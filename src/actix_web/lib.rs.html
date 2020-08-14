@@ -218,8 +218,6 @@
 <span id="218">218</span>
 <span id="219">219</span>
 <span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>, <span class="ident">warnings</span>)]</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">needless_doctest_main</span>, <span class="ident">clippy</span>::<span class="ident">type_complexity</span>)]</span>
@@ -436,9 +434,7 @@
     <span class="doccomment">//! }</span>
     <span class="doccomment">//! ```</span>
 
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">awc</span>::<span class="ident">error</span>::{
-        <span class="ident">ConnectError</span>, <span class="ident">InvalidUrl</span>, <span class="ident">PayloadError</span>, <span class="ident">SendRequestError</span>, <span class="ident">WsClientError</span>,
-    };
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">awc</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">awc</span>::{
         <span class="ident">test</span>, <span class="ident">Client</span>, <span class="ident">ClientBuilder</span>, <span class="ident">ClientRequest</span>, <span class="ident">ClientResponse</span>, <span class="ident">Connector</span>,
     };
