@@ -169,7 +169,7 @@
 <span class="doccomment">/// # fn main() {</span>
 <span class="doccomment">/// let enable_normalize = std::env::var(&quot;NORMALIZE_PATH&quot;) == Ok(&quot;true&quot;.into());</span>
 <span class="doccomment">/// let app = App::new()</span>
-<span class="doccomment">///     .wrap(Condition::new(enable_normalize, NormalizePath));</span>
+<span class="doccomment">///     .wrap(Condition::new(enable_normalize, NormalizePath::default()));</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Condition</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
