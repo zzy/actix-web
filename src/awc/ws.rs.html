@@ -865,7 +865,7 @@
         <span class="comment">// response and ws framed</span>
         <span class="prelude-val">Ok</span>((
             <span class="ident">ClientResponse</span>::<span class="ident">new</span>(<span class="ident">head</span>, <span class="ident">Payload</span>::<span class="prelude-val">None</span>),
-            <span class="ident">framed</span>.<span class="ident">map_codec</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
+            <span class="ident">framed</span>.<span class="ident">into_map_codec</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
                 <span class="kw">if</span> <span class="ident">server_mode</span> {
                     <span class="ident">ws</span>::<span class="ident">Codec</span>::<span class="ident">new</span>().<span class="ident">max_size</span>(<span class="ident">max_size</span>)
                 } <span class="kw">else</span> {
