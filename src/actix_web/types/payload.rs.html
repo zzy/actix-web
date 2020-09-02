@@ -570,9 +570,6 @@
 <span id="570">570</span>
 <span id="571">571</span>
 <span id="572">572</span>
-<span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Payload/Bytes/String extractors</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
@@ -855,27 +852,24 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Allow payload config extraction from app data checking both `T` and `Data&lt;T&gt;`, in that</span>
-    <span class="doccomment">/// order, and falling back to the default payload config.</span>
-    <span class="kw">fn</span> <span class="ident">from_req</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">PayloadConfig</span> {
-        <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">PayloadConfig</span><span class="op">&gt;</span>()
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">PayloadConfig</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">as_ref</span>())
-            })
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">DEFAULT_PAYLOAD_CONFIG</span>)
+    <span class="doccomment">/// Extract payload config from app data. Check both `T` and `Data&lt;T&gt;`, in that order, and fall</span>
+    <span class="doccomment">/// back to the default payload config.</span>
+    <span class="kw">fn</span> <span class="ident">from_req</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span> {
+        <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()
+            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">as_ref</span>()))
+            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">DEFAULT_CONFIG</span>)
     }
 }
 
 <span class="comment">// Allow shared refs to default.</span>
-<span class="kw">static</span> <span class="ident">DEFAULT_PAYLOAD_CONFIG</span>: <span class="ident">PayloadConfig</span> <span class="op">=</span> <span class="ident">PayloadConfig</span> {
+<span class="kw">const</span> <span class="ident">DEFAULT_CONFIG</span>: <span class="ident">PayloadConfig</span> <span class="op">=</span> <span class="ident">PayloadConfig</span> {
     <span class="ident">limit</span>: <span class="number">262_144</span>, <span class="comment">// 2^18 bytes (~256kB)</span>
     <span class="ident">mimetype</span>: <span class="prelude-val">None</span>,
 };
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PayloadConfig</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">DEFAULT_PAYLOAD_CONFIG</span>.<span class="ident">clone</span>()
+        <span class="ident">DEFAULT_CONFIG</span>.<span class="ident">clone</span>()
     }
 }
 
