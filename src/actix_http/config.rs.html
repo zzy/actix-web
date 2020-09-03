@@ -312,6 +312,7 @@
 <span id="312">312</span>
 <span id="313">313</span>
 <span id="314">314</span>
+<span id="315">315</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">Cell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Write</span>;
@@ -332,7 +333,7 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">KeepAlive</span> {
     <span class="doccomment">/// Keep alive in seconds</span>
     <span class="ident">Timeout</span>(<span class="ident">usize</span>),
-    <span class="doccomment">/// Relay on OS to shutdown tcp connection</span>
+    <span class="doccomment">/// Rely on OS to shutdown tcp connection</span>
     <span class="ident">Os</span>,
     <span class="doccomment">/// Disabled</span>
     <span class="ident">Disabled</span>,
@@ -524,6 +525,7 @@
         <span class="ident">date</span>.<span class="ident">update</span>();
         <span class="ident">date</span>
     }
+
     <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="macro">write</span><span class="macro">!</span>(

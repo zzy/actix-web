@@ -93,6 +93,7 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
+<span id="96">96</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">downcast_get_type_id</span> {
@@ -134,7 +135,7 @@
             <span class="doccomment">/// Downcasts generic body to a specific type.</span>
             <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">downcast_ref</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">__private_get_type_id__</span>().<span class="number">0</span> <span class="op">=</span><span class="op">=</span> <span class="ident">std</span>::<span class="ident">any</span>::<span class="ident">TypeId</span>::<span class="ident">of</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>() {
-                    <span class="comment">// Safety: external crates cannot override the default</span>
+                    <span class="comment">// SAFETY: external crates cannot override the default</span>
                     <span class="comment">// implementation of `__private_get_type_id__`, since</span>
                     <span class="comment">// it requires returning a private type. We can therefore</span>
                     <span class="comment">// rely on the returned `TypeId`, which ensures that this</span>
@@ -144,10 +145,11 @@
                     <span class="prelude-val">None</span>
                 }
             }
+
             <span class="doccomment">/// Downcasts a generic body to a mutable specific type.</span>
             <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">downcast_mut</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">__private_get_type_id__</span>().<span class="number">0</span> <span class="op">=</span><span class="op">=</span> <span class="ident">std</span>::<span class="ident">any</span>::<span class="ident">TypeId</span>::<span class="ident">of</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>() {
-                    <span class="comment">// Safety: external crates cannot override the default</span>
+                    <span class="comment">// SAFETY: external crates cannot override the default</span>
                     <span class="comment">// implementation of `__private_get_type_id__`, since</span>
                     <span class="comment">// it requires returning a private type. We can therefore</span>
                     <span class="comment">// rely on the returned `TypeId`, which ensures that this</span>

@@ -146,6 +146,9 @@
 <span id="146">146</span>
 <span id="147">147</span>
 <span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This is code from [Tungstenite project](https://github.com/snapview/tungstenite-rs)</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">cast_ptr_alignment</span>)]</span>
@@ -156,6 +159,8 @@
 <span class="kw">struct</span> <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>]);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// # Safety</span>
+    <span class="doccomment">/// Given slice must be shorter than 8 bytes.</span>
     <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">slice</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="comment">// Sanity check for debug builds</span>
         <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">slice</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">8</span>);
@@ -195,13 +200,13 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="comment">// TODO: copy_nonoverlapping here compiles to call memcpy. While it is not so</span>
 <span class="comment">// inefficient, it could be done better. The compiler does not understand that</span>
 <span class="comment">// a `ShortSlice` must be smaller than a u64.</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">needless_pass_by_value</span>)]</span>
 <span class="kw">fn</span> <span class="ident">xor_short</span>(<span class="ident">buf</span>: <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">mask</span>: <span class="ident">u64</span>) {
-    <span class="comment">// Unsafe: we know that a `ShortSlice` fits in a u64</span>
+    <span class="comment">// SAFETY: we know that a `ShortSlice` fits in a u64</span>
     <span class="kw">unsafe</span> {
         <span class="kw">let</span> (<span class="ident">ptr</span>, <span class="ident">len</span>) <span class="op">=</span> (<span class="ident">buf</span>.<span class="number">0</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">buf</span>.<span class="number">0</span>.<span class="ident">len</span>());
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0</span>;
@@ -213,8 +218,9 @@
     }
 }
 
+<span class="doccomment">/// # Safety</span>
+<span class="doccomment">/// Caller must ensure the buffer has the correct size and alignment.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="comment">// Unsafe: caller must ensure the buffer has the correct size and alignment</span>
 <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cast_slice</span>(<span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u64</span>] {
     <span class="comment">// Assert correct size and alignment in debug builds</span>
     <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">buf</span>.<span class="ident">len</span>().<span class="ident">trailing_zeros</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="number">3</span>);
@@ -223,9 +229,9 @@
     <span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>(<span class="ident">buf</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u64</span>, <span class="ident">buf</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>)
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="comment">// Splits a slice into three parts: an unaligned short head and tail, plus an aligned</span>
 <span class="comment">// u64 mid section.</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">fn</span> <span class="ident">align_buf</span>(<span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u64</span>], <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) {
     <span class="kw">let</span> <span class="ident">start_ptr</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="ident">usize</span>;
     <span class="kw">let</span> <span class="ident">end_ptr</span> <span class="op">=</span> <span class="ident">start_ptr</span> <span class="op">+</span> <span class="ident">buf</span>.<span class="ident">len</span>();
@@ -240,13 +246,13 @@
         <span class="kw">let</span> (<span class="ident">tmp</span>, <span class="ident">tail</span>) <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">split_at_mut</span>(<span class="ident">end_aligned</span> <span class="op">-</span> <span class="ident">start_ptr</span>);
         <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">mid</span>) <span class="op">=</span> <span class="ident">tmp</span>.<span class="ident">split_at_mut</span>(<span class="ident">start_aligned</span> <span class="op">-</span> <span class="ident">start_ptr</span>);
 
-        <span class="comment">// Unsafe: we know the middle section is correctly aligned, and the outer</span>
+        <span class="comment">// SAFETY: we know the middle section is correctly aligned, and the outer</span>
         <span class="comment">// sections are smaller than 8 bytes</span>
         <span class="kw">unsafe</span> { (<span class="ident">ShortSlice</span>::<span class="ident">new</span>(<span class="ident">head</span>), <span class="ident">cast_slice</span>(<span class="ident">mid</span>), <span class="ident">ShortSlice</span>(<span class="ident">tail</span>)) }
     } <span class="kw">else</span> {
         <span class="comment">// We didn&#39;t cross even one aligned boundary!</span>
 
-        <span class="comment">// Unsafe: The outer sections are smaller than 8 bytes</span>
+        <span class="comment">// SAFETY: The outer sections are smaller than 8 bytes</span>
         <span class="kw">unsafe</span> { (<span class="ident">ShortSlice</span>::<span class="ident">new</span>(<span class="ident">buf</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [], <span class="ident">ShortSlice</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> [])) }
     }
 }
