@@ -496,8 +496,62 @@
 <span id="496">496</span>
 <span id="497">497</span>
 <span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Websockets client</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Type definitions required to use [`awc::Client`](../struct.Client.html) as a WebSocket client.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Example</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! use awc::{Client, ws};</span>
+<span class="doccomment">//! use futures_util::{sink::SinkExt, stream::StreamExt};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! #[actix_rt::main]</span>
+<span class="doccomment">//! async fn main() {</span>
+<span class="doccomment">//!     let (_resp, mut connection) = Client::new()</span>
+<span class="doccomment">//!         .ws(&quot;ws://echo.websocket.org&quot;)</span>
+<span class="doccomment">//!         .connect()</span>
+<span class="doccomment">//!         .await</span>
+<span class="doccomment">//!         .unwrap();</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     connection</span>
+<span class="doccomment">//!         .send(ws::Message::Text(&quot;Echo&quot;.to_string()))</span>
+<span class="doccomment">//!         .await</span>
+<span class="doccomment">//!         .unwrap();</span>
+<span class="doccomment">//!     let response = connection.next().await.unwrap().unwrap();</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     assert_eq!(response, ws::Frame::Text(&quot;Echo&quot;.as_bytes().into()));</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">SocketAddr</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
