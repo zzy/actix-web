@@ -877,7 +877,7 @@
 <span class="kw">mod</span> <span class="ident">openssl</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">actix_tls</span>::<span class="ident">openssl</span>::{<span class="ident">Acceptor</span>, <span class="ident">SslAcceptor</span>, <span class="ident">SslStream</span>};
-    <span class="kw">use</span> <span class="ident">actix_tls</span>::{<span class="ident">openssl</span>::<span class="ident">HandshakeError</span>, <span class="ident">SslError</span>};
+    <span class="kw">use</span> <span class="ident">actix_tls</span>::{<span class="ident">openssl</span>::<span class="ident">HandshakeError</span>, <span class="ident">TlsError</span>};
 
     <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">SslStream</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -908,12 +908,12 @@
             <span class="ident">Config</span> <span class="op">=</span> (),
             <span class="ident">Request</span> <span class="op">=</span> <span class="ident">TcpStream</span>,
             <span class="ident">Response</span> <span class="op">=</span> (),
-            <span class="ident">Error</span> <span class="op">=</span> <span class="ident">SslError</span><span class="op">&lt;</span><span class="ident">HandshakeError</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span>,
+            <span class="ident">Error</span> <span class="op">=</span> <span class="ident">TlsError</span><span class="op">&lt;</span><span class="ident">HandshakeError</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span> {
             <span class="ident">pipeline_factory</span>(
                 <span class="ident">Acceptor</span>::<span class="ident">new</span>(<span class="ident">acceptor</span>)
-                    .<span class="ident">map_err</span>(<span class="ident">SslError</span>::<span class="ident">Ssl</span>)
+                    .<span class="ident">map_err</span>(<span class="ident">TlsError</span>::<span class="ident">Tls</span>)
                     .<span class="ident">map_init_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>()),
             )
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">SslStream</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">|</span> {
@@ -929,7 +929,7 @@
                 <span class="kw">let</span> <span class="ident">peer_addr</span> <span class="op">=</span> <span class="ident">io</span>.<span class="ident">get_ref</span>().<span class="ident">peer_addr</span>().<span class="ident">ok</span>();
                 <span class="ident">ok</span>((<span class="ident">io</span>, <span class="ident">proto</span>, <span class="ident">peer_addr</span>))
             })
-            .<span class="ident">and_then</span>(<span class="self">self</span>.<span class="ident">map_err</span>(<span class="ident">SslError</span>::<span class="ident">Service</span>))
+            .<span class="ident">and_then</span>(<span class="self">self</span>.<span class="ident">map_err</span>(<span class="ident">TlsError</span>::<span class="ident">Service</span>))
         }
     }
 }
@@ -938,7 +938,7 @@
 <span class="kw">mod</span> <span class="ident">rustls</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">actix_tls</span>::<span class="ident">rustls</span>::{<span class="ident">Acceptor</span>, <span class="ident">ServerConfig</span>, <span class="ident">Session</span>, <span class="ident">TlsStream</span>};
-    <span class="kw">use</span> <span class="ident">actix_tls</span>::<span class="ident">SslError</span>;
+    <span class="kw">use</span> <span class="ident">actix_tls</span>::<span class="ident">TlsError</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 
     <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">TlsStream</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
@@ -970,7 +970,7 @@
             <span class="ident">Config</span> <span class="op">=</span> (),
             <span class="ident">Request</span> <span class="op">=</span> <span class="ident">TcpStream</span>,
             <span class="ident">Response</span> <span class="op">=</span> (),
-            <span class="ident">Error</span> <span class="op">=</span> <span class="ident">SslError</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span>,
+            <span class="ident">Error</span> <span class="op">=</span> <span class="ident">TlsError</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">protos</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;h2&quot;</span>.<span class="ident">to_string</span>().<span class="ident">into</span>(), <span class="string">&quot;http/1.1&quot;</span>.<span class="ident">to_string</span>().<span class="ident">into</span>()];
@@ -978,7 +978,7 @@
 
             <span class="ident">pipeline_factory</span>(
                 <span class="ident">Acceptor</span>::<span class="ident">new</span>(<span class="ident">config</span>)
-                    .<span class="ident">map_err</span>(<span class="ident">SslError</span>::<span class="ident">Ssl</span>)
+                    .<span class="ident">map_err</span>(<span class="ident">TlsError</span>::<span class="ident">Tls</span>)
                     .<span class="ident">map_init_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>()),
             )
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">TlsStream</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">|</span> {
@@ -994,7 +994,7 @@
                 <span class="kw">let</span> <span class="ident">peer_addr</span> <span class="op">=</span> <span class="ident">io</span>.<span class="ident">get_ref</span>().<span class="number">0</span>.<span class="ident">peer_addr</span>().<span class="ident">ok</span>();
                 <span class="ident">ok</span>((<span class="ident">io</span>, <span class="ident">proto</span>, <span class="ident">peer_addr</span>))
             })
-            .<span class="ident">and_then</span>(<span class="self">self</span>.<span class="ident">map_err</span>(<span class="ident">SslError</span>::<span class="ident">Service</span>))
+            .<span class="ident">and_then</span>(<span class="self">self</span>.<span class="ident">map_err</span>(<span class="ident">TlsError</span>::<span class="ident">Service</span>))
         }
     }
 }
