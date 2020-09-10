@@ -319,10 +319,6 @@
 <span id="319">319</span>
 <span id="320">320</span>
 <span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>;
@@ -519,11 +515,7 @@
             }
         };
 
-        <span class="ident">SendClientRequest</span>::<span class="ident">new</span>(
-            <span class="ident">fut</span>,
-            <span class="ident">response_decompress</span>,
-            <span class="ident">timeout</span>.<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">config</span>.<span class="ident">timeout</span>),
-        )
+        <span class="ident">SendClientRequest</span>::<span class="ident">new</span>(<span class="ident">fut</span>, <span class="ident">response_decompress</span>, <span class="ident">timeout</span>.<span class="ident">or</span>(<span class="ident">config</span>.<span class="ident">timeout</span>))
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">send_json</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(
