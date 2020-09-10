@@ -720,7 +720,7 @@
 <span class="doccomment">///         web::resource(&quot;/index.html&quot;)</span>
 <span class="doccomment">///             // change `Form` extractor configuration</span>
 <span class="doccomment">///             .app_data(</span>
-<span class="doccomment">///                 web::Form::&lt;FormData&gt;::configure(|cfg| cfg.limit(4097))</span>
+<span class="doccomment">///                 web::FormConfig::default().limit(4097)</span>
 <span class="doccomment">///             )</span>
 <span class="doccomment">///             .route(web::get().to(index))</span>
 <span class="doccomment">///     );</span>

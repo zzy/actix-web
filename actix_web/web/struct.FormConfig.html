@@ -20,7 +20,7 @@
         <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>)
             <span class="comment">// change `Form` extractor configuration</span>
             .<span class="ident">app_data</span>(
-                <span class="ident">web</span>::<span class="ident">Form</span>::<span class="op">&lt;</span><span class="ident">FormData</span><span class="op">&gt;</span>::<span class="ident">configure</span>(<span class="op">|</span><span class="ident">cfg</span><span class="op">|</span> <span class="ident">cfg</span>.<span class="ident">limit</span>(<span class="number">4097</span>))
+                <span class="ident">web</span>::<span class="ident">FormConfig</span>::<span class="ident">default</span>().<span class="ident">limit</span>(<span class="number">4097</span>)
             )
             .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">index</span>))
     );

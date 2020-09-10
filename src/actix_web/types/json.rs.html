@@ -681,15 +681,6 @@
 <span id="681">681</span>
 <span id="682">682</span>
 <span id="683">683</span>
-<span id="684">684</span>
-<span id="685">685</span>
-<span id="686">686</span>
-<span id="687">687</span>
-<span id="688">688</span>
-<span id="689">689</span>
-<span id="690">690</span>
-<span id="691">691</span>
-<span id="692">692</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Json extractor/responder</span>
 
@@ -902,10 +893,10 @@
 
 <span class="doccomment">/// Json extractor configuration</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
+<span class="doccomment">/// # Example</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use actix_web::{error, web, App, FromRequest, HttpRequest, HttpResponse};</span>
+<span class="doccomment">/// use actix_web::{error, web, App, FromRequest, HttpResponse};</span>
 <span class="doccomment">/// use serde_derive::Deserialize;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// #[derive(Deserialize)]</span>
@@ -918,35 +909,26 @@
 <span class="doccomment">///     format!(&quot;Welcome {}!&quot;, info.username)</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// /// Return either a 400 or 415, and include the error message from serde</span>
-<span class="doccomment">/// /// in the response body</span>
-<span class="doccomment">/// fn json_error_handler(err: error::JsonPayloadError, _req: &amp;HttpRequest) -&gt; error::Error {</span>
-<span class="doccomment">///     let detail = err.to_string();</span>
-<span class="doccomment">///     let response = match &amp;err {</span>
-<span class="doccomment">///         error::JsonPayloadError::ContentType =&gt; {</span>
-<span class="doccomment">///             HttpResponse::UnsupportedMediaType().content_type(&quot;text/plain&quot;).body(detail)</span>
-<span class="doccomment">///         }</span>
-<span class="doccomment">///         _ =&gt; HttpResponse::BadRequest().content_type(&quot;text/plain&quot;).body(detail),</span>
-<span class="doccomment">///     };</span>
-<span class="doccomment">///     error::InternalError::from_response(err, response).into()</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// fn main() {</span>
 <span class="doccomment">///     let app = App::new().service(</span>
 <span class="doccomment">///         web::resource(&quot;/index.html&quot;)</span>
 <span class="doccomment">///             .app_data(</span>
-<span class="doccomment">///                 // change json extractor configuration</span>
-<span class="doccomment">///                 web::Json::&lt;Info&gt;::configure(|cfg| {</span>
-<span class="doccomment">///                     cfg.limit(4096)</span>
-<span class="doccomment">///                        .content_type(|mime| {  // &lt;- accept text/plain content type</span>
-<span class="doccomment">///                            mime.type_() == mime::TEXT &amp;&amp; mime.subtype() == mime::PLAIN</span>
-<span class="doccomment">///                        })</span>
-<span class="doccomment">///                        .error_handler(json_error_handler)  // Use our custom error response</span>
-<span class="doccomment">///             }))</span>
+<span class="doccomment">///                 // Json extractor configuration for this resource.</span>
+<span class="doccomment">///                 web::JsonConfig::default()</span>
+<span class="doccomment">///                     .limit(4096) // Limit request payload size</span>
+<span class="doccomment">///                     .content_type(|mime| {  // &lt;- accept text/plain content type</span>
+<span class="doccomment">///                         mime.type_() == mime::TEXT &amp;&amp; mime.subtype() == mime::PLAIN</span>
+<span class="doccomment">///                     })</span>
+<span class="doccomment">///                     .error_handler(|err, req| {  // &lt;- create custom error response</span>
+<span class="doccomment">///                        error::InternalError::from_response(</span>
+<span class="doccomment">///                            err, HttpResponse::Conflict().finish()).into()</span>
+<span class="doccomment">///                     })</span>
+<span class="doccomment">///             )</span>
 <span class="doccomment">///             .route(web::post().to(index))</span>
 <span class="doccomment">///     );</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">JsonConfig</span> {
     <span class="ident">limit</span>: <span class="ident">usize</span>,
