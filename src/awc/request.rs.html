@@ -1334,7 +1334,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_client_header</span>() {
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">build</span>()
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">builder</span>()
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;111&quot;</span>)
             .<span class="ident">finish</span>()
             .<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>);
@@ -1352,7 +1352,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_client_header_override</span>() {
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">build</span>()
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">builder</span>()
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;111&quot;</span>)
             .<span class="ident">finish</span>()
             .<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>)
