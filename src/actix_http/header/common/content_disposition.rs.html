@@ -1273,11 +1273,11 @@
 <span class="doccomment">///            Some(&quot;\u{1f600}.svg&quot;.as_bytes()));</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// # WARN</span>
+<span class="doccomment">/// # Security Note</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// If &quot;filename&quot; parameter is supplied, do not use the file name blindly, check and possibly</span>
 <span class="doccomment">/// change to match local file system conventions if applicable, and do not use directory path</span>
-<span class="doccomment">/// information that may be present. See [RFC2183](https://tools.ietf.org/html/rfc2183#section-2.3)</span>
-<span class="doccomment">/// .</span>
+<span class="doccomment">/// information that may be present. See [RFC2183](https://tools.ietf.org/html/rfc2183#section-2.3).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ContentDisposition</span> {
     <span class="doccomment">/// The disposition type</span>

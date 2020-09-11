@@ -1331,6 +1331,7 @@
 <span id="1331">1331</span>
 <span id="1332">1332</span>
 <span id="1333">1333</span>
+<span id="1334">1334</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
@@ -2615,55 +2616,56 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 
-    <span class="comment">/*
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_actor</span>() {
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Error</span>;
+        <span class="kw">use</span> <span class="ident">actix</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 
-        Comment out until actix decoupled of actix-http:
-        https://github.com/actix/actix/issues/321
+        <span class="kw">struct</span> <span class="ident">MyActor</span>;
 
-        use futures::FutureExt;
-
-        #[actix_rt::test]
-        async fn test_actor() {
-            use actix::Actor;
-
-            struct MyActor;
-
-            struct Num(usize);
-            impl actix::Message for Num {
-                type Result = usize;
-            }
-            impl actix::Actor for MyActor {
-                type Context = actix::Context&lt;Self&gt;;
-            }
-            impl actix::Handler&lt;Num&gt; for MyActor {
-                type Result = usize;
-                fn handle(&amp;mut self, msg: Num, _: &amp;mut Self::Context) -&gt; Self::Result {
-                    msg.0
-                }
-            }
-
-
-            let mut app = init_service(App::new().service(web::resource(&quot;/index.html&quot;).to(
-                move || {
-                    addr.send(Num(1)).map(|res| match res {
-                        Ok(res) =&gt; {
-                            if res == 1 {
-                                Ok(HttpResponse::Ok())
-                            } else {
-                                Ok(HttpResponse::BadRequest())
-                            }
-                        }
-                        Err(err) =&gt; Err(err),
-                    })
-                },
-            )))
-            .await;
-
-            let req = TestRequest::post().uri(&quot;/index.html&quot;).to_request();
-            let res = app.call(req).await.unwrap();
-            assert!(res.status().is_success());
+        <span class="kw">impl</span> <span class="ident">Actor</span> <span class="kw">for</span> <span class="ident">MyActor</span> {
+            <span class="kw">type</span> <span class="ident">Context</span> <span class="op">=</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
         }
-    */</span>
+
+        <span class="kw">struct</span> <span class="ident">Num</span>(<span class="ident">usize</span>);
+
+        <span class="kw">impl</span> <span class="ident">Message</span> <span class="kw">for</span> <span class="ident">Num</span> {
+            <span class="kw">type</span> <span class="prelude-ty">Result</span> <span class="op">=</span> <span class="ident">usize</span>;
+        }
+
+        <span class="kw">impl</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">Num</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">MyActor</span> {
+            <span class="kw">type</span> <span class="prelude-ty">Result</span> <span class="op">=</span> <span class="ident">usize</span>;
+
+            <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">Num</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>::<span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span> {
+                <span class="ident">msg</span>.<span class="number">0</span>
+            }
+        }
+
+        <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">MyActor</span>.<span class="ident">start</span>();
+
+        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">actor_handler</span>(
+            <span class="ident">addr</span>: <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">MyActor</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Responder</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+            <span class="comment">// `?` operator tests &quot;actors&quot; feature flag on actix-http</span>
+            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">addr</span>.<span class="ident">send</span>(<span class="ident">Num</span>(<span class="number">1</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+
+            <span class="kw">if</span> <span class="ident">res</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>())
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="ident">BadRequest</span>())
+            }
+        }
+
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">App</span>::<span class="ident">new</span>()
+            .<span class="ident">data</span>(<span class="ident">addr</span>.<span class="ident">clone</span>())
+            .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="ident">actor_handler</span>));
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">srv</span>).<span class="kw">await</span>;
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">post</span>().<span class="ident">uri</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to_request</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
+    }
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "actix_web";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

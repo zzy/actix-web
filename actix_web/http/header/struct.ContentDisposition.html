@@ -86,11 +86,10 @@ directly in a <em>Content-Disposition</em> header for <em>multipart/form-data</e
 };
 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">cd3</span>.<span class="ident">get_filename_ext</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ev</span><span class="op">|</span> <span class="ident">ev</span>.<span class="ident">value</span>.<span class="ident">as_ref</span>()),
            <span class="prelude-val">Some</span>(<span class="string">&quot;\u{1f600}.svg&quot;</span>.<span class="ident">as_bytes</span>()));</pre></div>
-<h1 id="warn" class="section-header"><a href="#warn">WARN</a></h1>
+<h1 id="security-note" class="section-header"><a href="#security-note">Security Note</a></h1>
 <p>If &quot;filename&quot; parameter is supplied, do not use the file name blindly, check and possibly
 change to match local file system conventions if applicable, and do not use directory path
-information that may be present. See <a href="https://tools.ietf.org/html/rfc2183#section-2.3">RFC2183</a>
-.</p>
+information that may be present. See <a href="https://tools.ietf.org/html/rfc2183#section-2.3">RFC2183</a>.</p>
 </div><h2 id='fields' class='fields small-section-header'>
                        Fields<a href='#fields' class='anchor'></a></h2><span id="structfield.disposition" class="structfield small-section-header"><a href="#structfield.disposition" class="anchor field"></a><code>disposition: <a class="enum" href="../../../actix_web/http/header/enum.DispositionType.html" title="enum actix_web::http::header::DispositionType">DispositionType</a></code></span><div class='docblock'><p>The disposition type</p>
 </div><span id="structfield.parameters" class="structfield small-section-header"><a href="#structfield.parameters" class="anchor field"></a><code>parameters: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="enum" href="../../../actix_web/http/header/enum.DispositionParam.html" title="enum actix_web::http::header::DispositionParam">DispositionParam</a>&gt;</code></span><div class='docblock'><p>Disposition parameters</p>
