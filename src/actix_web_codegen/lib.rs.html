@@ -232,13 +232,13 @@
 
 <span class="doccomment">/// Creates route handler with `GET` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[get(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[get(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Attributes:</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// - `&quot;path&quot;` - Raw literal string with path for which to register handler. Mandatory.</span>
-<span class="doccomment">/// - `guard=&quot;function_name&quot;` - Registers function as guard using `actix_web::guard::fn_guard`</span>
-<span class="doccomment">/// - `wrap=&quot;Middleware&quot;` - Registers a resource middleware.</span>
+<span class="doccomment">/// - `guard = &quot;function_name&quot;` - Registers function as guard using `actix_web::guard::fn_guard`</span>
+<span class="doccomment">/// - `wrap = &quot;Middleware&quot;` - Registers a resource middleware.</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
     <span class="ident">route</span>::<span class="ident">generate</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">route</span>::<span class="ident">GuardType</span>::<span class="ident">Get</span>)
@@ -246,7 +246,7 @@
 
 <span class="doccomment">/// Creates route handler with `POST` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[post(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[post(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Attributes are the same as in [get](attr.get.html)</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
@@ -256,7 +256,7 @@
 
 <span class="doccomment">/// Creates route handler with `PUT` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[put(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[put(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Attributes are the same as in [get](attr.get.html)</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
@@ -266,9 +266,9 @@
 
 <span class="doccomment">/// Creates route handler with `DELETE` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[delete(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[delete(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Attributes are the same as in [get](attr.get.html)</span>
+<span class="doccomment">/// Attributes are the same as in [get](attr.get.html).</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
     <span class="ident">route</span>::<span class="ident">generate</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">route</span>::<span class="ident">GuardType</span>::<span class="ident">Delete</span>)
@@ -276,9 +276,9 @@
 
 <span class="doccomment">/// Creates route handler with `HEAD` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[head(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[head(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Attributes are the same as in [head](attr.head.html)</span>
+<span class="doccomment">/// Attributes are the same as in [get](attr.get.html).</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
     <span class="ident">route</span>::<span class="ident">generate</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">route</span>::<span class="ident">GuardType</span>::<span class="ident">Head</span>)
@@ -286,9 +286,9 @@
 
 <span class="doccomment">/// Creates route handler with `CONNECT` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[connect(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[connect(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Attributes are the same as in [connect](attr.connect.html)</span>
+<span class="doccomment">/// Attributes are the same as in [get](attr.get.html).</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
     <span class="ident">route</span>::<span class="ident">generate</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">route</span>::<span class="ident">GuardType</span>::<span class="ident">Connect</span>)
@@ -296,9 +296,9 @@
 
 <span class="doccomment">/// Creates route handler with `OPTIONS` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[options(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[options(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Attributes are the same as in [options](attr.options.html)</span>
+<span class="doccomment">/// Attributes are the same as in [get](attr.get.html).</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">options</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
     <span class="ident">route</span>::<span class="ident">generate</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">route</span>::<span class="ident">GuardType</span>::<span class="ident">Options</span>)
@@ -306,9 +306,9 @@
 
 <span class="doccomment">/// Creates route handler with `TRACE` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[trace(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[trace(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Attributes are the same as in [trace](attr.trace.html)</span>
+<span class="doccomment">/// Attributes are the same as in [get](attr.get.html).</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">trace</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
     <span class="ident">route</span>::<span class="ident">generate</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">route</span>::<span class="ident">GuardType</span>::<span class="ident">Trace</span>)
@@ -316,9 +316,9 @@
 
 <span class="doccomment">/// Creates route handler with `PATCH` method guard.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Syntax: `#[patch(&quot;path&quot;[, attributes])]`</span>
+<span class="doccomment">/// Syntax: `#[patch(&quot;path&quot; [, attributes])]`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Attributes are the same as in [patch](attr.patch.html)</span>
+<span class="doccomment">/// Attributes are the same as in [get](attr.get.html).</span>
 <span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">patch</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
     <span class="ident">route</span>::<span class="ident">generate</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">route</span>::<span class="ident">GuardType</span>::<span class="ident">Patch</span>)
