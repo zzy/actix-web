@@ -1152,6 +1152,55 @@
 <span id="1152">1152</span>
 <span id="1153">1153</span>
 <span id="1154">1154</span>
+<span id="1155">1155</span>
+<span id="1156">1156</span>
+<span id="1157">1157</span>
+<span id="1158">1158</span>
+<span id="1159">1159</span>
+<span id="1160">1160</span>
+<span id="1161">1161</span>
+<span id="1162">1162</span>
+<span id="1163">1163</span>
+<span id="1164">1164</span>
+<span id="1165">1165</span>
+<span id="1166">1166</span>
+<span id="1167">1167</span>
+<span id="1168">1168</span>
+<span id="1169">1169</span>
+<span id="1170">1170</span>
+<span id="1171">1171</span>
+<span id="1172">1172</span>
+<span id="1173">1173</span>
+<span id="1174">1174</span>
+<span id="1175">1175</span>
+<span id="1176">1176</span>
+<span id="1177">1177</span>
+<span id="1178">1178</span>
+<span id="1179">1179</span>
+<span id="1180">1180</span>
+<span id="1181">1181</span>
+<span id="1182">1182</span>
+<span id="1183">1183</span>
+<span id="1184">1184</span>
+<span id="1185">1185</span>
+<span id="1186">1186</span>
+<span id="1187">1187</span>
+<span id="1188">1188</span>
+<span id="1189">1189</span>
+<span id="1190">1190</span>
+<span id="1191">1191</span>
+<span id="1192">1192</span>
+<span id="1193">1193</span>
+<span id="1194">1194</span>
+<span id="1195">1195</span>
+<span id="1196">1196</span>
+<span id="1197">1197</span>
+<span id="1198">1198</span>
+<span id="1199">1199</span>
+<span id="1200">1200</span>
+<span id="1201">1201</span>
+<span id="1202">1202</span>
+<span id="1203">1203</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Multipart payload support</span>
 
@@ -1219,26 +1268,13 @@
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="kw">match</span> <span class="self">Self</span>::<span class="ident">boundary</span>(<span class="ident">headers</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">boundary</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Multipart</span> {
-                <span class="ident">error</span>: <span class="prelude-val">None</span>,
-                <span class="ident">safety</span>: <span class="ident">Safety</span>::<span class="ident">new</span>(),
-                <span class="ident">inner</span>: <span class="prelude-val">Some</span>(<span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">InnerMultipart</span> {
-                    <span class="ident">boundary</span>,
-                    <span class="ident">payload</span>: <span class="ident">PayloadRef</span>::<span class="ident">new</span>(<span class="ident">PayloadBuffer</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">stream</span>))),
-                    <span class="ident">state</span>: <span class="ident">InnerState</span>::<span class="ident">FirstBoundary</span>,
-                    <span class="ident">item</span>: <span class="ident">InnerMultipartItem</span>::<span class="prelude-val">None</span>,
-                }))),
-            },
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Multipart</span> {
-                <span class="ident">error</span>: <span class="prelude-val">Some</span>(<span class="ident">err</span>),
-                <span class="ident">safety</span>: <span class="ident">Safety</span>::<span class="ident">new</span>(),
-                <span class="ident">inner</span>: <span class="prelude-val">None</span>,
-            },
+            <span class="prelude-val">Ok</span>(<span class="ident">boundary</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Multipart</span>::<span class="ident">from_boundary</span>(<span class="ident">boundary</span>, <span class="ident">stream</span>),
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Multipart</span>::<span class="ident">from_error</span>(<span class="ident">err</span>),
         }
     }
 
     <span class="doccomment">/// Extract boundary info from headers.</span>
-    <span class="kw">fn</span> <span class="ident">boundary</span>(<span class="ident">headers</span>: <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">MultipartError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">boundary</span>(<span class="ident">headers</span>: <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">MultipartError</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">content_type</span>) <span class="op">=</span> <span class="ident">headers</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>) {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">content_type</span>) <span class="op">=</span> <span class="ident">content_type</span>.<span class="ident">to_str</span>() {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">ct</span>) <span class="op">=</span> <span class="ident">content_type</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">mime</span>::<span class="ident">Mime</span><span class="op">&gt;</span>() {
@@ -1255,6 +1291,32 @@
             }
         } <span class="kw">else</span> {
             <span class="prelude-val">Err</span>(<span class="ident">MultipartError</span>::<span class="ident">NoContentType</span>)
+        }
+    }
+
+    <span class="doccomment">/// Create multipart instance for given boundary and stream</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_boundary</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">boundary</span>: <span class="ident">String</span>, <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Multipart</span>
+    <span class="kw">where</span>
+        <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    {
+        <span class="ident">Multipart</span> {
+            <span class="ident">error</span>: <span class="prelude-val">None</span>,
+            <span class="ident">safety</span>: <span class="ident">Safety</span>::<span class="ident">new</span>(),
+            <span class="ident">inner</span>: <span class="prelude-val">Some</span>(<span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">InnerMultipart</span> {
+                <span class="ident">boundary</span>,
+                <span class="ident">payload</span>: <span class="ident">PayloadRef</span>::<span class="ident">new</span>(<span class="ident">PayloadBuffer</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">stream</span>))),
+                <span class="ident">state</span>: <span class="ident">InnerState</span>::<span class="ident">FirstBoundary</span>,
+                <span class="ident">item</span>: <span class="ident">InnerMultipartItem</span>::<span class="prelude-val">None</span>,
+            }))),
+        }
+    }
+
+    <span class="doccomment">/// Create Multipart instance from MultipartError</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_error</span>(<span class="ident">err</span>: <span class="ident">MultipartError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Multipart</span> {
+        <span class="ident">Multipart</span> {
+            <span class="ident">error</span>: <span class="prelude-val">Some</span>(<span class="ident">err</span>),
+            <span class="ident">safety</span>: <span class="ident">Safety</span>::<span class="ident">new</span>(),
+            <span class="ident">inner</span>: <span class="prelude-val">None</span>,
         }
     }
 }
@@ -1970,6 +2032,8 @@
     <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">h1</span>::<span class="ident">Payload</span>;
     <span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">mpsc</span>;
     <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">DispositionParam</span>, <span class="ident">DispositionType</span>};
+    <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">test</span>::<span class="ident">TestRequest</span>;
+    <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">FromRequest</span>;
     <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
     <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::<span class="ident">lazy</span>;
 
@@ -2305,6 +2369,40 @@
             <span class="ident">payload</span>.<span class="ident">read_until</span>(<span class="string">b&quot;2&quot;</span>).<span class="ident">unwrap</span>()
         );
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">payload</span>.<span class="ident">buf</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_multipart_from_error</span>() {
+        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">MultipartError</span>::<span class="ident">NoContentType</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">multipart</span> <span class="op">=</span> <span class="ident">Multipart</span>::<span class="ident">from_error</span>(<span class="ident">err</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">multipart</span>.<span class="ident">next</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">is_err</span>())
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_multipart_from_boundary</span>() {
+        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">create_stream</span>();
+        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">headers</span>) <span class="op">=</span> <span class="ident">create_simple_request_with_header</span>();
+        <span class="kw">let</span> <span class="ident">boundary</span> <span class="op">=</span> <span class="ident">Multipart</span>::<span class="ident">boundary</span>(<span class="kw-2">&amp;</span><span class="ident">headers</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">boundary</span>.<span class="ident">is_ok</span>());
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Multipart</span>::<span class="ident">from_boundary</span>(<span class="ident">boundary</span>.<span class="ident">unwrap</span>(), <span class="ident">payload</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_multipart_payload_consumption</span>() {
+        <span class="comment">// with sample payload and HttpRequest with no headers</span>
+        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">inner_payload</span>) <span class="op">=</span> <span class="ident">Payload</span>::<span class="ident">create</span>(<span class="bool-val">false</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">actix_web</span>::<span class="ident">dev</span>::<span class="ident">Payload</span>::<span class="ident">from</span>(<span class="ident">inner_payload</span>);
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_http_request</span>();
+
+        <span class="comment">// multipart should generate an error</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mp</span> <span class="op">=</span> <span class="ident">Multipart</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">payload</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">mp</span>.<span class="ident">next</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">is_err</span>());
+
+        <span class="comment">// and should not consume the payload</span>
+        <span class="kw">match</span> <span class="ident">payload</span> {
+            <span class="ident">actix_web</span>::<span class="ident">dev</span>::<span class="ident">Payload</span>::<span class="ident">H1</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {} <span class="comment">//expected</span>
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+        }
     }
 }
 </pre></div>
