@@ -77,6 +77,7 @@
 <span id="77">77</span>
 <span id="78">78</span>
 <span id="79">79</span>
+<span id="80">80</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Basic http primitives for actix-net framework.</span>
 
@@ -87,6 +88,7 @@
     <span class="ident">clippy</span>::<span class="ident">new_without_default</span>,
     <span class="ident">clippy</span>::<span class="ident">borrow_interior_mutable_const</span>
 )]</span>
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">manual_strip</span>)]</span> <span class="comment">// Allow this to keep MSRV(1.42).</span>
 
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
