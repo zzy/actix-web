@@ -785,12 +785,8 @@
 <span class="doccomment">//! use actix_files::Files;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! let app = App::new()</span>
-<span class="doccomment">//!     .service(Files::new(&quot;/static&quot;, &quot;.&quot;));</span>
+<span class="doccomment">//!     .service(Files::new(&quot;/static&quot;, &quot;.&quot;).prefer_utf8(true));</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Implementation Quirks</span>
-<span class="doccomment">//! - If a filename contains non-ascii characters, that file will be served with the `charset=utf-8`</span>
-<span class="doccomment">//!   extension on the Content-Type header.</span>
 
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_docs</span>, <span class="ident">missing_debug_implementations</span>)]</span>
@@ -807,6 +803,7 @@
 
 <span class="kw">mod</span> <span class="ident">chunked</span>;
 <span class="kw">mod</span> <span class="ident">directory</span>;
+<span class="kw">mod</span> <span class="ident">encoding</span>;
 <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">mod</span> <span class="ident">files</span>;
 <span class="kw">mod</span> <span class="ident">named</span>;
@@ -870,6 +867,9 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_file_extension_to_mime</span>() {
+        <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">file_extension_to_mime</span>(<span class="string">&quot;&quot;</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">m</span>, <span class="ident">mime</span>::<span class="ident">APPLICATION_OCTET_STREAM</span>);
+
         <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">file_extension_to_mime</span>(<span class="string">&quot;jpg&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">m</span>, <span class="ident">mime</span>::<span class="ident">IMAGE_JPEG</span>);
 
