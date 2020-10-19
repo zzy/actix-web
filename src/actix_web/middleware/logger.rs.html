@@ -664,6 +664,43 @@
 <span id="663">663</span>
 <span id="664">664</span>
 <span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Request logging middleware</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
@@ -680,7 +717,7 @@
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::{<span class="ident">ok</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">log</span>::<span class="ident">debug</span>;
-<span class="kw">use</span> <span class="ident">regex</span>::<span class="ident">Regex</span>;
+<span class="kw">use</span> <span class="ident">regex</span>::{<span class="ident">Regex</span>, <span class="ident">RegexSet</span>};
 <span class="kw">use</span> <span class="ident">time</span>::<span class="ident">OffsetDateTime</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">dev</span>::{<span class="ident">BodySize</span>, <span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>};
@@ -759,6 +796,7 @@
 <span class="kw">struct</span> <span class="ident">Inner</span> {
     <span class="ident">format</span>: <span class="ident">Format</span>,
     <span class="ident">exclude</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="ident">exclude_regex</span>: <span class="ident">RegexSet</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Logger</span> {
@@ -767,6 +805,7 @@
         <span class="ident">Logger</span>(<span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">Inner</span> {
             <span class="ident">format</span>: <span class="ident">Format</span>::<span class="ident">new</span>(<span class="ident">format</span>),
             <span class="ident">exclude</span>: <span class="ident">HashSet</span>::<span class="ident">new</span>(),
+            <span class="ident">exclude_regex</span>: <span class="ident">RegexSet</span>::<span class="ident">empty</span>(),
         }))
     }
 
@@ -776,6 +815,16 @@
             .<span class="ident">unwrap</span>()
             .<span class="ident">exclude</span>
             .<span class="ident">insert</span>(<span class="ident">path</span>.<span class="ident">into</span>());
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Ignore and do not log access info for paths that match regex</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exclude_regex</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">patterns</span> <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">exclude_regex</span>.<span class="ident">patterns</span>().<span class="ident">to_vec</span>();
+        <span class="ident">patterns</span>.<span class="ident">push</span>(<span class="ident">path</span>.<span class="ident">into</span>());
+        <span class="kw">let</span> <span class="ident">regex_set</span> <span class="op">=</span> <span class="ident">RegexSet</span>::<span class="ident">new</span>(<span class="ident">patterns</span>).<span class="ident">unwrap</span>();
+        <span class="ident">inner</span>.<span class="ident">exclude_regex</span> <span class="op">=</span> <span class="ident">regex_set</span>;
         <span class="self">self</span>
     }
 }
@@ -790,6 +839,7 @@
         <span class="ident">Logger</span>(<span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">Inner</span> {
             <span class="ident">format</span>: <span class="ident">Format</span>::<span class="ident">default</span>(),
             <span class="ident">exclude</span>: <span class="ident">HashSet</span>::<span class="ident">new</span>(),
+            <span class="ident">exclude_regex</span>: <span class="ident">RegexSet</span>::<span class="ident">empty</span>(),
         }))
     }
 }
@@ -835,7 +885,9 @@
     }
 
     <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">exclude</span>.<span class="ident">contains</span>(<span class="ident">req</span>.<span class="ident">path</span>()) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">exclude</span>.<span class="ident">contains</span>(<span class="ident">req</span>.<span class="ident">path</span>())
+            <span class="op">||</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">exclude_regex</span>.<span class="ident">is_match</span>(<span class="ident">req</span>.<span class="ident">path</span>())
+        {
             <span class="ident">LoggerResponse</span> {
                 <span class="ident">fut</span>: <span class="self">self</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">req</span>),
                 <span class="ident">format</span>: <span class="prelude-val">None</span>,
@@ -1203,6 +1255,28 @@
         )
         .<span class="ident">to_srv_request</span>();
         <span class="kw">let</span> <span class="ident">_res</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>;
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_logger_exclude_regex</span>() {
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> {
+            <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(
+                <span class="ident">HttpResponse</span>::<span class="ident">build</span>(<span class="ident">StatusCode</span>::<span class="ident">OK</span>)
+                    .<span class="ident">header</span>(<span class="string">&quot;X-Test&quot;</span>, <span class="string">&quot;ttt&quot;</span>)
+                    .<span class="ident">finish</span>(),
+            ))
+        };
+        <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">Logger</span>::<span class="ident">new</span>(<span class="string">&quot;%% %{User-Agent}i %{X-Test}o %{HOME}e %D test&quot;</span>)
+            .<span class="ident">exclude_regex</span>(<span class="string">&quot;\\w&quot;</span>);
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
+            <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
+            <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
+        )
+        .<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">_res</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
