@@ -150,6 +150,15 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This is code from [Tungstenite project](https://github.com/snapview/tungstenite-rs)</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">cast_ptr_alignment</span>)]</span>
@@ -157,7 +166,9 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">slice</span>;
 
 <span class="comment">// Holds a slice guaranteed to be shorter than 8 bytes</span>
-<span class="kw">struct</span> <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>]);
+<span class="kw">struct</span> <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">inner</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>],
+}
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="doccomment">/// # Safety</span>
@@ -165,10 +176,11 @@
     <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">slice</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="comment">// Sanity check for debug builds</span>
         <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">slice</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">8</span>);
-        <span class="ident">ShortSlice</span>(<span class="ident">slice</span>)
+        <span class="ident">ShortSlice</span> { <span class="ident">inner</span>: <span class="ident">slice</span> }
     }
+
     <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">len</span>()
+        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">len</span>()
     }
 }
 
@@ -209,7 +221,7 @@
 <span class="kw">fn</span> <span class="ident">xor_short</span>(<span class="ident">buf</span>: <span class="ident">ShortSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">mask</span>: <span class="ident">u64</span>) {
     <span class="comment">// SAFETY: we know that a `ShortSlice` fits in a u64</span>
     <span class="kw">unsafe</span> {
-        <span class="kw">let</span> (<span class="ident">ptr</span>, <span class="ident">len</span>) <span class="op">=</span> (<span class="ident">buf</span>.<span class="number">0</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">buf</span>.<span class="number">0</span>.<span class="ident">len</span>());
+        <span class="kw">let</span> (<span class="ident">ptr</span>, <span class="ident">len</span>) <span class="op">=</span> (<span class="ident">buf</span>.<span class="ident">inner</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">buf</span>.<span class="ident">len</span>());
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">trivial_casts</span>)]</span>
         <span class="ident">copy_nonoverlapping</span>(<span class="ident">ptr</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">b</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>, <span class="ident">len</span>);
@@ -249,7 +261,13 @@
 
         <span class="comment">// SAFETY: we know the middle section is correctly aligned, and the outer</span>
         <span class="comment">// sections are smaller than 8 bytes</span>
-        <span class="kw">unsafe</span> { (<span class="ident">ShortSlice</span>::<span class="ident">new</span>(<span class="ident">head</span>), <span class="ident">cast_slice</span>(<span class="ident">mid</span>), <span class="ident">ShortSlice</span>(<span class="ident">tail</span>)) }
+        <span class="kw">unsafe</span> {
+            (
+                <span class="ident">ShortSlice</span>::<span class="ident">new</span>(<span class="ident">head</span>),
+                <span class="ident">cast_slice</span>(<span class="ident">mid</span>),
+                <span class="ident">ShortSlice</span>::<span class="ident">new</span>(<span class="ident">tail</span>),
+            )
+        }
     } <span class="kw">else</span> {
         <span class="comment">// We didn&#39;t cross even one aligned boundary!</span>
 
