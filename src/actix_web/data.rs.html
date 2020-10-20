@@ -315,7 +315,10 @@
 <span id="314">314</span>
 <span id="315">315</span>
 <span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
 </pre><div class="example-wrap"><pre class="rust ">
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">any</span>::<span class="ident">type_name</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Deref</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span>;
 
@@ -439,8 +442,9 @@
         } <span class="kw">else</span> {
             <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(
                 <span class="string">&quot;Failed to construct App-level Data extractor. \
-                 Request path: {:?}&quot;</span>,
-                <span class="ident">req</span>.<span class="ident">path</span>()
+                 Request path: {:?} (type: {})&quot;</span>,
+                <span class="ident">req</span>.<span class="ident">path</span>(),
+                <span class="ident">type_name</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(),
             );
             <span class="ident">err</span>(<span class="ident">ErrorInternalServerError</span>(
                 <span class="string">&quot;App data is not configured, to configure use App::data()&quot;</span>,
