@@ -1218,6 +1218,9 @@
 <span id="1217">1217</span>
 <span id="1218">1218</span>
 <span id="1219">1219</span>
+<span id="1220">1220</span>
+<span id="1221">1221</span>
+<span id="1222">1222</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
@@ -1430,6 +1433,9 @@
 
             <span class="self">self</span>.<span class="ident">data</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>);
         }
+        <span class="self">self</span>.<span class="ident">data</span>
+            .<span class="ident">get_or_insert_with</span>(<span class="ident">Extensions</span>::<span class="ident">new</span>)
+            .<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">extensions</span>);
         <span class="self">self</span>
     }
 
