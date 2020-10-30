@@ -580,6 +580,27 @@
 <span id="579">579</span>
 <span id="580">580</span>
 <span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
@@ -601,6 +622,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">helpers</span>::<span class="ident">DataFactory</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">request</span>::<span class="ident">Request</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">response</span>::<span class="ident">Response</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">ConnectCallback</span>, <span class="ident">Extensions</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">codec</span>::<span class="ident">Codec</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">dispatcher</span>::<span class="ident">Dispatcher</span>;
@@ -613,6 +635,7 @@
     <span class="ident">expect</span>: <span class="ident">X</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>,
     <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
 }
 
@@ -635,6 +658,7 @@
             <span class="ident">expect</span>: <span class="ident">ExpectHandler</span>,
             <span class="ident">upgrade</span>: <span class="prelude-val">None</span>,
             <span class="ident">on_connect</span>: <span class="prelude-val">None</span>,
+            <span class="ident">on_connect_ext</span>: <span class="prelude-val">None</span>,
             <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
         }
     }
@@ -796,6 +820,7 @@
             <span class="ident">srv</span>: <span class="self">self</span>.<span class="ident">srv</span>,
             <span class="ident">upgrade</span>: <span class="self">self</span>.<span class="ident">upgrade</span>,
             <span class="ident">on_connect</span>: <span class="self">self</span>.<span class="ident">on_connect</span>,
+            <span class="ident">on_connect_ext</span>: <span class="self">self</span>.<span class="ident">on_connect_ext</span>,
             <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
         }
     }
@@ -812,6 +837,7 @@
             <span class="ident">srv</span>: <span class="self">self</span>.<span class="ident">srv</span>,
             <span class="ident">expect</span>: <span class="self">self</span>.<span class="ident">expect</span>,
             <span class="ident">on_connect</span>: <span class="self">self</span>.<span class="ident">on_connect</span>,
+            <span class="ident">on_connect_ext</span>: <span class="self">self</span>.<span class="ident">on_connect_ext</span>,
             <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
         }
     }
@@ -822,6 +848,12 @@
         <span class="ident">f</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">on_connect</span> <span class="op">=</span> <span class="ident">f</span>;
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Set on connect callback.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">on_connect_ext</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">on_connect_ext</span> <span class="op">=</span> <span class="ident">f</span>;
         <span class="self">self</span>
     }
 }
@@ -857,6 +889,7 @@
             <span class="ident">expect</span>: <span class="prelude-val">None</span>,
             <span class="ident">upgrade</span>: <span class="prelude-val">None</span>,
             <span class="ident">on_connect</span>: <span class="self">self</span>.<span class="ident">on_connect</span>.<span class="ident">clone</span>(),
+            <span class="ident">on_connect_ext</span>: <span class="self">self</span>.<span class="ident">on_connect_ext</span>.<span class="ident">clone</span>(),
             <span class="ident">cfg</span>: <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>()),
             <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
         }
@@ -886,6 +919,7 @@
     <span class="ident">expect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">X</span>::<span class="ident">Service</span><span class="op">&gt;</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span>::<span class="ident">Service</span><span class="op">&gt;</span>,
     <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     <span class="ident">cfg</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServiceConfig</span><span class="op">&gt;</span>,
     <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
 }
@@ -935,23 +969,26 @@
 
         <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="ident">result</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">service</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
+
             <span class="ident">H1ServiceHandler</span>::<span class="ident">new</span>(
                 <span class="ident">this</span>.<span class="ident">cfg</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
                 <span class="ident">service</span>,
                 <span class="ident">this</span>.<span class="ident">expect</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
                 <span class="ident">this</span>.<span class="ident">upgrade</span>.<span class="ident">take</span>(),
                 <span class="ident">this</span>.<span class="ident">on_connect</span>.<span class="ident">clone</span>(),
+                <span class="ident">this</span>.<span class="ident">on_connect_ext</span>.<span class="ident">clone</span>(),
             )
         }))
     }
 }
 
-<span class="doccomment">/// `Service` implementation for HTTP1 transport</span>
+<span class="doccomment">/// `Service` implementation for HTTP/1 transport</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">H1ServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>: <span class="ident">Service</span>, <span class="ident">B</span>, <span class="ident">X</span>: <span class="ident">Service</span>, <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&gt;</span> {
     <span class="ident">srv</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
     <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;&gt;</span>,
     <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
     <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
 }
@@ -973,6 +1010,7 @@
         <span class="ident">expect</span>: <span class="ident">X</span>,
         <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>,
         <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     ) <span class="op">-&gt;</span> <span class="ident">H1ServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> {
         <span class="ident">H1ServiceHandler</span> {
             <span class="ident">srv</span>: <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">srv</span>),
@@ -980,6 +1018,7 @@
             <span class="ident">upgrade</span>: <span class="ident">upgrade</span>.<span class="ident">map</span>(<span class="ident">CloneableService</span>::<span class="ident">new</span>),
             <span class="ident">cfg</span>,
             <span class="ident">on_connect</span>,
+            <span class="ident">on_connect_ext</span>,
             <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
         }
     }
@@ -1045,11 +1084,13 @@
     }
 
     <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, (<span class="ident">io</span>, <span class="ident">addr</span>): <span class="self">Self</span>::<span class="ident">Request</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
-        <span class="kw">let</span> <span class="ident">on_connect</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">on_connect</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">on_connect</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">on_connect</span>(<span class="kw-2">&amp;</span><span class="ident">io</span>))
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        };
+        <span class="kw">let</span> <span class="ident">deprecated_on_connect</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">on_connect</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">handler</span><span class="op">|</span> <span class="ident">handler</span>(<span class="kw-2">&amp;</span><span class="ident">io</span>));
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">connect_extensions</span> <span class="op">=</span> <span class="ident">Extensions</span>::<span class="ident">new</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">handler</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">on_connect_ext</span> {
+            <span class="comment">// run on_connect_ext callback, populating connect extensions</span>
+            <span class="ident">handler</span>(<span class="kw-2">&amp;</span><span class="ident">io</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">connect_extensions</span>);
+        }
 
         <span class="ident">Dispatcher</span>::<span class="ident">new</span>(
             <span class="ident">io</span>,
@@ -1057,7 +1098,8 @@
             <span class="self">self</span>.<span class="ident">srv</span>.<span class="ident">clone</span>(),
             <span class="self">self</span>.<span class="ident">expect</span>.<span class="ident">clone</span>(),
             <span class="self">self</span>.<span class="ident">upgrade</span>.<span class="ident">clone</span>(),
-            <span class="ident">on_connect</span>,
+            <span class="ident">deprecated_on_connect</span>,
+            <span class="ident">connect_extensions</span>,
             <span class="ident">addr</span>,
         )
     }

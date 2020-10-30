@@ -170,6 +170,7 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
+<span id="172">172</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 
@@ -223,6 +224,7 @@
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">extend_from_slice</span>(<span class="ident">buf</span>);
         <span class="prelude-val">Ok</span>(<span class="ident">buf</span>.<span class="ident">len</span>())
     }
+
     <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(())
     }
