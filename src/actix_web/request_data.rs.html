@@ -227,7 +227,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ReqData</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="ident">T</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">ReqData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Consumes the `ReqData`, returning it&#39;s wrapped data.</span>
+    <span class="doccomment">/// Consumes the `ReqData`, returning its wrapped data.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
         <span class="self">self</span>.<span class="number">0</span>
     }
