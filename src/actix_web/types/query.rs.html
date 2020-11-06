@@ -337,7 +337,7 @@
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// // Use `Query` extractor for query information (and destructure it within the signature).</span>
-<span class="doccomment">/// // This handler gets called only if the request&#39;s query string contains a `username` field.</span>
+<span class="doccomment">/// // This handler gets called only if the request&#39;s query string contains `id` and `response_type` fields.</span>
 <span class="doccomment">/// // The correct request for this handler would be `/index.html?id=64&amp;response_type=Code&quot;`.</span>
 <span class="doccomment">/// async fn index(web::Query(info): web::Query&lt;AuthRequest&gt;) -&gt; String {</span>
 <span class="doccomment">///     format!(&quot;Authorization request for client with id={} and type={:?}!&quot;, info.id, info.response_type)</span>
@@ -415,7 +415,7 @@
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// // Use `Query` extractor for query information.</span>
-<span class="doccomment">/// // This handler get called only if request&#39;s query contains `username` field</span>
+<span class="doccomment">/// // This handler get called only if request&#39;s query contains `id` and `response_type` fields.</span>
 <span class="doccomment">/// // The correct request for this handler would be `/index.html?id=64&amp;response_type=Code&quot;`</span>
 <span class="doccomment">/// async fn index(info: web::Query&lt;AuthRequest&gt;) -&gt; String {</span>
 <span class="doccomment">///     format!(&quot;Authorization request for client with id={} and type={:?}!&quot;, info.id, info.response_type)</span>

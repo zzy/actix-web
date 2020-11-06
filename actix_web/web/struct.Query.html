@@ -22,7 +22,7 @@ Attempts to do so will <em>fail at runtime</em>.</p>
 }
 
 <span class="comment">// Use `Query` extractor for query information (and destructure it within the signature).</span>
-<span class="comment">// This handler gets called only if the request&#39;s query string contains a `username` field.</span>
+<span class="comment">// This handler gets called only if the request&#39;s query string contains `id` and `response_type` fields.</span>
 <span class="comment">// The correct request for this handler would be `/index.html?id=64&amp;response_type=Code&quot;`.</span>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">web</span>::<span class="ident">Query</span>(<span class="ident">info</span>): <span class="ident">web</span>::<span class="ident">Query</span><span class="op">&lt;</span><span class="ident">AuthRequest</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Authorization request for client with id={} and type={:?}!&quot;</span>, <span class="ident">info</span>.<span class="ident">id</span>, <span class="ident">info</span>.<span class="ident">response_type</span>)
@@ -58,7 +58,7 @@ Attempts to do so will <em>fail at runtime</em>.</p>
 }
 
 <span class="comment">// Use `Query` extractor for query information.</span>
-<span class="comment">// This handler get called only if request&#39;s query contains `username` field</span>
+<span class="comment">// This handler get called only if request&#39;s query contains `id` and `response_type` fields.</span>
 <span class="comment">// The correct request for this handler would be `/index.html?id=64&amp;response_type=Code&quot;`</span>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Query</span><span class="op">&lt;</span><span class="ident">AuthRequest</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Authorization request for client with id={} and type={:?}!&quot;</span>, <span class="ident">info</span>.<span class="ident">id</span>, <span class="ident">info</span>.<span class="ident">response_type</span>)
