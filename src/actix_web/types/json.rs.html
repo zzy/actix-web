@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/types/json.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>json.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../actix_web/index.html'><div class='logo-container'><img src='https://actix.rs/img/logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/types/json.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>json.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../actix_web/index.html'><div class='logo-container'><img src='https://actix.rs/img/logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -768,7 +768,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Json</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Deconstruct to an inner value</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
         <span class="self">self</span>.<span class="number">0</span>
     }
 }
@@ -776,13 +776,13 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ops</span>::<span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">Json</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">T</span>;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ops</span>::<span class="ident">DerefMut</span> <span class="kw">for</span> <span class="ident">Json</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>
     }
 }
@@ -791,7 +791,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Json: {:?}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -800,19 +800,19 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">fmt</span>::<span class="ident">Display</span>::<span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, <span class="ident">f</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Serialize</span><span class="op">&gt;</span> <span class="ident">Responder</span> <span class="kw">for</span> <span class="ident">Json</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span>, <span class="ident">Error</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">respond_to</span>(<span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">respond_to</span>(<span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">body</span>) <span class="op">=&gt;</span> <span class="ident">body</span>,
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">err</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">Ok</span>(<span class="ident">body</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">body</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">err</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
         };
 
         <span class="ident">ok</span>(<span class="ident">Response</span>::<span class="ident">build</span>(<span class="ident">StatusCode</span>::<span class="ident">OK</span>)
@@ -858,11 +858,11 @@
     <span class="ident">T</span>: <span class="ident">DeserializeOwned</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> <span class="ident">JsonConfig</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Payload</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">let</span> <span class="ident">req2</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">JsonConfig</span>::<span class="ident">from_req</span>(<span class="ident">req</span>);
 
@@ -873,7 +873,7 @@
         <span class="ident">JsonBody</span>::<span class="ident">new</span>(<span class="ident">req</span>, <span class="ident">payload</span>, <span class="ident">ctype</span>)
             .<span class="ident">limit</span>(<span class="ident">limit</span>)
             .<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">res</span> {
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(
                         <span class="string">&quot;Failed to deserialize Json from payload. \
                          Request path: {}&quot;</span>,
@@ -886,7 +886,7 @@
                         <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>())
                     }
                 }
-                <span class="prelude-val">Ok</span>(<span class="ident">data</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Json</span>(<span class="ident">data</span>)),
+                <span class="prelude-val">Ok</span>(<span class="ident">data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Json</span>(<span class="ident">data</span>)),
             })
             .<span class="ident">boxed_local</span>()
     }
@@ -934,30 +934,30 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">JsonConfig</span> {
     <span class="ident">limit</span>: <span class="ident">usize</span>,
     <span class="ident">err_handler</span>:
-        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="ident">JsonPayloadError</span>, <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;&gt;</span>,
-    <span class="ident">content_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;&gt;</span>,
+        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="ident">JsonPayloadError</span>, <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">content_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">JsonConfig</span> {
     <span class="doccomment">/// Change max size of payload. By default max size is 32Kb</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="ident">limit</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Set custom error handler</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_handler</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_handler</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">JsonPayloadError</span>, <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">JsonPayloadError</span>, <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="self">self</span>.<span class="ident">err_handler</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">f</span>));
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Set predicate for allowed content types</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_type</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">predicate</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_type</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">predicate</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="self">self</span>.<span class="ident">content_type</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">predicate</span>));
         <span class="self">self</span>
@@ -965,9 +965,9 @@
 
     <span class="doccomment">/// Extract payload config from app data. Check both `T` and `Data&lt;T&gt;`, in that order, and fall</span>
     <span class="doccomment">/// back to the default payload config.</span>
-    <span class="kw">fn</span> <span class="ident">from_req</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from_req</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span> {
         <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()
-            .<span class="ident">or_else</span>(<span class="op">||</span> <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">as_ref</span>()))
+            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">as_ref</span>()))
             .<span class="ident">unwrap_or</span>(<span class="kw-2">&amp;</span><span class="ident">DEFAULT_CONFIG</span>)
     }
 }
@@ -980,7 +980,7 @@
 };
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">JsonConfig</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">DEFAULT_CONFIG</span>.<span class="ident">clone</span>()
     }
 }
@@ -997,11 +997,11 @@
     <span class="ident">limit</span>: <span class="ident">usize</span>,
     <span class="ident">length</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
-    <span class="ident">stream</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Decompress</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;&gt;</span>,
+    <span class="ident">stream</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Decompress</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>))]</span>
     <span class="ident">stream</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
     <span class="ident">err</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">JsonPayloadError</span><span class="op">&gt;</span>,
-    <span class="ident">fut</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">JsonPayloadError</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">fut</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">JsonPayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span> <span class="ident">JsonBody</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>
@@ -1013,13 +1013,13 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>,
         <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Payload</span>,
-        <span class="ident">ctype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="ident">ctype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="comment">// check content-type</span>
         <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">mime</span>)) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">mime_type</span>() {
-            <span class="ident">mime</span>.<span class="ident">subtype</span>() <span class="op">==</span> <span class="ident">mime</span>::<span class="ident">JSON</span>
-                <span class="op">||</span> <span class="ident">mime</span>.<span class="ident">suffix</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">mime</span>::<span class="ident">JSON</span>)
-                <span class="op">||</span> <span class="ident">ctype</span>.<span class="ident">as_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">predicate</span><span class="op">|</span> <span class="ident">predicate</span>(<span class="ident">mime</span>))
+            <span class="ident">mime</span>.<span class="ident">subtype</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">mime</span>::<span class="ident">JSON</span>
+                <span class="op">|</span><span class="op">|</span> <span class="ident">mime</span>.<span class="ident">suffix</span>() <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">mime</span>::<span class="ident">JSON</span>)
+                <span class="op">|</span><span class="op">|</span> <span class="ident">ctype</span>.<span class="ident">as_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">predicate</span><span class="op">|</span> <span class="ident">predicate</span>(<span class="ident">mime</span>))
         } <span class="kw">else</span> {
             <span class="bool-val">false</span>
         };
@@ -1055,7 +1055,7 @@
     }
 
     <span class="doccomment">/// Change max size of payload. By default max size is 256Kb</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="ident">limit</span>;
         <span class="self">self</span>
     }
@@ -1067,7 +1067,7 @@
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">JsonPayloadError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">fut</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">fut</span> {
             <span class="kw">return</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">fut</span>).<span class="ident">poll</span>(<span class="ident">cx</span>);
         }
@@ -1085,10 +1085,10 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stream</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stream</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
 
         <span class="self">self</span>.<span class="ident">fut</span> <span class="op">=</span> <span class="prelude-val">Some</span>(
-            <span class="kw">async</span> <span class="kw">move</span> {
+            <span class="ident">async</span> <span class="kw">move</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="number">8192</span>);
 
-                <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">next</span>().<span class="kw">await</span> {
+                <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">next</span>().<span class="ident">await</span> {
                     <span class="kw">let</span> <span class="ident">chunk</span> <span class="op">=</span> <span class="ident">item</span><span class="question-mark">?</span>;
                     <span class="kw">if</span> (<span class="ident">body</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">chunk</span>.<span class="ident">len</span>()) <span class="op">&gt;</span> <span class="ident">limit</span> {
                         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">JsonPayloadError</span>::<span class="ident">Overflow</span>);
@@ -1121,24 +1121,24 @@
         <span class="ident">name</span>: <span class="ident">String</span>,
     }
 
-    <span class="kw">fn</span> <span class="ident">json_eq</span>(<span class="ident">err</span>: <span class="ident">JsonPayloadError</span>, <span class="ident">other</span>: <span class="ident">JsonPayloadError</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">json_eq</span>(<span class="ident">err</span>: <span class="ident">JsonPayloadError</span>, <span class="ident">other</span>: <span class="ident">JsonPayloadError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="ident">err</span> {
-            <span class="ident">JsonPayloadError</span>::<span class="ident">Overflow</span> <span class="op">=&gt;</span> <span class="macro">matches</span><span class="macro">!</span>(<span class="ident">other</span>, <span class="ident">JsonPayloadError</span>::<span class="ident">Overflow</span>),
-            <span class="ident">JsonPayloadError</span>::<span class="ident">ContentType</span> <span class="op">=&gt;</span> {
+            <span class="ident">JsonPayloadError</span>::<span class="ident">Overflow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">matches</span><span class="macro">!</span>(<span class="ident">other</span>, <span class="ident">JsonPayloadError</span>::<span class="ident">Overflow</span>),
+            <span class="ident">JsonPayloadError</span>::<span class="ident">ContentType</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="macro">matches</span><span class="macro">!</span>(<span class="ident">other</span>, <span class="ident">JsonPayloadError</span>::<span class="ident">ContentType</span>)
             }
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
         }
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_responder</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_responder</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_http_request</span>();
 
         <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="ident">Json</span>(<span class="ident">MyObject</span> {
             <span class="ident">name</span>: <span class="string">&quot;test&quot;</span>.<span class="ident">to_string</span>(),
         });
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">j</span>.<span class="ident">respond_to</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">j</span>.<span class="ident">respond_to</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode</span>::<span class="ident">OK</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>(),
@@ -1150,7 +1150,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_custom_error_responder</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_custom_error_responder</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
             .<span class="ident">header</span>(
                 <span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>,
@@ -1171,17 +1171,17 @@
             }))
             .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Response</span>::<span class="ident">from_error</span>(<span class="ident">s</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>());
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>);
 
-        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">load_stream</span>(<span class="ident">resp</span>.<span class="ident">take_body</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">load_stream</span>(<span class="ident">resp</span>.<span class="ident">take_body</span>()).<span class="ident">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">msg</span>: <span class="ident">MyObject</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">msg</span>.<span class="ident">name</span>, <span class="string">&quot;invalid request&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_extract</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_extract</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
             .<span class="ident">header</span>(
                 <span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>,
@@ -1194,7 +1194,7 @@
             .<span class="ident">set_payload</span>(<span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;{\&quot;name\&quot;: \&quot;test\&quot;}&quot;</span>))
             .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">name</span>, <span class="string">&quot;test&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">s</span>.<span class="ident">into_inner</span>(),
@@ -1216,7 +1216,7 @@
             .<span class="ident">app_data</span>(<span class="ident">JsonConfig</span>::<span class="ident">default</span>().<span class="ident">limit</span>(<span class="number">10</span>))
             .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>())
             .<span class="ident">contains</span>(<span class="string">&quot;Json payload size is bigger than allowed&quot;</span>));
 
@@ -1236,14 +1236,14 @@
                     .<span class="ident">error_handler</span>(<span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="ident">JsonPayloadError</span>::<span class="ident">ContentType</span>.<span class="ident">into</span>()),
             )
             .<span class="ident">to_http_parts</span>();
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>()).<span class="ident">contains</span>(<span class="string">&quot;Content type error&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_json_body</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_json_body</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_http_parts</span>();
-        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="ident">JsonBody</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="ident">JsonBody</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>, <span class="prelude-val">None</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">json_eq</span>(<span class="ident">json</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>(), <span class="ident">JsonPayloadError</span>::<span class="ident">ContentType</span>));
 
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
@@ -1252,7 +1252,7 @@
                 <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;application/text&quot;</span>),
             )
             .<span class="ident">to_http_parts</span>();
-        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="ident">JsonBody</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="ident">JsonBody</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>, <span class="prelude-val">None</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">json_eq</span>(<span class="ident">json</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>(), <span class="ident">JsonPayloadError</span>::<span class="ident">ContentType</span>));
 
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
@@ -1268,7 +1268,7 @@
 
         <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="ident">JsonBody</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>, <span class="prelude-val">None</span>)
             .<span class="ident">limit</span>(<span class="number">100</span>)
-            .<span class="kw">await</span>;
+            .<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">json_eq</span>(<span class="ident">json</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>(), <span class="ident">JsonPayloadError</span>::<span class="ident">Overflow</span>));
 
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
@@ -1283,7 +1283,7 @@
             .<span class="ident">set_payload</span>(<span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;{\&quot;name\&quot;: \&quot;test\&quot;}&quot;</span>))
             .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="ident">JsonBody</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="ident">JsonBody</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>, <span class="prelude-val">None</span>).<span class="ident">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">json</span>.<span class="ident">ok</span>().<span class="ident">unwrap</span>(),
             <span class="ident">MyObject</span> {
@@ -1293,7 +1293,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_with_json_and_bad_content_type</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_with_json_and_bad_content_type</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
             <span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>,
             <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;text/plain&quot;</span>),
@@ -1306,12 +1306,12 @@
         .<span class="ident">app_data</span>(<span class="ident">JsonConfig</span>::<span class="ident">default</span>().<span class="ident">limit</span>(<span class="number">4096</span>))
         .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">is_err</span>())
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_with_json_and_good_custom_content_type</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_with_json_and_good_custom_content_type</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
             <span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>,
             <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;text/plain&quot;</span>),
@@ -1322,16 +1322,16 @@
         )
         .<span class="ident">set_payload</span>(<span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;{\&quot;name\&quot;: \&quot;test\&quot;}&quot;</span>))
         .<span class="ident">app_data</span>(<span class="ident">JsonConfig</span>::<span class="ident">default</span>().<span class="ident">content_type</span>(<span class="op">|</span><span class="ident">mime</span>: <span class="ident">mime</span>::<span class="ident">Mime</span><span class="op">|</span> {
-            <span class="ident">mime</span>.<span class="ident">type_</span>() <span class="op">==</span> <span class="ident">mime</span>::<span class="ident">TEXT</span> <span class="op">&amp;&amp;</span> <span class="ident">mime</span>.<span class="ident">subtype</span>() <span class="op">==</span> <span class="ident">mime</span>::<span class="ident">PLAIN</span>
+            <span class="ident">mime</span>.<span class="ident">type_</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">mime</span>::<span class="ident">TEXT</span> <span class="op">&amp;&amp;</span> <span class="ident">mime</span>.<span class="ident">subtype</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">mime</span>::<span class="ident">PLAIN</span>
         }))
         .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">is_ok</span>())
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_with_json_and_bad_custom_content_type</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_with_json_and_bad_custom_content_type</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
             <span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>,
             <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;text/html&quot;</span>),
@@ -1342,16 +1342,16 @@
         )
         .<span class="ident">set_payload</span>(<span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;{\&quot;name\&quot;: \&quot;test\&quot;}&quot;</span>))
         .<span class="ident">app_data</span>(<span class="ident">JsonConfig</span>::<span class="ident">default</span>().<span class="ident">content_type</span>(<span class="op">|</span><span class="ident">mime</span>: <span class="ident">mime</span>::<span class="ident">Mime</span><span class="op">|</span> {
-            <span class="ident">mime</span>.<span class="ident">type_</span>() <span class="op">==</span> <span class="ident">mime</span>::<span class="ident">TEXT</span> <span class="op">&amp;&amp;</span> <span class="ident">mime</span>.<span class="ident">subtype</span>() <span class="op">==</span> <span class="ident">mime</span>::<span class="ident">PLAIN</span>
+            <span class="ident">mime</span>.<span class="ident">type_</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">mime</span>::<span class="ident">TEXT</span> <span class="op">&amp;&amp;</span> <span class="ident">mime</span>.<span class="ident">subtype</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">mime</span>::<span class="ident">PLAIN</span>
         }))
         .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">is_err</span>())
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_with_config_in_data_wrapper</span>() {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_with_config_in_data_wrapper</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
             .<span class="ident">header</span>(<span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;application/json&quot;</span>))
             .<span class="ident">header</span>(<span class="ident">CONTENT_LENGTH</span>, <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;16&quot;</span>))
@@ -1359,7 +1359,7 @@
             .<span class="ident">app_data</span>(<span class="ident">web</span>::<span class="ident">Data</span>::<span class="ident">new</span>(<span class="ident">JsonConfig</span>::<span class="ident">default</span>().<span class="ident">limit</span>(<span class="number">10</span>)))
             .<span class="ident">to_http_parts</span>();
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Json</span>::<span class="op">&lt;</span><span class="ident">MyObject</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">is_err</span>());
 
         <span class="kw">let</span> <span class="ident">err_str</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>().<span class="ident">to_string</span>();
