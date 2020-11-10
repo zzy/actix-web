@@ -701,7 +701,7 @@
     <span class="doccomment">/// image, and video content types, and `attachment` otherwise, and</span>
     <span class="doccomment">/// the filename is taken from the path provided in the `open` method</span>
     <span class="doccomment">/// after converting it to UTF-8 using.</span>
-    <span class="doccomment">/// [to_string_lossy](https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy).</span>
+    <span class="doccomment">/// [`std::ffi::OsStr::to_string_lossy`]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_content_disposition</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cd</span>: <span class="ident">header</span>::<span class="ident">ContentDisposition</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">content_disposition</span> <span class="op">=</span> <span class="ident">cd</span>;
