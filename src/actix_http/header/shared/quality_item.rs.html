@@ -311,7 +311,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [RFC7231 Section 5.3.1](https://tools.ietf.org/html/rfc7231#section-5.3.1)</span>
 <span class="doccomment">/// gives more information on quality values in HTTP header fields.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Quality</span>(<span class="ident">u16</span>);
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Quality</span> {
@@ -414,7 +414,7 @@
 <span class="doccomment">/// Convenience function to wrap a value in a `QualityItem`</span>
 <span class="doccomment">/// Sets `q` to the default 1.0</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">qitem</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">item</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">QualityItem</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">item</span>, <span class="ident">Default</span>::<span class="ident">default</span>())
+    <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">item</span>, <span class="ident">Quality</span>::<span class="ident">default</span>())
 }
 
 <span class="doccomment">/// Convenience function to create a `Quality` from a float or integer.</span>
