@@ -499,8 +499,6 @@
 <span id="498">498</span>
 <span id="499">499</span>
 <span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Various http headers</span>
 <span class="comment">// This is mostly copy of [hyper](https://github.com/hyperium/hyper/tree/master/src/header)</span>
@@ -874,9 +872,7 @@
 }
 
 <span class="doccomment">/// Percent encode a sequence of bytes with a character set defined in</span>
-<span class="doccomment">/// [https://tools.ietf.org/html/rfc5987#section-3.2][url]</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [url]: https://tools.ietf.org/html/rfc5987#section-3.2</span>
+<span class="doccomment">/// &lt;https://tools.ietf.org/html/rfc5987#section-3.2&gt;</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">http_percent_encode</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
     <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="ident">percent_encoding</span>::<span class="ident">percent_encode</span>(<span class="ident">bytes</span>, <span class="ident">HTTP_VALUE</span>);
     <span class="ident">fmt</span>::<span class="ident">Display</span>::<span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="ident">encoded</span>, <span class="ident">f</span>)
