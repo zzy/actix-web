@@ -260,6 +260,18 @@
 <span id="257">257</span>
 <span id="258">258</span>
 <span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell</span>::<span class="ident">RefCell</span>, <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">path</span>::<span class="ident">PathBuf</span>, <span class="ident">rc</span>::<span class="ident">Rc</span>};
 
@@ -328,13 +340,25 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Files</span> {
-    <span class="doccomment">/// Create new `Files` instance for specified base directory.</span>
+    <span class="doccomment">/// Create new `Files` instance for a specified base directory.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// `File` uses `ThreadPool` for blocking filesystem operations.</span>
-    <span class="doccomment">/// By default pool with 5x threads of available cpus is used.</span>
-    <span class="doccomment">/// Pool size can be changed by setting ACTIX_THREADPOOL environment variable.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">dir</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Files</span> {
-        <span class="kw">let</span> <span class="ident">orig_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">into</span>();
+    <span class="doccomment">/// # Argument Order</span>
+    <span class="doccomment">/// The first argument (`mount_path`) is the root URL at which the static files are served.</span>
+    <span class="doccomment">/// For example, `/assets` will serve files at `example.com/assets/...`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The second argument (`serve_from`) is the location on disk at which files are loaded.</span>
+    <span class="doccomment">/// This can be a relative path. For example, `./` would serve files from the current</span>
+    <span class="doccomment">/// working directory.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Implementation Notes</span>
+    <span class="doccomment">/// If the mount path is set as the root path `/`, services registered after this one will</span>
+    <span class="doccomment">/// be inaccessible. Register more specific handlers and services first.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `Files` uses a threadpool for blocking filesystem operations. By default, the pool uses a</span>
+    <span class="doccomment">/// number of threads equal to 5x the number of available logical CPUs. Pool size can be changed</span>
+    <span class="doccomment">/// by setting ACTIX_THREADPOOL environment variable.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">mount_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">serve_from</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Files</span> {
+        <span class="kw">let</span> <span class="ident">orig_dir</span> <span class="op">=</span> <span class="ident">serve_from</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">orig_dir</span>.<span class="ident">canonicalize</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">canon_dir</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">canon_dir</span>,
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -344,7 +368,7 @@
         };
 
         <span class="ident">Files</span> {
-            <span class="ident">path</span>: <span class="ident">path</span>.<span class="ident">to_string</span>(),
+            <span class="ident">path</span>: <span class="ident">mount_path</span>.<span class="ident">to_owned</span>(),
             <span class="ident">directory</span>: <span class="ident">dir</span>,
             <span class="ident">index</span>: <span class="prelude-val">None</span>,
             <span class="ident">show_index</span>: <span class="bool-val">false</span>,
