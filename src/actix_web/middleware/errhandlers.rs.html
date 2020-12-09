@@ -205,6 +205,7 @@
 <span id="204">204</span>
 <span id="205">205</span>
 <span id="206">206</span>
+<span id="207">207</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Custom handlers service for responses.</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -362,6 +363,7 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">test</span>::{<span class="self">self</span>, <span class="ident">TestRequest</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">HttpResponse</span>;
 
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">unnecessary_wraps</span>)]</span>
     <span class="kw">fn</span> <span class="ident">render_500</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">res</span>: <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ErrorHandlerResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">res</span>.<span class="ident">response_mut</span>()
             .<span class="ident">headers_mut</span>()
