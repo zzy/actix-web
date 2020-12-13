@@ -824,7 +824,6 @@
 <span id="823">823</span>
 <span id="824">824</span>
 <span id="825">825</span>
-<span id="826">826</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Request logging middleware</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
@@ -910,11 +909,10 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Security</span>
 <span class="doccomment">///  **\*** It is calculated using</span>
-<span class="doccomment">///  [`ConnectionInfo::realip_remote_addr()`](../dev/struct.ConnectionInfo.html#method.realip_remote_addr)</span>
+<span class="doccomment">///  [`ConnectionInfo::realip_remote_addr()`](crate::dev::ConnectionInfo::realip_remote_addr())</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///  If you use this value ensure that all requests come from trusted hosts, since it is trivial</span>
 <span class="doccomment">///  for the remote client to simulate being another client.</span>
-<span class="doccomment">///</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Logger</span>(<span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Inner</span><span class="op">&gt;</span>);
 
 <span class="kw">struct</span> <span class="ident">Inner</span> {

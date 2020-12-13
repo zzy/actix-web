@@ -716,7 +716,7 @@
 <span class="doccomment">/// To extract typed information from request&#39;s body, the type `T` must</span>
 <span class="doccomment">/// implement the `Deserialize` trait from *serde*.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// [**JsonConfig**](struct.JsonConfig.html) allows to configure extraction</span>
+<span class="doccomment">/// [**JsonConfig**](JsonConfig) allows to configure extraction</span>
 <span class="doccomment">/// process.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Example</span>
@@ -827,7 +827,7 @@
 <span class="doccomment">/// To extract typed information from request&#39;s body, the type `T` must</span>
 <span class="doccomment">/// implement the `Deserialize` trait from *serde*.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// [**JsonConfig**](struct.JsonConfig.html) allows to configure extraction</span>
+<span class="doccomment">/// [**JsonConfig**](JsonConfig) allows to configure extraction</span>
 <span class="doccomment">/// process.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Example</span>
@@ -991,7 +991,7 @@
 <span class="doccomment">/// Returns error:</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// * content type is not `application/json`</span>
-<span class="doccomment">///   (unless specified in [`JsonConfig`](struct.JsonConfig.html))</span>
+<span class="doccomment">///   (unless specified in [`JsonConfig`])</span>
 <span class="doccomment">/// * content length is greater than 256k</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">JsonBody</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span> {
     <span class="ident">limit</span>: <span class="ident">usize</span>,

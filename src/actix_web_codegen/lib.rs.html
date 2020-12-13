@@ -197,8 +197,6 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Macros for reducing boilerplate code in Actix Web applications.</span>
 <span class="doccomment">//!</span>
@@ -210,7 +208,7 @@
 <span class="doccomment">//! are re-exported.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Runtime Setup</span>
-<span class="doccomment">//! Used for setting up the actix async runtime. See [main] macro docs.</span>
+<span class="doccomment">//! Used for setting up the actix async runtime. See [macro@main] macro docs.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```rust</span>
 <span class="doccomment">//! #[actix_web_codegen::main] // or `#[actix_web::main]` in Actix Web apps</span>
@@ -236,7 +234,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Multiple Method Handlers</span>
 <span class="doccomment">//! Similar to the single method handler macro but takes one or more arguments for the HTTP methods</span>
-<span class="doccomment">//! it should respond to. See [route] macro docs.</span>
+<span class="doccomment">//! it should respond to. See [macro@route] macro docs.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```rust</span>
 <span class="doccomment">//! # use actix_web::HttpResponse;</span>
@@ -248,17 +246,15 @@
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [actix-web attributes docs]: https://docs.rs/actix-web/*/actix_web/#attributes</span>
-<span class="doccomment">//! [main]: attr.main.html</span>
-<span class="doccomment">//! [route]: attr.route.html</span>
-<span class="doccomment">//! [GET]: attr.get.html</span>
-<span class="doccomment">//! [POST]: attr.post.html</span>
-<span class="doccomment">//! [PUT]: attr.put.html</span>
-<span class="doccomment">//! [DELETE]: attr.delete.html</span>
-<span class="doccomment">//! [HEAD]: attr.head.html</span>
-<span class="doccomment">//! [CONNECT]: attr.connect.html</span>
-<span class="doccomment">//! [OPTIONS]: attr.options.html</span>
-<span class="doccomment">//! [TRACE]: attr.trace.html</span>
-<span class="doccomment">//! [PATCH]: attr.patch.html</span>
+<span class="doccomment">//! [GET]: macro@get</span>
+<span class="doccomment">//! [POST]: macro@post</span>
+<span class="doccomment">//! [PUT]: macro@put</span>
+<span class="doccomment">//! [HEAD]: macro@head</span>
+<span class="doccomment">//! [CONNECT]: macro@macro@connect</span>
+<span class="doccomment">//! [OPTIONS]: macro@options</span>
+<span class="doccomment">//! [TRACE]: macro@trace</span>
+<span class="doccomment">//! [PATCH]: macro@patch</span>
+<span class="doccomment">//! [DELETE]: macro@delete</span>
 
 <span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;512&quot;</span>]</span>
 
