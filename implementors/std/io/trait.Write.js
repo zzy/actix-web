@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["actix_http"] = [{"text":"impl Write for TestBuffer","synthetic":false,"types":[]}];
+implementors["actix_http"] = [{"text":"impl Write for TestBuffer","synthetic":false,"types":[]},{"text":"impl Write for TestSeqBuffer","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

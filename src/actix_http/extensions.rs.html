@@ -249,8 +249,8 @@
 
 <span class="kw">use</span> <span class="ident">fxhash</span>::<span class="ident">FxHashMap</span>;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="doccomment">/// A type map of request extensions.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Extensions</span> {
     <span class="doccomment">/// Use FxHasher with a std HashMap with for faster</span>
     <span class="doccomment">/// lookups on the small `TypeId` (u64 equivalent) keys.</span>

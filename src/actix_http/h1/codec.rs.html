@@ -238,6 +238,7 @@
 <span id="237">237</span>
 <span id="238">238</span>
 <span id="239">239</span>
+<span id="240">240</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io</span>};
 
@@ -299,6 +300,7 @@
         } <span class="kw">else</span> {
             <span class="ident">Flags</span>::<span class="ident">empty</span>()
         };
+
         <span class="ident">Codec</span> {
             <span class="ident">config</span>,
             <span class="ident">flags</span>,
@@ -310,26 +312,26 @@
         }
     }
 
+    <span class="doccomment">/// Check if request is upgrade.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Check if request is upgrade</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">ctype</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ConnectionType</span>::<span class="ident">Upgrade</span>
     }
 
+    <span class="doccomment">/// Check if last response is keep-alive.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Check if last response is keep-alive</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keepalive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">ctype</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span>
     }
 
+    <span class="doccomment">/// Check if keep-alive enabled on server level.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Check if keep-alive enabled on server level</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keepalive_enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">KEEPALIVE_ENABLED</span>)
     }
 
+    <span class="doccomment">/// Check last request&#39;s message type.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Check last request&#39;s message type</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">message_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MessageType</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">STREAM</span>) {
             <span class="ident">MessageType</span>::<span class="ident">Stream</span>

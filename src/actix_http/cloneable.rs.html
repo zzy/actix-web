@@ -46,12 +46,12 @@
 
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="doccomment">/// Service that allows to turn non-clone service to a service with `Clone` impl</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Panics</span>
 <span class="doccomment">/// CloneableService might panic with some creative use of thread local storage.</span>
 <span class="doccomment">/// See https://github.com/actix/actix-web/issues/1295 for example</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Service</span><span class="op">&gt;</span>(<span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Service</span><span class="op">&gt;</span> <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
