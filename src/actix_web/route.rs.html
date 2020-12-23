@@ -396,7 +396,6 @@
 <span id="395">395</span>
 <span id="396">396</span>
 <span id="397">397</span>
-<span id="398">398</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">rc_buffer</span>)]</span> <span class="comment">// inner value is mutated before being shared (`Rc::get_mut`)</span>
 
@@ -411,7 +410,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">extract</span>::<span class="ident">FromRequest</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">guard</span>::{<span class="self">self</span>, <span class="ident">Guard</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">handler</span>::{<span class="ident">Extract</span>, <span class="ident">Factory</span>, <span class="ident">Handler</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">handler</span>::{<span class="ident">Factory</span>, <span class="ident">Handler</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">responder</span>::<span class="ident">Responder</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">HttpResponse</span>;
@@ -451,9 +450,9 @@
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">new_without_default</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Route</span> {
         <span class="ident">Route</span> {
-            <span class="ident">service</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">RouteNewService</span>::<span class="ident">new</span>(<span class="ident">Extract</span>::<span class="ident">new</span>(<span class="ident">Handler</span>::<span class="ident">new</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="ident">service</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">RouteNewService</span>::<span class="ident">new</span>(<span class="ident">Handler</span>::<span class="ident">new</span>(<span class="op">|</span><span class="op">|</span> {
                 <span class="ident">ready</span>(<span class="ident">HttpResponse</span>::<span class="ident">NotFound</span>())
-            })))),
+            }))),
             <span class="ident">guards</span>: <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">Vec</span>::<span class="ident">new</span>()),
         }
     }
@@ -626,8 +625,7 @@
         <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">U</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">U</span>: <span class="ident">Responder</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
-        <span class="self">self</span>.<span class="ident">service</span> <span class="op">=</span>
-            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">RouteNewService</span>::<span class="ident">new</span>(<span class="ident">Extract</span>::<span class="ident">new</span>(<span class="ident">Handler</span>::<span class="ident">new</span>(<span class="ident">handler</span>))));
+        <span class="self">self</span>.<span class="ident">service</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">RouteNewService</span>::<span class="ident">new</span>(<span class="ident">Handler</span>::<span class="ident">new</span>(<span class="ident">handler</span>)));
         <span class="self">self</span>
     }
 }
