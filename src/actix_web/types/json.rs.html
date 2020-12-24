@@ -913,7 +913,7 @@
         <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">JsonConfig</span>::<span class="ident">from_req</span>(<span class="ident">req</span>);
 
         <span class="kw">let</span> <span class="ident">limit</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">limit</span>;
-        <span class="kw">let</span> <span class="ident">ctype</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">content_type</span>.<span class="ident">clone</span>();
+        <span class="kw">let</span> <span class="ident">ctype</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">content_type</span>.<span class="ident">as_deref</span>();
         <span class="kw">let</span> <span class="ident">err_handler</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">err_handler</span>.<span class="ident">clone</span>();
 
         <span class="ident">JsonExtractFut</span> {
@@ -1091,7 +1091,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>,
         <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Payload</span>,
-        <span class="ident">ctype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">ctype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="ident">mime</span>::<span class="ident">Mime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>)<span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="comment">// check content-type</span>
         <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">mime</span>)) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">mime_type</span>() {
