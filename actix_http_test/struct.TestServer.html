@@ -8,9 +8,9 @@ integration tests for actix-net applications.</p>
 <span class="kw">use</span> <span class="ident">actix_testing</span>::<span class="ident">TestServer</span>;
 
 <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">main</span>]</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">TestServer</span>::<span class="ident">with</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">fn_service</span>(
-        <span class="op">|</span><span class="ident">sock</span><span class="op">|</span> <span class="ident">async</span> <span class="kw">move</span> {
+        <span class="op">|</span><span class="ident">sock</span><span class="op">|</span> <span class="kw">async</span> <span class="kw">move</span> {
             <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;New connection: {:?}&quot;</span>, <span class="ident">sock</span>);
             <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, ()<span class="op">&gt;</span>(())
         }

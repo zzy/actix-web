@@ -1321,7 +1321,7 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Client</span>;
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_debug</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_debug</span>() {
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">header</span>(<span class="string">&quot;x-test&quot;</span>, <span class="string">&quot;111&quot;</span>);
         <span class="kw">let</span> <span class="ident">repr</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">request</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">repr</span>.<span class="ident">contains</span>(<span class="string">&quot;ClientRequest&quot;</span>));
@@ -1329,7 +1329,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_basics</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_basics</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>()
             .<span class="ident">put</span>(<span class="string">&quot;/&quot;</span>)
             .<span class="ident">version</span>(<span class="ident">Version</span>::<span class="ident">HTTP_2</span>)
@@ -1364,7 +1364,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_client_header</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_client_header</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">builder</span>()
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;111&quot;</span>)
             .<span class="ident">finish</span>()
@@ -1382,7 +1382,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_client_header_override</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_client_header_override</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">builder</span>()
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;111&quot;</span>)
             .<span class="ident">finish</span>()
@@ -1401,7 +1401,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">client_basic_auth</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">client_basic_auth</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>()
             .<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>)
             .<span class="ident">basic_auth</span>(<span class="string">&quot;username&quot;</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;password&quot;</span>));
@@ -1428,7 +1428,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">client_bearer_auth</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">client_bearer_auth</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">bearer_auth</span>(<span class="string">&quot;someS3cr3tAutht0k3n&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">req</span>.<span class="ident">head</span>
@@ -1442,7 +1442,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">client_query</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">client_query</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>()
             .<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>)
             .<span class="ident">query</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;key1&quot;</span>, <span class="string">&quot;val1&quot;</span>), (<span class="string">&quot;key2&quot;</span>, <span class="string">&quot;val2&quot;</span>)])

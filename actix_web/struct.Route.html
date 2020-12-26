@@ -33,7 +33,7 @@ If handler is not explicitly set, default <em>404 Not Found</em> handler is used
 }
 
 <span class="doccomment">/// extract path info using serde</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">info</span>.<span class="ident">username</span>)
 }
 
@@ -54,7 +54,7 @@ If handler is not explicitly set, default <em>404 Not Found</em> handler is used
 }
 
 <span class="doccomment">/// extract path info using serde</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">path</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>, <span class="ident">query</span>: <span class="ident">web</span>::<span class="ident">Query</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">body</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">path</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>, <span class="ident">query</span>: <span class="ident">web</span>::<span class="ident">Query</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">body</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">path</span>.<span class="ident">username</span>)
 }
 

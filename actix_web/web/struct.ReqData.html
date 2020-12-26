@@ -19,7 +19,7 @@ provided to make this potential foot-gun more obvious.</p>
 <span class="kw">struct</span> <span class="ident">FlagFromMiddleware</span>(<span class="ident">String</span>);
 
 <span class="doccomment">/// Use the `ReqData&lt;T&gt;` extractor to access request data in a handler.</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">handler</span>(
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handler</span>(
     <span class="ident">req</span>: <span class="ident">HttpRequest</span>,
     <span class="ident">opt_flag</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">web</span>::<span class="ident">ReqData</span><span class="op">&lt;</span><span class="ident">FlagFromMiddleware</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {

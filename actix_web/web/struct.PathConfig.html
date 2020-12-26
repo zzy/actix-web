@@ -15,7 +15,7 @@
 }
 
 <span class="comment">// deserialize `Info` from request&#39;s path</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">folder</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Folder</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">folder</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Folder</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Selected folder: {:?}!&quot;</span>, <span class="ident">folder</span>)
 }
 

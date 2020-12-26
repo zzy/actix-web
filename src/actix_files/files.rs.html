@@ -272,6 +272,17 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell</span>::<span class="ident">RefCell</span>, <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">path</span>::<span class="ident">PathBuf</span>, <span class="ident">rc</span>::<span class="ident">Rc</span>};
 
@@ -313,7 +324,8 @@
     <span class="ident">renderer</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">DirectoryRenderer</span><span class="op">&gt;</span>,
     <span class="ident">mime_override</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">MimeOverride</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">file_flags</span>: <span class="ident">named</span>::<span class="ident">Flags</span>,
-    <span class="ident">guards</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">guards</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">hidden_files</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Files</span> {
@@ -335,6 +347,7 @@
             <span class="ident">path</span>: <span class="self">self</span>.<span class="ident">path</span>.<span class="ident">clone</span>(),
             <span class="ident">mime_override</span>: <span class="self">self</span>.<span class="ident">mime_override</span>.<span class="ident">clone</span>(),
             <span class="ident">guards</span>: <span class="self">self</span>.<span class="ident">guards</span>.<span class="ident">clone</span>(),
+            <span class="ident">hidden_files</span>: <span class="self">self</span>.<span class="ident">hidden_files</span>,
         }
     }
 }
@@ -378,6 +391,7 @@
             <span class="ident">mime_override</span>: <span class="prelude-val">None</span>,
             <span class="ident">file_flags</span>: <span class="ident">named</span>::<span class="ident">Flags</span>::<span class="ident">default</span>(),
             <span class="ident">guards</span>: <span class="prelude-val">None</span>,
+            <span class="ident">hidden_files</span>: <span class="bool-val">false</span>,
         }
     }
 
@@ -488,6 +502,13 @@
 
         <span class="self">self</span>
     }
+
+    <span class="doccomment">/// Enables serving hidden files and directories, allowing a leading dots in url fragments.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">use_hidden_files</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">hidden_files</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="self">self</span>
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">HttpServiceFactory</span> <span class="kw">for</span> <span class="ident">Files</span> {
@@ -526,6 +547,7 @@
             <span class="ident">mime_override</span>: <span class="self">self</span>.<span class="ident">mime_override</span>.<span class="ident">clone</span>(),
             <span class="ident">file_flags</span>: <span class="self">self</span>.<span class="ident">file_flags</span>,
             <span class="ident">guards</span>: <span class="self">self</span>.<span class="ident">guards</span>.<span class="ident">clone</span>(),
+            <span class="ident">hidden_files</span>: <span class="self">self</span>.<span class="ident">hidden_files</span>,
         };
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">default</span>) <span class="op">=</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">default</span>.<span class="ident">borrow</span>() {

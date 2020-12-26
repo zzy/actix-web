@@ -17,7 +17,7 @@ inbound and/or outbound processing in the request/response lifecycle.
 It may modify request and/or response.</p>
 <p>For example, timeout transform:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Timeout</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
     <span class="ident">service</span>: <span class="ident">S</span>,
     <span class="ident">timeout</span>: <span class="ident">Duration</span>,
@@ -52,7 +52,7 @@ the Service that follows it during execution as a parameter, assuming
 ownership of the next Service.</p>
 <p>Factory for <code>Timeout</code> middleware from the above example could look like this:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TimeoutTransform</span> {
     <span class="ident">timeout</span>: <span class="ident">Duration</span>,
 }

@@ -601,7 +601,7 @@
 }
 
 <span class="doccomment">/// Matches any of supplied guards.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AnyGuard</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AnyGuard</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span> <span class="ident">AnyGuard</span> {
     <span class="doccomment">/// Add guard to a list of guards to check</span>
@@ -641,7 +641,7 @@
 }
 
 <span class="doccomment">/// Matches if all of supplied guards.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AllGuard</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AllGuard</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span> <span class="ident">AllGuard</span> {
     <span class="doccomment">/// Add new guard to the list of guards to check</span>
@@ -668,7 +668,7 @@
 }
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NotGuard</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NotGuard</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span> <span class="ident">Guard</span> <span class="kw">for</span> <span class="ident">NotGuard</span> {
     <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="ident">RequestHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {

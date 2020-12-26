@@ -14,7 +14,7 @@ be converted to a <code>/app/</code> and it would not match <code>/app</code> pa
 <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
         <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/{project_id}/&quot;</span>)
-            .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/path1&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">async</span> { <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>() }))
+            .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/path1&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>() }))
             .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/path2&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>())))
             .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/path3&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">head</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>())))
     );
@@ -31,7 +31,7 @@ be converted to a <code>/app/</code> and it would not match <code>/app</code> pa
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">guard</span>, <span class="ident">App</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>};
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
     <span class="string">&quot;Welcome!&quot;</span>
 }
 
@@ -56,7 +56,7 @@ by using <code>Data&lt;T&gt;</code> extractor where <code>T</code> is data type.
     <span class="ident">counter</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 }
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">MyData</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">MyData</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
     <span class="ident">data</span>.<span class="ident">counter</span>.<span class="ident">set</span>(<span class="ident">data</span>.<span class="ident">counter</span>.<span class="ident">get</span>() <span class="op">+</span> <span class="number">1</span>);
     <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
 }
@@ -112,7 +112,7 @@ some of the resource's configuration could be moved to different module.</p>
 
 <span class="kw">struct</span> <span class="ident">AppState</span>;
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
     <span class="string">&quot;Welcome!&quot;</span>
 }
 
@@ -131,7 +131,7 @@ multiple resources with one route would be registered for same resource path.</p
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
     <span class="string">&quot;Welcome!&quot;</span>
 }
 
@@ -164,7 +164,7 @@ can not modify ServiceResponse.</p>
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>};
 <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">http</span>::{<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>};
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
     <span class="string">&quot;Welcome!&quot;</span>
 }
 
@@ -173,8 +173,8 @@ can not modify ServiceResponse.</p>
         <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/app&quot;</span>)
             .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">srv</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>);
-                <span class="ident">async</span> {
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="ident">await</span><span class="question-mark">?</span>;
+                <span class="kw">async</span> {
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
                     <span class="ident">res</span>.<span class="ident">headers_mut</span>().<span class="ident">insert</span>(
                        <span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;text/plain&quot;</span>),
                     );

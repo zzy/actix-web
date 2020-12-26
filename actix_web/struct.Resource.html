@@ -25,7 +25,7 @@ Default behavior could be overridden with <code>default_resource()</code> method
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">guard</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
     <span class="string">&quot;Welcome!&quot;</span>
 }
 
@@ -79,7 +79,7 @@ Resource data overrides data registered by <code>App::data()</code> method.</p>
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">FromRequest</span>};
 
 <span class="doccomment">/// extract text data from request</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">body</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">body</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Body {}!&quot;</span>, <span class="ident">body</span>)
 }
 
@@ -129,7 +129,7 @@ type (i.e modify response's body).</p>
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>};
 <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">http</span>::{<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>};
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
     <span class="string">&quot;Welcome!&quot;</span>
 }
 
@@ -138,8 +138,8 @@ type (i.e modify response's body).</p>
         <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>)
             .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">srv</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>);
-                <span class="ident">async</span> {
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="ident">await</span><span class="question-mark">?</span>;
+                <span class="kw">async</span> {
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
                     <span class="ident">res</span>.<span class="ident">headers_mut</span>().<span class="ident">insert</span>(
                        <span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;text/plain&quot;</span>),
                     );

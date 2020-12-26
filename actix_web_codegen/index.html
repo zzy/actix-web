@@ -13,8 +13,8 @@ are re-exported.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">actix_web_codegen</span>::<span class="ident">main</span>]</span> <span class="comment">// or `#[actix_web::main]` in Actix Web apps</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="ident">async</span> { <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hello world&quot;</span>); }.<span class="ident">await</span>
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">async</span> { <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hello world&quot;</span>); }.<span class="kw">await</span>
 }</pre></div>
 <h1 id="single-method-handler" class="section-header"><a href="#single-method-handler">Single Method Handler</a></h1>
 <p>There is a macro to set up a handler for each of the most common HTTP methods that also define
@@ -23,7 +23,7 @@ additional guards and route-specific middleware.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">get</span>(<span class="string">&quot;/test&quot;</span>)]</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_handler</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpResponse</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_handler</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpResponse</span> {
     <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>()
 }</pre></div>
 <h1 id="multiple-method-handlers" class="section-header"><a href="#multiple-method-handlers">Multiple Method Handlers</a></h1>
@@ -32,7 +32,7 @@ it should respond to. See <a href="../actix_web_codegen/attr.route.html" title="
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">route</span>(<span class="string">&quot;/test&quot;</span>, <span class="ident">method</span><span class="op">=</span><span class="string">&quot;GET&quot;</span>, <span class="ident">method</span><span class="op">=</span><span class="string">&quot;HEAD&quot;</span>)]</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_and_head_handler</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpResponse</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_and_head_handler</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpResponse</span> {
     <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>()
 }</pre></div>
 </div><h2 id="attributes" class="section-header"><a href="#attributes">Attribute Macros</a></h2>

@@ -7,12 +7,12 @@ builder-like pattern.</p>
 <span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">System</span>;
 
 <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">main</span>]</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
    <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">awc</span>::<span class="ident">Client</span>::<span class="ident">new</span>()
         .<span class="ident">get</span>(<span class="string">&quot;http://www.rust-lang.org&quot;</span>) <span class="comment">// &lt;- Create request builder</span>
         .<span class="ident">header</span>(<span class="string">&quot;User-Agent&quot;</span>, <span class="string">&quot;Actix-web&quot;</span>)
         .<span class="ident">send</span>()                          <span class="comment">// &lt;- Send http request</span>
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
    <span class="ident">response</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">response</span><span class="op">|</span> {   <span class="comment">// &lt;- server http response</span>
         <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Response: {:?}&quot;</span>, <span class="ident">response</span>);
@@ -65,7 +65,7 @@ This setting affect only http/1 connections.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">main</span>]</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">awc</span>::<span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">get</span>(<span class="string">&quot;https://www.rust-lang.org&quot;</span>)
         .<span class="ident">cookie</span>(
             <span class="ident">awc</span>::<span class="ident">http</span>::<span class="ident">Cookie</span>::<span class="ident">build</span>(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;value&quot;</span>)
@@ -76,7 +76,7 @@ This setting affect only http/1 connections.</p>
                 .<span class="ident">finish</span>(),
          )
          .<span class="ident">send</span>()
-         .<span class="ident">await</span>;
+         .<span class="kw">await</span>;
 
     <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Response: {:?}&quot;</span>, <span class="ident">resp</span>);
 }</pre></div>

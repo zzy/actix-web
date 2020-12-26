@@ -6,22 +6,22 @@
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
 
 <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_index</span>() {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_index</span>() {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">init_service</span>(
         <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
             <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>)
-                .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">async</span> {
+                .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
                     <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(<span class="string">&quot;welcome!&quot;</span>)
                 })))
-    ).<span class="ident">await</span>;
+    ).<span class="kw">await</span>;
 
     <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">TestRequest</span>::<span class="ident">post</span>()
         .<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>)
         .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;application/json&quot;</span>)
         .<span class="ident">to_request</span>();
 
-    <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="ident">await</span>;
-    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">read_body</span>(<span class="ident">resp</span>).<span class="ident">await</span>;
+    <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">read_body</span>(<span class="ident">resp</span>).<span class="kw">await</span>;
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;welcome!&quot;</span>));
 }</pre></div>
 </div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "actix_web";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

@@ -7,18 +7,18 @@
 <span class="kw">use</span> <span class="ident">futures_util</span>::{<span class="ident">sink</span>::<span class="ident">SinkExt</span>, <span class="ident">stream</span>::<span class="ident">StreamExt</span>};
 
 <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">main</span>]</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> (<span class="ident">_resp</span>, <span class="kw-2">mut</span> <span class="ident">connection</span>) <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>()
         .<span class="ident">ws</span>(<span class="string">&quot;ws://echo.websocket.org&quot;</span>)
         .<span class="ident">connect</span>()
-        .<span class="ident">await</span>
+        .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
 
     <span class="ident">connection</span>
         .<span class="ident">send</span>(<span class="ident">ws</span>::<span class="ident">Message</span>::<span class="ident">Text</span>(<span class="string">&quot;Echo&quot;</span>.<span class="ident">to_string</span>()))
-        .<span class="ident">await</span>
+        .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
-    <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">next</span>().<span class="ident">await</span>.<span class="ident">unwrap</span>().<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">next</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">unwrap</span>();
 
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">response</span>, <span class="ident">ws</span>::<span class="ident">Frame</span>::<span class="ident">Text</span>(<span class="string">&quot;Echo&quot;</span>.<span class="ident">as_bytes</span>().<span class="ident">into</span>()));
 }</pre></div>

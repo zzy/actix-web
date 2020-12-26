@@ -1441,7 +1441,7 @@
     <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
     <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
     <span class="ident">flags</span>: <span class="ident">Flags</span>,
     <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
@@ -1529,7 +1529,7 @@
         <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
         <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
         <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
@@ -1558,7 +1558,7 @@
         <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
         <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
         <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
@@ -2358,12 +2358,12 @@
     <span class="kw">fn</span> <span class="ident">echo_payload_service</span>(
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">fn_service</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">Request</span><span class="op">|</span> {
-            <span class="ident">Box</span>::<span class="ident">pin</span>(<span class="ident">async</span> <span class="kw">move</span> {
+            <span class="ident">Box</span>::<span class="ident">pin</span>(<span class="kw">async</span> <span class="kw">move</span> {
                 <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">stream</span>::<span class="ident">StreamExt</span> <span class="kw">as</span> <span class="kw">_</span>;
 
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">take_payload</span>();
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
-                <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">chunk</span>) <span class="op">=</span> <span class="ident">pl</span>.<span class="ident">next</span>().<span class="ident">await</span> {
+                <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">chunk</span>) <span class="op">=</span> <span class="ident">pl</span>.<span class="ident">next</span>().<span class="kw">await</span> {
                     <span class="ident">body</span>.<span class="ident">extend_from_slice</span>(<span class="ident">chunk</span>.<span class="ident">unwrap</span>().<span class="ident">bytes</span>())
                 }
 
@@ -2373,7 +2373,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_req_parse_err</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_req_parse_err</span>() {
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestBuffer</span>::<span class="ident">new</span>(<span class="string">&quot;GET /test HTTP/1\r\n\r\n&quot;</span>);
 
@@ -2403,11 +2403,11 @@
                 );
             }
         })
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_pipelining</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_pipelining</span>() {
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestBuffer</span>::<span class="ident">new</span>(
                 <span class="string">&quot;\
@@ -2461,7 +2461,7 @@
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">to_vec</span>(), <span class="ident">exp</span>.<span class="ident">to_vec</span>());
             }
         })
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestBuffer</span>::<span class="ident">new</span>(
@@ -2515,11 +2515,11 @@
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">to_vec</span>(), <span class="ident">exp</span>.<span class="ident">to_vec</span>());
             }
         })
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_expect</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_expect</span>() {
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestSeqBuffer</span>::<span class="ident">empty</span>();
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
@@ -2587,11 +2587,11 @@
                 );
             }
         })
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_eager_expect</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_eager_expect</span>() {
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestSeqBuffer</span>::<span class="ident">empty</span>();
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
@@ -2647,11 +2647,11 @@
                 );
             }
         })
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_upgrade</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_upgrade</span>() {
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestSeqBuffer</span>::<span class="ident">empty</span>();
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
@@ -2683,7 +2683,7 @@
             <span class="comment">// polls: manual shutdown</span>
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">h1</span>.<span class="ident">poll_count</span>, <span class="number">2</span>);
         })
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
     }
 }
 </pre></div>

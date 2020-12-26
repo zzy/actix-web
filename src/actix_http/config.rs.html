@@ -621,7 +621,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_date</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_date</span>() {
         <span class="kw">let</span> <span class="ident">settings</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Os</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf1</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="ident">DATE_VALUE_LENGTH</span> <span class="op">+</span> <span class="number">10</span>);
         <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf1</span>);

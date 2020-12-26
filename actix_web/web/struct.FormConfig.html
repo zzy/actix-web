@@ -12,7 +12,7 @@
 
 <span class="doccomment">/// Extract form data using serde.</span>
 <span class="doccomment">/// Custom configuration is used for this handler, max payload size is 4k</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">form</span>: <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">FormData</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">form</span>: <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">FormData</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">form</span>.<span class="ident">username</span>))
 }
 

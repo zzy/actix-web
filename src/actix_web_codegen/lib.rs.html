@@ -389,7 +389,7 @@ async fn example() -&gt; HttpResponse {
         #(#<span class="ident">attrs</span>)<span class="op">*</span>
         #<span class="ident">vis</span> #<span class="ident">sig</span> {
             <span class="ident">actix_web</span>::<span class="ident">rt</span>::<span class="ident">System</span>::<span class="ident">new</span>(<span class="macro">stringify</span><span class="macro">!</span>(#<span class="ident">name</span>))
-                .<span class="ident">block_on</span>(<span class="ident">async</span> <span class="kw">move</span> { #<span class="ident">body</span> })
+                .<span class="ident">block_on</span>(<span class="kw">async</span> <span class="kw">move</span> { #<span class="ident">body</span> })
         }
     })
     .<span class="ident">into</span>()

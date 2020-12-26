@@ -322,7 +322,7 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">pool</span>::<span class="ident">Acquired</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">body</span>::{<span class="ident">BodySize</span>, <span class="ident">MessageBody</span>};
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(
     <span class="ident">io</span>: <span class="ident">T</span>,
     <span class="kw-2">mut</span> <span class="ident">head</span>: <span class="ident">RequestHeadType</span>,
     <span class="ident">body</span>: <span class="ident">B</span>,
@@ -368,16 +368,16 @@
 
     <span class="comment">// create Framed and send request</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">framed_inner</span> <span class="op">=</span> <span class="ident">Framed</span>::<span class="ident">new</span>(<span class="ident">io</span>, <span class="ident">h1</span>::<span class="ident">ClientCodec</span>::<span class="ident">default</span>());
-    <span class="ident">framed_inner</span>.<span class="ident">send</span>((<span class="ident">head</span>, <span class="ident">body</span>.<span class="ident">size</span>()).<span class="ident">into</span>()).<span class="ident">await</span><span class="question-mark">?</span>;
+    <span class="ident">framed_inner</span>.<span class="ident">send</span>((<span class="ident">head</span>, <span class="ident">body</span>.<span class="ident">size</span>()).<span class="ident">into</span>()).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="comment">// send request body</span>
     <span class="kw">match</span> <span class="ident">body</span>.<span class="ident">size</span>() {
         <span class="ident">BodySize</span>::<span class="prelude-val">None</span> <span class="op">|</span> <span class="ident">BodySize</span>::<span class="ident">Empty</span> <span class="op">|</span> <span class="ident">BodySize</span>::<span class="ident">Sized</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">send_body</span>(<span class="ident">body</span>, <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">framed_inner</span>)).<span class="ident">await</span><span class="question-mark">?</span>,
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">send_body</span>(<span class="ident">body</span>, <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">framed_inner</span>)).<span class="kw">await</span><span class="question-mark">?</span>,
     };
 
     <span class="comment">// read response and init read body</span>
-    <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">framed_inner</span>).<span class="ident">into_future</span>().<span class="ident">await</span>;
+    <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">framed_inner</span>).<span class="ident">into_future</span>().<span class="kw">await</span>;
     <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">result</span>), <span class="ident">framed</span>) <span class="op">=</span> <span class="ident">res</span> {
         <span class="kw">let</span> <span class="ident">item</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">map_err</span>(<span class="ident">SendRequestError</span>::<span class="ident">from</span>)<span class="question-mark">?</span>;
         (<span class="ident">item</span>, <span class="ident">framed</span>)
@@ -398,7 +398,7 @@
     }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">open_tunnel</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">open_tunnel</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
     <span class="ident">io</span>: <span class="ident">T</span>,
     <span class="ident">head</span>: <span class="ident">RequestHeadType</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">ResponseHead</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">h1</span>::<span class="ident">ClientCodec</span><span class="op">&gt;</span>), <span class="ident">SendRequestError</span><span class="op">&gt;</span>
@@ -407,10 +407,10 @@
 {
     <span class="comment">// create Framed and send request</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">framed</span> <span class="op">=</span> <span class="ident">Framed</span>::<span class="ident">new</span>(<span class="ident">io</span>, <span class="ident">h1</span>::<span class="ident">ClientCodec</span>::<span class="ident">default</span>());
-    <span class="ident">framed</span>.<span class="ident">send</span>((<span class="ident">head</span>, <span class="ident">BodySize</span>::<span class="prelude-val">None</span>).<span class="ident">into</span>()).<span class="ident">await</span><span class="question-mark">?</span>;
+    <span class="ident">framed</span>.<span class="ident">send</span>((<span class="ident">head</span>, <span class="ident">BodySize</span>::<span class="prelude-val">None</span>).<span class="ident">into</span>()).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="comment">// read response</span>
-    <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">result</span>), <span class="ident">framed</span>) <span class="op">=</span> <span class="ident">framed</span>.<span class="ident">into_future</span>().<span class="ident">await</span> {
+    <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">result</span>), <span class="ident">framed</span>) <span class="op">=</span> <span class="ident">framed</span>.<span class="ident">into_future</span>().<span class="kw">await</span> {
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">map_err</span>(<span class="ident">SendRequestError</span>::<span class="ident">from</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>((<span class="ident">head</span>, <span class="ident">framed</span>))
     } <span class="kw">else</span> {
@@ -419,7 +419,7 @@
 }
 
 <span class="doccomment">/// send request body to the peer</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(
     <span class="ident">body</span>: <span class="ident">B</span>,
     <span class="kw-2">mut</span> <span class="ident">framed</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">h1</span>::<span class="ident">ClientCodec</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SendRequestError</span><span class="op">&gt;</span>
@@ -432,7 +432,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">eof</span> <span class="op">=</span> <span class="bool-val">false</span>;
     <span class="kw">while</span> <span class="op">!</span><span class="ident">eof</span> {
         <span class="kw">while</span> <span class="op">!</span><span class="ident">eof</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">framed</span>.<span class="ident">as_ref</span>().<span class="ident">is_write_buf_full</span>() {
-            <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="ident">await</span> {
+            <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="kw">await</span> {
                 <span class="prelude-val">Some</span>(<span class="ident">result</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">framed</span>.<span class="ident">as_mut</span>().<span class="ident">write</span>(<span class="ident">h1</span>::<span class="ident">Message</span>::<span class="ident">Chunk</span>(<span class="prelude-val">Some</span>(<span class="ident">result</span><span class="question-mark">?</span>)))<span class="question-mark">?</span>;
                 }
@@ -455,11 +455,11 @@
                     }
                 }
             })
-            .<span class="ident">await</span><span class="question-mark">?</span>;
+            .<span class="kw">await</span><span class="question-mark">?</span>;
         }
     }
 
-    <span class="ident">SinkExt</span>::<span class="ident">flush</span>(<span class="ident">Pin</span>::<span class="ident">into_inner</span>(<span class="ident">framed</span>)).<span class="ident">await</span><span class="question-mark">?</span>;
+    <span class="ident">SinkExt</span>::<span class="ident">flush</span>(<span class="ident">Pin</span>::<span class="ident">into_inner</span>(<span class="ident">framed</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 

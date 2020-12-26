@@ -228,7 +228,7 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">error</span>::<span class="ident">SendRequestError</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">pool</span>::<span class="ident">Acquired</span>;
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(
     <span class="kw-2">mut</span> <span class="ident">io</span>: <span class="ident">SendRequest</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
     <span class="ident">head</span>: <span class="ident">RequestHeadType</span>,
     <span class="ident">body</span>: <span class="ident">B</span>,
@@ -299,7 +299,7 @@
         <span class="ident">req</span>.<span class="ident">headers_mut</span>().<span class="ident">append</span>(<span class="ident">key</span>, <span class="ident">value</span>.<span class="ident">clone</span>());
     }
 
-    <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">io</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>)).<span class="ident">await</span>;
+    <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">io</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>)).<span class="kw">await</span>;
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">res</span> {
         <span class="ident">release</span>(<span class="ident">io</span>, <span class="ident">pool</span>, <span class="ident">created</span>, <span class="ident">e</span>.<span class="ident">is_io</span>());
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">SendRequestError</span>::<span class="ident">from</span>(<span class="ident">e</span>));
@@ -310,9 +310,9 @@
             <span class="ident">release</span>(<span class="ident">io</span>, <span class="ident">pool</span>, <span class="ident">created</span>, <span class="bool-val">false</span>);
 
             <span class="kw">if</span> <span class="op">!</span><span class="ident">eof</span> {
-                <span class="ident">send_body</span>(<span class="ident">body</span>, <span class="ident">send</span>).<span class="ident">await</span><span class="question-mark">?</span>;
+                <span class="ident">send_body</span>(<span class="ident">body</span>, <span class="ident">send</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             }
-            <span class="ident">fut</span>.<span class="ident">await</span>.<span class="ident">map_err</span>(<span class="ident">SendRequestError</span>::<span class="ident">from</span>)<span class="question-mark">?</span>
+            <span class="ident">fut</span>.<span class="kw">await</span>.<span class="ident">map_err</span>(<span class="ident">SendRequestError</span>::<span class="ident">from</span>)<span class="question-mark">?</span>
         }
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
             <span class="ident">release</span>(<span class="ident">io</span>, <span class="ident">pool</span>, <span class="ident">created</span>, <span class="ident">e</span>.<span class="ident">is_io</span>());
@@ -329,7 +329,7 @@
     <span class="prelude-val">Ok</span>((<span class="ident">head</span>, <span class="ident">payload</span>))
 }
 
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">MessageBody</span><span class="op">&gt;</span>(
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">MessageBody</span><span class="op">&gt;</span>(
     <span class="ident">body</span>: <span class="ident">B</span>,
     <span class="kw-2">mut</span> <span class="ident">send</span>: <span class="ident">SendStream</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SendRequestError</span><span class="op">&gt;</span> {
@@ -337,7 +337,7 @@
     <span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">body</span>);
     <span class="kw">loop</span> {
         <span class="kw">if</span> <span class="ident">buf</span>.<span class="ident">is_none</span>() {
-            <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="ident">await</span> {
+            <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="kw">await</span> {
                 <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">b</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">send</span>.<span class="ident">reserve_capacity</span>(<span class="ident">b</span>.<span class="ident">len</span>());
                     <span class="ident">buf</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">b</span>);
@@ -353,7 +353,7 @@
             }
         }
 
-        <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">send</span>.<span class="ident">poll_capacity</span>(<span class="ident">cx</span>)).<span class="ident">await</span> {
+        <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">send</span>.<span class="ident">poll_capacity</span>(<span class="ident">cx</span>)).<span class="kw">await</span> {
             <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(()),
             <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">cap</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>();

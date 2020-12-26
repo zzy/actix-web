@@ -776,7 +776,7 @@
     }
 
     <span class="doccomment">/// Complete request construction and connect to a websockets server.</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">connect</span>(
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect</span>(
         <span class="kw-2">mut</span> <span class="self">self</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">ClientResponse</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">BoxedSocket</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">WsClientError</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">err</span>.<span class="ident">take</span>() {
@@ -866,11 +866,11 @@
         <span class="comment">// set request timeout</span>
         <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">to</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">timeout</span> {
             <span class="ident">timeout</span>(<span class="ident">to</span>, <span class="ident">fut</span>)
-                .<span class="ident">await</span>
+                .<span class="kw">await</span>
                 .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">SendRequestError</span>::<span class="ident">Timeout</span>)
                 .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>)<span class="question-mark">?</span>
         } <span class="kw">else</span> {
-            <span class="ident">fut</span>.<span class="ident">await</span><span class="question-mark">?</span>
+            <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>
         };
 
         <span class="comment">// verify response</span>
@@ -962,7 +962,7 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Client</span>;
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_debug</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_debug</span>() {
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">header</span>(<span class="string">&quot;x-test&quot;</span>, <span class="string">&quot;111&quot;</span>);
         <span class="kw">let</span> <span class="ident">repr</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">request</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">repr</span>.<span class="ident">contains</span>(<span class="string">&quot;WebsocketsRequest&quot;</span>));
@@ -970,7 +970,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_header_override</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_header_override</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">builder</span>()
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;111&quot;</span>)
             .<span class="ident">finish</span>()
@@ -989,7 +989,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">basic_auth</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basic_auth</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>()
             .<span class="ident">ws</span>(<span class="string">&quot;/&quot;</span>)
             .<span class="ident">basic_auth</span>(<span class="string">&quot;username&quot;</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;password&quot;</span>));
@@ -1016,7 +1016,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">bearer_auth</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">bearer_auth</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">bearer_auth</span>(<span class="string">&quot;someS3cr3tAutht0k3n&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">req</span>.<span class="ident">head</span>
@@ -1031,7 +1031,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">basics</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basics</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>()
             .<span class="ident">ws</span>(<span class="string">&quot;http://localhost/&quot;</span>)
             .<span class="ident">origin</span>(<span class="string">&quot;test-origin&quot;</span>)
@@ -1053,11 +1053,11 @@
             <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;json&quot;</span>)
         );
 
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">connect</span>().<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">connect</span>().<span class="kw">await</span>;
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">connect</span>().<span class="ident">await</span>.<span class="ident">is_err</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;http:///test&quot;</span>).<span class="ident">connect</span>().<span class="ident">await</span>.<span class="ident">is_err</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;hmm://test.com/&quot;</span>).<span class="ident">connect</span>().<span class="ident">await</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">connect</span>().<span class="kw">await</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;http:///test&quot;</span>).<span class="ident">connect</span>().<span class="kw">await</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Client</span>::<span class="ident">new</span>().<span class="ident">ws</span>(<span class="string">&quot;hmm://test.com/&quot;</span>).<span class="ident">connect</span>().<span class="kw">await</span>.<span class="ident">is_err</span>());
     }
 }
 </pre></div>

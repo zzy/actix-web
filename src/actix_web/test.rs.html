@@ -1412,7 +1412,7 @@
 <span class="doccomment">///     assert_eq!(resp.status(), StatusCode::OK);</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">init_service</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">init_service</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(
     <span class="ident">app</span>: <span class="ident">R</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>
 <span class="kw">where</span>
@@ -1426,12 +1426,12 @@
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span>,
 {
     <span class="ident">try_init_service</span>(<span class="ident">app</span>)
-        .<span class="ident">await</span>
+        .<span class="kw">await</span>
         .<span class="ident">expect</span>(<span class="string">&quot;service initilization failed&quot;</span>)
 }
 
 <span class="doccomment">/// Fallible version of init_service that allows testing data factory errors.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">try_init_service</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">try_init_service</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(
     <span class="ident">app</span>: <span class="ident">R</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>
     <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>,
@@ -1448,7 +1448,7 @@
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span>,
 {
     <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">into_factory</span>();
-    <span class="ident">srv</span>.<span class="ident">new_service</span>(<span class="ident">AppConfig</span>::<span class="ident">default</span>()).<span class="ident">await</span>
+    <span class="ident">srv</span>.<span class="ident">new_service</span>(<span class="ident">AppConfig</span>::<span class="ident">default</span>()).<span class="kw">await</span>
 }
 
 <span class="doccomment">/// Calls service and waits for response future completion.</span>
@@ -1473,12 +1473,12 @@
 <span class="doccomment">///     assert_eq!(resp.status(), StatusCode::OK);</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">call_service</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">R</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>, <span class="ident">req</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">S</span>::<span class="ident">Response</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">call_service</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">R</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>, <span class="ident">req</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">S</span>::<span class="ident">Response</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">R</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>,
     <span class="ident">E</span>: <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span>,
 {
-    <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>()
+    <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>()
 }
 
 <span class="doccomment">/// Helper function that returns a response body of a TestRequest</span>
@@ -1506,19 +1506,19 @@
 <span class="doccomment">///     assert_eq!(result, Bytes::from_static(b&quot;welcome!&quot;));</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">read_response</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>, <span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">read_response</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>, <span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">app</span>
         .<span class="ident">call</span>(<span class="ident">req</span>)
-        .<span class="ident">await</span>
+        .<span class="kw">await</span>
         .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;read_response failed at application call&quot;</span>));
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">take_body</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">body</span>.<span class="ident">next</span>().<span class="ident">await</span> {
+    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">body</span>.<span class="ident">next</span>().<span class="kw">await</span> {
         <span class="ident">bytes</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">unwrap</span>());
     }
     <span class="ident">bytes</span>.<span class="ident">freeze</span>()
@@ -1550,13 +1550,13 @@
 <span class="doccomment">///     assert_eq!(result, Bytes::from_static(b&quot;welcome!&quot;));</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">read_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">res</span>: <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">read_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">res</span>: <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span>
 <span class="kw">where</span>
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">take_body</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">body</span>.<span class="ident">next</span>().<span class="ident">await</span> {
+    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">body</span>.<span class="ident">next</span>().<span class="kw">await</span> {
         <span class="ident">bytes</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">unwrap</span>());
     }
     <span class="ident">bytes</span>.<span class="ident">freeze</span>()
@@ -1599,24 +1599,24 @@
 <span class="doccomment">///     let result: Person = test::read_body_json(resp).await;</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">read_body_json</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="ident">res</span>: <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">read_body_json</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="ident">res</span>: <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">T</span>: <span class="ident">DeserializeOwned</span>,
 {
-    <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">read_body</span>(<span class="ident">res</span>).<span class="ident">await</span>;
+    <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">read_body</span>(<span class="ident">res</span>).<span class="kw">await</span>;
 
     <span class="ident">serde_json</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
         <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;read_response_json failed during deserialization: {}&quot;</span>, <span class="ident">e</span>)
     })
 }
 
-<span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">load_stream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">load_stream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">next</span>().<span class="ident">await</span> {
+    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">next</span>().<span class="kw">await</span> {
         <span class="ident">data</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">item</span><span class="question-mark">?</span>);
     }
     <span class="prelude-val">Ok</span>(<span class="ident">data</span>.<span class="ident">freeze</span>())
@@ -1656,13 +1656,13 @@
 <span class="doccomment">///     let result: Person = test::read_response_json(&amp;mut app, req).await;</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">read_response_json</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>, <span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">read_response_json</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>, <span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">T</span>: <span class="ident">DeserializeOwned</span>,
 {
-    <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="ident">app</span>, <span class="ident">req</span>).<span class="ident">await</span>;
+    <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
 
     <span class="ident">serde_json</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>)
         .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;read_response_json failed during deserialization&quot;</span>))
@@ -1937,13 +1937,13 @@
     }
 
     <span class="doccomment">/// Complete request creation, calls service and waits for response future completion.</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">S</span>::<span class="ident">Response</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">S</span>::<span class="ident">Response</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>,
         <span class="ident">E</span>: <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span>,
     {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">to_request</span>();
-        <span class="ident">call_service</span>(<span class="ident">app</span>, <span class="ident">req</span>).<span class="ident">await</span>
+        <span class="ident">call_service</span>(<span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>
     }
 }
 
@@ -2326,40 +2326,40 @@
         <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">request</span>(<span class="ident">method</span>, <span class="ident">path</span>.<span class="ident">as_ref</span>())
     }
 
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">load_body</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">load_body</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="kw-2">mut</span> <span class="ident">response</span>: <span class="ident">ClientResponse</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
-        <span class="ident">response</span>.<span class="ident">body</span>().<span class="ident">limit</span>(<span class="number">10_485_760</span>).<span class="ident">await</span>
+        <span class="ident">response</span>.<span class="ident">body</span>().<span class="ident">limit</span>(<span class="number">10_485_760</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Connect to websocket server at a given path</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">ws_at</span>(
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">ws_at</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Framed</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span>, <span class="ident">ws</span>::<span class="ident">Codec</span><span class="op">&gt;</span>, <span class="ident">awc</span>::<span class="ident">error</span>::<span class="ident">WsClientError</span><span class="op">&gt;</span>
     {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">url</span>(<span class="ident">path</span>);
         <span class="kw">let</span> <span class="ident">connect</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">ws</span>(<span class="ident">url</span>).<span class="ident">connect</span>();
-        <span class="ident">connect</span>.<span class="ident">await</span>.<span class="ident">map</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">framed</span>)<span class="op">|</span> <span class="ident">framed</span>)
+        <span class="ident">connect</span>.<span class="kw">await</span>.<span class="ident">map</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">framed</span>)<span class="op">|</span> <span class="ident">framed</span>)
     }
 
     <span class="doccomment">/// Connect to a websocket server</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">ws</span>(
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">ws</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Framed</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span>, <span class="ident">ws</span>::<span class="ident">Codec</span><span class="op">&gt;</span>, <span class="ident">awc</span>::<span class="ident">error</span>::<span class="ident">WsClientError</span><span class="op">&gt;</span>
     {
-        <span class="self">self</span>.<span class="ident">ws_at</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">await</span>
+        <span class="self">self</span>.<span class="ident">ws_at</span>(<span class="string">&quot;/&quot;</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Gracefully stop http server</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">stop</span>(<span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">stop</span>(<span class="bool-val">true</span>).<span class="ident">await</span>;
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">stop</span>(<span class="self">self</span>) {
+        <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">stop</span>(<span class="bool-val">true</span>).<span class="kw">await</span>;
         <span class="self">self</span>.<span class="ident">system</span>.<span class="ident">stop</span>();
-        <span class="ident">delay_for</span>(<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">100</span>)).<span class="ident">await</span>;
+        <span class="ident">delay_for</span>(<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
     }
 }
 
@@ -2379,7 +2379,7 @@
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">http</span>::<span class="ident">header</span>, <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>};
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_basics</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_basics</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_hdr</span>(<span class="ident">header</span>::<span class="ident">ContentType</span>::<span class="ident">json</span>())
             .<span class="ident">version</span>(<span class="ident">Version</span>::<span class="ident">HTTP_2</span>)
             .<span class="ident">set</span>(<span class="ident">header</span>::<span class="ident">Date</span>(<span class="ident">SystemTime</span>::<span class="ident">now</span>().<span class="ident">into</span>()))
@@ -2406,7 +2406,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_request_methods</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_request_methods</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
                 <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>)
@@ -2415,14 +2415,14 @@
                     .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">delete</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(<span class="string">&quot;delete!&quot;</span>))),
             ),
         )
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">put_req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">put</span>()
             .<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>)
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;application/json&quot;</span>)
             .<span class="ident">to_request</span>();
 
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">put_req</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">put_req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;put!&quot;</span>));
 
         <span class="kw">let</span> <span class="ident">patch_req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">patch</span>()
@@ -2430,49 +2430,49 @@
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;application/json&quot;</span>)
             .<span class="ident">to_request</span>();
 
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">patch_req</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">patch_req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;patch!&quot;</span>));
 
         <span class="kw">let</span> <span class="ident">delete_req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">delete</span>().<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">delete_req</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">delete_req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;delete!&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_response</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_response</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
                 <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>)
                     .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(<span class="string">&quot;welcome!&quot;</span>))),
             ),
         )
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">post</span>()
             .<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>)
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;application/json&quot;</span>)
             .<span class="ident">to_request</span>();
 
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;welcome!&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_send_request</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_send_request</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
                 <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>)
                     .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(<span class="string">&quot;welcome!&quot;</span>))),
             ),
         )
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">get</span>()
             .<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>)
             .<span class="ident">send_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>)
-            .<span class="ident">await</span>;
+            .<span class="kw">await</span>;
 
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_body</span>(<span class="ident">resp</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_body</span>(<span class="ident">resp</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;welcome!&quot;</span>));
     }
 
@@ -2483,13 +2483,13 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_response_json</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_response_json</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
             <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
                 <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
             }),
         )))
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="string">r#&quot;{&quot;id&quot;:&quot;12345&quot;,&quot;name&quot;:&quot;User name&quot;}&quot;#</span>.<span class="ident">as_bytes</span>();
 
@@ -2499,18 +2499,18 @@
             .<span class="ident">set_payload</span>(<span class="ident">payload</span>)
             .<span class="ident">to_request</span>();
 
-        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_body_json</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_body_json</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
             <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
                 <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
             }),
         )))
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="string">r#&quot;{&quot;id&quot;:&quot;12345&quot;,&quot;name&quot;:&quot;User name&quot;}&quot;#</span>.<span class="ident">as_bytes</span>();
 
@@ -2519,20 +2519,20 @@
             .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;application/json&quot;</span>)
             .<span class="ident">set_payload</span>(<span class="ident">payload</span>)
             .<span class="ident">send_request</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>)
-            .<span class="ident">await</span>;
+            .<span class="kw">await</span>;
 
-        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_body_json</span>(<span class="ident">resp</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_body_json</span>(<span class="ident">resp</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_request_response_form</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_request_response_form</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
             <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
                 <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
             }),
         )))
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">Person</span> {
             <span class="ident">id</span>: <span class="string">&quot;12345&quot;</span>.<span class="ident">to_string</span>(),
@@ -2546,19 +2546,19 @@
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">content_type</span>(), <span class="string">&quot;application/x-www-form-urlencoded&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_request_response_json</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_request_response_json</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
             <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
                 <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
             }),
         )))
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">Person</span> {
             <span class="ident">id</span>: <span class="string">&quot;12345&quot;</span>.<span class="ident">to_string</span>(),
@@ -2572,15 +2572,15 @@
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">content_type</span>(), <span class="string">&quot;application/json&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_async_with_block</span>() {
-        <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">async_with_block</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">web</span>::<span class="ident">block</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Some</span>(<span class="number">4usize</span>).<span class="ident">ok_or</span>(<span class="string">&quot;wrong&quot;</span>)).<span class="ident">await</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_async_with_block</span>() {
+        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">async_with_block</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">web</span>::<span class="ident">block</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Some</span>(<span class="number">4usize</span>).<span class="ident">ok_or</span>(<span class="string">&quot;wrong&quot;</span>)).<span class="kw">await</span>;
 
             <span class="kw">match</span> <span class="ident">res</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
@@ -2593,16 +2593,16 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to</span>(<span class="ident">async_with_block</span>)),
         )
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">post</span>().<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_server_data</span>() {
-        <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">handler</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_server_data</span>() {
+        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handler</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">data</span>, <span class="number">10</span>);
             <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
         }
@@ -2612,15 +2612,15 @@
                 .<span class="ident">data</span>(<span class="number">10usize</span>)
                 .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to</span>(<span class="ident">handler</span>)),
         )
-        .<span class="ident">await</span>;
+        .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">post</span>().<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_actor</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_actor</span>() {
         <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Error</span>;
         <span class="kw">use</span> <span class="ident">actix</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 
@@ -2646,11 +2646,11 @@
 
         <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">MyActor</span>.<span class="ident">start</span>();
 
-        <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">actor_handler</span>(
+        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">actor_handler</span>(
             <span class="ident">addr</span>: <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">MyActor</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Responder</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="comment">// `?` operator tests &quot;actors&quot; feature flag on actix-http</span>
-            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">addr</span>.<span class="ident">send</span>(<span class="ident">Num</span>(<span class="number">1</span>)).<span class="ident">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">addr</span>.<span class="ident">send</span>(<span class="ident">Num</span>(<span class="number">1</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="kw">if</span> <span class="ident">res</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>())
@@ -2663,10 +2663,10 @@
             .<span class="ident">data</span>(<span class="ident">addr</span>.<span class="ident">clone</span>())
             .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="ident">actor_handler</span>));
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">srv</span>).<span class="ident">await</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">srv</span>).<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">post</span>().<span class="ident">uri</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 }

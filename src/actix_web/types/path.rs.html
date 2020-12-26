@@ -605,7 +605,7 @@
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PathConfig</span> {
-    <span class="ident">ehandler</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="ident">PathError</span>, <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">ehandler</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="ident">PathError</span>, <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">PathConfig</span> {
@@ -649,19 +649,19 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_extract_path_single</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_extract_path_single</span>() {
         <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef</span>::<span class="ident">new</span>(<span class="string">&quot;/{value}/&quot;</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/32/&quot;</span>).<span class="ident">to_srv_request</span>();
         <span class="ident">resource</span>.<span class="ident">match_path</span>(<span class="ident">req</span>.<span class="ident">match_info_mut</span>());
 
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>(), <span class="number">32</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">MyStruct</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>(), <span class="number">32</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">MyStruct</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>.<span class="ident">is_err</span>());
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_tuple_extract</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_tuple_extract</span>() {
         <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef</span>::<span class="ident">new</span>(<span class="string">&quot;/{key}/{value}/&quot;</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/name/user1/?id=test&quot;</span>).<span class="ident">to_srv_request</span>();
@@ -669,7 +669,7 @@
 
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
         <span class="kw">let</span> (<span class="ident">Path</span>(<span class="ident">res</span>),) <span class="op">=</span> <span class="op">&lt;</span>(<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>,)<span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>)
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="number">0</span>, <span class="string">&quot;name&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="number">1</span>, <span class="string">&quot;user1&quot;</span>);
@@ -678,25 +678,25 @@
             <span class="op">&lt;</span>(<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>, <span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>)<span class="op">&gt;</span>::<span class="ident">from_request</span>(
                 <span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>,
             )
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">a</span>.<span class="number">0</span>, <span class="string">&quot;name&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">a</span>.<span class="number">1</span>, <span class="string">&quot;user1&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">b</span>.<span class="number">0</span>, <span class="string">&quot;name&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">b</span>.<span class="number">1</span>, <span class="string">&quot;user1&quot;</span>);
 
-        <span class="kw">let</span> () <span class="op">=</span> <span class="op">&lt;</span>()<span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> () <span class="op">=</span> <span class="op">&lt;</span>()<span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_request_extract</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_request_extract</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/name/user1/?id=test&quot;</span>).<span class="ident">to_srv_request</span>();
 
         <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef</span>::<span class="ident">new</span>(<span class="string">&quot;/{key}/{value}/&quot;</span>);
         <span class="ident">resource</span>.<span class="ident">match_path</span>(<span class="ident">req</span>.<span class="ident">match_info_mut</span>());
 
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">MyStruct</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">MyStruct</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">key</span>, <span class="string">&quot;name&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">value</span>, <span class="string">&quot;user1&quot;</span>);
         <span class="ident">s</span>.<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;user2&quot;</span>.<span class="ident">to_string</span>();
@@ -709,7 +709,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">value</span>, <span class="string">&quot;user2&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">Path</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>)
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="number">0</span>, <span class="string">&quot;name&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="number">1</span>, <span class="string">&quot;user1&quot;</span>);
@@ -719,25 +719,25 @@
         <span class="ident">resource</span>.<span class="ident">match_path</span>(<span class="ident">req</span>.<span class="ident">match_info_mut</span>());
 
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">Test2</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="ident">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">Test2</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">as_ref</span>().<span class="ident">key</span>, <span class="string">&quot;name&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">value</span>, <span class="number">32</span>);
 
         <span class="kw">let</span> <span class="ident">Path</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">u8</span>)<span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>)
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="number">0</span>, <span class="string">&quot;name&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="number">1</span>, <span class="number">32</span>);
 
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>)
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>[<span class="number">0</span>], <span class="string">&quot;name&quot;</span>.<span class="ident">to_owned</span>());
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>[<span class="number">1</span>], <span class="string">&quot;32&quot;</span>.<span class="ident">to_owned</span>());
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">test_custom_err_handler</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_custom_err_handler</span>() {
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="kw-2">mut</span> <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/name/user1/&quot;</span>)
             .<span class="ident">app_data</span>(<span class="ident">PathConfig</span>::<span class="ident">default</span>().<span class="ident">error_handler</span>(<span class="op">|</span><span class="ident">err</span>, <span class="kw">_</span><span class="op">|</span> {
                 <span class="ident">error</span>::<span class="ident">InternalError</span>::<span class="ident">from_response</span>(
@@ -749,7 +749,7 @@
             .<span class="ident">to_http_parts</span>();
 
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="op">&lt;</span>(<span class="ident">usize</span>,)<span class="op">&gt;</span>::<span class="ident">from_request</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pl</span>)
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">unwrap_err</span>();
         <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">HttpResponse</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">into</span>();
 

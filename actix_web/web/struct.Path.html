@@ -8,7 +8,7 @@
 <span class="doccomment">/// extract path info from &quot;/{username}/{count}/index.html&quot; url</span>
 <span class="doccomment">/// {username} - deserializes to a String</span>
 <span class="doccomment">/// {count} -  - deserializes to a u32</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">web</span>::<span class="ident">Path</span>((<span class="ident">username</span>, <span class="ident">count</span>)): <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">u32</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">web</span>::<span class="ident">Path</span>((<span class="ident">username</span>, <span class="ident">count</span>)): <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">u32</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}! {}&quot;</span>, <span class="ident">username</span>, <span class="ident">count</span>)
 }
 
@@ -31,7 +31,7 @@ implements <code>Deserialize</code> trait from <em>serde</em>.</p>
 }
 
 <span class="doccomment">/// extract `Info` from a path using serde</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">info</span>.<span class="ident">username</span>))
 }
 
@@ -57,7 +57,7 @@ implements <code>Deserialize</code> trait from <em>serde</em>.</p>
 <span class="doccomment">/// extract path info from &quot;/{username}/{count}/index.html&quot; url</span>
 <span class="doccomment">/// {username} - deserializes to a String</span>
 <span class="doccomment">/// {count} -  - deserializes to a u32</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">web</span>::<span class="ident">Path</span>((<span class="ident">username</span>, <span class="ident">count</span>)): <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">u32</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">web</span>::<span class="ident">Path</span>((<span class="ident">username</span>, <span class="ident">count</span>)): <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">u32</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}! {}&quot;</span>, <span class="ident">username</span>, <span class="ident">count</span>)
 }
 
@@ -80,7 +80,7 @@ implements <code>Deserialize</code> trait from <em>serde</em>.</p>
 }
 
 <span class="doccomment">/// extract `Info` from a path using serde</span>
-<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">info</span>.<span class="ident">username</span>))
 }
 
