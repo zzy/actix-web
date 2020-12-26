@@ -208,6 +208,11 @@
 <span id="207">207</span>
 <span id="208">208</span>
 <span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
@@ -225,20 +230,25 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">responder</span>::<span class="ident">Responder</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>};
 
-<span class="doccomment">/// Async handler converter factory</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>
+<span class="doccomment">///  A request handler is an async function that accepts zero or more parameters that can be</span>
+<span class="doccomment">///  extracted from a request (ie, [`impl FromRequest`](crate::FromRequest)) and returns a type that can be converted into</span>
+<span class="doccomment">///  an [`HttpResponse`](crate::HttpResponse) (ie, [`impl Responder`](crate::Responder)).</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// If you got the error `the trait Handler&lt;_, _, _&gt; is not implemented`, then your function is not</span>
+<span class="doccomment">/// a valid handler. See [Request Handlers](https://actix.rs/docs/handlers/) for more information.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>
 <span class="kw">where</span>
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">param</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">R</span>;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="ident">Factory</span><span class="op">&lt;</span>(), <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">F</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span>(), <span class="ident">R</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">F</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">R</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: ()) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">R</span> {
         (<span class="self">self</span>)()
@@ -247,53 +257,53 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="doccomment">/// Extract arguments from request, run factory function and make response.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HandlerService</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="ident">hnd</span>: <span class="ident">F</span>,
-    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span>)<span class="op">&gt;</span>,
+    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">R</span>)<span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="ident">HandlerService</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">hnd</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Handler</span> {
+        <span class="self">Self</span> {
             <span class="ident">hnd</span>,
             <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">HandlerService</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Handler</span> {
+        <span class="self">Self</span> {
             <span class="ident">hnd</span>: <span class="self">self</span>.<span class="ident">hnd</span>.<span class="ident">clone</span>(),
             <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="ident">ServiceFactory</span> <span class="kw">for</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="ident">ServiceFactory</span> <span class="kw">for</span> <span class="ident">HandlerService</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="kw">type</span> <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>;
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>;
@@ -308,18 +318,18 @@
     }
 }
 
-<span class="comment">// Handler is both it&#39;s ServiceFactory and Service Type.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="ident">Service</span> <span class="kw">for</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>
+<span class="comment">// Handler is both it&#39;s ServiceHandler and Service Type.</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="ident">Service</span> <span class="kw">for</span> <span class="ident">HandlerService</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="kw">type</span> <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>;
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">HandlerServiceFuture</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">HandlerServiceFuture</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(()))
@@ -334,24 +344,24 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">pin_project</span>(<span class="ident">project</span> <span class="op">=</span> <span class="ident">HandlerProj</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HandlerServiceFuture</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HandlerServiceFuture</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="ident">Extract</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">T</span>::<span class="ident">Future</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HttpRequest</span><span class="op">&gt;</span>, <span class="ident">F</span>),
     <span class="ident">Handle</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">R</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HttpRequest</span><span class="op">&gt;</span>),
-    <span class="ident">Respond</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">O</span>::<span class="ident">Future</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HttpRequest</span><span class="op">&gt;</span>),
+    <span class="ident">Respond</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="op">&lt;</span><span class="ident">R</span>::<span class="ident">Output</span> <span class="kw">as</span> <span class="ident">Responder</span><span class="op">&gt;</span>::<span class="ident">Future</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HttpRequest</span><span class="op">&gt;</span>),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">HandlerServiceFuture</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">HandlerServiceFuture</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span>, <span class="ident">O</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-    <span class="ident">O</span>: <span class="ident">Responder</span>,
+    <span class="ident">R</span>: <span class="ident">Future</span>,
+    <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
 {
     <span class="comment">// Error type in this future is a placeholder type.</span>
     <span class="comment">// all instances of error must be converted to ServiceResponse and return in Ok.</span>
@@ -392,10 +402,10 @@
 
 <span class="doccomment">/// FromRequest trait impl for tuples</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">factory_tuple</span> ({ $((<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>:<span class="ident">ident</span>)),<span class="op">+</span>} <span class="op">=</span><span class="op">&gt;</span> {
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Func</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span> <span class="ident">Res</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="ident">Factory</span><span class="op">&lt;</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span>), <span class="ident">Res</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Func</span>
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Func</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span> <span class="ident">Res</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span>), <span class="ident">Res</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Func</span>
     <span class="kw">where</span> <span class="ident">Func</span>: <span class="ident">Fn</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Res</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-          <span class="ident">Res</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>,
-          <span class="ident">O</span>: <span class="ident">Responder</span>,
+          <span class="ident">Res</span>: <span class="ident">Future</span>,
+          <span class="ident">Res</span>::<span class="ident">Output</span>: <span class="ident">Responder</span>,
     {
         <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">param</span>: ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span>)) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Res</span> {
             (<span class="self">self</span>)($(<span class="ident">param</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>,)<span class="op">+</span>)

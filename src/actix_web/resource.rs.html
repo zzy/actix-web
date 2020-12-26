@@ -835,7 +835,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">dev</span>::{<span class="ident">insert_slash</span>, <span class="ident">AppService</span>, <span class="ident">HttpServiceFactory</span>, <span class="ident">ResourceDef</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">extract</span>::<span class="ident">FromRequest</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">guard</span>::<span class="ident">Guard</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">handler</span>::<span class="ident">Factory</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">handler</span>::<span class="ident">Handler</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">responder</span>::<span class="ident">Responder</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">route</span>::{<span class="ident">CreateRouteService</span>, <span class="ident">Route</span>, <span class="ident">RouteService</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>};
@@ -1045,12 +1045,12 @@
     <span class="doccomment">/// # fn index(req: HttpRequest) -&gt; HttpResponse { unimplemented!() }</span>
     <span class="doccomment">/// App::new().service(web::resource(&quot;/&quot;).route(web::route().to(index)));</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">I</span>, <span class="ident">R</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">handler</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">I</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">handler</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Factory</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">R</span>, <span class="ident">U</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">R</span><span class="op">&gt;</span>,
         <span class="ident">I</span>: <span class="ident">FromRequest</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-        <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">U</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-        <span class="ident">U</span>: <span class="ident">Responder</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">R</span>: <span class="ident">Future</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">R</span>::<span class="ident">Output</span>: <span class="ident">Responder</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="self">self</span>.<span class="ident">routes</span>.<span class="ident">push</span>(<span class="ident">Route</span>::<span class="ident">new</span>().<span class="ident">to</span>(<span class="ident">handler</span>));
         <span class="self">self</span>
