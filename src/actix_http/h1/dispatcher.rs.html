@@ -1324,24 +1324,6 @@
 <span id="1323">1323</span>
 <span id="1324">1324</span>
 <span id="1325">1325</span>
-<span id="1326">1326</span>
-<span id="1327">1327</span>
-<span id="1328">1328</span>
-<span id="1329">1329</span>
-<span id="1330">1330</span>
-<span id="1331">1331</span>
-<span id="1332">1332</span>
-<span id="1333">1333</span>
-<span id="1334">1334</span>
-<span id="1335">1335</span>
-<span id="1336">1336</span>
-<span id="1337">1337</span>
-<span id="1338">1338</span>
-<span id="1339">1339</span>
-<span id="1340">1340</span>
-<span id="1341">1341</span>
-<span id="1342">1342</span>
-<span id="1343">1343</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1364,7 +1346,6 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::<span class="ident">ServiceConfig</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">DispatchError</span>, <span class="ident">Error</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">ParseError</span>, <span class="ident">PayloadError</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">helpers</span>::<span class="ident">DataFactory</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">httpmessage</span>::<span class="ident">HttpMessage</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">request</span>::<span class="ident">Request</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">response</span>::<span class="ident">Response</span>;
@@ -1441,7 +1422,6 @@
     <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
     <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
     <span class="ident">flags</span>: <span class="ident">Flags</span>,
     <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
@@ -1529,7 +1509,6 @@
         <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
         <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
         <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
@@ -1542,7 +1521,6 @@
             <span class="ident">service</span>,
             <span class="ident">expect</span>,
             <span class="ident">upgrade</span>,
-            <span class="ident">on_connect</span>,
             <span class="ident">on_connect_data</span>,
             <span class="ident">peer_addr</span>,
         )
@@ -1558,7 +1536,6 @@
         <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
         <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
         <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
@@ -1591,7 +1568,6 @@
                 <span class="ident">service</span>,
                 <span class="ident">expect</span>,
                 <span class="ident">upgrade</span>,
-                <span class="ident">on_connect</span>,
                 <span class="ident">on_connect_data</span>,
                 <span class="ident">flags</span>,
                 <span class="ident">peer_addr</span>,
@@ -1916,12 +1892,6 @@
                         <span class="ident">Message</span>::<span class="ident">Item</span>(<span class="kw-2">mut</span> <span class="ident">req</span>) <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">message_type</span>();
                             <span class="ident">req</span>.<span class="ident">head_mut</span>().<span class="ident">peer_addr</span> <span class="op">=</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">peer_addr</span>;
-
-                            <span class="comment">// DEPRECATED</span>
-                            <span class="comment">// set on_connect data</span>
-                            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">on_connect</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">on_connect</span> {
-                                <span class="ident">on_connect</span>.<span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">req</span>.<span class="ident">extensions_mut</span>());
-                            }
 
                             <span class="comment">// merge on_connect_ext data into request extensions</span>
                             <span class="ident">req</span>.<span class="ident">extensions_mut</span>().<span class="ident">drain_from</span>(<span class="ident">this</span>.<span class="ident">on_connect_data</span>);
@@ -2383,7 +2353,6 @@
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ok_service</span>()),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ExpectHandler</span>),
                 <span class="prelude-val">None</span>,
-                <span class="prelude-val">None</span>,
                 <span class="ident">Extensions</span>::<span class="ident">new</span>(),
                 <span class="prelude-val">None</span>,
             );
@@ -2423,7 +2392,6 @@
                 <span class="ident">cfg</span>,
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_path_service</span>()),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ExpectHandler</span>),
-                <span class="prelude-val">None</span>,
                 <span class="prelude-val">None</span>,
                 <span class="ident">Extensions</span>::<span class="ident">new</span>(),
                 <span class="prelude-val">None</span>,
@@ -2479,7 +2447,6 @@
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_path_service</span>()),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ExpectHandler</span>),
                 <span class="prelude-val">None</span>,
-                <span class="prelude-val">None</span>,
                 <span class="ident">Extensions</span>::<span class="ident">new</span>(),
                 <span class="prelude-val">None</span>,
             );
@@ -2528,7 +2495,6 @@
                 <span class="ident">cfg</span>,
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_payload_service</span>()),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ExpectHandler</span>),
-                <span class="prelude-val">None</span>,
                 <span class="prelude-val">None</span>,
                 <span class="ident">Extensions</span>::<span class="ident">new</span>(),
                 <span class="prelude-val">None</span>,
@@ -2601,7 +2567,6 @@
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_path_service</span>()),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ExpectHandler</span>),
                 <span class="prelude-val">None</span>,
-                <span class="prelude-val">None</span>,
                 <span class="ident">Extensions</span>::<span class="ident">new</span>(),
                 <span class="prelude-val">None</span>,
             );
@@ -2661,7 +2626,6 @@
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ok_service</span>()),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ExpectHandler</span>),
                 <span class="prelude-val">Some</span>(<span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">UpgradeHandler</span>(<span class="ident">PhantomData</span>))),
-                <span class="prelude-val">None</span>,
                 <span class="ident">Extensions</span>::<span class="ident">new</span>(),
                 <span class="prelude-val">None</span>,
             );
