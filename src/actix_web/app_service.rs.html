@@ -483,8 +483,6 @@
 <span id="482">482</span>
 <span id="483">483</span>
 <span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
@@ -498,7 +496,6 @@
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">fn_service</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::{<span class="ident">join_all</span>, <span class="ident">ok</span>, <span class="ident">FutureExt</span>, <span class="ident">LocalBoxFuture</span>};
-<span class="kw">use</span> <span class="ident">tinyvec</span>::<span class="ident">tiny_vec</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::{<span class="ident">AppConfig</span>, <span class="ident">AppService</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">data</span>::{<span class="ident">DataFactory</span>, <span class="ident">FnDataFactory</span>};
@@ -734,7 +731,6 @@
             <span class="ident">inner</span>.<span class="ident">path</span>.<span class="ident">reset</span>();
             <span class="ident">inner</span>.<span class="ident">head</span> <span class="op">=</span> <span class="ident">head</span>;
             <span class="ident">inner</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="ident">payload</span>;
-            <span class="ident">inner</span>.<span class="ident">app_data</span> <span class="op">=</span> <span class="macro">tiny_vec</span><span class="macro">!</span>[<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clone</span>()];
             <span class="ident">req</span>
         } <span class="kw">else</span> {
             <span class="ident">HttpRequest</span>::<span class="ident">new</span>(
