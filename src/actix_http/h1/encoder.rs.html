@@ -705,6 +705,7 @@
 <span id="704">704</span>
 <span id="705">705</span>
 <span id="706">706</span>
+<span id="707">707</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
@@ -1240,30 +1241,29 @@
 }
 
 <span class="kw">fn</span> <span class="ident">write_camel_case</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">index</span> <span class="op">=</span> <span class="number">0</span>;
-    <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">value</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key_iter</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">iter</span>();
+    <span class="comment">// first copy entire (potentially wrong) slice to output</span>
+    <span class="ident">buffer</span>[..<span class="ident">value</span>.<span class="ident">len</span>()].<span class="ident">copy_from_slice</span>(<span class="ident">value</span>);
 
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="ident">key_iter</span>.<span class="ident">next</span>() {
-        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">c</span> <span class="op">&gt;</span><span class="op">=</span> <span class="string">b&#39;a&#39;</span> <span class="op">&amp;&amp;</span> <span class="kw-2">*</span><span class="ident">c</span> <span class="op">&lt;</span><span class="op">=</span> <span class="string">b&#39;z&#39;</span> {
-            <span class="ident">buffer</span>[<span class="ident">index</span>] <span class="op">=</span> <span class="kw-2">*</span><span class="ident">c</span> <span class="op">^</span> <span class="string">b&#39; &#39;</span>;
-            <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-        }
-    } <span class="kw">else</span> {
-        <span class="kw">return</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">iter</span>();
+
+    <span class="comment">// first character should be uppercase</span>
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span> @ <span class="string">b&#39;a&#39;</span>..<span class="op">=</span><span class="string">b&#39;z&#39;</span>) <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
+        <span class="ident">buffer</span>[<span class="number">0</span>] <span class="op">=</span> <span class="ident">c</span> <span class="op">&amp;</span> <span class="number">0b1101_1111</span>;
     }
 
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="ident">key_iter</span>.<span class="ident">next</span>() {
-        <span class="ident">buffer</span>[<span class="ident">index</span>] <span class="op">=</span> <span class="kw-2">*</span><span class="ident">c</span>;
-        <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="string">b&#39;-&#39;</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="ident">key_iter</span>.<span class="ident">next</span>() {
-                <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">c</span> <span class="op">&gt;</span><span class="op">=</span> <span class="string">b&#39;a&#39;</span> <span class="op">&amp;&amp;</span> <span class="kw-2">*</span><span class="ident">c</span> <span class="op">&lt;</span><span class="op">=</span> <span class="string">b&#39;z&#39;</span> {
-                    <span class="ident">buffer</span>[<span class="ident">index</span>] <span class="op">=</span> <span class="kw-2">*</span><span class="ident">c</span> <span class="op">^</span> <span class="string">b&#39; &#39;</span>;
-                    <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                }
+    <span class="comment">// track 1 ahead of the current position since that&#39;s the location being assigned to</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">index</span> <span class="op">=</span> <span class="number">2</span>;
+
+    <span class="comment">// remaining characters after hyphens should also be uppercase</span>
+    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
+        <span class="kw">if</span> <span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="string">b&#39;-&#39;</span> {
+            <span class="comment">// advance iter by one and uppercase if needed</span>
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span> @ <span class="string">b&#39;a&#39;</span>..<span class="op">=</span><span class="string">b&#39;z&#39;</span>) <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
+                <span class="ident">buffer</span>[<span class="ident">index</span>] <span class="op">=</span> <span class="ident">c</span> <span class="op">&amp;</span> <span class="number">0b1101_1111</span>;
             }
         }
+
+        <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
     }
 }
 
@@ -1312,6 +1312,8 @@
         );
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span>
             <span class="ident">String</span>::<span class="ident">from_utf8</span>(<span class="ident">Vec</span>::<span class="ident">from</span>(<span class="ident">bytes</span>.<span class="ident">split</span>().<span class="ident">freeze</span>().<span class="ident">as_ref</span>())).<span class="ident">unwrap</span>();
+        <span class="macro">eprintln</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">data</span>);
+
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">data</span>.<span class="ident">contains</span>(<span class="string">&quot;Content-Length: 0\r\n&quot;</span>));
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">data</span>.<span class="ident">contains</span>(<span class="string">&quot;Connection: close\r\n&quot;</span>));
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">data</span>.<span class="ident">contains</span>(<span class="string">&quot;Content-Type: plain/text\r\n&quot;</span>));
