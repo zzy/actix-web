@@ -99,13 +99,15 @@
 <span id="98"> 98</span>
 <span id="99"> 99</span>
 <span id="100">100</span>
+<span id="101">101</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::{<span class="ident">SystemTime</span>, <span class="ident">UNIX_EPOCH</span>};
 
-<span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">buf</span>::<span class="ident">BufMutExt</span>, <span class="ident">BytesMut</span>};
+<span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">buf</span>::<span class="ident">BufMut</span>;
+<span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">BytesMut</span>;
 <span class="kw">use</span> <span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">InvalidHeaderValue</span>};
 <span class="kw">use</span> <span class="ident">time</span>::{<span class="ident">offset</span>, <span class="ident">OffsetDateTime</span>, <span class="ident">PrimitiveDateTime</span>};
 

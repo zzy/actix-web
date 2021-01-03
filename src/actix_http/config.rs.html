@@ -321,7 +321,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">net</span>};
 
-<span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::{<span class="ident">delay_for</span>, <span class="ident">delay_until</span>, <span class="ident">Delay</span>, <span class="ident">Instant</span>};
+<span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::{<span class="ident">sleep</span>, <span class="ident">sleep_until</span>, <span class="ident">Instant</span>, <span class="ident">Sleep</span>};
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">BytesMut</span>;
 <span class="kw">use</span> <span class="ident">futures_util</span>::{<span class="ident">future</span>, <span class="ident">FutureExt</span>};
 <span class="kw">use</span> <span class="ident">time</span>::<span class="ident">OffsetDateTime</span>;
@@ -438,10 +438,10 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Client timeout for first request.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_timer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Delay</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_timer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">delay_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">client_timeout</span>;
         <span class="kw">if</span> <span class="ident">delay_time</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">delay_until</span>(
+            <span class="prelude-val">Some</span>(<span class="ident">sleep_until</span>(
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">timer</span>.<span class="ident">now</span>() <span class="op">+</span> <span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="ident">delay_time</span>),
             ))
         } <span class="kw">else</span> {
@@ -471,9 +471,9 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Return keep-alive timer delay is configured.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive_timer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Delay</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive_timer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ka</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">keep_alive</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">delay_until</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">timer</span>.<span class="ident">now</span>() <span class="op">+</span> <span class="ident">ka</span>))
+            <span class="prelude-val">Some</span>(<span class="ident">sleep_until</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">timer</span>.<span class="ident">now</span>() <span class="op">+</span> <span class="ident">ka</span>))
         } <span class="kw">else</span> {
             <span class="prelude-val">None</span>
         }
@@ -583,7 +583,7 @@
 
             <span class="comment">// periodic date update</span>
             <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-            <span class="ident">actix_rt</span>::<span class="ident">spawn</span>(<span class="ident">delay_for</span>(<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">500</span>)).<span class="ident">then</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
+            <span class="ident">actix_rt</span>::<span class="ident">spawn</span>(<span class="ident">sleep</span>(<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">500</span>)).<span class="ident">then</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
                 <span class="ident">s</span>.<span class="number">0</span>.<span class="ident">reset</span>();
                 <span class="ident">future</span>::<span class="ident">ready</span>(())
             }));

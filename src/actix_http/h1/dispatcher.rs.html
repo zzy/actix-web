@@ -1324,6 +1324,14 @@
 <span id="1323">1323</span>
 <span id="1324">1324</span>
 <span id="1325">1325</span>
+<span id="1326">1326</span>
+<span id="1327">1327</span>
+<span id="1328">1328</span>
+<span id="1329">1329</span>
+<span id="1330">1330</span>
+<span id="1331">1331</span>
+<span id="1332">1332</span>
+<span id="1333">1333</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1335,7 +1343,7 @@
 };
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Decoder</span>, <span class="ident">Encoder</span>, <span class="ident">Framed</span>, <span class="ident">FramedParts</span>};
-<span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::{<span class="ident">delay_until</span>, <span class="ident">Delay</span>, <span class="ident">Instant</span>};
+<span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::{<span class="ident">sleep_until</span>, <span class="ident">Instant</span>, <span class="ident">Sleep</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
 <span class="kw">use</span> <span class="ident">bitflags</span>::<span class="ident">bitflags</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Buf</span>, <span class="ident">BytesMut</span>};
@@ -1378,12 +1386,12 @@
 <span class="doccomment">/// Dispatcher for HTTP/1.1 protocol</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> (<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
+    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
     <span class="attribute">#[<span class="ident">pin</span>]</span>
@@ -1396,12 +1404,12 @@
 <span class="attribute">#[<span class="ident">pin_project</span>(<span class="ident">project</span> <span class="op">=</span> <span class="ident">DispatcherStateProj</span>)]</span>
 <span class="kw">enum</span> <span class="ident">DispatcherState</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> (<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
+    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
     <span class="ident">Normal</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">InnerDispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>),
@@ -1411,12 +1419,12 @@
 <span class="attribute">#[<span class="ident">pin_project</span>(<span class="ident">project</span> <span class="op">=</span> <span class="ident">InnerDispatcherProj</span>)]</span>
 <span class="kw">struct</span> <span class="ident">InnerDispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> (<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
+    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
     <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
@@ -1433,7 +1441,8 @@
     <span class="ident">messages</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">DispatcherMessage</span><span class="op">&gt;</span>,
 
     <span class="ident">ka_expire</span>: <span class="ident">Instant</span>,
-    <span class="ident">ka_timer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Delay</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">pin</span>]</span>
+    <span class="ident">ka_timer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span>,
 
     <span class="ident">io</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
     <span class="ident">read_buf</span>: <span class="ident">BytesMut</span>,
@@ -1450,8 +1459,8 @@
 <span class="attribute">#[<span class="ident">pin_project</span>(<span class="ident">project</span> <span class="op">=</span> <span class="ident">StateProj</span>)]</span>
 <span class="kw">enum</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
     <span class="prelude-val">None</span>,
@@ -1462,8 +1471,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span><span class="op">&gt;</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
     <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
@@ -1493,13 +1502,13 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> (<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
+    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
     <span class="doccomment">/// Create HTTP/1 dispatcher.</span>
@@ -1532,7 +1541,7 @@
         <span class="ident">codec</span>: <span class="ident">Codec</span>,
         <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">read_buf</span>: <span class="ident">BytesMut</span>,
-        <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Delay</span><span class="op">&gt;</span>,
+        <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span>,
         <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
         <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
         <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -1584,13 +1593,13 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">InnerDispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> (<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
+    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
     <span class="kw">fn</span> <span class="ident">can_read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
@@ -1987,7 +1996,7 @@
             <span class="comment">// shutdown timeout</span>
             <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>) {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">interval</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">client_disconnect_timer</span>() {
-                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_timer</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">delay_until</span>(<span class="ident">interval</span>));
+                    <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">set</span>(<span class="prelude-val">Some</span>(<span class="ident">sleep_until</span>(<span class="ident">interval</span>)));
                 } <span class="kw">else</span> {
                     <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">READ_DISCONNECT</span>);
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">take</span>() {
@@ -2000,12 +2009,14 @@
             }
         }
 
-        <span class="kw">match</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>()).<span class="ident">poll</span>(<span class="ident">cx</span>) {
+        <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">poll</span>(<span class="ident">cx</span>) {
             <span class="ident">Poll</span>::<span class="ident">Ready</span>(()) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="comment">// if we get timeout during shutdown, drop connection</span>
                 <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>) {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">DisconnectTimeout</span>);
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>().<span class="ident">deadline</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span> {
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">deadline</span>()
+                    <span class="op">&gt;</span><span class="op">=</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span>
+                {
                     <span class="comment">// check for any outstanding tasks</span>
                     <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">this</span>.<span class="ident">write_buf</span>.<span class="ident">is_empty</span>() {
                         <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">STARTED</span>) {
@@ -2016,9 +2027,15 @@
                             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
                                 <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">client_disconnect_timer</span>()
                             {
-                                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>() {
+                                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>()
+                                {
                                     <span class="ident">timer</span>.<span class="ident">reset</span>(<span class="ident">deadline</span>);
-                                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timer</span>).<span class="ident">poll</span>(<span class="ident">cx</span>);
+                                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">this</span>
+                                        .<span class="ident">ka_timer</span>
+                                        .<span class="ident">as_mut</span>()
+                                        .<span class="ident">as_pin_mut</span>()
+                                        .<span class="ident">unwrap</span>()
+                                        .<span class="ident">poll</span>(<span class="ident">cx</span>);
                                 }
                             } <span class="kw">else</span> {
                                 <span class="comment">// no shutdown timeout, drop socket</span>
@@ -2043,14 +2060,15 @@
                     } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
                         <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">keep_alive_expire</span>()
                     {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>() {
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
                             <span class="ident">timer</span>.<span class="ident">reset</span>(<span class="ident">deadline</span>);
-                            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timer</span>).<span class="ident">poll</span>(<span class="ident">cx</span>);
+                            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span>
+                                <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">poll</span>(<span class="ident">cx</span>);
                         }
                     }
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>() {
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
                     <span class="ident">timer</span>.<span class="ident">reset</span>(<span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span>);
-                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timer</span>).<span class="ident">poll</span>(<span class="ident">cx</span>);
+                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">poll</span>(<span class="ident">cx</span>);
                 }
             }
             <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> (),
@@ -2063,13 +2081,13 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
-    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+    <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> (<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
+    <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span>;
@@ -2278,12 +2296,12 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 {
-    <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">io</span>).<span class="ident">poll_read_buf</span>(<span class="ident">cx</span>, <span class="ident">buf</span>)
+    <span class="ident">actix_codec</span>::<span class="ident">poll_read_buf</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">io</span>), <span class="ident">cx</span>, <span class="ident">buf</span>)
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">marker</span>::<span class="ident">PhantomData</span>, <span class="ident">str</span>};
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>;
 
     <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">fn_service</span>;
     <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::{<span class="ident">lazy</span>, <span class="ident">ready</span>};
@@ -2312,21 +2330,19 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">ok_service</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span>
-    {
+    <span class="kw">fn</span> <span class="ident">ok_service</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">_req</span>: <span class="ident">Request</span><span class="op">|</span> <span class="ident">ready</span>(<span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(<span class="ident">Response</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>())))
     }
 
-    <span class="kw">fn</span> <span class="ident">echo_path_service</span>(
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">echo_path_service</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">Request</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">path</span>().<span class="ident">as_bytes</span>();
             <span class="ident">ready</span>(<span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(<span class="ident">Response</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(<span class="ident">Body</span>::<span class="ident">from_slice</span>(<span class="ident">path</span>))))
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">echo_payload_service</span>(
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">echo_payload_service</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span>
+    {
         <span class="ident">fn_service</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">Request</span><span class="op">|</span> {
             <span class="ident">Box</span>::<span class="ident">pin</span>(<span class="kw">async</span> <span class="kw">move</span> {
                 <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">stream</span>::<span class="ident">StreamExt</span> <span class="kw">as</span> <span class="kw">_</span>;
@@ -2334,7 +2350,7 @@
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">take_payload</span>();
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
                 <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">chunk</span>) <span class="op">=</span> <span class="ident">pl</span>.<span class="ident">next</span>().<span class="kw">await</span> {
-                    <span class="ident">body</span>.<span class="ident">extend_from_slice</span>(<span class="ident">chunk</span>.<span class="ident">unwrap</span>().<span class="ident">bytes</span>())
+                    <span class="ident">body</span>.<span class="ident">extend_from_slice</span>(<span class="ident">chunk</span>.<span class="ident">unwrap</span>().<span class="ident">chunk</span>())
                 }
 
                 <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(<span class="ident">Response</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(<span class="ident">body</span>))
@@ -2347,7 +2363,7 @@
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestBuffer</span>::<span class="ident">new</span>(<span class="string">&quot;GET /test HTTP/1\r\n\r\n&quot;</span>);
 
-            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="ident">TestBuffer</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(
+            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span>::<span class="ident">new</span>(
                 <span class="ident">buf</span>,
                 <span class="ident">ServiceConfig</span>::<span class="ident">default</span>(),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ok_service</span>()),
@@ -2387,7 +2403,7 @@
 
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
 
-            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="ident">TestBuffer</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(
+            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span>::<span class="ident">new</span>(
                 <span class="ident">buf</span>,
                 <span class="ident">cfg</span>,
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_path_service</span>()),
@@ -2441,7 +2457,7 @@
 
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
 
-            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="ident">TestBuffer</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(
+            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span>::<span class="ident">new</span>(
                 <span class="ident">buf</span>,
                 <span class="ident">cfg</span>,
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_path_service</span>()),
@@ -2490,7 +2506,7 @@
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestSeqBuffer</span>::<span class="ident">empty</span>();
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
-            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(
+            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span>::<span class="ident">new</span>(
                 <span class="ident">buf</span>.<span class="ident">clone</span>(),
                 <span class="ident">cfg</span>,
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_payload_service</span>()),
@@ -2561,7 +2577,7 @@
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestSeqBuffer</span>::<span class="ident">empty</span>();
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
-            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(
+            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span>::<span class="ident">new</span>(
                 <span class="ident">buf</span>.<span class="ident">clone</span>(),
                 <span class="ident">cfg</span>,
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">echo_path_service</span>()),
@@ -2620,12 +2636,12 @@
         <span class="ident">lazy</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">TestSeqBuffer</span>::<span class="ident">empty</span>();
             <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Disabled</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
-            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(
+            <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span>::<span class="ident">new</span>(
                 <span class="ident">buf</span>.<span class="ident">clone</span>(),
                 <span class="ident">cfg</span>,
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ok_service</span>()),
                 <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">ExpectHandler</span>),
-                <span class="prelude-val">Some</span>(<span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">UpgradeHandler</span>(<span class="ident">PhantomData</span>))),
+                <span class="prelude-val">Some</span>(<span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">UpgradeHandler</span>)),
                 <span class="ident">Extensions</span>::<span class="ident">new</span>(),
                 <span class="prelude-val">None</span>,
             );

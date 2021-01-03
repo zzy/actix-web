@@ -1220,8 +1220,6 @@
 <span id="1219">1219</span>
 <span id="1220">1220</span>
 <span id="1221">1221</span>
-<span id="1222">1222</span>
-<span id="1223">1223</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
@@ -1234,7 +1232,8 @@
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">ResourceDef</span>, <span class="ident">ResourceInfo</span>, <span class="ident">Router</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{
-    <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>, <span class="ident">Transform</span>,
+    <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>,
+    <span class="ident">ServiceFactoryExt</span>, <span class="ident">Transform</span>,
 };
 <span class="kw">use</span> <span class="ident">futures_core</span>::<span class="ident">future</span>::<span class="ident">LocalBoxFuture</span>;
 
@@ -1313,8 +1312,8 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Scope</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+        <span class="ident">ServiceRequest</span>,
         <span class="ident">Config</span> <span class="op">=</span> (),
-        <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>,
         <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
         <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
         <span class="ident">InitError</span> <span class="op">=</span> (),
@@ -1509,10 +1508,10 @@
     <span class="doccomment">/// If default resource is not registered, app&#39;s default resource is being used.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_service</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">ServiceRequest</span><span class="op">&gt;</span>,
         <span class="ident">U</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+                <span class="ident">ServiceRequest</span>,
                 <span class="ident">Config</span> <span class="op">=</span> (),
-                <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>,
                 <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
                 <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -1542,8 +1541,8 @@
         <span class="ident">mw</span>: <span class="ident">M</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Scope</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+            <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>,
             <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
@@ -1552,7 +1551,7 @@
     <span class="kw">where</span>
         <span class="ident">M</span>: <span class="ident">Transform</span><span class="op">&lt;</span>
             <span class="ident">T</span>::<span class="ident">Service</span>,
-            <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>,
+            <span class="ident">ServiceRequest</span>,
             <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
@@ -1607,8 +1606,8 @@
         <span class="ident">mw</span>: <span class="ident">F</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Scope</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+            <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>,
             <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
@@ -1634,8 +1633,8 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">HttpServiceFactory</span> <span class="kw">for</span> <span class="ident">Scope</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+            <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>,
             <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
@@ -1705,9 +1704,8 @@
     <span class="ident">default</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpNewService</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">ServiceFactory</span> <span class="kw">for</span> <span class="ident">ScopeFactory</span> {
+<span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ScopeFactory</span> {
     <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> ();
-    <span class="kw">type</span> <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>;
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
     <span class="kw">type</span> <span class="ident">InitError</span> <span class="op">=</span> ();
@@ -1826,8 +1824,7 @@
     <span class="ident">_ready</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">ServiceRequest</span>, <span class="ident">ResourceInfo</span>)<span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">Service</span> <span class="kw">for</span> <span class="ident">ScopeService</span> {
-    <span class="kw">type</span> <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>;
+<span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ScopeService</span> {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Response</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
@@ -1878,13 +1875,12 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">ServiceFactory</span> <span class="kw">for</span> <span class="ident">ScopeEndpoint</span> {
-    <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> ();
-    <span class="kw">type</span> <span class="ident">Request</span> <span class="op">=</span> <span class="ident">ServiceRequest</span>;
+<span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ScopeEndpoint</span> {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">type</span> <span class="ident">InitError</span> <span class="op">=</span> ();
+    <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">Service</span> <span class="op">=</span> <span class="ident">ScopeService</span>;
+    <span class="kw">type</span> <span class="ident">InitError</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">ScopeFactoryResponse</span>;
 
     <span class="kw">fn</span> <span class="ident">new_service</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: ()) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {

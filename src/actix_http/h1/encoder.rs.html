@@ -844,7 +844,7 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">has_date</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">bytes_mut</span>().<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">chunk_mut</span>().<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">capacity</span>() <span class="op">-</span> <span class="ident">dst</span>.<span class="ident">len</span>();
 
         <span class="comment">// tracks bytes written since last buffer resize</span>
@@ -886,7 +886,7 @@
 
                         <span class="comment">// re-assign buf raw pointer since it&#39;s possible that the buffer was</span>
                         <span class="comment">// reallocated and/or resized</span>
-                        <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">bytes_mut</span>().<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>;
+                        <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">chunk_mut</span>().<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>;
                     }
 
                     <span class="comment">// SAFETY: on each write, it is enough to ensure that the advancement of the</span>
@@ -933,7 +933,7 @@
 
                             <span class="comment">// re-assign buf raw pointer since it&#39;s possible that the buffer was</span>
                             <span class="comment">// reallocated and/or resized</span>
-                            <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">bytes_mut</span>().<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>;
+                            <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">chunk_mut</span>().<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>;
                         }
 
                         <span class="comment">// SAFETY: on each write, it is enough to ensure that the advancement of</span>
