@@ -362,18 +362,26 @@
 <span id="361">361</span>
 <span id="362">362</span>
 <span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>, <span class="ident">convert</span>::<span class="ident">TryFrom</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
 <span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::{<span class="ident">Instant</span>, <span class="ident">Sleep</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
+<span class="kw">use</span> <span class="ident">futures_core</span>::<span class="ident">ready</span>;
 <span class="kw">use</span> <span class="ident">h2</span>::<span class="ident">server</span>::{<span class="ident">Connection</span>, <span class="ident">SendResponse</span>};
 <span class="kw">use</span> <span class="ident">h2</span>::<span class="ident">SendStream</span>;
 <span class="kw">use</span> <span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">CONNECTION</span>, <span class="ident">CONTENT_LENGTH</span>, <span class="ident">DATE</span>, <span class="ident">TRANSFER_ENCODING</span>};
@@ -392,7 +400,7 @@
 
 <span class="kw">const</span> <span class="ident">CHUNK_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">16_384</span>;
 
-<span class="doccomment">/// Dispatcher for HTTP/2 protocol</span>
+<span class="doccomment">/// Dispatcher for HTTP/2 protocol.</span>
 <span class="attribute">#[<span class="ident">pin_project</span>::<span class="ident">pin_project</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
 <span class="kw">where</span>
@@ -407,7 +415,7 @@
     <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     <span class="ident">ka_expire</span>: <span class="ident">Instant</span>,
     <span class="ident">ka_timer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span>,
-    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
@@ -415,7 +423,6 @@
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="comment">// S::Future: &#39;static,</span>
     <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
@@ -451,7 +458,7 @@
             <span class="ident">on_connect_data</span>,
             <span class="ident">ka_expire</span>,
             <span class="ident">ka_timer</span>,
-            <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 }
@@ -472,10 +479,12 @@
         <span class="kw">let</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>();
 
         <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">connection</span>).<span class="ident">poll_accept</span>(<span class="ident">cx</span>) {
-                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
-                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>.<span class="ident">into</span>())),
-                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((<span class="ident">req</span>, <span class="ident">res</span>)))) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">match</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">connection</span>).<span class="ident">poll_accept</span>(<span class="ident">cx</span>)) {
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
+
+                <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>.<span class="ident">into</span>())),
+
+                <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((<span class="ident">req</span>, <span class="ident">res</span>))) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="comment">// update keep-alive expire</span>
                     <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">is_some</span>() {
                         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">expire</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">keep_alive_expire</span>() {
@@ -484,11 +493,9 @@
                     }
 
                     <span class="kw">let</span> (<span class="ident">parts</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">with_payload</span>(<span class="ident">Payload</span>::<span class="op">&lt;</span>
-                        <span class="kw">crate</span>::<span class="ident">payload</span>::<span class="ident">PayloadStream</span>,
-                    <span class="op">&gt;</span>::<span class="ident">H2</span>(
-                        <span class="kw">crate</span>::<span class="ident">h2</span>::<span class="ident">Payload</span>::<span class="ident">new</span>(<span class="ident">body</span>)
-                    ));
+                    <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">h2</span>::<span class="ident">Payload</span>::<span class="ident">new</span>(<span class="ident">body</span>);
+                    <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">Payload</span>::<span class="op">&lt;</span><span class="kw">crate</span>::<span class="ident">payload</span>::<span class="ident">PayloadStream</span><span class="op">&gt;</span>::<span class="ident">H2</span>(<span class="ident">pl</span>);
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">with_payload</span>(<span class="ident">pl</span>);
 
                     <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">req</span>.<span class="ident">head_mut</span>();
                     <span class="ident">head</span>.<span class="ident">uri</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">uri</span>;
@@ -500,22 +507,18 @@
                     <span class="comment">// merge on_connect_ext data into request extensions</span>
                     <span class="ident">req</span>.<span class="ident">extensions_mut</span>().<span class="ident">drain_from</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">on_connect_data</span>);
 
-                    <span class="ident">actix_rt</span>::<span class="ident">spawn</span>(<span class="ident">ServiceResponse</span>::<span class="op">&lt;</span>
-                        <span class="ident">S</span>::<span class="ident">Future</span>,
-                        <span class="ident">S</span>::<span class="ident">Response</span>,
-                        <span class="ident">S</span>::<span class="ident">Error</span>,
-                        <span class="ident">B</span>,
-                    <span class="op">&gt;</span> {
+                    <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>::<span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Future</span>, <span class="ident">S</span>::<span class="ident">Response</span>, <span class="ident">S</span>::<span class="ident">Error</span>, <span class="ident">B</span><span class="op">&gt;</span> {
                         <span class="ident">state</span>: <span class="ident">ServiceResponseState</span>::<span class="ident">ServiceCall</span>(
                             <span class="ident">this</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">req</span>),
                             <span class="prelude-val">Some</span>(<span class="ident">res</span>),
                         ),
                         <span class="ident">config</span>: <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">clone</span>(),
                         <span class="ident">buffer</span>: <span class="prelude-val">None</span>,
-                        <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
-                    });
+                        <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
+                    };
+
+                    <span class="ident">actix_rt</span>::<span class="ident">spawn</span>(<span class="ident">svc</span>);
                 }
-                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
             }
         }
     }
@@ -527,7 +530,7 @@
     <span class="ident">state</span>: <span class="ident">ServiceResponseState</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">B</span><span class="op">&gt;</span>,
     <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
     <span class="ident">buffer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
-    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">I</span>, <span class="ident">E</span>)<span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">I</span>, <span class="ident">E</span>)<span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">pin_project</span>::<span class="ident">pin_project</span>(<span class="ident">project</span> <span class="op">=</span> <span class="ident">ServiceResponseStateProj</span>)]</span>
@@ -564,8 +567,9 @@
                 <span class="ident">skip_len</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 <span class="kw-2">*</span><span class="ident">size</span> <span class="op">=</span> <span class="ident">BodySize</span>::<span class="ident">Stream</span>;
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
         }
+
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">size</span> {
             <span class="ident">BodySize</span>::<span class="prelude-val">None</span> <span class="op">|</span> <span class="ident">BodySize</span>::<span class="ident">Stream</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
             <span class="ident">BodySize</span>::<span class="ident">Empty</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">res</span>
@@ -580,11 +584,13 @@
         <span class="comment">// copy headers</span>
         <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">value</span>) <span class="kw">in</span> <span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">iter</span>() {
             <span class="kw">match</span> <span class="kw-2">*</span><span class="ident">key</span> {
-                <span class="ident">CONNECTION</span> <span class="op">|</span> <span class="ident">TRANSFER_ENCODING</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>, <span class="comment">// http2 specific</span>
+                <span class="comment">// omit HTTP/1 only headers</span>
+                <span class="ident">CONNECTION</span> <span class="op">|</span> <span class="ident">TRANSFER_ENCODING</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
                 <span class="ident">CONTENT_LENGTH</span> <span class="kw">if</span> <span class="ident">skip_len</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
                 <span class="ident">DATE</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">has_date</span> <span class="op">=</span> <span class="bool-val">true</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
             }
+
             <span class="ident">res</span>.<span class="ident">headers_mut</span>().<span class="ident">append</span>(<span class="ident">key</span>, <span class="ident">value</span>.<span class="ident">clone</span>());
         }
 
@@ -616,109 +622,117 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
 
         <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">project</span>() {
-            <span class="ident">ServiceResponseStateProj</span>::<span class="ident">ServiceCall</span>(<span class="ident">call</span>, <span class="ident">send</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">call</span>.<span class="ident">poll</span>(<span class="ident">cx</span>) {
-                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">res</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">into</span>().<span class="ident">replace_body</span>(());
+            <span class="ident">ServiceResponseStateProj</span>::<span class="ident">ServiceCall</span>(<span class="ident">call</span>, <span class="ident">send</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">match</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">call</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)) {
+                    <span class="prelude-val">Ok</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">into</span>().<span class="ident">replace_body</span>(());
 
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">send</span> <span class="op">=</span> <span class="ident">send</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">body</span>.<span class="ident">size</span>();
-                    <span class="kw">let</span> <span class="ident">h2_res</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">prepare_response</span>(<span class="ident">res</span>.<span class="ident">head</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">size</span>);
-                    <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">send</span> <span class="op">=</span> <span class="ident">send</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">body</span>.<span class="ident">size</span>();
+                        <span class="kw">let</span> <span class="ident">h2_res</span> <span class="op">=</span>
+                            <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">prepare_response</span>(<span class="ident">res</span>.<span class="ident">head</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">size</span>);
+                        <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
 
-                    <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">send</span>.<span class="ident">send_response</span>(<span class="ident">h2_res</span>, <span class="ident">size</span>.<span class="ident">is_eof</span>()) {
-                        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Error sending h2 response: {:?}&quot;</span>, <span class="ident">e</span>);
-                            <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
+                        <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">send</span>.<span class="ident">send_response</span>(<span class="ident">h2_res</span>, <span class="ident">size</span>.<span class="ident">is_eof</span>()) {
+                            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Error sending HTTP/2 response: {:?}&quot;</span>, <span class="ident">e</span>);
+                                <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
+                            }
+                            <span class="prelude-val">Ok</span>(<span class="ident">stream</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">stream</span>,
+                        };
+
+                        <span class="kw">if</span> <span class="ident">size</span>.<span class="ident">is_eof</span>() {
+                            <span class="ident">Poll</span>::<span class="ident">Ready</span>(())
+                        } <span class="kw">else</span> {
+                            <span class="ident">this</span>.<span class="ident">state</span>
+                                .<span class="ident">set</span>(<span class="ident">ServiceResponseState</span>::<span class="ident">SendPayload</span>(<span class="ident">stream</span>, <span class="ident">body</span>));
+                            <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
                         }
-                        <span class="prelude-val">Ok</span>(<span class="ident">stream</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">stream</span>,
-                    };
+                    }
 
-                    <span class="kw">if</span> <span class="ident">size</span>.<span class="ident">is_eof</span>() {
-                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(())
-                    } <span class="kw">else</span> {
-                        <span class="ident">this</span>.<span class="ident">state</span>
-                            .<span class="ident">set</span>(<span class="ident">ServiceResponseState</span>::<span class="ident">SendPayload</span>(<span class="ident">stream</span>, <span class="ident">body</span>));
-                        <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
+                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>().<span class="ident">into</span>();
+                        <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
+
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">send</span> <span class="op">=</span> <span class="ident">send</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">body</span>.<span class="ident">size</span>();
+                        <span class="kw">let</span> <span class="ident">h2_res</span> <span class="op">=</span>
+                            <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">prepare_response</span>(<span class="ident">res</span>.<span class="ident">head</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">size</span>);
+                        <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
+
+                        <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">send</span>.<span class="ident">send_response</span>(<span class="ident">h2_res</span>, <span class="ident">size</span>.<span class="ident">is_eof</span>()) {
+                            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Error sending HTTP/2 response: {:?}&quot;</span>, <span class="ident">e</span>);
+                                <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
+                            }
+                            <span class="prelude-val">Ok</span>(<span class="ident">stream</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">stream</span>,
+                        };
+
+                        <span class="kw">if</span> <span class="ident">size</span>.<span class="ident">is_eof</span>() {
+                            <span class="ident">Poll</span>::<span class="ident">Ready</span>(())
+                        } <span class="kw">else</span> {
+                            <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">ServiceResponseState</span>::<span class="ident">SendPayload</span>(
+                                <span class="ident">stream</span>,
+                                <span class="ident">body</span>.<span class="ident">into_body</span>(),
+                            ));
+                            <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
+                        }
                     }
                 }
-                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
-                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>().<span class="ident">into</span>();
-                    <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
+            }
 
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">send</span> <span class="op">=</span> <span class="ident">send</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">body</span>.<span class="ident">size</span>();
-                    <span class="kw">let</span> <span class="ident">h2_res</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">prepare_response</span>(<span class="ident">res</span>.<span class="ident">head</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">size</span>);
-                    <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
-
-                    <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">send</span>.<span class="ident">send_response</span>(<span class="ident">h2_res</span>, <span class="ident">size</span>.<span class="ident">is_eof</span>()) {
-                        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Error sending h2 response: {:?}&quot;</span>, <span class="ident">e</span>);
-                            <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
-                        }
-                        <span class="prelude-val">Ok</span>(<span class="ident">stream</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">stream</span>,
-                    };
-
-                    <span class="kw">if</span> <span class="ident">size</span>.<span class="ident">is_eof</span>() {
-                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(())
-                    } <span class="kw">else</span> {
-                        <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">ServiceResponseState</span>::<span class="ident">SendPayload</span>(
-                            <span class="ident">stream</span>,
-                            <span class="ident">body</span>.<span class="ident">into_body</span>(),
-                        ));
-                        <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
-                    }
-                }
-            },
             <span class="ident">ServiceResponseStateProj</span>::<span class="ident">SendPayload</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">stream</span>, <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">body</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">loop</span> {
                     <span class="kw">loop</span> {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">buffer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">buffer</span> {
-                            <span class="kw">match</span> <span class="ident">stream</span>.<span class="ident">poll_capacity</span>(<span class="ident">cx</span>) {
-                                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
-                                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(()),
-                                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">cap</span>))) <span class="op">=</span><span class="op">&gt;</span> {
-                                    <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">buffer</span>.<span class="ident">len</span>();
-                                    <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">buffer</span>.<span class="ident">split_to</span>(<span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">cap</span>, <span class="ident">len</span>));
+                        <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">buffer</span> {
+                            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">buffer</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="kw">match</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">stream</span>.<span class="ident">poll_capacity</span>(<span class="ident">cx</span>)) {
+                                    <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(()),
 
-                                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">send_data</span>(<span class="ident">bytes</span>, <span class="bool-val">false</span>) {
+                                    <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">cap</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                                        <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">buffer</span>.<span class="ident">len</span>();
+                                        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">buffer</span>.<span class="ident">split_to</span>(<span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">cap</span>, <span class="ident">len</span>));
+
+                                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">send_data</span>(<span class="ident">bytes</span>, <span class="bool-val">false</span>) {
+                                            <span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>);
+                                            <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
+                                        } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">buffer</span>.<span class="ident">is_empty</span>() {
+                                            <span class="kw">let</span> <span class="ident">cap</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">buffer</span>.<span class="ident">len</span>(), <span class="ident">CHUNK_SIZE</span>);
+                                            <span class="ident">stream</span>.<span class="ident">reserve_capacity</span>(<span class="ident">cap</span>);
+                                        } <span class="kw">else</span> {
+                                            <span class="ident">this</span>.<span class="ident">buffer</span>.<span class="ident">take</span>();
+                                        }
+                                    }
+
+                                    <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                                         <span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>);
                                         <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
-                                    } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">buffer</span>.<span class="ident">is_empty</span>() {
-                                        <span class="kw">let</span> <span class="ident">cap</span> <span class="op">=</span>
-                                            <span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">buffer</span>.<span class="ident">len</span>(), <span class="ident">CHUNK_SIZE</span>);
-                                        <span class="ident">stream</span>.<span class="ident">reserve_capacity</span>(<span class="ident">cap</span>);
-                                    } <span class="kw">else</span> {
-                                        <span class="ident">this</span>.<span class="ident">buffer</span>.<span class="ident">take</span>();
                                     }
                                 }
-                                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>))) <span class="op">=</span><span class="op">&gt;</span> {
-                                    <span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>);
-                                    <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
-                                }
                             }
-                        } <span class="kw">else</span> {
-                            <span class="kw">match</span> <span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>) {
-                                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
-                                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
+
+                            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)) {
+                                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
                                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">send_data</span>(<span class="ident">Bytes</span>::<span class="ident">new</span>(), <span class="bool-val">true</span>)
                                     {
                                         <span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>);
                                     }
                                     <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
                                 }
-                                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">chunk</span>))) <span class="op">=</span><span class="op">&gt;</span> {
-                                    <span class="ident">stream</span>.<span class="ident">reserve_capacity</span>(<span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">min</span>(
+
+                                <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">chunk</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                                    <span class="ident">stream</span>.<span class="ident">reserve_capacity</span>(<span class="ident">cmp</span>::<span class="ident">min</span>(
                                         <span class="ident">chunk</span>.<span class="ident">len</span>(),
                                         <span class="ident">CHUNK_SIZE</span>,
                                     ));
                                     <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">buffer</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">chunk</span>);
                                 }
-                                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>))) <span class="op">=</span><span class="op">&gt;</span> {
+
+                                <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                                     <span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Response payload stream error: {:?}&quot;</span>, <span class="ident">e</span>);
                                     <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(());
                                 }
-                            }
+                            },
                         }
                     }
                 }

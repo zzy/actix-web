@@ -717,7 +717,7 @@
     <span class="ident">expect</span>: <span class="ident">X</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>,
     <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
@@ -754,7 +754,7 @@
             <span class="ident">expect</span>: <span class="ident">h1</span>::<span class="ident">ExpectHandler</span>,
             <span class="ident">upgrade</span>: <span class="prelude-val">None</span>,
             <span class="ident">on_connect_ext</span>: <span class="prelude-val">None</span>,
-            <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 
@@ -769,7 +769,7 @@
             <span class="ident">expect</span>: <span class="ident">h1</span>::<span class="ident">ExpectHandler</span>,
             <span class="ident">upgrade</span>: <span class="prelude-val">None</span>,
             <span class="ident">on_connect_ext</span>: <span class="prelude-val">None</span>,
-            <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 }
@@ -801,7 +801,7 @@
             <span class="ident">srv</span>: <span class="self">self</span>.<span class="ident">srv</span>,
             <span class="ident">upgrade</span>: <span class="self">self</span>.<span class="ident">upgrade</span>,
             <span class="ident">on_connect_ext</span>: <span class="self">self</span>.<span class="ident">on_connect_ext</span>,
-            <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 
@@ -822,7 +822,7 @@
             <span class="ident">srv</span>: <span class="self">self</span>.<span class="ident">srv</span>,
             <span class="ident">expect</span>: <span class="self">self</span>.<span class="ident">expect</span>,
             <span class="ident">on_connect_ext</span>: <span class="self">self</span>.<span class="ident">on_connect_ext</span>,
-            <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 
@@ -1037,7 +1037,7 @@
             <span class="ident">upgrade</span>: <span class="prelude-val">None</span>,
             <span class="ident">on_connect_ext</span>: <span class="self">self</span>.<span class="ident">on_connect_ext</span>.<span class="ident">clone</span>(),
             <span class="ident">cfg</span>: <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>(),
-            <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 }
@@ -1060,7 +1060,7 @@
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span>::<span class="ident">Service</span><span class="op">&gt;</span>,
     <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
-    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">HttpServiceResponse</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
@@ -1135,7 +1135,7 @@
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
     <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">HttpServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
@@ -1163,7 +1163,7 @@
             <span class="ident">srv</span>: <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">srv</span>),
             <span class="ident">expect</span>: <span class="ident">CloneableService</span>::<span class="ident">new</span>(<span class="ident">expect</span>),
             <span class="ident">upgrade</span>: <span class="ident">upgrade</span>.<span class="ident">map</span>(<span class="ident">CloneableService</span>::<span class="ident">new</span>),
-            <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 }

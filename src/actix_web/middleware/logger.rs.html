@@ -1061,7 +1061,7 @@
                 <span class="ident">fut</span>: <span class="self">self</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">req</span>),
                 <span class="ident">format</span>: <span class="prelude-val">None</span>,
                 <span class="ident">time</span>: <span class="ident">OffsetDateTime</span>::<span class="ident">now_utc</span>(),
-                <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+                <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
             }
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">OffsetDateTime</span>::<span class="ident">now_utc</span>();
@@ -1074,7 +1074,7 @@
                 <span class="ident">fut</span>: <span class="self">self</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">req</span>),
                 <span class="ident">format</span>: <span class="prelude-val">Some</span>(<span class="ident">format</span>),
                 <span class="ident">time</span>: <span class="ident">now</span>,
-                <span class="ident">_t</span>: <span class="ident">PhantomData</span>,
+                <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
             }
         }
     }
@@ -1091,7 +1091,7 @@
     <span class="ident">fut</span>: <span class="ident">S</span>::<span class="ident">Future</span>,
     <span class="ident">time</span>: <span class="ident">OffsetDateTime</span>,
     <span class="ident">format</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Format</span><span class="op">&gt;</span>,
-    <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">LoggerResponse</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
@@ -1347,7 +1347,7 @@
                 };
                 <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">FormatText</span>::<span class="ident">Str</span>(<span class="ident">s</span>.<span class="ident">to_string</span>())
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {},
         }
     }
 
@@ -1412,7 +1412,7 @@
 
                 <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">s</span>;
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {},
         }
     }
 }

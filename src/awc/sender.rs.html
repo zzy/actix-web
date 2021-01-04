@@ -410,7 +410,7 @@
             <span class="ident">SendClientRequest</span>::<span class="ident">Fut</span>(<span class="ident">send</span>, <span class="ident">delay</span>, <span class="ident">response_decompress</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="ident">delay</span>.<span class="ident">is_some</span>() {
                     <span class="kw">match</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">delay</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>()).<span class="ident">poll</span>(<span class="ident">cx</span>) {
-                        <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                        <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> {},
                         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">SendRequestError</span>::<span class="ident">Timeout</span>)),
                     }
                 }
@@ -451,7 +451,7 @@
             <span class="ident">SendClientRequest</span>::<span class="ident">Fut</span>(<span class="ident">send</span>, <span class="ident">delay</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="ident">delay</span>.<span class="ident">is_some</span>() {
                     <span class="kw">match</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">delay</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>()).<span class="ident">poll</span>(<span class="ident">cx</span>) {
-                        <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                        <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> {},
                         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">SendRequestError</span>::<span class="ident">Timeout</span>)),
                     }
                 }
