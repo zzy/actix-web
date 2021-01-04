@@ -15,7 +15,7 @@
         .<span class="ident">unwrap</span>();
 
     <span class="ident">connection</span>
-        .<span class="ident">send</span>(<span class="ident">ws</span>::<span class="ident">Message</span>::<span class="ident">Text</span>(<span class="string">&quot;Echo&quot;</span>.<span class="ident">to_string</span>()))
+        .<span class="ident">send</span>(<span class="ident">ws</span>::<span class="ident">Message</span>::<span class="ident">Text</span>(<span class="string">&quot;Echo&quot;</span>.<span class="ident">into</span>()))
         .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">next</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">unwrap</span>();
@@ -24,11 +24,11 @@
 }</pre></div>
 </div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
 <table><tr class="module-item"><td><a class="struct" href="struct.CloseReason.html" title="awc::ws::CloseReason struct">CloseReason</a></td><td class="docblock-short"><p>Reason for closing the connection</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Codec.html" title="awc::ws::Codec struct">Codec</a></td><td class="docblock-short"><p>WebSockets protocol codec</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Codec.html" title="awc::ws::Codec struct">Codec</a></td><td class="docblock-short"><p>WebSocket protocol codec.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.WebsocketsRequest.html" title="awc::ws::WebsocketsRequest struct">WebsocketsRequest</a></td><td class="docblock-short"><p><code>WebSocket</code> connection</p>
 </td></tr></table><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
 <table><tr class="module-item"><td><a class="enum" href="enum.CloseCode.html" title="awc::ws::CloseCode enum">CloseCode</a></td><td class="docblock-short"><p>Status code used to indicate why an endpoint is closing the <code>WebSocket</code>
 connection.</p>
-</td></tr><tr class="module-item"><td><a class="enum" href="enum.Frame.html" title="awc::ws::Frame enum">Frame</a></td><td class="docblock-short"><p><code>WebSocket</code> frame</p>
-</td></tr><tr class="module-item"><td><a class="enum" href="enum.Message.html" title="awc::ws::Message enum">Message</a></td><td class="docblock-short"><p><code>WebSocket</code> Message</p>
+</td></tr><tr class="module-item"><td><a class="enum" href="enum.Frame.html" title="awc::ws::Frame enum">Frame</a></td><td class="docblock-short"><p>A WebSocket frame.</p>
+</td></tr><tr class="module-item"><td><a class="enum" href="enum.Message.html" title="awc::ws::Message enum">Message</a></td><td class="docblock-short"><p>A WebSocket message.</p>
 </td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "awc";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

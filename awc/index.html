@@ -43,7 +43,7 @@
     .<span class="kw">await</span><span class="question-mark">?</span>;
 
 <span class="ident">connection</span>
-    .<span class="ident">send</span>(<span class="ident">awc</span>::<span class="ident">ws</span>::<span class="ident">Message</span>::<span class="ident">Text</span>(<span class="string">&quot;Echo&quot;</span>.<span class="ident">to_string</span>()))
+    .<span class="ident">send</span>(<span class="ident">awc</span>::<span class="ident">ws</span>::<span class="ident">Message</span>::<span class="ident">Text</span>(<span class="string">&quot;Echo&quot;</span>.<span class="ident">into</span>()))
     .<span class="kw">await</span><span class="question-mark">?</span>;
 <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">next</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>()<span class="question-mark">?</span>;</pre></div>
 </div><h2 id="reexports" class="section-header"><a href="#reexports">Re-exports</a></h2>

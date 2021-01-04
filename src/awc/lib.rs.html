@@ -361,7 +361,7 @@
 <span class="doccomment">//!     .await?;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! connection</span>
-<span class="doccomment">//!     .send(awc::ws::Message::Text(&quot;Echo&quot;.to_string()))</span>
+<span class="doccomment">//!     .send(awc::ws::Message::Text(&quot;Echo&quot;.into()))</span>
 <span class="doccomment">//!     .await?;</span>
 <span class="doccomment">//! let response = connection.next().await.unwrap()?;</span>
 <span class="doccomment">//! # assert_eq!(response, awc::ws::Frame::Text(&quot;Echo&quot;.as_bytes().into()));</span>

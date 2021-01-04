@@ -549,7 +549,7 @@
 <span class="doccomment">//!         .unwrap();</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     connection</span>
-<span class="doccomment">//!         .send(ws::Message::Text(&quot;Echo&quot;.to_string()))</span>
+<span class="doccomment">//!         .send(ws::Message::Text(&quot;Echo&quot;.into()))</span>
 <span class="doccomment">//!         .await</span>
 <span class="doccomment">//!         .unwrap();</span>
 <span class="doccomment">//!     let response = connection.next().await.unwrap().unwrap();</span>

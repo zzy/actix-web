@@ -282,51 +282,77 @@
 <span id="281">281</span>
 <span id="282">282</span>
 <span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
+<span class="kw">use</span> <span class="ident">bitflags</span>::<span class="ident">bitflags</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
+<span class="kw">use</span> <span class="ident">bytestring</span>::<span class="ident">ByteString</span>;
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">frame</span>::<span class="ident">Parser</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">proto</span>::{<span class="ident">CloseReason</span>, <span class="ident">OpCode</span>};
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">ProtocolError</span>;
 
-<span class="doccomment">/// `WebSocket` Message</span>
+<span class="doccomment">/// A WebSocket message.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Message</span> {
-    <span class="doccomment">/// Text message</span>
-    <span class="ident">Text</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// Binary message</span>
+    <span class="doccomment">/// Text message.</span>
+    <span class="ident">Text</span>(<span class="ident">ByteString</span>),
+
+    <span class="doccomment">/// Binary message.</span>
     <span class="ident">Binary</span>(<span class="ident">Bytes</span>),
-    <span class="doccomment">/// Continuation</span>
+
+    <span class="doccomment">/// Continuation.</span>
     <span class="ident">Continuation</span>(<span class="ident">Item</span>),
-    <span class="doccomment">/// Ping message</span>
+
+    <span class="doccomment">/// Ping message.</span>
     <span class="ident">Ping</span>(<span class="ident">Bytes</span>),
-    <span class="doccomment">/// Pong message</span>
+
+    <span class="doccomment">/// Pong message.</span>
     <span class="ident">Pong</span>(<span class="ident">Bytes</span>),
-    <span class="doccomment">/// Close message with optional reason</span>
+
+    <span class="doccomment">/// Close message with optional reason.</span>
     <span class="ident">Close</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloseReason</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// No-op. Useful for actix-net services</span>
+
+    <span class="doccomment">/// No-op. Useful for low-level services.</span>
     <span class="ident">Nop</span>,
 }
 
-<span class="doccomment">/// `WebSocket` frame</span>
+<span class="doccomment">/// A WebSocket frame.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Frame</span> {
-    <span class="doccomment">/// Text frame, codec does not verify utf8 encoding</span>
+    <span class="doccomment">/// Text frame. Note that the codec does not validate UTF-8 encoding.</span>
     <span class="ident">Text</span>(<span class="ident">Bytes</span>),
-    <span class="doccomment">/// Binary frame</span>
+
+    <span class="doccomment">/// Binary frame.</span>
     <span class="ident">Binary</span>(<span class="ident">Bytes</span>),
-    <span class="doccomment">/// Continuation</span>
+
+    <span class="doccomment">/// Continuation.</span>
     <span class="ident">Continuation</span>(<span class="ident">Item</span>),
-    <span class="doccomment">/// Ping message</span>
+
+    <span class="doccomment">/// Ping message.</span>
     <span class="ident">Ping</span>(<span class="ident">Bytes</span>),
-    <span class="doccomment">/// Pong message</span>
+
+    <span class="doccomment">/// Pong message.</span>
     <span class="ident">Pong</span>(<span class="ident">Bytes</span>),
-    <span class="doccomment">/// Close message with optional reason</span>
+
+    <span class="doccomment">/// Close message with optional reason.</span>
     <span class="ident">Close</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloseReason</span><span class="op">&gt;</span>),
 }
 
-<span class="doccomment">/// `WebSocket` continuation item</span>
+<span class="doccomment">/// A `WebSocket` continuation item.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Item</span> {
     <span class="ident">FirstText</span>(<span class="ident">Bytes</span>),
@@ -336,13 +362,13 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
-<span class="doccomment">/// WebSockets protocol codec</span>
+<span class="doccomment">/// WebSocket protocol codec.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Codec</span> {
     <span class="ident">flags</span>: <span class="ident">Flags</span>,
     <span class="ident">max_size</span>: <span class="ident">usize</span>,
 }
 
-<span class="ident">bitflags</span>::<span class="macro">bitflags</span><span class="macro">!</span> {
+<span class="macro">bitflags</span><span class="macro">!</span> {
     <span class="kw">struct</span> <span class="ident">Flags</span>: <span class="ident">u8</span> {
         <span class="kw">const</span> <span class="ident">SERVER</span>         <span class="op">=</span> <span class="number">0b0000_0001</span>;
         <span class="kw">const</span> <span class="ident">CONTINUATION</span>   <span class="op">=</span> <span class="number">0b0000_0010</span>;
@@ -351,7 +377,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Codec</span> {
-    <span class="doccomment">/// Create new websocket frames decoder</span>
+    <span class="doccomment">/// Create new websocket frames decoder.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Codec</span> {
         <span class="ident">Codec</span> {
             <span class="ident">max_size</span>: <span class="number">65_536</span>,
@@ -359,9 +385,9 @@
         }
     }
 
-    <span class="doccomment">/// Set max frame size</span>
+    <span class="doccomment">/// Set max frame size.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// By default max size is set to 64kb</span>
+    <span class="doccomment">/// By default max size is set to 64kb.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">max_size</span> <span class="op">=</span> <span class="ident">size</span>;
         <span class="self">self</span>

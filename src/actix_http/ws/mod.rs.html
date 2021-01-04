@@ -319,15 +319,32 @@
 <span id="318">318</span>
 <span id="319">319</span>
 <span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! WebSocket protocol support.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! To setup a `WebSocket`, first do web socket handshake then on success</span>
-<span class="doccomment">//! convert `Payload` into a `WsStream` stream and then use `WsWriter` to</span>
-<span class="doccomment">//! communicate with the peer.</span>
+<span class="doccomment">//! To setup a WebSocket, first do web socket handshake then on success convert `Payload` into a</span>
+<span class="doccomment">//! `WsStream` stream and then use `WsWriter` to communicate with the peer.</span>
+
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 
-<span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">From</span>};
+<span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">From</span>};
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="ident">ResponseError</span>;
@@ -345,86 +362,103 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">frame</span>::<span class="ident">Parser</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">proto</span>::{<span class="ident">hash_key</span>, <span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">OpCode</span>};
 
-<span class="doccomment">/// Websocket protocol errors</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
+<span class="doccomment">/// WebSocket protocol errors.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>, <span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ProtocolError</span> {
-    <span class="doccomment">/// Received an unmasked frame from client</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Received an unmasked frame from client&quot;</span>)]</span>
+    <span class="doccomment">/// Received an unmasked frame from client.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Received an unmasked frame from client.&quot;</span>)]</span>
     <span class="ident">UnmaskedFrame</span>,
-    <span class="doccomment">/// Received a masked frame from server</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Received a masked frame from server&quot;</span>)]</span>
+
+    <span class="doccomment">/// Received a masked frame from server.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Received a masked frame from server.&quot;</span>)]</span>
     <span class="ident">MaskedFrame</span>,
-    <span class="doccomment">/// Encountered invalid opcode</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid opcode: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">InvalidOpcode</span>(<span class="ident">u8</span>),
+
+    <span class="doccomment">/// Encountered invalid opcode.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid opcode: {}.&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="ident">InvalidOpcode</span>(<span class="attribute">#[<span class="ident">error</span>(<span class="ident">not</span>(<span class="ident">source</span>))]</span> <span class="ident">u8</span>),
+
     <span class="doccomment">/// Invalid control frame length</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid control frame length: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">InvalidLength</span>(<span class="ident">usize</span>),
-    <span class="doccomment">/// Bad web socket op code</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Bad web socket op code&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid control frame length: {}.&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="ident">InvalidLength</span>(<span class="attribute">#[<span class="ident">error</span>(<span class="ident">not</span>(<span class="ident">source</span>))]</span> <span class="ident">usize</span>),
+
+    <span class="doccomment">/// Bad opcode.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Bad opcode.&quot;</span>)]</span>
     <span class="ident">BadOpCode</span>,
+
     <span class="doccomment">/// A payload reached size limit.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;A payload reached size limit.&quot;</span>)]</span>
     <span class="ident">Overflow</span>,
-    <span class="doccomment">/// Continuation is not started</span>
+
+    <span class="doccomment">/// Continuation is not started.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Continuation is not started.&quot;</span>)]</span>
     <span class="ident">ContinuationNotStarted</span>,
-    <span class="doccomment">/// Received new continuation but it is already started</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Received new continuation but it is already started&quot;</span>)]</span>
+
+    <span class="doccomment">/// Received new continuation but it is already started.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Received new continuation but it is already started.&quot;</span>)]</span>
     <span class="ident">ContinuationStarted</span>,
-    <span class="doccomment">/// Unknown continuation fragment</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unknown continuation fragment.&quot;</span>)]</span>
-    <span class="ident">ContinuationFragment</span>(<span class="ident">OpCode</span>),
-    <span class="doccomment">/// Io error</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;io error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+
+    <span class="doccomment">/// Unknown continuation fragment.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unknown continuation fragment: {}.&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="ident">ContinuationFragment</span>(<span class="attribute">#[<span class="ident">error</span>(<span class="ident">not</span>(<span class="ident">source</span>))]</span> <span class="ident">OpCode</span>),
+
+    <span class="doccomment">/// I/O error.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;I/O error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Io</span>(<span class="ident">io</span>::<span class="ident">Error</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">ProtocolError</span> {}
-
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">ProtocolError</span> {}
 
-<span class="doccomment">/// Websocket handshake errors</span>
+<span class="doccomment">/// WebSocket handshake errors</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Debug</span>, <span class="ident">Display</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HandshakeError</span> {
-    <span class="doccomment">/// Only get method is allowed</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Method not allowed&quot;</span>)]</span>
+    <span class="doccomment">/// Only get method is allowed.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Method not allowed.&quot;</span>)]</span>
     <span class="ident">GetMethodRequired</span>,
-    <span class="doccomment">/// Upgrade header if not set to websocket</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Websocket upgrade is expected&quot;</span>)]</span>
+
+    <span class="doccomment">/// Upgrade header if not set to websocket.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;WebSocket upgrade is expected.&quot;</span>)]</span>
     <span class="ident">NoWebsocketUpgrade</span>,
-    <span class="doccomment">/// Connection header is not set to upgrade</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Connection upgrade is expected&quot;</span>)]</span>
+
+    <span class="doccomment">/// Connection header is not set to upgrade.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Connection upgrade is expected.&quot;</span>)]</span>
     <span class="ident">NoConnectionUpgrade</span>,
-    <span class="doccomment">/// Websocket version header is not set</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Websocket version header is required&quot;</span>)]</span>
+
+    <span class="doccomment">/// WebSocket version header is not set.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;WebSocket version header is required.&quot;</span>)]</span>
     <span class="ident">NoVersionHeader</span>,
-    <span class="doccomment">/// Unsupported websocket version</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unsupported version&quot;</span>)]</span>
+
+    <span class="doccomment">/// Unsupported websocket version.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unsupported version.&quot;</span>)]</span>
     <span class="ident">UnsupportedVersion</span>,
-    <span class="doccomment">/// Websocket key is not set or wrong</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unknown websocket key&quot;</span>)]</span>
+
+    <span class="doccomment">/// WebSocket key is not set or wrong.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unknown websocket key.&quot;</span>)]</span>
     <span class="ident">BadWebsocketKey</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">HandshakeError</span> {
     <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
-        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">HandshakeError</span>::<span class="ident">GetMethodRequired</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Response</span>::<span class="ident">MethodNotAllowed</span>()
                 .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">ALLOW</span>, <span class="string">&quot;GET&quot;</span>)
                 .<span class="ident">finish</span>(),
+
             <span class="ident">HandshakeError</span>::<span class="ident">NoWebsocketUpgrade</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Response</span>::<span class="ident">BadRequest</span>()
                 .<span class="ident">reason</span>(<span class="string">&quot;No WebSocket UPGRADE header found&quot;</span>)
                 .<span class="ident">finish</span>(),
+
             <span class="ident">HandshakeError</span>::<span class="ident">NoConnectionUpgrade</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Response</span>::<span class="ident">BadRequest</span>()
                 .<span class="ident">reason</span>(<span class="string">&quot;No CONNECTION upgrade&quot;</span>)
                 .<span class="ident">finish</span>(),
+
             <span class="ident">HandshakeError</span>::<span class="ident">NoVersionHeader</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Response</span>::<span class="ident">BadRequest</span>()
                 .<span class="ident">reason</span>(<span class="string">&quot;Websocket version header is required&quot;</span>)
                 .<span class="ident">finish</span>(),
+
             <span class="ident">HandshakeError</span>::<span class="ident">UnsupportedVersion</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Response</span>::<span class="ident">BadRequest</span>()
                 .<span class="ident">reason</span>(<span class="string">&quot;Unsupported version&quot;</span>)
                 .<span class="ident">finish</span>(),
+
             <span class="ident">HandshakeError</span>::<span class="ident">BadWebsocketKey</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="ident">Response</span>::<span class="ident">BadRequest</span>().<span class="ident">reason</span>(<span class="string">&quot;Handshake error&quot;</span>).<span class="ident">finish</span>()
             }

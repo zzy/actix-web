@@ -319,26 +319,38 @@
 <span id="318">318</span>
 <span id="319">319</span>
 <span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::{<span class="ident">From</span>, <span class="ident">Into</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 
 <span class="kw">use</span> <span class="self">self</span>::<span class="ident">OpCode</span>::<span class="kw-2">*</span>;
-<span class="doccomment">/// Operation codes as part of rfc6455.</span>
+<span class="doccomment">/// Operation codes as part of RFC6455.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">OpCode</span> {
     <span class="doccomment">/// Indicates a continuation frame of a fragmented message.</span>
     <span class="ident">Continue</span>,
+
     <span class="doccomment">/// Indicates a text data frame.</span>
     <span class="ident">Text</span>,
+
     <span class="doccomment">/// Indicates a binary data frame.</span>
     <span class="ident">Binary</span>,
+
     <span class="doccomment">/// Indicates a close control frame.</span>
     <span class="ident">Close</span>,
+
     <span class="doccomment">/// Indicates a ping control frame.</span>
     <span class="ident">Ping</span>,
+
     <span class="doccomment">/// Indicates a pong control frame.</span>
     <span class="ident">Pong</span>,
+
     <span class="doccomment">/// Indicates an invalid opcode was received.</span>
     <span class="ident">Bad</span>,
 }
