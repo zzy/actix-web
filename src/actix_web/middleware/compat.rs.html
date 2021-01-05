@@ -191,45 +191,53 @@
 <span id="190">190</span>
 <span id="191">191</span>
 <span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! `Middleware` for enabling any middleware to be used in `Resource`, `Scope` and `Condition`.</span>
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
+<span class="doccomment">//! For middleware documentation, see [`Compat`].</span>
 
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">body</span>::<span class="ident">Body</span>;
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">body</span>::{<span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">future</span>::<span class="ident">Future</span>,
+    <span class="ident">pin</span>::<span class="ident">Pin</span>,
+    <span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>},
+};
+
+<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">body</span>::{<span class="ident">Body</span>, <span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">Service</span>, <span class="ident">Transform</span>};
-<span class="kw">use</span> <span class="ident">futures_core</span>::<span class="ident">future</span>::<span class="ident">LocalBoxFuture</span>;
-<span class="kw">use</span> <span class="ident">futures_core</span>::<span class="ident">ready</span>;
+<span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">future</span>::<span class="ident">LocalBoxFuture</span>, <span class="ident">ready</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">service</span>::<span class="ident">ServiceResponse</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error</span>::<span class="ident">Error</span>, <span class="ident">service</span>::<span class="ident">ServiceResponse</span>};
 
-<span class="doccomment">/// `Middleware` for enabling any middleware to be used in `Resource`, `Scope` and `Condition`.</span>
+<span class="doccomment">/// Middleware for enabling any middleware to be used in [`Resource::wrap`](crate::Resource::wrap),</span>
+<span class="doccomment">/// [`Scope::wrap`](crate::Scope::wrap) and [`Condition`](super::Condition).</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Usage</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// # Usage</span>
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// use actix_web::middleware::{Logger, Compat};</span>
 <span class="doccomment">/// use actix_web::{App, web};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let logger = Logger::default();</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// // this would not compile</span>
-<span class="doccomment">/// // let app = App::new().service(web::scope(&quot;scoped&quot;).wrap(logger));</span>
+<span class="doccomment">/// // this would not compile because of incompatible body types</span>
+<span class="doccomment">/// // let app = App::new()</span>
+<span class="doccomment">/// //     .service(web::scope(&quot;scoped&quot;).wrap(logger));</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// // by using scoped middleware we can use logger in scope.</span>
-<span class="doccomment">/// let app = App::new().service(web::scope(&quot;scoped&quot;).wrap(Compat::new(logger)));</span>
+<span class="doccomment">/// // by using this middleware we can use the logger on a scope</span>
+<span class="doccomment">/// let app = App::new()</span>
+<span class="doccomment">///     .service(web::scope(&quot;scoped&quot;).wrap(Compat::new(logger)));</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Compat</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="ident">transform</span>: <span class="ident">T</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Compat</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">transform</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">transform</span> }
+    <span class="doccomment">/// Wrap a middleware to give it broader compatibility.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">middleware</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">transform</span>: <span class="ident">middleware</span>,
+        }
     }
 }
 
