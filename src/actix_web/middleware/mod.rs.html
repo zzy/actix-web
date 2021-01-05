@@ -16,6 +16,8 @@
 <span id="15">15</span>
 <span id="16">16</span>
 <span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Middlewares</span>
 
@@ -24,12 +26,14 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">compress</span>::<span class="ident">Compress</span>;
 
+<span class="kw">mod</span> <span class="ident">compat</span>;
 <span class="kw">mod</span> <span class="ident">condition</span>;
 <span class="kw">mod</span> <span class="ident">defaultheaders</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">errhandlers</span>;
 <span class="kw">mod</span> <span class="ident">logger</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">normalize</span>;
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">compat</span>::<span class="ident">Compat</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">condition</span>::<span class="ident">Condition</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">defaultheaders</span>::<span class="ident">DefaultHeaders</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">logger</span>::<span class="ident">Logger</span>;

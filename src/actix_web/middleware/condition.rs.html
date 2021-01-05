@@ -149,6 +149,8 @@
 <span id="148">148</span>
 <span id="149">149</span>
 <span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! `Middleware` for conditionally enables another middleware.</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
@@ -158,7 +160,9 @@
 
 <span class="doccomment">/// `Middleware` for conditionally enables another middleware.</span>
 <span class="doccomment">/// The controlled middleware must not change the `Service` interfaces.</span>
-<span class="doccomment">/// This means you cannot control such middlewares like `Logger` or `Compress`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This means you cannot control such middlewares like `Logger` or `Compress` directly.</span>
+<span class="doccomment">/// *. See `Compat` middleware for alternative.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Usage</span>
 <span class="doccomment">///</span>
