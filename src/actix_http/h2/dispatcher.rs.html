@@ -369,11 +369,14 @@
 <span id="368">368</span>
 <span id="369">369</span>
 <span id="370">370</span>
+<span id="371">371</span>
 </pre><div class="example-wrap"><pre class="rust ">
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>, <span class="ident">convert</span>::<span class="ident">TryFrom</span>};
 
@@ -388,29 +391,28 @@
 <span class="kw">use</span> <span class="ident">log</span>::{<span class="ident">error</span>, <span class="ident">trace</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">body</span>::{<span class="ident">BodySize</span>, <span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">cloneable</span>::<span class="ident">CloneableService</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::<span class="ident">ServiceConfig</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">DispatchError</span>, <span class="ident">Error</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">httpmessage</span>::<span class="ident">HttpMessage</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">message</span>::<span class="ident">ResponseHead</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">payload</span>::<span class="ident">Payload</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">request</span>::<span class="ident">Request</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">response</span>::<span class="ident">Response</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Extensions</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">service</span>::<span class="ident">HttpFlow</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">OnConnectData</span>;
 
 <span class="kw">const</span> <span class="ident">CHUNK_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">16_384</span>;
 
 <span class="doccomment">/// Dispatcher for HTTP/2 protocol.</span>
 <span class="attribute">#[<span class="ident">pin_project</span>::<span class="ident">pin_project</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
-    <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
+    <span class="ident">services</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">connection</span>: <span class="ident">Connection</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Bytes</span><span class="op">&gt;</span>,
-    <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
+    <span class="ident">on_connect_data</span>: <span class="ident">OnConnectData</span>,
     <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
     <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     <span class="ident">ka_expire</span>: <span class="ident">Instant</span>,
@@ -418,7 +420,7 @@
     <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
@@ -427,9 +429,9 @@
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">service</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
+        <span class="ident">services</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">connection</span>: <span class="ident">Connection</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Bytes</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect_data</span>: <span class="ident">Extensions</span>,
+        <span class="ident">on_connect_data</span>: <span class="ident">OnConnectData</span>,
         <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
@@ -451,7 +453,7 @@
         };
 
         <span class="ident">Dispatcher</span> {
-            <span class="ident">service</span>,
+            <span class="ident">services</span>,
             <span class="ident">config</span>,
             <span class="ident">peer_addr</span>,
             <span class="ident">connection</span>,
@@ -463,7 +465,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
@@ -505,11 +507,11 @@
                     <span class="ident">head</span>.<span class="ident">peer_addr</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">peer_addr</span>;
 
                     <span class="comment">// merge on_connect_ext data into request extensions</span>
-                    <span class="ident">req</span>.<span class="ident">extensions_mut</span>().<span class="ident">drain_from</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">on_connect_data</span>);
+                    <span class="ident">this</span>.<span class="ident">on_connect_data</span>.<span class="ident">merge_into</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">req</span>);
 
                     <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>::<span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Future</span>, <span class="ident">S</span>::<span class="ident">Response</span>, <span class="ident">S</span>::<span class="ident">Error</span>, <span class="ident">B</span><span class="op">&gt;</span> {
                         <span class="ident">state</span>: <span class="ident">ServiceResponseState</span>::<span class="ident">ServiceCall</span>(
-                            <span class="ident">this</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">req</span>),
+                            <span class="ident">this</span>.<span class="ident">services</span>.<span class="ident">borrow_mut</span>().<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">req</span>),
                             <span class="prelude-val">Some</span>(<span class="ident">res</span>),
                         ),
                         <span class="ident">config</span>: <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">clone</span>(),
