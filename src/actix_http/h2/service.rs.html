@@ -639,7 +639,7 @@
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
 {
-    <span class="ident">services</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, (), ()<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">flow</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, (), ()<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
     <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
@@ -659,7 +659,7 @@
         <span class="ident">service</span>: <span class="ident">S</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">H2ServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span> {
         <span class="ident">H2ServiceHandler</span> {
-            <span class="ident">services</span>: <span class="ident">HttpFlow</span>::<span class="ident">new</span>(<span class="ident">service</span>, (), <span class="prelude-val">None</span>),
+            <span class="ident">flow</span>: <span class="ident">HttpFlow</span>::<span class="ident">new</span>(<span class="ident">service</span>, (), <span class="prelude-val">None</span>),
             <span class="ident">cfg</span>,
             <span class="ident">on_connect_ext</span>,
             <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
@@ -681,7 +681,7 @@
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">H2ServiceHandlerResponse</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">services</span>
+        <span class="self">self</span>.<span class="ident">flow</span>
             .<span class="ident">borrow_mut</span>()
             .<span class="ident">service</span>
             .<span class="ident">poll_ready</span>(<span class="ident">cx</span>)
@@ -698,7 +698,7 @@
 
         <span class="ident">H2ServiceHandlerResponse</span> {
             <span class="ident">state</span>: <span class="ident">State</span>::<span class="ident">Handshake</span>(
-                <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">services</span>.<span class="ident">clone</span>()),
+                <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">flow</span>.<span class="ident">clone</span>()),
                 <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>()),
                 <span class="ident">addr</span>,
                 <span class="ident">on_connect_data</span>,

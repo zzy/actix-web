@@ -114,6 +114,9 @@
 <span id="113">113</span>
 <span id="114">114</span>
 <span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP primitives for the Actix ecosystem.</span>
 
@@ -189,7 +192,7 @@
     <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">message</span>::<span class="ident">ConnectionType</span>;
 }
 
-<span class="doccomment">/// Http protocol</span>
+<span class="doccomment">/// HTTP protocol</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Protocol</span> {
     <span class="ident">Http1</span>,
@@ -199,6 +202,9 @@
 <span class="kw">type</span> <span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">IO</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">IO</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>);
 
 <span class="doccomment">/// Container for data that extract with ConnectCallback.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Implementation Details</span>
+<span class="doccomment">/// Uses Option to reduce necessary allocations when merging with request extensions.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">OnConnectData</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">OnConnectData</span> {
@@ -208,7 +214,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">OnConnectData</span> {
-    <span class="comment">// construct self from io.</span>
+    <span class="doccomment">/// Construct by calling the on-connect callback with the underlying transport I/O.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_io</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
         <span class="ident">io</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>,
         <span class="ident">on_connect_ext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ConnectCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -222,7 +228,7 @@
         <span class="self">Self</span>(<span class="ident">ext</span>)
     }
 
-    <span class="comment">// merge self to given request&#39;s head extension.</span>
+    <span class="doccomment">/// Merge self into given request&#39;s extensions.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">merge_into</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Request</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">ext</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span> {
