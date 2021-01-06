@@ -695,6 +695,8 @@
 <span id="694">694</span>
 <span id="695">695</span>
 <span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
@@ -1278,6 +1280,8 @@
                     <span class="ident">peer_addr</span>,
                 )),
             },
+
+            <span class="ident">proto</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unimplemented</span><span class="macro">!</span>(<span class="string">&quot;Unsupported HTTP version: {:?}.&quot;</span>, <span class="ident">proto</span>)
         }
     }
 }
