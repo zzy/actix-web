@@ -1331,11 +1331,6 @@
 <span id="1330">1330</span>
 <span id="1331">1331</span>
 <span id="1332">1332</span>
-<span id="1333">1333</span>
-<span id="1334">1334</span>
-<span id="1335">1335</span>
-<span id="1336">1336</span>
-<span id="1337">1337</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::<span class="ident">RefCell</span>,
@@ -2026,15 +2021,11 @@
                             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
                                 <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">client_disconnect_timer</span>()
                             {
-                                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>()
+                                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span>
+                                    <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>()
                                 {
-                                    <span class="ident">timer</span>.<span class="ident">reset</span>(<span class="ident">deadline</span>);
-                                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">this</span>
-                                        .<span class="ident">ka_timer</span>
-                                        .<span class="ident">as_mut</span>()
-                                        .<span class="ident">as_pin_mut</span>()
-                                        .<span class="ident">unwrap</span>()
-                                        .<span class="ident">poll</span>(<span class="ident">cx</span>);
+                                    <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">deadline</span>);
+                                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
                                 }
                             } <span class="kw">else</span> {
                                 <span class="comment">// no shutdown timeout, drop socket</span>
@@ -2059,15 +2050,14 @@
                     } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
                         <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">keep_alive_expire</span>()
                     {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
-                            <span class="ident">timer</span>.<span class="ident">reset</span>(<span class="ident">deadline</span>);
-                            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span>
-                                <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">poll</span>(<span class="ident">cx</span>);
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
+                            <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">deadline</span>);
+                            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
                         }
                     }
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
-                    <span class="ident">timer</span>.<span class="ident">reset</span>(<span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span>);
-                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">poll</span>(<span class="ident">cx</span>);
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
+                    <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span>);
+                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
                 }
             }
             <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> {}
