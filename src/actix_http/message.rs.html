@@ -495,14 +495,12 @@
 <span id="494">494</span>
 <span id="495">495</span>
 <span id="496">496</span>
-<span id="497">497</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
 
 <span class="kw">use</span> <span class="ident">bitflags</span>::<span class="ident">bitflags</span>;
-<span class="kw">use</span> <span class="ident">copyless</span>::<span class="ident">BoxHelper</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">extensions</span>::<span class="ident">Extensions</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">header</span>::<span class="ident">HeaderMap</span>;
@@ -979,17 +977,17 @@
             <span class="ident">BoxedResponseHead</span> { <span class="ident">head</span>: <span class="prelude-val">Some</span>(<span class="ident">head</span>) }
         } <span class="kw">else</span> {
             <span class="ident">BoxedResponseHead</span> {
-                <span class="ident">head</span>: <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">alloc</span>().<span class="ident">init</span>(<span class="ident">ResponseHead</span>::<span class="ident">new</span>(<span class="ident">status</span>))),
+                <span class="ident">head</span>: <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ResponseHead</span>::<span class="ident">new</span>(<span class="ident">status</span>))),
             }
         }
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Release request instance</span>
-    <span class="kw">fn</span> <span class="ident">release</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ResponseHead</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">release</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">msg</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ResponseHead</span><span class="op">&gt;</span>) {
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>();
         <span class="kw">if</span> <span class="ident">v</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">128</span> {
-            <span class="ident">msg</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>().<span class="ident">clear</span>();
+            <span class="ident">msg</span>.<span class="ident">extensions</span>.<span class="ident">get_mut</span>().<span class="ident">clear</span>();
             <span class="ident">v</span>.<span class="ident">push</span>(<span class="ident">msg</span>);
         }
     }
