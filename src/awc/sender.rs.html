@@ -357,18 +357,18 @@
     <span class="ident">Http</span>(<span class="ident">HttpError</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">FreezeRequestError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PrepForSendingError</span> {
-    <span class="kw">fn</span> <span class="ident">into</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FreezeRequestError</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PrepForSendingError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FreezeRequestError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">PrepForSendingError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FreezeRequestError</span> {
+        <span class="kw">match</span> <span class="ident">err</span> {
             <span class="ident">PrepForSendingError</span>::<span class="ident">Url</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FreezeRequestError</span>::<span class="ident">Url</span>(<span class="ident">e</span>),
             <span class="ident">PrepForSendingError</span>::<span class="ident">Http</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FreezeRequestError</span>::<span class="ident">Http</span>(<span class="ident">e</span>),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">SendRequestError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PrepForSendingError</span> {
-    <span class="kw">fn</span> <span class="ident">into</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SendRequestError</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PrepForSendingError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SendRequestError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">PrepForSendingError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SendRequestError</span> {
+        <span class="kw">match</span> <span class="ident">err</span> {
             <span class="ident">PrepForSendingError</span>::<span class="ident">Url</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SendRequestError</span>::<span class="ident">Url</span>(<span class="ident">e</span>),
             <span class="ident">PrepForSendingError</span>::<span class="ident">Http</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SendRequestError</span>::<span class="ident">Http</span>(<span class="ident">e</span>),
         }
