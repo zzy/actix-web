@@ -287,7 +287,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Making a GET request</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
 <span class="doccomment">//! let mut client = awc::Client::default();</span>
@@ -305,7 +305,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### Raw body contents</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
 <span class="doccomment">//! let mut client = awc::Client::default();</span>
@@ -318,7 +318,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### Forms</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
 <span class="doccomment">//! let params = [(&quot;foo&quot;, &quot;bar&quot;), (&quot;baz&quot;, &quot;quux&quot;)];</span>
@@ -333,7 +333,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### JSON</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
 <span class="doccomment">//! let request = serde_json::json!({</span>
@@ -351,7 +351,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## WebSocket support</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```</span>
+<span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
 <span class="doccomment">//! use futures_util::{sink::SinkExt, stream::StreamExt};</span>
