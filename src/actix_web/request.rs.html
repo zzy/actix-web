@@ -726,6 +726,7 @@
 <span id="725">725</span>
 <span id="726">726</span>
 <span id="727">727</span>
+<span id="728">728</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -746,9 +747,10 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="doccomment">/// An HTTP Request</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpRequest</span> {
-    <span class="comment">// *. Rc&lt;HttpRequestInner&gt; is used exclusively and NO Weak&lt;HttpRequestInner&gt;</span>
-    <span class="comment">// is allowed anywhere in the code. Weak pointer is purposely ignored when</span>
-    <span class="comment">// doing Rc&#39;s ref counter check.</span>
+    <span class="doccomment">/// # Panics</span>
+    <span class="doccomment">/// `Rc&lt;HttpRequestInner&gt;` is used exclusively and NO `Weak&lt;HttpRequestInner&gt;`</span>
+    <span class="doccomment">/// is allowed anywhere in the code. Weak pointer is purposely ignored when</span>
+    <span class="doccomment">/// doing `Rc`&#39;s ref counter check. Expect panics if this invariant is violated.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">inner</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpRequestInner</span><span class="op">&gt;</span>,
 }
 

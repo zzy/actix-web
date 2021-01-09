@@ -4,27 +4,27 @@
 <table><tr class="module-item"><td><a class="struct" href="struct.Bytes.html" title="actix_web::web::Bytes struct">Bytes</a></td><td class="docblock-short"><p>A cheaply cloneable and sliceable chunk of contiguous memory.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.BytesMut.html" title="actix_web::web::BytesMut struct">BytesMut</a></td><td class="docblock-short"><p>A unique reference to a contiguous slice of memory.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.Data.html" title="actix_web::web::Data struct">Data</a></td><td class="docblock-short"><p>Application data.</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Form.html" title="actix_web::web::Form struct">Form</a></td><td class="docblock-short"><p>Form data helper (<code>application/x-www-form-urlencoded</code>)</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.FormConfig.html" title="actix_web::web::FormConfig struct">FormConfig</a></td><td class="docblock-short"><p>Form extractor configuration</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Form.html" title="actix_web::web::Form struct">Form</a></td><td class="docblock-short"><p>URL encoded payload extractor and responder.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.FormConfig.html" title="actix_web::web::FormConfig struct">FormConfig</a></td><td class="docblock-short"><p><a href="../../actix_web/web/struct.Form.html" title="Form"><code>Form</code></a> extractor configuration.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.HttpRequest.html" title="actix_web::web::HttpRequest struct">HttpRequest</a></td><td class="docblock-short"><p>An HTTP Request</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.HttpResponse.html" title="actix_web::web::HttpResponse struct">HttpResponse</a></td><td class="docblock-short"><p>An HTTP Response</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Json.html" title="actix_web::web::Json struct">Json</a></td><td class="docblock-short"><p>Json helper</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.JsonConfig.html" title="actix_web::web::JsonConfig struct">JsonConfig</a></td><td class="docblock-short"><p>Json extractor configuration</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Path.html" title="actix_web::web::Path struct">Path</a></td><td class="docblock-short"><p>Extract typed information from the request's path.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Json.html" title="actix_web::web::Json struct">Json</a></td><td class="docblock-short"><p>JSON extractor and responder.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.JsonConfig.html" title="actix_web::web::JsonConfig struct">JsonConfig</a></td><td class="docblock-short"><p><code>Json</code> extractor configuration.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Path.html" title="actix_web::web::Path struct">Path</a></td><td class="docblock-short"><p>Extract typed data from request path segments.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.PathConfig.html" title="actix_web::web::PathConfig struct">PathConfig</a></td><td class="docblock-short"><p>Path extractor configuration</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Payload.html" title="actix_web::web::Payload struct">Payload</a></td><td class="docblock-short"><p>Payload extractor returns request 's payload stream.</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.PayloadConfig.html" title="actix_web::web::PayloadConfig struct">PayloadConfig</a></td><td class="docblock-short"><p>Configuration for request's payload.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Payload.html" title="actix_web::web::Payload struct">Payload</a></td><td class="docblock-short"><p>Extract a request's raw payload stream.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.PayloadConfig.html" title="actix_web::web::PayloadConfig struct">PayloadConfig</a></td><td class="docblock-short"><p>Configuration for request payloads.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.Query.html" title="actix_web::web::Query struct">Query</a></td><td class="docblock-short"><p>Extract typed information from the request's query.</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.QueryConfig.html" title="actix_web::web::QueryConfig struct">QueryConfig</a></td><td class="docblock-short"><p>Query extractor configuration</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Readlines.html" title="actix_web::web::Readlines struct">Readlines</a></td><td class="docblock-short"><p>Stream to read request line by line.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.QueryConfig.html" title="actix_web::web::QueryConfig struct">QueryConfig</a></td><td class="docblock-short"><p>Query extractor configuration.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Readlines.html" title="actix_web::web::Readlines struct">Readlines</a></td><td class="docblock-short"><p>Stream that reads request line by line.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.ReqData.html" title="actix_web::web::ReqData struct">ReqData</a></td><td class="docblock-short"><p>Request-local data extractor.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.ServiceConfig.html" title="actix_web::web::ServiceConfig struct">ServiceConfig</a></td><td class="docblock-short"><p>Service config is used for external configuration.
 Part of application configuration could be offloaded
 to set of external methods. This could help with
 modularization of big application configuration.</p>
 </td></tr></table><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
-<table><tr class="module-item"><td><a class="enum" href="enum.Either.html" title="actix_web::web::Either enum">Either</a></td><td class="docblock-short"><p>Combines two different responder types into a single type</p>
-</td></tr><tr class="module-item"><td><a class="enum" href="enum.EitherExtractError.html" title="actix_web::web::EitherExtractError enum">EitherExtractError</a></td><td class="docblock-short"><p>A composite error resulting from failure to extract an <code>Either&lt;A, B&gt;</code>.</p>
+<table><tr class="module-item"><td><a class="enum" href="enum.Either.html" title="actix_web::web::Either enum">Either</a></td><td class="docblock-short"><p>Combines two extractor or responder types into a single type.</p>
+</td></tr><tr class="module-item"><td><a class="enum" href="enum.EitherExtractError.html" title="actix_web::web::EitherExtractError enum">EitherExtractError</a></td><td class="docblock-short"><p>A composite error resulting from failure to extract an <code>Either&lt;L, R&gt;</code>.</p>
 </td></tr></table><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
 <table><tr class="module-item"><td><a class="trait" href="trait.Buf.html" title="actix_web::web::Buf trait">Buf</a></td><td class="docblock-short"><p>Read bytes from a buffer.</p>
 </td></tr><tr class="module-item"><td><a class="trait" href="trait.BufMut.html" title="actix_web::web::BufMut trait">BufMut</a></td><td class="docblock-short"><p>A trait for values that provide sequential write access to bytes.</p>
