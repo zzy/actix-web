@@ -768,15 +768,6 @@
 <span id="765">765</span>
 <span id="766">766</span>
 <span id="767">767</span>
-<span id="768">768</span>
-<span id="769">769</span>
-<span id="770">770</span>
-<span id="771">771</span>
-<span id="772">772</span>
-<span id="773">773</span>
-<span id="774">774</span>
-<span id="775">775</span>
-<span id="776">776</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Static file serving for Actix Web.</span>
 <span class="doccomment">//!</span>
@@ -794,12 +785,10 @@
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_docs</span>, <span class="ident">missing_debug_implementations</span>)]</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
-
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">boxed</span>::{<span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_web</span>::{
     <span class="ident">dev</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
-    <span class="ident">error</span>::{<span class="ident">BlockingError</span>, <span class="ident">Error</span>, <span class="ident">ErrorInternalServerError</span>},
+    <span class="ident">error</span>::<span class="ident">Error</span>,
     <span class="ident">http</span>::<span class="ident">header</span>::<span class="ident">DispositionType</span>,
 };
 <span class="kw">use</span> <span class="ident">mime_guess</span>::<span class="ident">from_ext</span>;
@@ -834,13 +823,6 @@
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">file_extension_to_mime</span>(<span class="ident">ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">mime</span>::<span class="ident">Mime</span> {
     <span class="ident">from_ext</span>(<span class="ident">ext</span>).<span class="ident">first_or_octet_stream</span>()
-}
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">handle_error</span>(<span class="ident">err</span>: <span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
-    <span class="kw">match</span> <span class="ident">err</span> {
-        <span class="ident">BlockingError</span>::<span class="ident">Error</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>.<span class="ident">into</span>(),
-        <span class="ident">BlockingError</span>::<span class="ident">Canceled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ErrorInternalServerError</span>(<span class="string">&quot;Unexpected error&quot;</span>),
-    }
 }
 
 <span class="kw">type</span> <span class="ident">MimeOverride</span> <span class="op">=</span> <span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">mime</span>::<span class="ident">Name</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispositionType</span>;

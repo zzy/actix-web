@@ -1206,6 +1206,16 @@
 <span id="1205">1205</span>
 <span id="1206">1206</span>
 <span id="1207">1207</span>
+<span id="1208">1208</span>
+<span id="1209">1209</span>
+<span id="1210">1210</span>
+<span id="1211">1211</span>
+<span id="1212">1212</span>
+<span id="1213">1213</span>
+<span id="1214">1214</span>
+<span id="1215">1215</span>
+<span id="1216">1216</span>
+<span id="1217">1217</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Error and Result module</span>
 
@@ -1216,7 +1226,6 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">result</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_threadpool</span>::<span class="ident">BlockingError</span>;
 <span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">dispatcher</span>::<span class="ident">DispatcherError</span> <span class="kw">as</span> <span class="ident">FramedDispatcherError</span>;
 <span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">timeout</span>::<span class="ident">TimeoutError</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">BytesMut</span>;
@@ -1395,9 +1404,6 @@
 <span class="doccomment">/// `InternalServerError` for `Canceled`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Canceled</span> {}
 
-<span class="doccomment">/// `InternalServerError` for `BlockingError`</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {}
-
 <span class="doccomment">/// Return `BAD_REQUEST` for `Utf8Error`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Utf8Error</span> {
     <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
@@ -1508,6 +1514,20 @@
         }
     }
 }
+
+<span class="doccomment">/// A set of errors that can occur running blocking tasks in thread pool.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> {
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{:?}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="ident">Error</span>(<span class="ident">E</span>),
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Thread pool is gone&quot;</span>)]</span>
+    <span class="ident">Canceled</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {}
+
+<span class="doccomment">/// `InternalServerError` for `BlockingError`</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {}
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Display</span>, <span class="ident">Debug</span>)]</span>
 <span class="doccomment">/// A set of errors that can occur during payload parsing</span>
