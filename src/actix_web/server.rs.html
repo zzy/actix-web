@@ -673,12 +673,6 @@
 <span id="672">672</span>
 <span id="673">673</span>
 <span id="674">674</span>
-<span id="675">675</span>
-<span id="676">676</span>
-<span id="677">677</span>
-<span id="678">678</span>
-<span id="679">679</span>
-<span id="680">680</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">any</span>::<span class="ident">Any</span>,
@@ -965,11 +959,7 @@
             <span class="ident">lst</span>,
             <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-                <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">AppConfig</span>::<span class="ident">new</span>(
-                    <span class="bool-val">false</span>,
-                    <span class="ident">addr</span>,
-                    <span class="ident">c</span>.<span class="ident">host</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">addr</span>)),
-                );
+                <span class="kw">let</span> <span class="ident">host</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">host</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">addr</span>));
 
                 <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService</span>::<span class="ident">build</span>()
                     .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
@@ -984,8 +974,10 @@
                     <span class="ident">svc</span>
                 };
 
-                <span class="ident">svc</span>.<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">factory</span>(), <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">cfg</span>.<span class="ident">clone</span>()))
-                    .<span class="ident">tcp</span>()
+                <span class="ident">svc</span>.<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">factory</span>(), <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
+                    <span class="ident">AppConfig</span>::<span class="ident">new</span>(<span class="bool-val">false</span>, <span class="ident">addr</span>, <span class="ident">host</span>.<span class="ident">clone</span>())
+                }))
+                .<span class="ident">tcp</span>()
             },
         )<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
@@ -1024,11 +1016,7 @@
             <span class="ident">lst</span>,
             <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-                <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">AppConfig</span>::<span class="ident">new</span>(
-                    <span class="bool-val">true</span>,
-                    <span class="ident">addr</span>,
-                    <span class="ident">c</span>.<span class="ident">host</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">addr</span>)),
-                );
+                <span class="kw">let</span> <span class="ident">host</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">host</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">addr</span>));
 
                 <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService</span>::<span class="ident">build</span>()
                     .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
@@ -1043,8 +1031,10 @@
                     <span class="ident">svc</span>
                 };
 
-                <span class="ident">svc</span>.<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">factory</span>(), <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">cfg</span>.<span class="ident">clone</span>()))
-                    .<span class="ident">openssl</span>(<span class="ident">acceptor</span>.<span class="ident">clone</span>())
+                <span class="ident">svc</span>.<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">factory</span>(), <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
+                    <span class="ident">AppConfig</span>::<span class="ident">new</span>(<span class="bool-val">true</span>, <span class="ident">addr</span>, <span class="ident">host</span>.<span class="ident">clone</span>())
+                }))
+                .<span class="ident">openssl</span>(<span class="ident">acceptor</span>.<span class="ident">clone</span>())
             },
         )<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
@@ -1083,11 +1073,7 @@
             <span class="ident">lst</span>,
             <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-                <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">AppConfig</span>::<span class="ident">new</span>(
-                    <span class="bool-val">true</span>,
-                    <span class="ident">addr</span>,
-                    <span class="ident">c</span>.<span class="ident">host</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">addr</span>)),
-                );
+                <span class="kw">let</span> <span class="ident">host</span> <span class="op">=</span> <span class="ident">c</span>.<span class="ident">host</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">addr</span>));
 
                 <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService</span>::<span class="ident">build</span>()
                     .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
@@ -1102,8 +1088,10 @@
                     <span class="ident">svc</span>
                 };
 
-                <span class="ident">svc</span>.<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">factory</span>(), <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">cfg</span>.<span class="ident">clone</span>()))
-                    .<span class="ident">rustls</span>(<span class="ident">config</span>.<span class="ident">clone</span>())
+                <span class="ident">svc</span>.<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">factory</span>(), <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
+                    <span class="ident">AppConfig</span>::<span class="ident">new</span>(<span class="bool-val">true</span>, <span class="ident">addr</span>, <span class="ident">host</span>.<span class="ident">clone</span>())
+                }))
+                .<span class="ident">rustls</span>(<span class="ident">config</span>.<span class="ident">clone</span>())
             },
         )<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
