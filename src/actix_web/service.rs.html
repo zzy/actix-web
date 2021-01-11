@@ -606,41 +606,6 @@
 <span id="605">605</span>
 <span id="606">606</span>
 <span id="607">607</span>
-<span id="608">608</span>
-<span id="609">609</span>
-<span id="610">610</span>
-<span id="611">611</span>
-<span id="612">612</span>
-<span id="613">613</span>
-<span id="614">614</span>
-<span id="615">615</span>
-<span id="616">616</span>
-<span id="617">617</span>
-<span id="618">618</span>
-<span id="619">619</span>
-<span id="620">620</span>
-<span id="621">621</span>
-<span id="622">622</span>
-<span id="623">623</span>
-<span id="624">624</span>
-<span id="625">625</span>
-<span id="626">626</span>
-<span id="627">627</span>
-<span id="628">628</span>
-<span id="629">629</span>
-<span id="630">630</span>
-<span id="631">631</span>
-<span id="632">632</span>
-<span id="633">633</span>
-<span id="634">634</span>
-<span id="635">635</span>
-<span id="636">636</span>
-<span id="637">637</span>
-<span id="638">638</span>
-<span id="639">639</span>
-<span id="640">640</span>
-<span id="641">641</span>
-<span id="642">642</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -696,75 +661,61 @@
 <span class="doccomment">/// An service http request</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ServiceRequest allows mutable access to request&#39;s internal structures</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServiceRequest</span>(<span class="ident">HttpRequest</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServiceRequest</span> {
+    <span class="ident">req</span>: <span class="ident">HttpRequest</span>,
+    <span class="ident">payload</span>: <span class="ident">Payload</span>,
+}
 
 <span class="kw">impl</span> <span class="ident">ServiceRequest</span> {
     <span class="doccomment">/// Construct service request</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">ServiceRequest</span>(<span class="ident">req</span>)
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">req</span>, <span class="ident">payload</span> }
     }
 
     <span class="doccomment">/// Deconstruct request into parts</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_parts</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">HttpRequest</span>, <span class="ident">Payload</span>) {
-        <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="ident">inner</span>).<span class="ident">unwrap</span>().<span class="ident">payload</span>.<span class="ident">take</span>();
-        (<span class="self">self</span>.<span class="number">0</span>, <span class="ident">pl</span>)
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_parts</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">HttpRequest</span>, <span class="ident">Payload</span>) {
+        (<span class="self">self</span>.<span class="ident">req</span>, <span class="self">self</span>.<span class="ident">payload</span>)
     }
 
     <span class="doccomment">/// Construct request from parts.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `ServiceRequest` can be re-constructed only if `req` hasn&#39;t been cloned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_parts</span>(
-        <span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">HttpRequest</span>,
-        <span class="ident">pl</span>: <span class="ident">Payload</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, (<span class="ident">HttpRequest</span>, <span class="ident">Payload</span>)<span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">req</span>.<span class="ident">inner</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">p</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="ident">pl</span>;
-                <span class="prelude-val">Ok</span>(<span class="ident">ServiceRequest</span>(<span class="ident">req</span>))
-            }
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>((<span class="ident">req</span>, <span class="ident">pl</span>)),
-        }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_parts</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">req</span>, <span class="ident">payload</span> }
     }
 
     <span class="doccomment">/// Construct request from request.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// `HttpRequest` implements `Clone` trait via `Rc` type. `ServiceRequest`</span>
-    <span class="doccomment">/// can be re-constructed only if rc&#39;s strong pointers count eq 1 and</span>
-    <span class="doccomment">/// weak pointers count is 0.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">HttpRequest</span><span class="op">&gt;</span> {
-        <span class="comment">// There is no weak pointer used on HttpRequest so intentionally</span>
-        <span class="comment">// ignore the check.</span>
-        <span class="kw">if</span> <span class="ident">Rc</span>::<span class="ident">strong_count</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">inner</span>) <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
-            <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">Rc</span>::<span class="ident">weak_count</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">inner</span>) <span class="op">=</span><span class="op">=</span> <span class="number">0</span>);
-            <span class="prelude-val">Ok</span>(<span class="ident">ServiceRequest</span>(<span class="ident">req</span>))
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">req</span>)
+    <span class="doccomment">/// The returned `ServiceRequest` would have no payload.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">ServiceRequest</span> {
+            <span class="ident">req</span>,
+            <span class="ident">payload</span>: <span class="ident">Payload</span>::<span class="prelude-val">None</span>,
         }
     }
 
     <span class="doccomment">/// Create service response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_response</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">res</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="ident">ServiceResponse</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="ident">res</span>.<span class="ident">into</span>())
+        <span class="ident">ServiceResponse</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">req</span>, <span class="ident">res</span>.<span class="ident">into</span>())
     }
 
     <span class="doccomment">/// Create service response for error</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_response</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">err</span>: <span class="ident">E</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">into</span>();
-        <span class="ident">ServiceResponse</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="ident">res</span>.<span class="ident">into_body</span>())
+        <span class="ident">ServiceResponse</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">req</span>, <span class="ident">res</span>.<span class="ident">into_body</span>())
     }
 
     <span class="doccomment">/// This method returns reference to the request head</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">RequestHead</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.<span class="ident">head</span>()
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">req</span>.<span class="ident">head</span>()
     }
 
     <span class="doccomment">/// This method returns reference to the request head</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">RequestHead</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">head_mut</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">head_mut</span>()
     }
 
     <span class="doccomment">/// Request&#39;s uri.</span>
@@ -840,42 +791,42 @@
     <span class="doccomment">/// access the matched value for that segment.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">match_info</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_info</span>()
     }
 
     <span class="doccomment">/// Counterpart to [`HttpRequest::match_name`](super::HttpRequest::match_name()).</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">match_name</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_name</span>()
     }
 
     <span class="doccomment">/// Counterpart to [`HttpRequest::match_pattern`](super::HttpRequest::match_pattern()).</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_pattern</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">match_pattern</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_pattern</span>()
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Get a mutable reference to the Path parameters.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_info_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">match_info_mut</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_info_mut</span>()
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Get a reference to a `ResourceMap` of current application.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resource_map</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ResourceMap</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">resource_map</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">resource_map</span>()
     }
 
     <span class="doccomment">/// Service configuration</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">AppConfig</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">app_config</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">app_config</span>()
     }
 
     <span class="doccomment">/// Counterpart to [`HttpRequest::app_data`](super::HttpRequest::app_data()).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">for</span> <span class="ident">container</span> <span class="kw">in</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="ident">inner</span>.<span class="ident">app_data</span>.<span class="ident">iter</span>().<span class="ident">rev</span>() {
+        <span class="kw">for</span> <span class="ident">container</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">inner</span>.<span class="ident">app_data</span>.<span class="ident">iter</span>().<span class="ident">rev</span>() {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="ident">container</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>);
             }
@@ -886,13 +837,13 @@
 
     <span class="doccomment">/// Set request payload.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_payload</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">payload</span>: <span class="ident">Payload</span>) {
-        <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="ident">inner</span>).<span class="ident">unwrap</span>().<span class="ident">payload</span> <span class="op">=</span> <span class="ident">payload</span>;
+        <span class="self">self</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="ident">payload</span>;
     }
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="doccomment">/// Add app data container to request&#39;s resolution set.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_data_container</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">extensions</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span>) {
-        <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="ident">inner</span>)
+        <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> (<span class="self">self</span>.<span class="ident">req</span>).<span class="ident">inner</span>)
             .<span class="ident">unwrap</span>()
             .<span class="ident">app_data</span>
             .<span class="ident">push</span>(<span class="ident">extensions</span>);
@@ -917,18 +868,18 @@
     <span class="doccomment">/// Request extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">extensions</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">extensions</span>()
     }
 
     <span class="doccomment">/// Mutable reference to a the request&#39;s extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">extensions_mut</span>()
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">extensions_mut</span>()
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">take_payload</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Payload</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Stream</span><span class="op">&gt;</span> {
-        <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="ident">inner</span>).<span class="ident">unwrap</span>().<span class="ident">payload</span>.<span class="ident">take</span>()
+        <span class="self">self</span>.<span class="ident">payload</span>.<span class="ident">take</span>()
     }
 }
 
@@ -1195,27 +1146,6 @@
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">guard</span>, <span class="ident">http</span>, <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
     <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
     <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::<span class="ident">ok</span>;
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_service_request</span>() {
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>();
-        <span class="kw">let</span> (<span class="ident">r</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">ServiceRequest</span>::<span class="ident">from_parts</span>(<span class="ident">r</span>, <span class="ident">pl</span>).<span class="ident">is_ok</span>());
-
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>();
-        <span class="kw">let</span> (<span class="ident">r</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-        <span class="kw">let</span> <span class="ident">_r2</span> <span class="op">=</span> <span class="ident">r</span>.<span class="ident">clone</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">ServiceRequest</span>::<span class="ident">from_parts</span>(<span class="ident">r</span>, <span class="ident">pl</span>).<span class="ident">is_err</span>());
-
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>();
-        <span class="kw">let</span> (<span class="ident">r</span>, <span class="ident">_pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">ServiceRequest</span>::<span class="ident">from_request</span>(<span class="ident">r</span>).<span class="ident">is_ok</span>());
-
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>();
-        <span class="kw">let</span> (<span class="ident">r</span>, <span class="ident">_pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-        <span class="kw">let</span> <span class="ident">_r2</span> <span class="op">=</span> <span class="ident">r</span>.<span class="ident">clone</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">ServiceRequest</span>::<span class="ident">from_request</span>(<span class="ident">r</span>).<span class="ident">is_err</span>());
-    }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_service</span>() {
