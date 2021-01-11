@@ -835,7 +835,7 @@
             <span class="kw">let</span> <span class="ident">t2</span>: <span class="ident">SystemTime</span> <span class="op">=</span> <span class="ident">since</span>.<span class="ident">clone</span>().<span class="ident">into</span>();
 
             <span class="kw">match</span> (<span class="ident">t1</span>.<span class="ident">duration_since</span>(<span class="ident">UNIX_EPOCH</span>), <span class="ident">t2</span>.<span class="ident">duration_since</span>(<span class="ident">UNIX_EPOCH</span>)) {
-                (<span class="prelude-val">Ok</span>(<span class="ident">t1</span>), <span class="prelude-val">Ok</span>(<span class="ident">t2</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">t1</span> <span class="op">&gt;</span> <span class="ident">t2</span>,
+                (<span class="prelude-val">Ok</span>(<span class="ident">t1</span>), <span class="prelude-val">Ok</span>(<span class="ident">t2</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">t1</span>.<span class="ident">as_secs</span>() <span class="op">&gt;</span> <span class="ident">t2</span>.<span class="ident">as_secs</span>(),
                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
             }
         } <span class="kw">else</span> {
@@ -854,7 +854,7 @@
             <span class="kw">let</span> <span class="ident">t2</span>: <span class="ident">SystemTime</span> <span class="op">=</span> <span class="ident">since</span>.<span class="ident">clone</span>().<span class="ident">into</span>();
 
             <span class="kw">match</span> (<span class="ident">t1</span>.<span class="ident">duration_since</span>(<span class="ident">UNIX_EPOCH</span>), <span class="ident">t2</span>.<span class="ident">duration_since</span>(<span class="ident">UNIX_EPOCH</span>)) {
-                (<span class="prelude-val">Ok</span>(<span class="ident">t1</span>), <span class="prelude-val">Ok</span>(<span class="ident">t2</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">t1</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">t2</span>,
+                (<span class="prelude-val">Ok</span>(<span class="ident">t1</span>), <span class="prelude-val">Ok</span>(<span class="ident">t2</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">t1</span>.<span class="ident">as_secs</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="ident">t2</span>.<span class="ident">as_secs</span>(),
                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
             }
         } <span class="kw">else</span> {
