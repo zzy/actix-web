@@ -282,6 +282,7 @@
 <span id="279">279</span>
 <span id="280">280</span>
 <span id="281">281</span>
+<span id="282">282</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell</span>::<span class="ident">RefCell</span>, <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">path</span>::<span class="ident">PathBuf</span>, <span class="ident">rc</span>::<span class="ident">Rc</span>};
 
@@ -367,8 +368,9 @@
     <span class="doccomment">/// be inaccessible. Register more specific handlers and services first.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `Files` uses a threadpool for blocking filesystem operations. By default, the pool uses a</span>
-    <span class="doccomment">/// number of threads equal to 5x the number of available logical CPUs. Pool size can be changed</span>
-    <span class="doccomment">/// by setting ACTIX_THREADPOOL environment variable.</span>
+    <span class="doccomment">/// max number of threads equal to `512 * HttpServer::worker`. Real time thread count are</span>
+    <span class="doccomment">/// adjusted with work load. More threads would spawn when need and threads goes idle for a</span>
+    <span class="doccomment">/// period of time would be de-spawned.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">mount_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">serve_from</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Files</span> {
         <span class="kw">let</span> <span class="ident">orig_dir</span> <span class="op">=</span> <span class="ident">serve_from</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">orig_dir</span>.<span class="ident">canonicalize</span>() {
