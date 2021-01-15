@@ -101,20 +101,20 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::IfMatch;</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
-    <span class="doccomment">/// builder.set(IfMatch::Any);</span>
+    <span class="doccomment">/// builder.insert_header(IfMatch::Any);</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::{IfMatch, EntityTag};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
-    <span class="doccomment">/// builder.set(</span>
+    <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     IfMatch::Items(vec![</span>
     <span class="doccomment">///         EntityTag::new(false, &quot;xyzzy&quot;.to_owned()),</span>
     <span class="doccomment">///         EntityTag::new(false, &quot;foobar&quot;.to_owned()),</span>

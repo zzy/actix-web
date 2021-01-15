@@ -115,12 +115,6 @@
 <span id="114">114</span>
 <span id="115">115</span>
 <span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>;
 <span class="kw">use</span> <span class="ident">mime</span>::<span class="ident">Mime</span>;
@@ -154,31 +148,24 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::ContentType;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn main() {</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
-    <span class="doccomment">/// builder.set(</span>
+    <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     ContentType::json()</span>
     <span class="doccomment">/// );</span>
-    <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # extern crate mime;</span>
-    <span class="doccomment">/// # extern crate actix_http;</span>
-    <span class="doccomment">/// use mime::TEXT_HTML;</span>
+    <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::ContentType;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn main() {</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
-    <span class="doccomment">/// builder.set(</span>
-    <span class="doccomment">///     ContentType(TEXT_HTML)</span>
+    <span class="doccomment">/// builder.insert_header(</span>
+    <span class="doccomment">///     ContentType(mime::TEXT_HTML)</span>
     <span class="doccomment">/// );</span>
-    <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     (<span class="ident">ContentType</span>, <span class="ident">CONTENT_TYPE</span>) <span class="op">=</span><span class="op">&gt;</span> [<span class="ident">Mime</span>]
 
@@ -223,6 +210,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">form_url_encoded</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentType</span> {
         <span class="ident">ContentType</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_WWW_FORM_URLENCODED</span>)
     }
+
     <span class="doccomment">/// A constructor  to easily create a `Content-Type: image/jpeg` header.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">jpeg</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentType</span> {

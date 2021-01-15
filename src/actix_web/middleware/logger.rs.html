@@ -808,6 +808,11 @@
 <span id="807">807</span>
 <span id="808">808</span>
 <span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! For middleware documentation, see [`Logger`].</span>
 
@@ -1414,7 +1419,7 @@
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> {
             <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(
                 <span class="ident">HttpResponse</span>::<span class="ident">build</span>(<span class="ident">StatusCode</span>::<span class="ident">OK</span>)
-                    .<span class="ident">header</span>(<span class="string">&quot;X-Test&quot;</span>, <span class="string">&quot;ttt&quot;</span>)
+                    .<span class="ident">insert_header</span>((<span class="string">&quot;X-Test&quot;</span>, <span class="string">&quot;ttt&quot;</span>))
                     .<span class="ident">finish</span>(),
             ))
         };
@@ -1422,11 +1427,12 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
 
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
-            <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
-            <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
-        )
-        .<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
+            .<span class="ident">insert_header</span>((
+                <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
+                <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
+            ))
+            .<span class="ident">to_srv_request</span>();
         <span class="kw">let</span> <span class="ident">_res</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>;
     }
 
@@ -1435,7 +1441,7 @@
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> {
             <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(
                 <span class="ident">HttpResponse</span>::<span class="ident">build</span>(<span class="ident">StatusCode</span>::<span class="ident">OK</span>)
-                    .<span class="ident">header</span>(<span class="string">&quot;X-Test&quot;</span>, <span class="string">&quot;ttt&quot;</span>)
+                    .<span class="ident">insert_header</span>((<span class="string">&quot;X-Test&quot;</span>, <span class="string">&quot;ttt&quot;</span>))
                     .<span class="ident">finish</span>(),
             ))
         };
@@ -1444,23 +1450,25 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
 
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
-            <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
-            <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
-        )
-        .<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
+            .<span class="ident">insert_header</span>((
+                <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
+                <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
+            ))
+            .<span class="ident">to_srv_request</span>();
         <span class="kw">let</span> <span class="ident">_res</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_url_path</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">format</span> <span class="op">=</span> <span class="ident">Format</span>::<span class="ident">new</span>(<span class="string">&quot;%T %U&quot;</span>);
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
-            <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
-            <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
-        )
-        .<span class="ident">uri</span>(<span class="string">&quot;/test/route/yeah&quot;</span>)
-        .<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
+            .<span class="ident">insert_header</span>((
+                <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
+                <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
+            ))
+            .<span class="ident">uri</span>(<span class="string">&quot;/test/route/yeah&quot;</span>)
+            .<span class="ident">to_srv_request</span>();
 
         <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">OffsetDateTime</span>::<span class="ident">now_utc</span>();
         <span class="kw">for</span> <span class="ident">unit</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">format</span>.<span class="number">0</span> {
@@ -1487,12 +1495,13 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_default_format</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">format</span> <span class="op">=</span> <span class="ident">Format</span>::<span class="ident">default</span>();
 
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
-            <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
-            <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
-        )
-        .<span class="ident">peer_addr</span>(<span class="string">&quot;127.0.0.1:8081&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>())
-        .<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
+            .<span class="ident">insert_header</span>((
+                <span class="ident">header</span>::<span class="ident">USER_AGENT</span>,
+                <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;ACTIX-WEB&quot;</span>),
+            ))
+            .<span class="ident">peer_addr</span>(<span class="string">&quot;127.0.0.1:8081&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>())
+            .<span class="ident">to_srv_request</span>();
 
         <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">OffsetDateTime</span>::<span class="ident">now_utc</span>();
         <span class="kw">for</span> <span class="ident">unit</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">format</span>.<span class="number">0</span> {
@@ -1547,13 +1556,14 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_remote_addr_format</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">format</span> <span class="op">=</span> <span class="ident">Format</span>::<span class="ident">new</span>(<span class="string">&quot;%{r}a&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(
-            <span class="ident">header</span>::<span class="ident">FORWARDED</span>,
-            <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(
-                <span class="string">&quot;for=192.0.2.60;proto=http;by=203.0.113.43&quot;</span>,
-            ),
-        )
-        .<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
+            .<span class="ident">insert_header</span>((
+                <span class="ident">header</span>::<span class="ident">FORWARDED</span>,
+                <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(
+                    <span class="string">&quot;for=192.0.2.60;proto=http;by=203.0.113.43&quot;</span>,
+                ),
+            ))
+            .<span class="ident">to_srv_request</span>();
 
         <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">OffsetDateTime</span>::<span class="ident">now_utc</span>();
         <span class="kw">for</span> <span class="ident">unit</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">format</span>.<span class="number">0</span> {

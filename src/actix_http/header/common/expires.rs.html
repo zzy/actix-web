@@ -38,6 +38,8 @@
 <span id="37">37</span>
 <span id="38">38</span>
 <span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">header</span>::{<span class="ident">HttpDate</span>, <span class="ident">EXPIRES</span>};
 
@@ -62,14 +64,16 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Example</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use std::time::{SystemTime, Duration};</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::Expires;</span>
-    <span class="doccomment">/// use std::time::{SystemTime, Duration};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
     <span class="doccomment">/// let expiration = SystemTime::now() + Duration::from_secs(60 * 60 * 24);</span>
-    <span class="doccomment">/// builder.set(Expires(expiration.into()));</span>
+    <span class="doccomment">/// builder.insert_header(</span>
+    <span class="doccomment">///     Expires(expiration.into())</span>
+    <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     (<span class="ident">Expires</span>, <span class="ident">EXPIRES</span>) <span class="op">=</span><span class="op">&gt;</span> [<span class="ident">HttpDate</span>]
 

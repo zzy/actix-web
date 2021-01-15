@@ -243,18 +243,22 @@
 <span id="242">242</span>
 <span id="243">243</span>
 <span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">any</span>::{<span class="ident">Any</span>, <span class="ident">TypeId</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">mem</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">any</span>::{<span class="ident">Any</span>, <span class="ident">TypeId</span>},
+    <span class="ident">fmt</span>, <span class="ident">mem</span>,
+};
 
-<span class="kw">use</span> <span class="ident">fxhash</span>::<span class="ident">FxHashMap</span>;
+<span class="kw">use</span> <span class="ident">ahash</span>::<span class="ident">AHashMap</span>;
 
 <span class="doccomment">/// A type map of request extensions.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Extensions</span> {
     <span class="doccomment">/// Use FxHasher with a std HashMap with for faster</span>
     <span class="doccomment">/// lookups on the small `TypeId` (u64 equivalent) keys.</span>
-    <span class="ident">map</span>: <span class="ident">FxHashMap</span><span class="op">&lt;</span><span class="ident">TypeId</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Any</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">map</span>: <span class="ident">AHashMap</span><span class="op">&lt;</span><span class="ident">TypeId</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Any</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Extensions</span> {
@@ -262,7 +266,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Extensions</span> {
         <span class="ident">Extensions</span> {
-            <span class="ident">map</span>: <span class="ident">FxHashMap</span>::<span class="ident">default</span>(),
+            <span class="ident">map</span>: <span class="ident">AHashMap</span>::<span class="ident">default</span>(),
         }
     }
 

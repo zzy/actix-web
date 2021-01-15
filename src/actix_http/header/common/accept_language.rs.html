@@ -68,12 +68,6 @@
 <span id="67">67</span>
 <span id="68">68</span>
 <span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">header</span>::{<span class="ident">QualityItem</span>, <span class="ident">ACCEPT_LANGUAGE</span>};
 <span class="kw">use</span> <span class="ident">language_tags</span>::<span class="ident">LanguageTag</span>;
@@ -99,41 +93,35 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # extern crate actix_http;</span>
-    <span class="doccomment">/// # extern crate language_tags;</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use language_tags::langtag;</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::{AcceptLanguage, LanguageTag, qitem};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn main() {</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
     <span class="doccomment">/// let mut langtag: LanguageTag = Default::default();</span>
     <span class="doccomment">/// langtag.language = Some(&quot;en&quot;.to_owned());</span>
     <span class="doccomment">/// langtag.region = Some(&quot;US&quot;.to_owned());</span>
-    <span class="doccomment">/// builder.set(</span>
+    <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptLanguage(vec![</span>
     <span class="doccomment">///         qitem(langtag),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
-    <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # extern crate actix_http;</span>
-    <span class="doccomment">/// # #[macro_use] extern crate language_tags;</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use language_tags::langtag;</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::{AcceptLanguage, QualityItem, q, qitem};</span>
-    <span class="doccomment">/// #</span>
-    <span class="doccomment">/// # fn main() {</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
-    <span class="doccomment">/// builder.set(</span>
+    <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptLanguage(vec![</span>
     <span class="doccomment">///         qitem(langtag!(da)),</span>
     <span class="doccomment">///         QualityItem::new(langtag!(en;;;GB), q(800)),</span>
     <span class="doccomment">///         QualityItem::new(langtag!(en), q(700)),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
-    <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     (<span class="ident">AcceptLanguage</span>, <span class="ident">ACCEPT_LANGUAGE</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">QualityItem</span><span class="op">&lt;</span><span class="ident">LanguageTag</span><span class="op">&gt;</span>)<span class="op">+</span>
 

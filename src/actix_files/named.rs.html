@@ -501,6 +501,9 @@
 <span id="498">498</span>
 <span id="499">499</span>
 <span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::{<span class="ident">File</span>, <span class="ident">Metadata</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
@@ -786,16 +789,16 @@
 
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">PREFER_UTF8</span>) {
                 <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">equiv_utf8_text</span>(<span class="self">self</span>.<span class="ident">content_type</span>.<span class="ident">clone</span>());
-                <span class="ident">res</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">ct</span>.<span class="ident">to_string</span>());
+                <span class="ident">res</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">ct</span>.<span class="ident">to_string</span>()));
             } <span class="kw">else</span> {
-                <span class="ident">res</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="self">self</span>.<span class="ident">content_type</span>.<span class="ident">to_string</span>());
+                <span class="ident">res</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="self">self</span>.<span class="ident">content_type</span>.<span class="ident">to_string</span>()));
             }
 
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">CONTENT_DISPOSITION</span>) {
-                <span class="ident">res</span>.<span class="ident">header</span>(
+                <span class="ident">res</span>.<span class="ident">insert_header</span>((
                     <span class="ident">header</span>::<span class="ident">CONTENT_DISPOSITION</span>,
                     <span class="self">self</span>.<span class="ident">content_disposition</span>.<span class="ident">to_string</span>(),
-                );
+                ));
             }
 
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">current_encoding</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">encoding</span> {
@@ -865,16 +868,16 @@
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">PREFER_UTF8</span>) {
             <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">equiv_utf8_text</span>(<span class="self">self</span>.<span class="ident">content_type</span>.<span class="ident">clone</span>());
-            <span class="ident">resp</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">ct</span>.<span class="ident">to_string</span>());
+            <span class="ident">resp</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">ct</span>.<span class="ident">to_string</span>()));
         } <span class="kw">else</span> {
-            <span class="ident">resp</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="self">self</span>.<span class="ident">content_type</span>.<span class="ident">to_string</span>());
+            <span class="ident">resp</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="self">self</span>.<span class="ident">content_type</span>.<span class="ident">to_string</span>()));
         }
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">CONTENT_DISPOSITION</span>) {
-            <span class="ident">resp</span>.<span class="ident">header</span>(
+            <span class="ident">resp</span>.<span class="ident">insert_header</span>((
                 <span class="ident">header</span>::<span class="ident">CONTENT_DISPOSITION</span>,
                 <span class="self">self</span>.<span class="ident">content_disposition</span>.<span class="ident">to_string</span>(),
-            );
+            ));
         }
 
         <span class="comment">// default compressing</span>
@@ -883,14 +886,14 @@
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">lm</span>) <span class="op">=</span> <span class="ident">last_modified</span> {
-            <span class="ident">resp</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">LAST_MODIFIED</span>, <span class="ident">lm</span>.<span class="ident">to_string</span>());
+            <span class="ident">resp</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">LAST_MODIFIED</span>, <span class="ident">lm</span>.<span class="ident">to_string</span>()));
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">etag</span>) <span class="op">=</span> <span class="ident">etag</span> {
-            <span class="ident">resp</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">ETAG</span>, <span class="ident">etag</span>.<span class="ident">to_string</span>());
+            <span class="ident">resp</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">ETAG</span>, <span class="ident">etag</span>.<span class="ident">to_string</span>()));
         }
 
-        <span class="ident">resp</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">ACCEPT_RANGES</span>, <span class="string">&quot;bytes&quot;</span>);
+        <span class="ident">resp</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">ACCEPT_RANGES</span>, <span class="string">&quot;bytes&quot;</span>));
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">length</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">md</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">offset</span> <span class="op">=</span> <span class="number">0</span>;
@@ -903,7 +906,7 @@
                     <span class="ident">offset</span> <span class="op">=</span> <span class="ident">ranges</span>[<span class="number">0</span>].<span class="ident">start</span>;
 
                     <span class="ident">resp</span>.<span class="ident">encoding</span>(<span class="ident">ContentEncoding</span>::<span class="ident">Identity</span>);
-                    <span class="ident">resp</span>.<span class="ident">header</span>(
+                    <span class="ident">resp</span>.<span class="ident">insert_header</span>((
                         <span class="ident">header</span>::<span class="ident">CONTENT_RANGE</span>,
                         <span class="macro">format</span><span class="macro">!</span>(
                             <span class="string">&quot;bytes {}-{}/{}&quot;</span>,
@@ -911,9 +914,12 @@
                             <span class="ident">offset</span> <span class="op">+</span> <span class="ident">length</span> <span class="op">-</span> <span class="number">1</span>,
                             <span class="self">self</span>.<span class="ident">md</span>.<span class="ident">len</span>()
                         ),
-                    );
+                    ));
                 } <span class="kw">else</span> {
-                    <span class="ident">resp</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_RANGE</span>, <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;bytes */{}&quot;</span>, <span class="ident">length</span>));
+                    <span class="ident">resp</span>.<span class="ident">insert_header</span>((
+                        <span class="ident">header</span>::<span class="ident">CONTENT_RANGE</span>,
+                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;bytes */{}&quot;</span>, <span class="ident">length</span>),
+                    ));
                     <span class="kw">return</span> <span class="ident">resp</span>.<span class="ident">status</span>(<span class="ident">StatusCode</span>::<span class="ident">RANGE_NOT_SATISFIABLE</span>).<span class="ident">finish</span>();
                 };
             } <span class="kw">else</span> {

@@ -439,7 +439,7 @@
     <span class="doccomment">//!</span>
     <span class="doccomment">//!    // Create request builder and send request</span>
     <span class="doccomment">//!    let response = client.get(&quot;http://www.rust-lang.org&quot;)</span>
-    <span class="doccomment">//!       .header(&quot;User-Agent&quot;, &quot;actix-web/3.0&quot;)</span>
+    <span class="doccomment">//!       .insert_header((&quot;User-Agent&quot;, &quot;actix-web/3.0&quot;))</span>
     <span class="doccomment">//!       .send()     // &lt;- Send request</span>
     <span class="doccomment">//!       .await;     // &lt;- Wait for response</span>
     <span class="doccomment">//!</span>

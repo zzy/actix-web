@@ -657,10 +657,10 @@
 <span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::{<span class="ident">sleep</span>, <span class="ident">Sleep</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
 <span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">task</span>::<span class="ident">LocalWaker</span>;
+<span class="kw">use</span> <span class="ident">ahash</span>::<span class="ident">AHashMap</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_channel</span>::<span class="ident">oneshot</span>;
 <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::{<span class="ident">poll_fn</span>, <span class="ident">FutureExt</span>, <span class="ident">LocalBoxFuture</span>};
-<span class="kw">use</span> <span class="ident">fxhash</span>::<span class="ident">FxHashMap</span>;
 <span class="kw">use</span> <span class="ident">h2</span>::<span class="ident">client</span>::{<span class="ident">Connection</span>, <span class="ident">SendRequest</span>};
 <span class="kw">use</span> <span class="ident">http</span>::<span class="ident">uri</span>::<span class="ident">Authority</span>;
 <span class="kw">use</span> <span class="ident">indexmap</span>::<span class="ident">IndexSet</span>;
@@ -706,7 +706,7 @@
             <span class="ident">acquired</span>: <span class="number">0</span>,
             <span class="ident">waiters</span>: <span class="ident">Slab</span>::<span class="ident">new</span>(),
             <span class="ident">waiters_queue</span>: <span class="ident">IndexSet</span>::<span class="ident">new</span>(),
-            <span class="ident">available</span>: <span class="ident">FxHashMap</span>::<span class="ident">default</span>(),
+            <span class="ident">available</span>: <span class="ident">AHashMap</span>::<span class="ident">default</span>(),
             <span class="ident">waker</span>: <span class="ident">LocalWaker</span>::<span class="ident">new</span>(),
         }));
 
@@ -904,7 +904,7 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Inner</span><span class="op">&lt;</span><span class="ident">Io</span><span class="op">&gt;</span> {
     <span class="ident">config</span>: <span class="ident">ConnectorConfig</span>,
     <span class="ident">acquired</span>: <span class="ident">usize</span>,
-    <span class="ident">available</span>: <span class="ident">FxHashMap</span><span class="op">&lt;</span><span class="ident">Key</span>, <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">AvailableConnection</span><span class="op">&lt;</span><span class="ident">Io</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">available</span>: <span class="ident">AHashMap</span><span class="op">&lt;</span><span class="ident">Key</span>, <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">AvailableConnection</span><span class="op">&lt;</span><span class="ident">Io</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">waiters</span>: <span class="ident">Slab</span><span class="op">&lt;</span>
         <span class="prelude-ty">Option</span><span class="op">&lt;</span>(
             <span class="ident">Connect</span>,

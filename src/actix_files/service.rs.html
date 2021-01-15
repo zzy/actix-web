@@ -244,7 +244,7 @@
         <span class="kw">if</span> <span class="op">!</span><span class="ident">is_method_valid</span> {
             <span class="kw">return</span> <span class="ident">Either</span>::<span class="ident">Left</span>(<span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(
                 <span class="ident">actix_web</span>::<span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()
-                    .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;text/plain&quot;</span>)
+                    .<span class="ident">insert_header</span>(<span class="ident">header</span>::<span class="ident">ContentType</span>(<span class="ident">mime</span>::<span class="ident">TEXT_PLAIN_UTF_8</span>))
                     .<span class="ident">body</span>(<span class="string">&quot;Request did not meet this resource&#39;s requirements.&quot;</span>),
             )));
         }
@@ -268,7 +268,7 @@
 
                     <span class="kw">return</span> <span class="ident">Either</span>::<span class="ident">Left</span>(<span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(
                         <span class="ident">HttpResponse</span>::<span class="ident">Found</span>()
-                            .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">LOCATION</span>, <span class="ident">redirect_to</span>)
+                            .<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">LOCATION</span>, <span class="ident">redirect_to</span>))
                             .<span class="ident">body</span>(<span class="string">&quot;&quot;</span>)
                             .<span class="ident">into_body</span>(),
                     )));

@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["HttpMessage","Trait that implements general purpose operations on http messages"]]});
+initSidebarItems({"trait":[["HttpMessage","Trait that implements general purpose operations on HTTP messages."]]});

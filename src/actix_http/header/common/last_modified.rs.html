@@ -37,6 +37,8 @@
 <span id="36">36</span>
 <span id="37">37</span>
 <span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">header</span>::{<span class="ident">HttpDate</span>, <span class="ident">LAST_MODIFIED</span>};
 
@@ -61,14 +63,16 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Example</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use std::time::{SystemTime, Duration};</span>
     <span class="doccomment">/// use actix_http::Response;</span>
     <span class="doccomment">/// use actix_http::http::header::LastModified;</span>
-    <span class="doccomment">/// use std::time::{SystemTime, Duration};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
     <span class="doccomment">/// let modified = SystemTime::now() - Duration::from_secs(60 * 60 * 24);</span>
-    <span class="doccomment">/// builder.set(LastModified(modified.into()));</span>
+    <span class="doccomment">/// builder.insert_header(</span>
+    <span class="doccomment">///     LastModified(modified.into())</span>
+    <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     (<span class="ident">LastModified</span>, <span class="ident">LAST_MODIFIED</span>) <span class="op">=</span><span class="op">&gt;</span> [<span class="ident">HttpDate</span>]
 

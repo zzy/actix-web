@@ -74,16 +74,6 @@
 <span id="73">73</span>
 <span id="74">74</span>
 <span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
-<span id="83">83</span>
-<span id="84">84</span>
-<span id="85">85</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">http</span>::<span class="ident">header</span>;
 <span class="kw">use</span> <span class="ident">http</span>::<span class="ident">Method</span>;
@@ -109,38 +99,28 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # extern crate http;</span>
-    <span class="doccomment">/// # extern crate actix_http;</span>
+    <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_http::Response;</span>
-    <span class="doccomment">/// use actix_http::http::header::Allow;</span>
-    <span class="doccomment">/// use http::Method;</span>
+    <span class="doccomment">/// use actix_http::http::{header::Allow, Method};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn main() {</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
-    <span class="doccomment">/// builder.set(</span>
+    <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     Allow(vec![Method::GET])</span>
     <span class="doccomment">/// );</span>
-    <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # extern crate http;</span>
-    <span class="doccomment">/// # extern crate actix_http;</span>
+    <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_http::Response;</span>
-    <span class="doccomment">/// use actix_http::http::header::Allow;</span>
-    <span class="doccomment">/// use http::Method;</span>
+    <span class="doccomment">/// use actix_http::http::{header::Allow, Method};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn main() {</span>
     <span class="doccomment">/// let mut builder = Response::Ok();</span>
-    <span class="doccomment">/// builder.set(</span>
+    <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     Allow(vec![</span>
     <span class="doccomment">///         Method::GET,</span>
     <span class="doccomment">///         Method::POST,</span>
     <span class="doccomment">///         Method::PATCH,</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
-    <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     (<span class="ident">Allow</span>, <span class="ident">header</span>::<span class="ident">ALLOW</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">Method</span>)<span class="op">*</span>
 

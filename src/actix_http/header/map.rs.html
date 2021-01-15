@@ -380,37 +380,44 @@
 <span id="379">379</span>
 <span id="380">380</span>
 <span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">hash_map</span>::{<span class="self">self</span>, <span class="ident">Entry</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">collections</span>::<span class="ident">hash_map</span>::{<span class="self">self</span>, <span class="ident">Entry</span>},
+    <span class="ident">convert</span>::<span class="ident">TryFrom</span>,
+};
 
+<span class="kw">use</span> <span class="ident">ahash</span>::<span class="ident">AHashMap</span>;
 <span class="kw">use</span> <span class="ident">either</span>::<span class="ident">Either</span>;
-<span class="kw">use</span> <span class="ident">fxhash</span>::<span class="ident">FxHashMap</span>;
 <span class="kw">use</span> <span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>};
+<span class="kw">use</span> <span class="ident">smallvec</span>::{<span class="ident">smallvec</span>, <span class="ident">SmallVec</span>};
 
-<span class="doccomment">/// A set of HTTP headers</span>
+<span class="doccomment">/// A multi-map of HTTP headers.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// `HeaderMap` is an multi-map of [`HeaderName`] to values.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
+<span class="doccomment">/// `HeaderMap` is a &quot;multi-map&quot; of [`HeaderName`] to one or more values.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HeaderMap</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">inner</span>: <span class="ident">FxHashMap</span><span class="op">&lt;</span><span class="ident">HeaderName</span>, <span class="ident">Value</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">inner</span>: <span class="ident">AHashMap</span><span class="op">&lt;</span><span class="ident">HeaderName</span>, <span class="ident">Value</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">Value</span> {
     <span class="ident">One</span>(<span class="ident">HeaderValue</span>),
-    <span class="ident">Multi</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">HeaderValue</span><span class="op">&gt;</span>),
+    <span class="ident">Multi</span>(<span class="ident">SmallVec</span><span class="op">&lt;</span>[<span class="ident">HeaderValue</span>; <span class="number">4</span>]<span class="op">&gt;</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">Value</span> {
-    <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderValue</span> {
+    <span class="kw">fn</span> <span class="ident">first</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderValue</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">Value</span>::<span class="ident">One</span>(<span class="kw-2">ref</span> <span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>,
             <span class="ident">Value</span>::<span class="ident">Multi</span>(<span class="kw-2">ref</span> <span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">val</span>[<span class="number">0</span>],
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderValue</span> {
+    <span class="kw">fn</span> <span class="ident">first_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderValue</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">Value</span>::<span class="ident">One</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>,
             <span class="ident">Value</span>::<span class="ident">Multi</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">val</span>[<span class="number">0</span>],
@@ -420,7 +427,7 @@
     <span class="kw">fn</span> <span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">HeaderValue</span>) {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">Value</span>::<span class="ident">One</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">replace</span>(<span class="self">self</span>, <span class="ident">Value</span>::<span class="ident">Multi</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">val</span>]));
+                <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">replace</span>(<span class="self">self</span>, <span class="ident">Value</span>::<span class="ident">Multi</span>(<span class="macro">smallvec</span><span class="macro">!</span>[<span class="ident">val</span>]));
                 <span class="kw">match</span> <span class="ident">data</span> {
                     <span class="ident">Value</span>::<span class="ident">One</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">append</span>(<span class="ident">val</span>),
                     <span class="ident">Value</span>::<span class="ident">Multi</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
@@ -438,7 +445,7 @@
     <span class="doccomment">/// allocate.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">HeaderMap</span> {
-            <span class="ident">inner</span>: <span class="ident">FxHashMap</span>::<span class="ident">default</span>(),
+            <span class="ident">inner</span>: <span class="ident">AHashMap</span>::<span class="ident">default</span>(),
         }
     }
 
@@ -452,7 +459,7 @@
     <span class="doccomment">/// More capacity than requested may be allocated.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_capacity</span>(<span class="ident">capacity</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HeaderMap</span> {
         <span class="ident">HeaderMap</span> {
-            <span class="ident">inner</span>: <span class="ident">FxHashMap</span>::<span class="ident">with_capacity_and_hasher</span>(<span class="ident">capacity</span>, <span class="ident">Default</span>::<span class="ident">default</span>()),
+            <span class="ident">inner</span>: <span class="ident">AHashMap</span>::<span class="ident">with_capacity_and_hasher</span>(<span class="ident">capacity</span>, <span class="ident">Default</span>::<span class="ident">default</span>()),
         }
     }
 
@@ -501,7 +508,7 @@
     <span class="doccomment">/// is returned. Use `get_all` to get all values associated with a given</span>
     <span class="doccomment">/// key. Returns `None` if there are no values associated with the key.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">AsName</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">HeaderValue</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">get2</span>(<span class="ident">name</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">get</span>())
+        <span class="self">self</span>.<span class="ident">get2</span>(<span class="ident">name</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">first</span>())
     }
 
     <span class="kw">fn</span> <span class="ident">get2</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">AsName</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Value</span><span class="op">&gt;</span> {
@@ -517,11 +524,11 @@
         }
     }
 
-    <span class="doccomment">/// Returns a view of all values associated with a key.</span>
+    <span class="doccomment">/// Returns an iterator of all values associated with a key.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The returned view does not incur any allocations and allows iterating</span>
-    <span class="doccomment">/// the values associated with the key.  See [`GetAll`] for more details.</span>
-    <span class="doccomment">/// Returns `None` if there are no values associated with the key.</span>
+    <span class="doccomment">/// The returned view does not incur any allocations and allows iterating the values associated</span>
+    <span class="doccomment">/// with the key. Returns `None` if there are no values associated with the key. Iteration order</span>
+    <span class="doccomment">/// is not guaranteed to be the same as insertion order.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_all</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">AsName</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GetAll</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
         <span class="ident">GetAll</span> {
             <span class="ident">idx</span>: <span class="number">0</span>,
@@ -536,10 +543,10 @@
     <span class="doccomment">/// key. Returns `None` if there are no values associated with the key.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mut</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">AsName</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderValue</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">name</span>.<span class="ident">as_name</span>() {
-            <span class="ident">Either</span>::<span class="ident">Left</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>(<span class="ident">name</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">get_mut</span>()),
+            <span class="ident">Either</span>::<span class="ident">Left</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>(<span class="ident">name</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">first_mut</span>()),
             <span class="ident">Either</span>::<span class="ident">Right</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">HeaderName</span>::<span class="ident">try_from</span>(<span class="ident">s</span>) {
-                    <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">get_mut</span>())
+                    <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">first_mut</span>())
                 } <span class="kw">else</span> {
                     <span class="prelude-val">None</span>
                 }
@@ -665,6 +672,7 @@
     }
 }
 
+<span class="doccomment">/// Iterator for all values in a `HeaderMap` with the same name.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GetAll</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">idx</span>: <span class="ident">usize</span>,
     <span class="ident">item</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Value</span><span class="op">&gt;</span>,
@@ -720,7 +728,7 @@
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">idx</span>: <span class="ident">usize</span>,
-    <span class="ident">current</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HeaderName</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">HeaderValue</span><span class="op">&gt;</span>)<span class="op">&gt;</span>,
+    <span class="ident">current</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HeaderName</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">SmallVec</span><span class="op">&lt;</span>[<span class="ident">HeaderValue</span>; <span class="number">4</span>]<span class="op">&gt;</span>)<span class="op">&gt;</span>,
     <span class="ident">iter</span>: <span class="ident">hash_map</span>::<span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">HeaderName</span>, <span class="ident">Value</span><span class="op">&gt;</span>,
 }
 

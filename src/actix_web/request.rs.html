@@ -770,6 +770,8 @@
 <span id="769">769</span>
 <span id="770">770</span>
 <span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -1196,8 +1198,9 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_debug</span>() {
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span>
-            <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(<span class="string">&quot;content-type&quot;</span>, <span class="string">&quot;text/plain&quot;</span>).<span class="ident">to_http_request</span>();
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
+            .<span class="ident">insert_header</span>((<span class="string">&quot;content-type&quot;</span>, <span class="string">&quot;text/plain&quot;</span>))
+            .<span class="ident">to_http_request</span>();
         <span class="kw">let</span> <span class="ident">dbg</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">req</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dbg</span>.<span class="ident">contains</span>(<span class="string">&quot;HttpRequest&quot;</span>));
     }
@@ -1211,8 +1214,8 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_request_cookies</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
-            .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">COOKIE</span>, <span class="string">&quot;cookie1=value1&quot;</span>)
-            .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">COOKIE</span>, <span class="string">&quot;cookie2=value2&quot;</span>)
+            .<span class="ident">append_header</span>((<span class="ident">header</span>::<span class="ident">COOKIE</span>, <span class="string">&quot;cookie1=value1&quot;</span>))
+            .<span class="ident">append_header</span>((<span class="ident">header</span>::<span class="ident">COOKIE</span>, <span class="string">&quot;cookie2=value2&quot;</span>))
             .<span class="ident">to_http_request</span>();
         {
             <span class="kw">let</span> <span class="ident">cookies</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">cookies</span>().<span class="ident">unwrap</span>();
@@ -1249,7 +1252,8 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;/user/test.html&quot;</span>));
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;/test/unknown&quot;</span>));
 
-        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_header</span>(<span class="ident">header</span>::<span class="ident">HOST</span>, <span class="string">&quot;www.rust-lang.org&quot;</span>)
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
+            .<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">HOST</span>, <span class="string">&quot;www.rust-lang.org&quot;</span>))
             .<span class="ident">rmap</span>(<span class="ident">rmap</span>)
             .<span class="ident">to_http_request</span>();
 
@@ -1279,7 +1283,7 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;/index.html&quot;</span>));
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/test&quot;</span>)
-            .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">HOST</span>, <span class="string">&quot;www.rust-lang.org&quot;</span>)
+            .<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">HOST</span>, <span class="string">&quot;www.rust-lang.org&quot;</span>))
             .<span class="ident">rmap</span>(<span class="ident">rmap</span>)
             .<span class="ident">to_http_request</span>();
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">url_for_static</span>(<span class="string">&quot;index&quot;</span>);
@@ -1330,7 +1334,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(
             <span class="op">|</span><span class="ident">req</span>: <span class="ident">HttpRequest</span><span class="op">|</span> {
                 <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
-                    .<span class="ident">set_header</span>(<span class="string">&quot;pool_cap&quot;</span>, <span class="ident">req</span>.<span class="ident">app_state</span>().<span class="ident">pool</span>().<span class="ident">cap</span>)
+                    .<span class="ident">insert_header</span>((<span class="string">&quot;pool_cap&quot;</span>, <span class="ident">req</span>.<span class="ident">app_state</span>().<span class="ident">pool</span>().<span class="ident">cap</span>))
                     .<span class="ident">finish</span>()
             },
         )))
