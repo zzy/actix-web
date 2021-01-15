@@ -686,17 +686,6 @@
 <span id="685">685</span>
 <span id="686">686</span>
 <span id="687">687</span>
-<span id="688">688</span>
-<span id="689">689</span>
-<span id="690">690</span>
-<span id="691">691</span>
-<span id="692">692</span>
-<span id="693">693</span>
-<span id="694">694</span>
-<span id="695">695</span>
-<span id="696">696</span>
-<span id="697">697</span>
-<span id="698">698</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
@@ -734,7 +723,6 @@
     <span class="ident">services</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AppServiceFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">default</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpNewService</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">factory_ref</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AppRoutingFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">data_factories</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FnDataFactory</span><span class="op">&gt;</span>,
     <span class="ident">external</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ResourceDef</span><span class="op">&gt;</span>,
     <span class="ident">extensions</span>: <span class="ident">Extensions</span>,
@@ -748,7 +736,6 @@
         <span class="kw">let</span> <span class="ident">fref</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="prelude-val">None</span>));
         <span class="ident">App</span> {
             <span class="ident">endpoint</span>: <span class="ident">AppEntry</span>::<span class="ident">new</span>(<span class="ident">fref</span>.<span class="ident">clone</span>()),
-            <span class="ident">data</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
             <span class="ident">data_factories</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
             <span class="ident">services</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
             <span class="ident">default</span>: <span class="prelude-val">None</span>,
@@ -801,9 +788,8 @@
     <span class="doccomment">///         web::resource(&quot;/index.html&quot;).route(</span>
     <span class="doccomment">///             web::get().to(index)));</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">push</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Data</span>::<span class="ident">new</span>(<span class="ident">data</span>)));
-        <span class="self">self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">app_data</span>(<span class="ident">Data</span>::<span class="ident">new</span>(<span class="ident">data</span>))
     }
 
     <span class="doccomment">/// Set application data factory. This function is</span>
@@ -857,8 +843,7 @@
     <span class="doccomment">/// some of the resource&#39;s configuration could be moved to different module.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # extern crate actix_web;</span>
-    <span class="doccomment">/// use actix_web::{web, middleware, App, HttpResponse};</span>
+    <span class="doccomment">/// use actix_web::{web, App, HttpResponse};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// // this function could be located in different module</span>
     <span class="doccomment">/// fn config(cfg: &amp;mut web::ServiceConfig) {</span>
@@ -868,12 +853,9 @@
     <span class="doccomment">///     );</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// fn main() {</span>
-    <span class="doccomment">///     let app = App::new()</span>
-    <span class="doccomment">///         .wrap(middleware::Logger::default())</span>
-    <span class="doccomment">///         .configure(config)  // &lt;- register resources</span>
-    <span class="doccomment">///         .route(&quot;/index.html&quot;, web::get().to(|| HttpResponse::Ok()));</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// App::new()</span>
+    <span class="doccomment">///     .configure(config)  // &lt;- register resources</span>
+    <span class="doccomment">///     .route(&quot;/index.html&quot;, web::get().to(|| HttpResponse::Ok()));</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">configure</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
@@ -881,10 +863,9 @@
     {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>();
         <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cfg</span>);
-        <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">data</span>);
         <span class="self">self</span>.<span class="ident">services</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">services</span>);
         <span class="self">self</span>.<span class="ident">external</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">external</span>);
-        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">extensions</span>);
+        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">app_data</span>);
         <span class="self">self</span>
     }
 
@@ -1074,7 +1055,6 @@
     {
         <span class="ident">App</span> {
             <span class="ident">endpoint</span>: <span class="ident">apply</span>(<span class="ident">mw</span>, <span class="self">self</span>.<span class="ident">endpoint</span>),
-            <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>,
             <span class="ident">data_factories</span>: <span class="self">self</span>.<span class="ident">data_factories</span>,
             <span class="ident">services</span>: <span class="self">self</span>.<span class="ident">services</span>,
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>,
@@ -1136,7 +1116,6 @@
     {
         <span class="ident">App</span> {
             <span class="ident">endpoint</span>: <span class="ident">apply_fn_factory</span>(<span class="self">self</span>.<span class="ident">endpoint</span>, <span class="ident">mw</span>),
-            <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>,
             <span class="ident">data_factories</span>: <span class="self">self</span>.<span class="ident">data_factories</span>,
             <span class="ident">services</span>: <span class="self">self</span>.<span class="ident">services</span>,
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>,
@@ -1162,7 +1141,6 @@
 {
     <span class="kw">fn</span> <span class="ident">into_factory</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">AppInit</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span> {
         <span class="ident">AppInit</span> {
-            <span class="ident">data_factories</span>: <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">into_boxed_slice</span>().<span class="ident">into</span>(),
             <span class="ident">async_data_factories</span>: <span class="self">self</span>.<span class="ident">data_factories</span>.<span class="ident">into_boxed_slice</span>().<span class="ident">into</span>(),
             <span class="ident">endpoint</span>: <span class="self">self</span>.<span class="ident">endpoint</span>,
             <span class="ident">services</span>: <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">services</span>)),

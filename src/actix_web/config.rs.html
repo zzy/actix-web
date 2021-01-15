@@ -358,8 +358,6 @@
 <span id="357">357</span>
 <span id="358">358</span>
 <span id="359">359</span>
-<span id="360">360</span>
-<span id="361">361</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">SocketAddr</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -368,7 +366,7 @@
 <span class="kw">use</span> <span class="ident">actix_router</span>::<span class="ident">ResourceDef</span>;
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">ServiceFactory</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">data</span>::{<span class="ident">Data</span>, <span class="ident">DataFactory</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">data</span>::<span class="ident">Data</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">guard</span>::<span class="ident">Guard</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">resource</span>::<span class="ident">Resource</span>;
@@ -394,20 +392,14 @@
         <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Guards</span><span class="op">&gt;</span>,
         <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ResourceMap</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     )<span class="op">&gt;</span>,
-    <span class="ident">service_data</span>: <span class="ident">Rc</span><span class="op">&lt;</span>[<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span>]<span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">AppService</span> {
-    <span class="doccomment">/// Crate server settings instance</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">config</span>: <span class="ident">AppConfig</span>,
-        <span class="ident">default</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpNewService</span><span class="op">&gt;</span>,
-        <span class="ident">service_data</span>: <span class="ident">Rc</span><span class="op">&lt;</span>[<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span>]<span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="doccomment">/// Crate server settings instance.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">config</span>: <span class="ident">AppConfig</span>, <span class="ident">default</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpNewService</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">AppService</span> {
             <span class="ident">config</span>,
             <span class="ident">default</span>,
-            <span class="ident">service_data</span>,
             <span class="ident">root</span>: <span class="bool-val">true</span>,
             <span class="ident">services</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
         }
@@ -438,7 +430,6 @@
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>.<span class="ident">clone</span>(),
             <span class="ident">services</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
             <span class="ident">root</span>: <span class="bool-val">false</span>,
-            <span class="ident">service_data</span>: <span class="self">self</span>.<span class="ident">service_data</span>.<span class="ident">clone</span>(),
         }
     }
 
@@ -452,15 +443,7 @@
         <span class="self">self</span>.<span class="ident">default</span>.<span class="ident">clone</span>()
     }
 
-    <span class="doccomment">/// Set global route data</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_service_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extensions</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="kw">for</span> <span class="ident">f</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">service_data</span>.<span class="ident">iter</span>() {
-            <span class="ident">f</span>.<span class="ident">create</span>(<span class="ident">extensions</span>);
-        }
-        <span class="op">!</span><span class="self">self</span>.<span class="ident">service_data</span>.<span class="ident">is_empty</span>()
-    }
-
-    <span class="doccomment">/// Register http service</span>
+    <span class="doccomment">/// Register HTTP service.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_service</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">S</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">rdef</span>: <span class="ident">ResourceDef</span>,
@@ -531,47 +514,60 @@
     }
 }
 
-<span class="doccomment">/// Service config is used for external configuration.</span>
-<span class="doccomment">/// Part of application configuration could be offloaded</span>
-<span class="doccomment">/// to set of external methods. This could help with</span>
-<span class="doccomment">/// modularization of big application configuration.</span>
+<span class="doccomment">/// Enables parts of app configuration to be declared separately from the app itself. Helpful for</span>
+<span class="doccomment">/// modularizing large applications.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Merge a `ServiceConfig` into an app using [`App::configure`](crate::App::configure). Scope and</span>
+<span class="doccomment">/// resources services have similar methods.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// use actix_web::{web, App, HttpResponse};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// // this function could be located in different module</span>
+<span class="doccomment">/// fn config(cfg: &amp;mut web::ServiceConfig) {</span>
+<span class="doccomment">///     cfg.service(web::resource(&quot;/test&quot;)</span>
+<span class="doccomment">///         .route(web::get().to(|| HttpResponse::Ok()))</span>
+<span class="doccomment">///         .route(web::head().to(|| HttpResponse::MethodNotAllowed()))</span>
+<span class="doccomment">///     );</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// // merge `/test` routes from config function to App</span>
+<span class="doccomment">/// App::new().configure(config);</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServiceConfig</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">services</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AppServiceFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">external</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ResourceDef</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">extensions</span>: <span class="ident">Extensions</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">app_data</span>: <span class="ident">Extensions</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ServiceConfig</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">services</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
-            <span class="ident">data</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
             <span class="ident">external</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
-            <span class="ident">extensions</span>: <span class="ident">Extensions</span>::<span class="ident">new</span>(),
+            <span class="ident">app_data</span>: <span class="ident">Extensions</span>::<span class="ident">new</span>(),
         }
     }
 
-    <span class="doccomment">/// Set application data. Application data could be accessed</span>
-    <span class="doccomment">/// by using `Data&lt;T&gt;` extractor where `T` is data type.</span>
+    <span class="doccomment">/// Add shared app data item.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This is same as `App::data()` method.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">push</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Data</span>::<span class="ident">new</span>(<span class="ident">data</span>)));
+    <span class="doccomment">/// Counterpart to [`App::data()`](crate::App::data).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">app_data</span>(<span class="ident">Data</span>::<span class="ident">new</span>(<span class="ident">data</span>));
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Set arbitrary data item.</span>
+    <span class="doccomment">/// Add arbitrary app data item.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This is same as `App::data()` method.</span>
+    <span class="doccomment">/// Counterpart to [`App::app_data()`](crate::App::app_data).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ext</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">insert</span>(<span class="ident">ext</span>);
+        <span class="self">self</span>.<span class="ident">app_data</span>.<span class="ident">insert</span>(<span class="ident">ext</span>);
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Configure route for a specific path.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This is same as `App::route()` method.</span>
+    <span class="doccomment">/// Counterpart to [`App::route()`](crate::App::route).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">route</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">mut</span> <span class="ident">route</span>: <span class="ident">Route</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">service</span>(
             <span class="ident">Resource</span>::<span class="ident">new</span>(<span class="ident">path</span>)
@@ -580,9 +576,9 @@
         )
     }
 
-    <span class="doccomment">/// Register http service.</span>
+    <span class="doccomment">/// Register HTTP service factory.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This is same as `App::service()` method.</span>
+    <span class="doccomment">/// Counterpart to [`App::service()`](crate::App::service).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">service</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">factory</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">HttpServiceFactory</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -594,11 +590,11 @@
 
     <span class="doccomment">/// Register an external resource.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// External resources are useful for URL generation purposes only</span>
-    <span class="doccomment">/// and are never considered for matching at request time. Calls to</span>
-    <span class="doccomment">/// `HttpRequest::url_for()` will work as expected.</span>
+    <span class="doccomment">/// External resources are useful for URL generation purposes only and are never considered for</span>
+    <span class="doccomment">/// matching at request time. Calls to [`HttpRequest::url_for()`](crate::HttpRequest::url_for)</span>
+    <span class="doccomment">/// will work as expected.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This is same as `App::external_service()` method.</span>
+    <span class="doccomment">/// Counterpart to [`App::external_resource()`](crate::App::external_resource).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">external_resource</span><span class="op">&lt;</span><span class="ident">N</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>, <span class="ident">url</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,

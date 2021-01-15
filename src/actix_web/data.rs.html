@@ -308,6 +308,21 @@
 <span id="307">307</span>
 <span id="308">308</span>
 <span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">any</span>::<span class="ident">type_name</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Deref</span>;
@@ -321,8 +336,9 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">extract</span>::<span class="ident">FromRequest</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">request</span>::<span class="ident">HttpRequest</span>;
 
-<span class="doccomment">/// Application data factory</span>
+<span class="doccomment">/// Data factory.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">DataFactory</span> {
+    <span class="doccomment">/// Return true if modifications were made to extensions map.</span>
     <span class="kw">fn</span> <span class="ident">create</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extensions</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 }
 
@@ -437,12 +453,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">DataFactory</span> <span class="kw">for</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">create</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extensions</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">extensions</span>.<span class="ident">contains</span>::<span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>() {
-            <span class="ident">extensions</span>.<span class="ident">insert</span>(<span class="ident">Data</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>()));
-            <span class="bool-val">true</span>
-        } <span class="kw">else</span> {
-            <span class="bool-val">false</span>
-        }
+        <span class="ident">extensions</span>.<span class="ident">insert</span>(<span class="ident">Data</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>()));
+        <span class="bool-val">true</span>
     }
 }
 
@@ -478,6 +490,24 @@
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>);
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
+            <span class="ident">App</span>::<span class="ident">new</span>()
+                .<span class="ident">data</span>(<span class="number">10u32</span>)
+                .<span class="ident">data</span>(<span class="number">13u32</span>)
+                .<span class="ident">app_data</span>(<span class="number">12u64</span>)
+                .<span class="ident">app_data</span>(<span class="number">15u64</span>)
+                .<span class="ident">default_service</span>(<span class="ident">web</span>::<span class="ident">to</span>(<span class="op">|</span><span class="ident">n</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>, <span class="ident">req</span>: <span class="ident">HttpRequest</span><span class="op">|</span> {
+                    <span class="comment">// in each case, the latter insertion should be preserved</span>
+                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="number">15</span>);
+                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">n</span>.<span class="ident">into_inner</span>(), <span class="number">13</span>);
+                    <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
+                })),
+        )
+        .<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode</span>::<span class="ident">OK</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
