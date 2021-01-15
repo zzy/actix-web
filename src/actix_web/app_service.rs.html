@@ -526,7 +526,7 @@
     }
 }
 
-<span class="doccomment">/// Service to convert `Request` to a `ServiceRequest&lt;S&gt;`</span>
+<span class="doccomment">/// Service that takes a [`Request`] and delegates to a service that take a [`ServiceRequest`].</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AppInitService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span>,
@@ -536,7 +536,7 @@
     <span class="ident">app_state</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">AppInitServiceState</span><span class="op">&gt;</span>,
 }
 
-<span class="comment">// a collection of AppInitService state that shared between HttpRequests.</span>
+<span class="doccomment">/// A collection of [`AppInitService`] state that shared across `HttpRequest`s.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">AppInitServiceState</span> {
     <span class="ident">rmap</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ResourceMap</span><span class="op">&gt;</span>,
     <span class="ident">config</span>: <span class="ident">AppConfig</span>,

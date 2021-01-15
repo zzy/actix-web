@@ -376,7 +376,7 @@
     }
 }
 
-<span class="comment">// release SendRequest object</span>
+<span class="doccomment">/// release SendRequest object</span>
 <span class="kw">fn</span> <span class="ident">release</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(
     <span class="ident">io</span>: <span class="ident">SendRequest</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
     <span class="ident">pool</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Acquired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,

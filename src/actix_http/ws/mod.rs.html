@@ -330,12 +330,6 @@
 <span id="329">329</span>
 <span id="330">330</span>
 <span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
-<span id="335">335</span>
-<span id="336">336</span>
-<span id="337">337</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! WebSocket protocol support.</span>
 <span class="doccomment">//!</span>
@@ -467,18 +461,12 @@
 }
 
 <span class="doccomment">/// Verify `WebSocket` handshake request and create handshake response.</span>
-<span class="comment">// /// `protocols` is a sequence of known protocols. On successful handshake,</span>
-<span class="comment">// /// the returned response headers contain the first protocol in this list</span>
-<span class="comment">// /// which the server also knows.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handshake</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">RequestHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span>, <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
     <span class="ident">verify_handshake</span>(<span class="ident">req</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">handshake_response</span>(<span class="ident">req</span>))
 }
 
 <span class="doccomment">/// Verify `WebSocket` handshake request.</span>
-<span class="comment">// /// `protocols` is a sequence of known protocols. On successful handshake,</span>
-<span class="comment">// /// the returned response headers contain the first protocol in this list</span>
-<span class="comment">// /// which the server also knows.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">verify_handshake</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">RequestHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
     <span class="comment">// WebSocket accepts only GET</span>
     <span class="kw">if</span> <span class="ident">req</span>.<span class="ident">method</span> <span class="op">!</span><span class="op">=</span> <span class="ident">Method</span>::<span class="ident">GET</span> {

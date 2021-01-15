@@ -37,13 +37,11 @@
 <span id="36">36</span>
 <span id="37">37</span>
 <span id="38">38</span>
-<span id="39">39</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>;
 
-<span class="comment">// These values are taken from hyper/src/proto/h2/client.rs</span>
-<span class="kw">const</span> <span class="ident">DEFAULT_H2_CONN_WINDOW</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">2</span>; <span class="comment">// 2mb</span>
-<span class="kw">const</span> <span class="ident">DEFAULT_H2_STREAM_WINDOW</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">1024</span>; <span class="comment">// 1mb</span>
+<span class="kw">const</span> <span class="ident">DEFAULT_H2_CONN_WINDOW</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">2</span>; <span class="comment">// 2MB</span>
+<span class="kw">const</span> <span class="ident">DEFAULT_H2_STREAM_WINDOW</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">1024</span>; <span class="comment">// 1MB</span>
 
 <span class="doccomment">/// Connector configuration</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>

@@ -194,7 +194,6 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
-<span id="196">196</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! For middleware documentation, see [`Compat`].</span>
 
@@ -308,8 +307,7 @@
     }
 }
 
-<span class="comment">// trait for convert ServiceResponse&#39;s ResponseBody&lt;B&gt; generic type</span>
-<span class="comment">// to ResponseBody&lt;Body&gt;</span>
+<span class="doccomment">/// Convert `ServiceResponse`&#39;s `ResponseBody&lt;B&gt;` generic type to `ResponseBody&lt;Body&gt;`.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">MapServiceResponseBody</span> {
     <span class="kw">fn</span> <span class="ident">map_body</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ServiceResponse</span>;
 }
