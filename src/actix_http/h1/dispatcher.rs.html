@@ -1305,7 +1305,6 @@
 <span id="1304">1304</span>
 <span id="1305">1305</span>
 <span id="1306">1306</span>
-<span id="1307">1307</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::<span class="ident">RefCell</span>,
@@ -1954,83 +1953,82 @@
         <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
-        <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">is_none</span>() {
-            <span class="comment">// shutdown timeout</span>
-            <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>) {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">interval</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">client_disconnect_timer</span>() {
-                    <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">set</span>(<span class="prelude-val">Some</span>(<span class="ident">sleep_until</span>(<span class="ident">interval</span>)));
-                } <span class="kw">else</span> {
-                    <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">READ_DISCONNECT</span>);
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">take</span>() {
-                        <span class="ident">payload</span>.<span class="ident">set_error</span>(<span class="ident">PayloadError</span>::<span class="ident">Incomplete</span>(<span class="prelude-val">None</span>));
-                    }
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
-                }
-            } <span class="kw">else</span> {
-                <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
-            }
-        }
 
-        <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">poll</span>(<span class="ident">cx</span>) {
-            <span class="ident">Poll</span>::<span class="ident">Ready</span>(()) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="comment">// if we get timeout during shutdown, drop connection</span>
+        <span class="comment">// when a branch is not explicit return early it&#39;s meant to fall through</span>
+        <span class="comment">// and return as Ok(())</span>
+        <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="comment">// conditionally go into shutdown timeout</span>
                 <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>) {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">DisconnectTimeout</span>);
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>().<span class="ident">unwrap</span>().<span class="ident">deadline</span>()
-                    <span class="op">&gt;</span><span class="op">=</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span>
-                {
-                    <span class="comment">// check for any outstanding tasks</span>
-                    <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">this</span>.<span class="ident">write_buf</span>.<span class="ident">is_empty</span>() {
-                        <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">STARTED</span>) {
-                            <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Keep-alive timeout, close connection&quot;</span>);
-                            <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>);
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">client_disconnect_timer</span>()
+                    {
+                        <span class="comment">// write client disconnect time out and poll again to</span>
+                        <span class="comment">// go into Some&lt;Pin&lt;&amp;mut Sleep&gt;&gt; branch</span>
+                        <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">set</span>(<span class="prelude-val">Some</span>(<span class="ident">sleep_until</span>(<span class="ident">deadline</span>)));
+                        <span class="kw">return</span> <span class="self">self</span>.<span class="ident">poll_keepalive</span>(<span class="ident">cx</span>);
+                    } <span class="kw">else</span> {
+                        <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">READ_DISCONNECT</span>);
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">take</span>() {
+                            <span class="ident">payload</span>.<span class="ident">set_error</span>(<span class="ident">PayloadError</span>::<span class="ident">Incomplete</span>(<span class="prelude-val">None</span>));
+                        }
+                    }
+                }
+            }
+            <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="comment">// only operate when keep-alive timer is resolved.</span>
+                <span class="kw">if</span> <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>).<span class="ident">is_ready</span>() {
+                    <span class="comment">// got timeout during shutdown, drop connection</span>
+                    <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>) {
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">DisconnectTimeout</span>);
+                    <span class="comment">// exceed deadline. check for any outstanding tasks</span>
+                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">timer</span>.<span class="ident">deadline</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span> {
+                        <span class="comment">// have no task at hand.</span>
+                        <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">this</span>.<span class="ident">write_buf</span>.<span class="ident">is_empty</span>() {
+                            <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">STARTED</span>) {
+                                <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Keep-alive timeout, close connection&quot;</span>);
+                                <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>);
 
-                            <span class="comment">// start shutdown timer</span>
-                            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
-                                <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">client_disconnect_timer</span>()
-                            {
-                                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span>
-                                    <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>()
+                                <span class="comment">// start shutdown timeout</span>
+                                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
+                                    <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">client_disconnect_timer</span>()
                                 {
                                     <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">deadline</span>);
                                     <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
+                                } <span class="kw">else</span> {
+                                    <span class="comment">// no shutdown timeout, drop socket</span>
+                                    <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">WRITE_DISCONNECT</span>);
                                 }
                             } <span class="kw">else</span> {
-                                <span class="comment">// no shutdown timeout, drop socket</span>
-                                <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">WRITE_DISCONNECT</span>);
-                                <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                                <span class="comment">// timeout on first request (slow request) return 408</span>
+                                <span class="kw">if</span> <span class="op">!</span><span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">STARTED</span>) {
+                                    <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Slow request timeout&quot;</span>);
+                                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_response</span>(
+                                        <span class="ident">Response</span>::<span class="ident">RequestTimeout</span>().<span class="ident">finish</span>().<span class="ident">drop_body</span>(),
+                                        <span class="ident">ResponseBody</span>::<span class="ident">Other</span>(<span class="ident">Body</span>::<span class="ident">Empty</span>),
+                                    );
+                                    <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">project</span>();
+                                } <span class="kw">else</span> {
+                                    <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Keep-alive connection timeout&quot;</span>);
+                                }
+                                <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">STARTED</span> <span class="op">|</span> <span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>);
+                                <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">State</span>::<span class="prelude-val">None</span>);
                             }
-                        } <span class="kw">else</span> {
-                            <span class="comment">// timeout on first request (slow request) return 408</span>
-                            <span class="kw">if</span> <span class="op">!</span><span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">STARTED</span>) {
-                                <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Slow request timeout&quot;</span>);
-                                <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_response</span>(
-                                    <span class="ident">Response</span>::<span class="ident">RequestTimeout</span>().<span class="ident">finish</span>().<span class="ident">drop_body</span>(),
-                                    <span class="ident">ResponseBody</span>::<span class="ident">Other</span>(<span class="ident">Body</span>::<span class="ident">Empty</span>),
-                                );
-                                <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
-                            } <span class="kw">else</span> {
-                                <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Keep-alive connection timeout&quot;</span>);
-                            }
-                            <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">STARTED</span> <span class="op">|</span> <span class="ident">Flags</span>::<span class="ident">SHUTDOWN</span>);
-                            <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">State</span>::<span class="prelude-val">None</span>);
-                        }
-                    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
-                        <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">keep_alive_expire</span>()
-                    {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
+                        <span class="comment">// still have unfinished task. try to reset and register keep-alive.</span>
+                        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">deadline</span>) <span class="op">=</span>
+                            <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">config</span>().<span class="ident">keep_alive_expire</span>()
+                        {
                             <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">deadline</span>);
                             <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
                         }
+                    <span class="comment">// timer resolved but still have not met the keep-alive expire deadline.</span>
+                    <span class="comment">// reset and register for later wakeup.</span>
+                    } <span class="kw">else</span> {
+                        <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span>);
+                        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
                     }
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">timer</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">ka_timer</span>.<span class="ident">as_mut</span>().<span class="ident">as_pin_mut</span>() {
-                    <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">ka_expire</span>);
-                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
                 }
             }
-            <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> {}
         }
-
         <span class="prelude-val">Ok</span>(())
     }
 }
