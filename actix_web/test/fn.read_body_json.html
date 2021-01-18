@@ -18,7 +18,7 @@
             <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>)
                 .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> <span class="kw">async</span> {
                     <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
-                        .<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())})
+                        .<span class="ident">json</span>(<span class="ident">person</span>)})
                     ))
     ).<span class="kw">await</span>;
 

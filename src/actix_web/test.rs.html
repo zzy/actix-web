@@ -1299,14 +1299,6 @@
 <span id="1298">1298</span>
 <span id="1299">1299</span>
 <span id="1300">1300</span>
-<span id="1301">1301</span>
-<span id="1302">1302</span>
-<span id="1303">1303</span>
-<span id="1304">1304</span>
-<span id="1305">1305</span>
-<span id="1306">1306</span>
-<span id="1307">1307</span>
-<span id="1308">1308</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
@@ -1549,7 +1541,7 @@
 <span class="doccomment">///             web::resource(&quot;/people&quot;)</span>
 <span class="doccomment">///                 .route(web::post().to(|person: web::Json&lt;Person&gt;| async {</span>
 <span class="doccomment">///                     HttpResponse::Ok()</span>
-<span class="doccomment">///                         .json(person.into_inner())})</span>
+<span class="doccomment">///                         .json(person)})</span>
 <span class="doccomment">///                     ))</span>
 <span class="doccomment">///     ).await;</span>
 <span class="doccomment">///</span>
@@ -1609,7 +1601,7 @@
 <span class="doccomment">///             web::resource(&quot;/people&quot;)</span>
 <span class="doccomment">///                 .route(web::post().to(|person: web::Json&lt;Person&gt;| async {</span>
 <span class="doccomment">///                     HttpResponse::Ok()</span>
-<span class="doccomment">///                         .json(person.into_inner())})</span>
+<span class="doccomment">///                         .json(person)})</span>
 <span class="doccomment">///                     ))</span>
 <span class="doccomment">///     ).await;</span>
 <span class="doccomment">///</span>
@@ -2431,9 +2423,7 @@
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_response_json</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
-            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
-                <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
-            }),
+            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>)),
         )))
         .<span class="kw">await</span>;
 
@@ -2452,9 +2442,7 @@
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_body_json</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
-            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
-                <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
-            }),
+            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>)),
         )))
         .<span class="kw">await</span>;
 
@@ -2474,9 +2462,7 @@
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_request_response_form</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
-            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
-                <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
-            }),
+            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>)),
         )))
         .<span class="kw">await</span>;
 
@@ -2500,9 +2486,7 @@
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_request_response_json</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/people&quot;</span>).<span class="ident">route</span>(
-            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> {
-                <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>.<span class="ident">into_inner</span>())
-            }),
+            <span class="ident">web</span>::<span class="ident">post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">person</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">json</span>(<span class="ident">person</span>)),
         )))
         .<span class="kw">await</span>;
 
