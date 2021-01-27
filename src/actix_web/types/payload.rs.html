@@ -519,6 +519,10 @@
 <span id="518">518</span>
 <span id="519">519</span>
 <span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Basic binary and string payload extractors.</span>
 
@@ -811,10 +815,12 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">l</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>::<span class="ident">CONTENT_LENGTH</span>) {
             <span class="kw">match</span> <span class="ident">l</span>.<span class="ident">to_str</span>() {
                 <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">s</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">l</span>) <span class="kw">if</span> <span class="ident">l</span> <span class="op">&gt;</span> <span class="ident">DEFAULT_CONFIG_LIMIT</span> <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">PayloadError</span>::<span class="ident">Overflow</span>)
+                    <span class="prelude-val">Ok</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">if</span> <span class="ident">l</span> <span class="op">&gt;</span> <span class="ident">DEFAULT_CONFIG_LIMIT</span> {
+                            <span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">PayloadError</span>::<span class="ident">Overflow</span>);
+                        }
+                        <span class="ident">length</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">l</span>)
                     }
-                    <span class="prelude-val">Ok</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">length</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">l</span>),
                     <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">PayloadError</span>::<span class="ident">UnknownLength</span>),
                 },
                 <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">PayloadError</span>::<span class="ident">UnknownLength</span>),
@@ -838,9 +844,11 @@
     <span class="doccomment">/// Change max size of payload. By default max size is 256kB</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">l</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">length</span> {
-            <span class="kw">if</span> <span class="ident">l</span> <span class="op">&gt;</span> <span class="ident">limit</span> {
-                <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">PayloadError</span>::<span class="ident">Overflow</span>);
-            }
+            <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">l</span> <span class="op">&gt;</span> <span class="ident">limit</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">PayloadError</span>::<span class="ident">Overflow</span>)
+            } <span class="kw">else</span> {
+                <span class="prelude-val">None</span>
+            };
         }
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="ident">limit</span>;
         <span class="self">self</span>
