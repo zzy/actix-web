@@ -492,18 +492,6 @@
 <span id="489">489</span>
 <span id="490">490</span>
 <span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
-<span id="495">495</span>
-<span id="496">496</span>
-<span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::{<span class="ident">File</span>, <span class="ident">Metadata</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
@@ -805,13 +793,7 @@
                 <span class="ident">res</span>.<span class="ident">encoding</span>(<span class="ident">current_encoding</span>);
             }
 
-            <span class="kw">let</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">ChunkedReadFile</span> {
-                <span class="ident">size</span>: <span class="self">self</span>.<span class="ident">md</span>.<span class="ident">len</span>(),
-                <span class="ident">offset</span>: <span class="number">0</span>,
-                <span class="ident">file</span>: <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">file</span>),
-                <span class="ident">fut</span>: <span class="prelude-val">None</span>,
-                <span class="ident">counter</span>: <span class="number">0</span>,
-            };
+            <span class="kw">let</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">ChunkedReadFile</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">md</span>.<span class="ident">len</span>(), <span class="number">0</span>, <span class="self">self</span>.<span class="ident">file</span>);
 
             <span class="kw">return</span> <span class="ident">res</span>.<span class="ident">streaming</span>(<span class="ident">reader</span>);
         }
@@ -933,13 +915,7 @@
             <span class="kw">return</span> <span class="ident">resp</span>.<span class="ident">status</span>(<span class="ident">StatusCode</span>::<span class="ident">NOT_MODIFIED</span>).<span class="ident">finish</span>();
         }
 
-        <span class="kw">let</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">ChunkedReadFile</span> {
-            <span class="ident">offset</span>,
-            <span class="ident">size</span>: <span class="ident">length</span>,
-            <span class="ident">file</span>: <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">file</span>),
-            <span class="ident">fut</span>: <span class="prelude-val">None</span>,
-            <span class="ident">counter</span>: <span class="number">0</span>,
-        };
+        <span class="kw">let</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">ChunkedReadFile</span>::<span class="ident">new</span>(<span class="ident">length</span>, <span class="ident">offset</span>, <span class="self">self</span>.<span class="ident">file</span>);
 
         <span class="kw">if</span> <span class="ident">offset</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">length</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">md</span>.<span class="ident">len</span>() {
             <span class="ident">resp</span>.<span class="ident">status</span>(<span class="ident">StatusCode</span>::<span class="ident">PARTIAL_CONTENT</span>);
