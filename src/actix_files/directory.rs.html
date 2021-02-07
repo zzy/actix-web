@@ -119,8 +119,8 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>::<span class="ident">Write</span>, <span class="ident">fs</span>::<span class="ident">DirEntry</span>, <span class="ident">io</span>, <span class="ident">path</span>::<span class="ident">Path</span>, <span class="ident">path</span>::<span class="ident">PathBuf</span>};
 
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">dev</span>::<span class="ident">ServiceResponse</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>};
+<span class="kw">use</span> <span class="ident">askama_escape</span>::{<span class="ident">escape</span> <span class="kw">as</span> <span class="ident">escape_html_entity</span>, <span class="ident">Html</span>};
 <span class="kw">use</span> <span class="ident">percent_encoding</span>::{<span class="ident">utf8_percent_encode</span>, <span class="ident">CONTROLS</span>};
-<span class="kw">use</span> <span class="ident">v_htmlescape</span>::<span class="ident">escape</span> <span class="kw">as</span> <span class="ident">escape_html_entity</span>;
 
 <span class="doccomment">/// A directory; responds with the generated directory listing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -168,7 +168,7 @@
 <span class="comment">// &quot; -- &amp;quot;  &amp; -- &amp;amp;  &#39; -- &amp;#x27;  &lt; -- &amp;lt;  &gt; -- &amp;gt;  / -- &amp;#x2f;</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">encode_file_name</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="ident">escape_html_entity</span>(<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry</span>.<span class="ident">file_name</span>().<span class="ident">to_string_lossy</span>())
+        <span class="ident">escape_html_entity</span>(<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry</span>.<span class="ident">file_name</span>().<span class="ident">to_string_lossy</span>(), <span class="ident">Html</span>)
     };
 }
 
