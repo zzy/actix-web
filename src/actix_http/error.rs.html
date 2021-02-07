@@ -1208,6 +1208,13 @@
 <span id="1207">1207</span>
 <span id="1208">1208</span>
 <span id="1209">1209</span>
+<span id="1210">1210</span>
+<span id="1211">1211</span>
+<span id="1212">1212</span>
+<span id="1213">1213</span>
+<span id="1214">1214</span>
+<span id="1215">1215</span>
+<span id="1216">1216</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Error and Result module</span>
 
@@ -1358,7 +1365,10 @@
     }
 }
 
-<span class="doccomment">/// Return `GATEWAY_TIMEOUT` for `TimeoutError`</span>
+<span class="doccomment">/// Inspects the underlying enum and returns an appropriate status code.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// If the variant is [`TimeoutError::Service`], the error code of the service is returned.</span>
+<span class="doccomment">/// Otherwise, [`StatusCode::GATEWAY_TIMEOUT`] is returned.</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ResponseError</span><span class="op">&gt;</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">TimeoutError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="kw">match</span> <span class="self">self</span> {
@@ -1372,41 +1382,44 @@
 <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;UnknownError&quot;</span>)]</span>
 <span class="kw">struct</span> <span class="ident">UnitError</span>;
 
-<span class="doccomment">/// `InternalServerError` for `UnitError`</span>
+<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`UnitError`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">UnitError</span> {}
 
-<span class="doccomment">/// `InternalServerError` for `JsonError`</span>
+<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`JsonError`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">JsonError</span> {}
 
-<span class="doccomment">/// `InternalServerError` for `FormError`</span>
+<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`FormError`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">FormError</span> {}
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
-<span class="doccomment">/// `InternalServerError` for `openssl::ssl::Error`</span>
+<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`actix_tls::accept::openssl::SslError`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">actix_tls</span>::<span class="ident">accept</span>::<span class="ident">openssl</span>::<span class="ident">SslError</span> {}
 
-<span class="doccomment">/// Return `BAD_REQUEST` for `de::value::Error`</span>
+<span class="doccomment">/// Returns [`StatusCode::BAD_REQUEST`] for [`DeError`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">DeError</span> {
     <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
 
-<span class="doccomment">/// `InternalServerError` for `Canceled`</span>
+<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`Canceled`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Canceled</span> {}
 
-<span class="doccomment">/// Return `BAD_REQUEST` for `Utf8Error`</span>
+<span class="doccomment">/// Returns [`StatusCode::BAD_REQUEST`] for [`Utf8Error`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Utf8Error</span> {
     <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
 
-<span class="doccomment">/// Return `InternalServerError` for `HttpError`,</span>
-<span class="doccomment">/// Response generation can return `HttpError`, so it is internal error</span>
+<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`HttpError`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">HttpError</span> {}
 
-<span class="doccomment">/// Return `InternalServerError` for `io::Error`</span>
+<span class="doccomment">/// Inspects the underlying [`io::ErrorKind`] and returns an appropriate status code.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// If the error is [`io::ErrorKind::NotFound`], [`StatusCode::NOT_FOUND`] is returned. If the</span>
+<span class="doccomment">/// error is [`io::ErrorKind::PermissionDenied`], [`StatusCode::FORBIDDEN`] is returned. Otherwise,</span>
+<span class="doccomment">/// [`StatusCode::INTERNAL_SERVER_ERROR`] is returned.</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">io</span>::<span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span>() {
@@ -1417,7 +1430,7 @@
     }
 }
 
-<span class="doccomment">/// `BadRequest` for `InvalidHeaderValue`</span>
+<span class="doccomment">/// Returns [`StatusCode::BAD_REQUEST`] for [`header::InvalidHeaderValue`].</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">header</span>::<span class="ident">InvalidHeaderValue</span> {
     <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
@@ -2174,8 +2187,9 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actors&quot;</span>)]</span>
-<span class="doccomment">/// `InternalServerError` for `actix::MailboxError`</span>
-<span class="doccomment">/// This is supported on feature=`actors` only</span>
+<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`actix::MailboxError`].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This is only supported when the feature `actors` is enabled.</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">actix</span>::<span class="ident">MailboxError</span> {}
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
