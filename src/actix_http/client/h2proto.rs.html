@@ -202,6 +202,7 @@
 <span id="201">201</span>
 <span id="202">202</span>
 <span id="203">203</span>
+<span id="204">204</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
@@ -227,9 +228,10 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">connection</span>::{<span class="ident">ConnectionType</span>, <span class="ident">IoConnection</span>};
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">error</span>::<span class="ident">SendRequestError</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">pool</span>::<span class="ident">Acquired</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">client</span>::<span class="ident">connection</span>::<span class="ident">H2Connection</span>;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>(
-    <span class="kw-2">mut</span> <span class="ident">io</span>: <span class="ident">SendRequest</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
+    <span class="kw-2">mut</span> <span class="ident">io</span>: <span class="ident">H2Connection</span>,
     <span class="ident">head</span>: <span class="ident">RequestHeadType</span>,
     <span class="ident">body</span>: <span class="ident">B</span>,
     <span class="ident">created</span>: <span class="ident">time</span>::<span class="ident">Instant</span>,
@@ -378,7 +380,7 @@
 
 <span class="doccomment">/// release SendRequest object</span>
 <span class="kw">fn</span> <span class="ident">release</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(
-    <span class="ident">io</span>: <span class="ident">SendRequest</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
+    <span class="ident">io</span>: <span class="ident">H2Connection</span>,
     <span class="ident">pool</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Acquired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">created</span>: <span class="ident">time</span>::<span class="ident">Instant</span>,
     <span class="ident">close</span>: <span class="ident">bool</span>,
