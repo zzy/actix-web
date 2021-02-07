@@ -636,9 +636,9 @@
     <span class="kw">fn</span> <span class="ident">build_ssl</span>(<span class="ident">protocols</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SslConnector</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">ClientConfig</span>::<span class="ident">new</span>();
         <span class="ident">config</span>.<span class="ident">set_protocols</span>(<span class="kw-2">&amp;</span><span class="ident">protocols</span>);
-        <span class="ident">config</span>
-            .<span class="ident">root_store</span>
-            .<span class="ident">add_server_trust_anchors</span>(<span class="kw-2">&amp;</span><span class="ident">actix_tls</span>::<span class="ident">accept</span>::<span class="ident">rustls</span>::<span class="ident">TLS_SERVER_ROOTS</span>);
+        <span class="ident">config</span>.<span class="ident">root_store</span>.<span class="ident">add_server_trust_anchors</span>(
+            <span class="kw-2">&amp;</span><span class="ident">actix_tls</span>::<span class="ident">connect</span>::<span class="ident">ssl</span>::<span class="ident">rustls</span>::<span class="ident">TLS_SERVER_ROOTS</span>,
+        );
         <span class="ident">SslConnector</span>::<span class="ident">Rustls</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">config</span>))
     }
 
@@ -928,11 +928,11 @@
             <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IoConnection</span><span class="op">&lt;</span><span class="ident">Io</span><span class="op">&gt;</span>, <span class="ident">ConnectError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="op">&gt;</span>;
 
-        <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="ident">tcp_pool</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">req</span>: <span class="ident">Connect</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+        <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">Connect</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
             <span class="kw">match</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">scheme_str</span>() {
                 <span class="prelude-val">Some</span>(<span class="string">&quot;https&quot;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&quot;wss&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">Either</span>::<span class="ident">Right</span>(<span class="ident">err</span>(<span class="ident">ConnectError</span>::<span class="ident">SslIsNotSupported</span>))
@@ -996,11 +996,11 @@
             <span class="ident">InnerConnectorResponseB</span><span class="op">&lt;</span><span class="ident">T2</span>, <span class="ident">Io1</span>, <span class="ident">Io2</span><span class="op">&gt;</span>,
         <span class="op">&gt;</span>;
 
-        <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="ident">tcp_pool</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">req</span>: <span class="ident">Connect</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+        <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">Connect</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
             <span class="kw">match</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">scheme_str</span>() {
                 <span class="prelude-val">Some</span>(<span class="string">&quot;https&quot;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&quot;wss&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Either</span>::<span class="ident">Right</span>(<span class="ident">InnerConnectorResponseB</span> {
                     <span class="ident">fut</span>: <span class="self">self</span>.<span class="ident">ssl_pool</span>.<span class="ident">call</span>(<span class="ident">req</span>),

@@ -525,10 +525,6 @@
 <span id="524">524</span>
 <span id="525">525</span>
 <span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Websockets client</span>
 <span class="doccomment">//!</span>
@@ -857,11 +853,7 @@
         <span class="kw">let</span> <span class="ident">max_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">max_size</span>;
         <span class="kw">let</span> <span class="ident">server_mode</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">server_mode</span>;
 
-        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>
-            .<span class="ident">config</span>
-            .<span class="ident">connector</span>
-            .<span class="ident">borrow_mut</span>()
-            .<span class="ident">open_tunnel</span>(<span class="ident">head</span>, <span class="self">self</span>.<span class="ident">addr</span>);
+        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">connector</span>.<span class="ident">open_tunnel</span>(<span class="ident">head</span>, <span class="self">self</span>.<span class="ident">addr</span>);
 
         <span class="comment">// set request timeout</span>
         <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">to</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">timeout</span> {

@@ -430,7 +430,7 @@
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// use actix_web::{web, middleware, App};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// # actix_web::rt::System::new(&quot;doctest&quot;).block_on(async {</span>
+<span class="doccomment">/// # actix_web::rt::System::new().block_on(async {</span>
 <span class="doccomment">/// let app = App::new()</span>
 <span class="doccomment">///     .wrap(middleware::NormalizePath::default())</span>
 <span class="doccomment">///     .route(&quot;/test&quot;, web::get().to(|| async { &quot;test&quot; }))</span>
@@ -439,22 +439,22 @@
 <span class="doccomment">/// use actix_web::http::StatusCode;</span>
 <span class="doccomment">/// use actix_web::test::{call_service, init_service, TestRequest};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let mut app = init_service(app).await;</span>
+<span class="doccomment">/// let app = init_service(app).await;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let req = TestRequest::with_uri(&quot;/test&quot;).to_request();</span>
-<span class="doccomment">/// let res = call_service(&amp;mut app, req).await;</span>
+<span class="doccomment">/// let res = call_service(&amp;app, req).await;</span>
 <span class="doccomment">/// assert_eq!(res.status(), StatusCode::OK);</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let req = TestRequest::with_uri(&quot;/test/&quot;).to_request();</span>
-<span class="doccomment">/// let res = call_service(&amp;mut app, req).await;</span>
+<span class="doccomment">/// let res = call_service(&amp;app, req).await;</span>
 <span class="doccomment">/// assert_eq!(res.status(), StatusCode::OK);</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let req = TestRequest::with_uri(&quot;/unmatchable&quot;).to_request();</span>
-<span class="doccomment">/// let res = call_service(&amp;mut app, req).await;</span>
+<span class="doccomment">/// let res = call_service(&amp;app, req).await;</span>
 <span class="doccomment">/// assert_eq!(res.status(), StatusCode::NOT_FOUND);</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let req = TestRequest::with_uri(&quot;/unmatchable/&quot;).to_request();</span>
-<span class="doccomment">/// let res = call_service(&amp;mut app, req).await;</span>
+<span class="doccomment">/// let res = call_service(&amp;app, req).await;</span>
 <span class="doccomment">/// assert_eq!(res.status(), StatusCode::NOT_FOUND);</span>
 <span class="doccomment">/// # })</span>
 <span class="doccomment">/// ```</span>
@@ -505,7 +505,7 @@
 
     <span class="ident">actix_service</span>::<span class="macro">forward_ready</span><span class="macro">!</span>(<span class="ident">service</span>);
 
-    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">head_mut</span>();
 
         <span class="kw">let</span> <span class="ident">original_path</span> <span class="op">=</span> <span class="ident">head</span>.<span class="ident">uri</span>.<span class="ident">path</span>();
@@ -568,7 +568,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_wrap</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
+        <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>()
                 .<span class="ident">wrap</span>(<span class="ident">NormalizePath</span>::<span class="ident">default</span>())
                 .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>))
@@ -577,37 +577,37 @@
         .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/?query=test&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;///&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/v1//something////&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req2</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;//v1/something&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res2</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req2</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res2</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req2</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res2</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req3</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;//v1//////something&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res3</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req3</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res3</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req3</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res3</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req4</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/v1//something&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res4</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req4</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res4</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req4</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res4</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">trim_trailing_slashes</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
+        <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>()
                 .<span class="ident">wrap</span>(<span class="ident">NormalizePath</span>(<span class="ident">TrailingSlash</span>::<span class="ident">Trim</span>))
                 .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>))
@@ -617,37 +617,37 @@
 
         <span class="comment">// root paths should still work</span>
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/?query=test&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;///&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/v1/something////&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req2</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/v1/something/&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res2</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req2</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res2</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req2</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res2</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req3</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;//v1//something//&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res3</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req3</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res3</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req3</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res3</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
 
         <span class="kw">let</span> <span class="ident">req4</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;//v1//something&quot;</span>).<span class="ident">to_request</span>();
-        <span class="kw">let</span> <span class="ident">res4</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req4</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">res4</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req4</span>).<span class="kw">await</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res4</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">keep_trailing_slash_unchanged</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
+        <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>()
                 .<span class="ident">wrap</span>(<span class="ident">NormalizePath</span>(<span class="ident">TrailingSlash</span>::<span class="ident">MergeOnly</span>))
                 .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>))
@@ -672,7 +672,7 @@
 
         <span class="kw">for</span> (<span class="ident">path</span>, <span class="ident">success</span>) <span class="kw">in</span> <span class="ident">tests</span> {
             <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="ident">path</span>).<span class="ident">to_request</span>();
-            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>(), <span class="ident">success</span>);
         }
     }
@@ -684,7 +684,7 @@
             <span class="ident">ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>())))
         };
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">normalize</span> <span class="op">=</span> <span class="ident">NormalizePath</span>::<span class="ident">default</span>()
+        <span class="kw">let</span> <span class="ident">normalize</span> <span class="op">=</span> <span class="ident">NormalizePath</span>::<span class="ident">default</span>()
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
@@ -715,7 +715,7 @@
             <span class="ident">ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>())))
         };
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">normalize</span> <span class="op">=</span> <span class="ident">NormalizePath</span>::<span class="ident">default</span>()
+        <span class="kw">let</span> <span class="ident">normalize</span> <span class="op">=</span> <span class="ident">NormalizePath</span>::<span class="ident">default</span>()
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
@@ -732,7 +732,7 @@
             <span class="ident">ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>())))
         };
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">normalize</span> <span class="op">=</span> <span class="ident">NormalizePath</span>::<span class="ident">default</span>()
+        <span class="kw">let</span> <span class="ident">normalize</span> <span class="op">=</span> <span class="ident">NormalizePath</span>::<span class="ident">default</span>()
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();

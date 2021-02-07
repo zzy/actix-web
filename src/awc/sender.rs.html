@@ -319,8 +319,6 @@
 <span id="318">318</span>
 <span id="319">319</span>
 <span id="320">320</span>
-<span id="321">321</span>
-<span id="322">322</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>;
@@ -507,15 +505,13 @@
     <span class="kw">where</span>
         <span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">connector</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">connector</span>.<span class="ident">borrow_mut</span>();
-
         <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">RequestSender</span>::<span class="ident">Owned</span>(<span class="ident">head</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">connector</span>.<span class="ident">send_request</span>(<span class="ident">head</span>, <span class="ident">body</span>.<span class="ident">into</span>(), <span class="ident">addr</span>)
+                <span class="ident">config</span>.<span class="ident">connector</span>.<span class="ident">send_request</span>(<span class="ident">head</span>, <span class="ident">body</span>.<span class="ident">into</span>(), <span class="ident">addr</span>)
             }
-            <span class="ident">RequestSender</span>::<span class="ident">Rc</span>(<span class="ident">head</span>, <span class="ident">extra_headers</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">connector</span>.<span class="ident">send_request_extra</span>(<span class="ident">head</span>, <span class="ident">extra_headers</span>, <span class="ident">body</span>.<span class="ident">into</span>(), <span class="ident">addr</span>)
-            }
+            <span class="ident">RequestSender</span>::<span class="ident">Rc</span>(<span class="ident">head</span>, <span class="ident">extra_headers</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">config</span>
+                .<span class="ident">connector</span>
+                .<span class="ident">send_request_extra</span>(<span class="ident">head</span>, <span class="ident">extra_headers</span>, <span class="ident">body</span>.<span class="ident">into</span>(), <span class="ident">addr</span>),
         };
 
         <span class="ident">SendClientRequest</span>::<span class="ident">new</span>(<span class="ident">fut</span>, <span class="ident">response_decompress</span>, <span class="ident">timeout</span>.<span class="ident">or</span>(<span class="ident">config</span>.<span class="ident">timeout</span>))

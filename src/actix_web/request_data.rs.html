@@ -279,7 +279,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">req_data_extractor</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>()
                 .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">srv</span><span class="op">|</span> {
                     <span class="kw">if</span> <span class="ident">req</span>.<span class="ident">method</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">Method</span>::<span class="ident">POST</span> {
@@ -319,7 +319,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">req_data_internal_mutability</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>()
                 .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">srv</span><span class="op">|</span> {
                     <span class="kw">let</span> <span class="ident">data_before</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="number">42u32</span>));

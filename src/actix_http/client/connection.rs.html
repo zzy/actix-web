@@ -266,6 +266,7 @@
 <span id="265">265</span>
 <span id="266">266</span>
 <span id="267">267</span>
+<span id="268">268</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
@@ -274,7 +275,8 @@
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Framed</span>, <span class="ident">ReadBuf</span>};
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
-<span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::{<span class="ident">err</span>, <span class="ident">Either</span>, <span class="ident">FutureExt</span>, <span class="ident">LocalBoxFuture</span>, <span class="ident">Ready</span>};
+<span class="kw">use</span> <span class="ident">futures_core</span>::<span class="ident">future</span>::<span class="ident">LocalBoxFuture</span>;
+<span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::{<span class="ident">err</span>, <span class="ident">Either</span>, <span class="ident">FutureExt</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">h2</span>::<span class="ident">client</span>::<span class="ident">SendRequest</span>;
 <span class="kw">use</span> <span class="ident">pin_project</span>::<span class="ident">pin_project</span>;
 

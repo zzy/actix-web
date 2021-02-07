@@ -392,7 +392,7 @@
 
     <span class="ident">actix_service</span>::<span class="macro">forward_ready</span><span class="macro">!</span>(<span class="ident">service</span>);
 
-    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">req</span>);
 
@@ -449,7 +449,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_default_headers</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>()
+        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>()
             .<span class="ident">header</span>(<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;0001&quot;</span>)
             .<span class="ident">new_transform</span>(<span class="ident">ok_service</span>())
             .<span class="kw">await</span>
@@ -467,7 +467,7 @@
                     .<span class="ident">finish</span>(),
             ))
         };
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>()
+        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>()
             .<span class="ident">header</span>(<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;0001&quot;</span>)
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>
@@ -480,7 +480,7 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_content_type</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span>
             <span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>()));
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>()
+        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>()
             .<span class="ident">add_content_type</span>()
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>

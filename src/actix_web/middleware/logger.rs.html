@@ -1035,7 +1035,7 @@
 
     <span class="ident">actix_service</span>::<span class="macro">forward_ready</span><span class="macro">!</span>(<span class="ident">service</span>);
 
-    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">exclude</span>.<span class="ident">contains</span>(<span class="ident">req</span>.<span class="ident">path</span>())
             <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">exclude_regex</span>.<span class="ident">is_match</span>(<span class="ident">req</span>.<span class="ident">path</span>())
         {
@@ -1425,7 +1425,7 @@
         };
         <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">Logger</span>::<span class="ident">new</span>(<span class="string">&quot;%% %{User-Agent}i %{X-Test}o %{HOME}e %D test&quot;</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
             .<span class="ident">insert_header</span>((
@@ -1448,7 +1448,7 @@
         <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">Logger</span>::<span class="ident">new</span>(<span class="string">&quot;%% %{User-Agent}i %{X-Test}o %{HOME}e %D test&quot;</span>)
             .<span class="ident">exclude_regex</span>(<span class="string">&quot;\\w&quot;</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
             .<span class="ident">insert_header</span>((
@@ -1622,7 +1622,7 @@
                 <span class="ident">captured</span>.<span class="ident">to_owned</span>()
             });
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">test</span>::<span class="ident">ok_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">test</span>::<span class="ident">ok_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>();
         <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();

@@ -236,11 +236,7 @@
 <span id="235">235</span>
 <span id="236">236</span>
 <span id="237">237</span>
-<span id="238">238</span>
-<span id="239">239</span>
-<span id="240">240</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -266,7 +262,7 @@
     <span class="ident">conn_window_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
     <span class="ident">headers</span>: <span class="ident">HeaderMap</span>,
     <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
-    <span class="ident">connector</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">connector</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ClientBuilder</span> {
@@ -298,7 +294,7 @@
         <span class="op">&lt;</span><span class="ident">T</span>::<span class="ident">Response</span> <span class="kw">as</span> <span class="ident">Connection</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
         <span class="ident">T</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
     {
-        <span class="self">self</span>.<span class="ident">connector</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ConnectorWrapper</span>(<span class="ident">connector</span>))));
+        <span class="self">self</span>.<span class="ident">connector</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ConnectorWrapper</span>(<span class="ident">connector</span>)));
         <span class="self">self</span>
     }
 
@@ -424,9 +420,7 @@
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">stream_window_size</span> {
                 <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">initial_window_size</span>(<span class="ident">val</span>)
             };
-            <span class="ident">RefCell</span>::<span class="ident">new</span>(
-                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ConnectorWrapper</span>(<span class="ident">connector</span>.<span class="ident">finish</span>())) <span class="kw">as</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Connect</span><span class="op">&gt;</span>
-            )
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ConnectorWrapper</span>(<span class="ident">connector</span>.<span class="ident">finish</span>())) <span class="kw">as</span> <span class="kw">_</span>
         };
         <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">ClientConfig</span> {
             <span class="ident">headers</span>: <span class="self">self</span>.<span class="ident">headers</span>,
