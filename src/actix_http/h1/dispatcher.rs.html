@@ -1301,6 +1301,25 @@
 <span id="1300">1300</span>
 <span id="1301">1301</span>
 <span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
+<span id="1307">1307</span>
+<span id="1308">1308</span>
+<span id="1309">1309</span>
+<span id="1310">1310</span>
+<span id="1311">1311</span>
+<span id="1312">1312</span>
+<span id="1313">1313</span>
+<span id="1314">1314</span>
+<span id="1315">1315</span>
+<span id="1316">1316</span>
+<span id="1317">1317</span>
+<span id="1318">1318</span>
+<span id="1319">1319</span>
+<span id="1320">1320</span>
+<span id="1321">1321</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1333,8 +1352,8 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadSender</span>, <span class="ident">PayloadStatus</span>};
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Message</span>, <span class="ident">MessageType</span>};
 
-<span class="kw">const</span> <span class="ident">LW_BUFFER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">4096</span>;
-<span class="kw">const</span> <span class="ident">HW_BUFFER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">32_768</span>;
+<span class="kw">const</span> <span class="ident">LW_BUFFER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1024</span>;
+<span class="kw">const</span> <span class="ident">HW_BUFFER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">8</span>;
 <span class="kw">const</span> <span class="ident">MAX_PIPELINED_MESSAGES</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">16</span>;
 
 <span class="macro">bitflags</span><span class="macro">!</span> {
@@ -1708,7 +1727,7 @@
                 },
                 <span class="ident">StateProj</span>::<span class="ident">SendPayload</span>(<span class="kw-2">mut</span> <span class="ident">stream</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">loop</span> {
-                        <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">write_buf</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="ident">HW_BUFFER_SIZE</span> {
+                        <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">write_buf</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="kw">super</span>::<span class="ident">payload</span>::<span class="ident">MAX_BUFFER_SIZE</span> {
                             <span class="kw">match</span> <span class="ident">stream</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>) {
                                 <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">item</span>))) <span class="op">=</span><span class="op">&gt;</span> {
                                     <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">encode</span>(
@@ -1909,11 +1928,25 @@
                         }
                     }
                 }
+                <span class="comment">// decode is partial and buffer is not full yet.</span>
+                <span class="comment">// break and wait for more read.</span>
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
                 <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">Io</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">client_disconnected</span>();
                     <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
                     <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">DispatchError</span>::<span class="ident">Io</span>(<span class="ident">e</span>));
+                    <span class="kw">break</span>;
+                }
+                <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">TooLarge</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">take</span>() {
+                        <span class="ident">payload</span>.<span class="ident">set_error</span>(<span class="ident">PayloadError</span>::<span class="ident">Overflow</span>);
+                    }
+                    <span class="comment">// Requests overflow buffer size should be responded with 413</span>
+                    <span class="ident">this</span>.<span class="ident">messages</span>.<span class="ident">push_back</span>(<span class="ident">DispatcherMessage</span>::<span class="ident">Error</span>(
+                        <span class="ident">Response</span>::<span class="ident">PayloadTooLarge</span>().<span class="ident">finish</span>().<span class="ident">drop_body</span>(),
+                    ));
+                    <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">READ_DISCONNECT</span>);
+                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ParseError</span>::<span class="ident">TooLarge</span>.<span class="ident">into</span>());
                     <span class="kw">break</span>;
                 }
                 <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -2194,12 +2227,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">read_some</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
     <span class="kw">loop</span> {
-        <span class="comment">// If buf is full return but do not disconnect since</span>
-        <span class="comment">// there is more reading to be done</span>
-        <span class="kw">if</span> <span class="ident">buf</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">HW_BUFFER_SIZE</span> {
-            <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="bool-val">false</span>));
-        }
-
+        <span class="comment">// reserve capacity for buffer</span>
         <span class="kw">let</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">capacity</span>() <span class="op">-</span> <span class="ident">buf</span>.<span class="ident">len</span>();
         <span class="kw">if</span> <span class="ident">remaining</span> <span class="op">&lt;</span> <span class="ident">LW_BUFFER_SIZE</span> {
             <span class="ident">buf</span>.<span class="ident">reserve</span>(<span class="ident">HW_BUFFER_SIZE</span> <span class="op">-</span> <span class="ident">remaining</span>);
@@ -2213,6 +2241,16 @@
                 <span class="kw">if</span> <span class="ident">n</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="bool-val">true</span>));
                 } <span class="kw">else</span> {
+                    <span class="comment">// If buf is full return but do not disconnect since</span>
+                    <span class="comment">// there is more reading to be done</span>
+                    <span class="kw">if</span> <span class="ident">buf</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="kw">super</span>::<span class="ident">decoder</span>::<span class="ident">MAX_BUFFER_SIZE</span> {
+                        <span class="comment">// at this point it&#39;s not known io is still scheduled to</span>
+                        <span class="comment">// be waked up. so force wake up dispatcher just in case.</span>
+                        <span class="comment">// TODO: figure out the overhead.</span>
+                        <span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">wake_by_ref</span>();
+                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="bool-val">false</span>));
+                    }
+
                     <span class="ident">read_some</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 }
             }
