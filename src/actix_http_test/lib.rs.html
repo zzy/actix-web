@@ -272,12 +272,18 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://actix.rs/img/logo.png&quot;</span>)]</span>
 <span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://actix.rs/favicon.ico&quot;</span>)]</span>
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tls_openssl</span> <span class="kw">as</span> <span class="ident">openssl</span>;
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">mpsc</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">net</span>, <span class="ident">thread</span>, <span class="ident">time</span>};
@@ -357,7 +363,7 @@
         <span class="kw">let</span> <span class="ident">connector</span> <span class="op">=</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
             {
-                <span class="kw">use</span> <span class="ident">open_ssl</span>::<span class="ident">ssl</span>::{<span class="ident">SslConnector</span>, <span class="ident">SslMethod</span>, <span class="ident">SslVerifyMode</span>};
+                <span class="kw">use</span> <span class="ident">openssl</span>::<span class="ident">ssl</span>::{<span class="ident">SslConnector</span>, <span class="ident">SslMethod</span>, <span class="ident">SslVerifyMode</span>};
 
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">SslConnector</span>::<span class="ident">builder</span>(<span class="ident">SslMethod</span>::<span class="ident">tls</span>()).<span class="ident">unwrap</span>();
                 <span class="ident">builder</span>.<span class="ident">set_verify</span>(<span class="ident">SslVerifyMode</span>::<span class="ident">NONE</span>);
