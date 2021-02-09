@@ -212,6 +212,10 @@
 <span id="211">211</span>
 <span id="212">212</span>
 <span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP requests.</span>
 
@@ -392,13 +396,17 @@
             <span class="self">self</span>.<span class="ident">method</span>(),
             <span class="self">self</span>.<span class="ident">path</span>()
         )<span class="question-mark">?</span>;
+
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">q</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">uri</span>().<span class="ident">query</span>().<span class="ident">as_ref</span>() {
             <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;  query: ?{:?}&quot;</span>, <span class="ident">q</span>)<span class="question-mark">?</span>;
         }
+
         <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;  headers:&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">val</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">headers</span>() {
+
+        <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">val</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">headers</span>().<span class="ident">iter</span>() {
             <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;    {:?}: {:?}&quot;</span>, <span class="ident">key</span>, <span class="ident">val</span>)<span class="question-mark">?</span>;
         }
+
         <span class="prelude-val">Ok</span>(())
     }
 }

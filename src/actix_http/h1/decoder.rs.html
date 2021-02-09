@@ -2077,8 +2077,8 @@
             .<span class="ident">get_all</span>(<span class="ident">SET_COOKIE</span>)
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">to_str</span>().<span class="ident">unwrap</span>().<span class="ident">to_owned</span>())
             .<span class="ident">collect</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">val</span>[<span class="number">1</span>], <span class="string">&quot;c1=cookie1&quot;</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">val</span>[<span class="number">0</span>], <span class="string">&quot;c2=cookie2&quot;</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">val</span>[<span class="number">0</span>], <span class="string">&quot;c1=cookie1&quot;</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">val</span>[<span class="number">1</span>], <span class="string">&quot;c2=cookie2&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

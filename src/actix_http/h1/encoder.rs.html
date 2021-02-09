@@ -652,56 +652,6 @@
 <span id="651">651</span>
 <span id="652">652</span>
 <span id="653">653</span>
-<span id="654">654</span>
-<span id="655">655</span>
-<span id="656">656</span>
-<span id="657">657</span>
-<span id="658">658</span>
-<span id="659">659</span>
-<span id="660">660</span>
-<span id="661">661</span>
-<span id="662">662</span>
-<span id="663">663</span>
-<span id="664">664</span>
-<span id="665">665</span>
-<span id="666">666</span>
-<span id="667">667</span>
-<span id="668">668</span>
-<span id="669">669</span>
-<span id="670">670</span>
-<span id="671">671</span>
-<span id="672">672</span>
-<span id="673">673</span>
-<span id="674">674</span>
-<span id="675">675</span>
-<span id="676">676</span>
-<span id="677">677</span>
-<span id="678">678</span>
-<span id="679">679</span>
-<span id="680">680</span>
-<span id="681">681</span>
-<span id="682">682</span>
-<span id="683">683</span>
-<span id="684">684</span>
-<span id="685">685</span>
-<span id="686">686</span>
-<span id="687">687</span>
-<span id="688">688</span>
-<span id="689">689</span>
-<span id="690">690</span>
-<span id="691">691</span>
-<span id="692">692</span>
-<span id="693">693</span>
-<span id="694">694</span>
-<span id="695">695</span>
-<span id="696">696</span>
-<span id="697">697</span>
-<span id="698">698</span>
-<span id="699">699</span>
-<span id="700">700</span>
-<span id="701">701</span>
-<span id="702">702</span>
-<span id="703">703</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
@@ -849,104 +799,54 @@
             <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">as_str</span>().<span class="ident">as_bytes</span>();
             <span class="kw">let</span> <span class="ident">k_len</span> <span class="op">=</span> <span class="ident">k</span>.<span class="ident">len</span>();
 
-            <span class="kw">match</span> <span class="ident">value</span> {
-                <span class="ident">Value</span>::<span class="ident">One</span>(<span class="kw-2">ref</span> <span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">as_ref</span>();
-                    <span class="kw">let</span> <span class="ident">v_len</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">len</span>();
+            <span class="comment">// TODO: drain?</span>
+            <span class="kw">for</span> <span class="ident">val</span> <span class="kw">in</span> <span class="ident">value</span>.<span class="ident">iter</span>() {
+                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">as_ref</span>();
+                <span class="kw">let</span> <span class="ident">v_len</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">len</span>();
 
-                    <span class="comment">// key length + value length + colon + space + \r\n</span>
-                    <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">k_len</span> <span class="op">+</span> <span class="ident">v_len</span> <span class="op">+</span> <span class="number">4</span>;
+                <span class="comment">// key length + value length + colon + space + \r\n</span>
+                <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">k_len</span> <span class="op">+</span> <span class="ident">v_len</span> <span class="op">+</span> <span class="number">4</span>;
 
-                    <span class="kw">if</span> <span class="ident">len</span> <span class="op">&gt;</span> <span class="ident">remaining</span> {
-                        <span class="comment">// not enough room in buffer for this header; reserve more space</span>
-
-                        <span class="comment">// SAFETY: all the bytes written up to position &quot;pos&quot; are initialized</span>
-                        <span class="comment">// the written byte count and pointer advancement are kept in sync</span>
-                        <span class="kw">unsafe</span> {
-                            <span class="ident">dst</span>.<span class="ident">advance_mut</span>(<span class="ident">pos</span>);
-                        }
-
-                        <span class="ident">pos</span> <span class="op">=</span> <span class="number">0</span>;
-                        <span class="ident">dst</span>.<span class="ident">reserve</span>(<span class="ident">len</span> <span class="op">*</span> <span class="number">2</span>);
-                        <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">capacity</span>() <span class="op">-</span> <span class="ident">dst</span>.<span class="ident">len</span>();
-
-                        <span class="comment">// re-assign buf raw pointer since it&#39;s possible that the buffer was</span>
-                        <span class="comment">// reallocated and/or resized</span>
-                        <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">chunk_mut</span>().<span class="ident">as_mut_ptr</span>();
-                    }
-
-                    <span class="comment">// SAFETY: on each write, it is enough to ensure that the advancement of the</span>
-                    <span class="comment">// cursor matches the number of bytes written</span>
+                <span class="kw">if</span> <span class="ident">len</span> <span class="op">&gt;</span> <span class="ident">remaining</span> {
+                    <span class="comment">// SAFETY: all the bytes written up to position &quot;pos&quot; are initialized</span>
+                    <span class="comment">// the written byte count and pointer advancement are kept in sync</span>
                     <span class="kw">unsafe</span> {
-                        <span class="comment">// use upper Camel-Case</span>
-                        <span class="kw">if</span> <span class="ident">camel_case</span> {
-                            <span class="ident">write_camel_case</span>(<span class="ident">k</span>, <span class="ident">from_raw_parts_mut</span>(<span class="ident">buf</span>, <span class="ident">k_len</span>))
-                        } <span class="kw">else</span> {
-                            <span class="ident">write_data</span>(<span class="ident">k</span>, <span class="ident">buf</span>, <span class="ident">k_len</span>)
-                        }
-
-                        <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="ident">k_len</span>);
-
-                        <span class="ident">write_data</span>(<span class="string">b&quot;: &quot;</span>, <span class="ident">buf</span>, <span class="number">2</span>);
-                        <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="number">2</span>);
-
-                        <span class="ident">write_data</span>(<span class="ident">v</span>, <span class="ident">buf</span>, <span class="ident">v_len</span>);
-                        <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="ident">v_len</span>);
-
-                        <span class="ident">write_data</span>(<span class="string">b&quot;\r\n&quot;</span>, <span class="ident">buf</span>, <span class="number">2</span>);
-                        <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="number">2</span>);
+                        <span class="ident">dst</span>.<span class="ident">advance_mut</span>(<span class="ident">pos</span>);
                     }
 
-                    <span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">len</span>;
-                    <span class="ident">remaining</span> <span class="op">-</span><span class="op">=</span> <span class="ident">len</span>;
+                    <span class="ident">pos</span> <span class="op">=</span> <span class="number">0</span>;
+                    <span class="ident">dst</span>.<span class="ident">reserve</span>(<span class="ident">len</span> <span class="op">*</span> <span class="number">2</span>);
+                    <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">capacity</span>() <span class="op">-</span> <span class="ident">dst</span>.<span class="ident">len</span>();
+
+                    <span class="comment">// re-assign buf raw pointer since it&#39;s possible that the buffer was</span>
+                    <span class="comment">// reallocated and/or resized</span>
+                    <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">chunk_mut</span>().<span class="ident">as_mut_ptr</span>();
                 }
 
-                <span class="ident">Value</span>::<span class="ident">Multi</span>(<span class="kw-2">ref</span> <span class="ident">vec</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">for</span> <span class="ident">val</span> <span class="kw">in</span> <span class="ident">vec</span> {
-                        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">as_ref</span>();
-                        <span class="kw">let</span> <span class="ident">v_len</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">len</span>();
-                        <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">k_len</span> <span class="op">+</span> <span class="ident">v_len</span> <span class="op">+</span> <span class="number">4</span>;
-
-                        <span class="kw">if</span> <span class="ident">len</span> <span class="op">&gt;</span> <span class="ident">remaining</span> {
-                            <span class="comment">// SAFETY: all the bytes written up to position &quot;pos&quot; are initialized</span>
-                            <span class="comment">// the written byte count and pointer advancement are kept in sync</span>
-                            <span class="kw">unsafe</span> {
-                                <span class="ident">dst</span>.<span class="ident">advance_mut</span>(<span class="ident">pos</span>);
-                            }
-                            <span class="ident">pos</span> <span class="op">=</span> <span class="number">0</span>;
-                            <span class="ident">dst</span>.<span class="ident">reserve</span>(<span class="ident">len</span> <span class="op">*</span> <span class="number">2</span>);
-                            <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">capacity</span>() <span class="op">-</span> <span class="ident">dst</span>.<span class="ident">len</span>();
-
-                            <span class="comment">// re-assign buf raw pointer since it&#39;s possible that the buffer was</span>
-                            <span class="comment">// reallocated and/or resized</span>
-                            <span class="ident">buf</span> <span class="op">=</span> <span class="ident">dst</span>.<span class="ident">chunk_mut</span>().<span class="ident">as_mut_ptr</span>();
-                        }
-
-                        <span class="comment">// SAFETY: on each write, it is enough to ensure that the advancement of</span>
-                        <span class="comment">// the cursor matches the number of bytes written</span>
-                        <span class="kw">unsafe</span> {
-                            <span class="kw">if</span> <span class="ident">camel_case</span> {
-                                <span class="ident">write_camel_case</span>(<span class="ident">k</span>, <span class="ident">from_raw_parts_mut</span>(<span class="ident">buf</span>, <span class="ident">k_len</span>));
-                            } <span class="kw">else</span> {
-                                <span class="ident">write_data</span>(<span class="ident">k</span>, <span class="ident">buf</span>, <span class="ident">k_len</span>);
-                            }
-
-                            <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="ident">k_len</span>);
-
-                            <span class="ident">write_data</span>(<span class="string">b&quot;: &quot;</span>, <span class="ident">buf</span>, <span class="number">2</span>);
-                            <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="number">2</span>);
-
-                            <span class="ident">write_data</span>(<span class="ident">v</span>, <span class="ident">buf</span>, <span class="ident">v_len</span>);
-                            <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="ident">v_len</span>);
-
-                            <span class="ident">write_data</span>(<span class="string">b&quot;\r\n&quot;</span>, <span class="ident">buf</span>, <span class="number">2</span>);
-                            <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="number">2</span>);
-                        };
-
-                        <span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">len</span>;
-                        <span class="ident">remaining</span> <span class="op">-</span><span class="op">=</span> <span class="ident">len</span>;
+                <span class="comment">// SAFETY: on each write, it is enough to ensure that the advancement of</span>
+                <span class="comment">// the cursor matches the number of bytes written</span>
+                <span class="kw">unsafe</span> {
+                    <span class="kw">if</span> <span class="ident">camel_case</span> {
+                        <span class="comment">// use Camel-Case headers</span>
+                        <span class="ident">write_camel_case</span>(<span class="ident">k</span>, <span class="ident">from_raw_parts_mut</span>(<span class="ident">buf</span>, <span class="ident">k_len</span>));
+                    } <span class="kw">else</span> {
+                        <span class="ident">write_data</span>(<span class="ident">k</span>, <span class="ident">buf</span>, <span class="ident">k_len</span>);
                     }
-                }
+
+                    <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="ident">k_len</span>);
+
+                    <span class="ident">write_data</span>(<span class="string">b&quot;: &quot;</span>, <span class="ident">buf</span>, <span class="number">2</span>);
+                    <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="number">2</span>);
+
+                    <span class="ident">write_data</span>(<span class="ident">v</span>, <span class="ident">buf</span>, <span class="ident">v_len</span>);
+                    <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="ident">v_len</span>);
+
+                    <span class="ident">write_data</span>(<span class="string">b&quot;\r\n&quot;</span>, <span class="ident">buf</span>, <span class="number">2</span>);
+                    <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">add</span>(<span class="number">2</span>);
+                };
+
+                <span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">len</span>;
+                <span class="ident">remaining</span> <span class="op">-</span><span class="op">=</span> <span class="ident">len</span>;
             }
         });
 

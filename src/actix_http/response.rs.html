@@ -1127,6 +1127,14 @@
 <span id="1126">1126</span>
 <span id="1127">1127</span>
 <span id="1128">1128</span>
+<span id="1129">1129</span>
+<span id="1130">1130</span>
+<span id="1131">1131</span>
+<span id="1132">1132</span>
+<span id="1133">1133</span>
+<span id="1134">1134</span>
+<span id="1135">1135</span>
+<span id="1136">1136</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP responses.</span>
 
@@ -1493,7 +1501,9 @@
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="kw">match</span> <span class="ident">header</span>.<span class="ident">try_into_header_pair</span>() {
-                <span class="prelude-val">Ok</span>((<span class="ident">key</span>, <span class="ident">value</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>),
+                <span class="prelude-val">Ok</span>((<span class="ident">key</span>, <span class="ident">value</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
+                }
                 <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
             };
         }
@@ -1882,9 +1892,11 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">msg</span> <span class="op">=</span> <span class="ident">BoxedResponseHead</span>::<span class="ident">new</span>(<span class="ident">head</span>.<span class="ident">status</span>);
         <span class="ident">msg</span>.<span class="ident">version</span> <span class="op">=</span> <span class="ident">head</span>.<span class="ident">version</span>;
         <span class="ident">msg</span>.<span class="ident">reason</span> <span class="op">=</span> <span class="ident">head</span>.<span class="ident">reason</span>;
-        <span class="kw">for</span> (<span class="ident">k</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">head</span>.<span class="ident">headers</span> {
+
+        <span class="kw">for</span> (<span class="ident">k</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">iter</span>() {
             <span class="ident">msg</span>.<span class="ident">headers</span>.<span class="ident">append</span>(<span class="ident">k</span>.<span class="ident">clone</span>(), <span class="ident">v</span>.<span class="ident">clone</span>());
         }
+
         <span class="ident">msg</span>.<span class="ident">no_chunking</span>(<span class="op">!</span><span class="ident">head</span>.<span class="ident">chunked</span>());
 
         <span class="ident">ResponseBuilder</span> {
@@ -2023,16 +2035,20 @@
                     .<span class="ident">max_age</span>(<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">days</span>(<span class="number">1</span>))
                     .<span class="ident">finish</span>(),
             )
-            .<span class="ident">del_cookie</span>(<span class="kw-2">&amp;</span><span class="ident">cookies</span>[<span class="number">1</span>])
+            .<span class="ident">del_cookie</span>(<span class="kw-2">&amp;</span><span class="ident">cookies</span>[<span class="number">0</span>])
             .<span class="ident">finish</span>();
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">val</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">resp</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">val</span> <span class="op">=</span> <span class="ident">resp</span>
             .<span class="ident">headers</span>()
             .<span class="ident">get_all</span>(<span class="ident">SET_COOKIE</span>)
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">to_str</span>().<span class="ident">unwrap</span>().<span class="ident">to_owned</span>())
-            .<span class="ident">collect</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
         <span class="ident">val</span>.<span class="ident">sort</span>();
+
+        <span class="comment">// the .del_cookie call</span>
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">val</span>[<span class="number">0</span>].<span class="ident">starts_with</span>(<span class="string">&quot;cookie1=; Max-Age=0;&quot;</span>));
+
+        <span class="comment">// the .cookie call</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">val</span>[<span class="number">1</span>],
             <span class="string">&quot;name=value; HttpOnly; Path=/test; Domain=www.rust-lang.org; Max-Age=86400&quot;</span>
@@ -2057,9 +2073,9 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">r</span>.<span class="ident">cookies</span>();
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>((<span class="ident">v</span>.<span class="ident">name</span>(), <span class="ident">v</span>.<span class="ident">value</span>()), (<span class="string">&quot;cookie3&quot;</span>, <span class="string">&quot;val300&quot;</span>));
-        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>((<span class="ident">v</span>.<span class="ident">name</span>(), <span class="ident">v</span>.<span class="ident">value</span>()), (<span class="string">&quot;original&quot;</span>, <span class="string">&quot;val100&quot;</span>));
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>((<span class="ident">v</span>.<span class="ident">name</span>(), <span class="ident">v</span>.<span class="ident">value</span>()), (<span class="string">&quot;cookie3&quot;</span>, <span class="string">&quot;val300&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

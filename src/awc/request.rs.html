@@ -686,6 +686,10 @@
 <span id="685">685</span>
 <span id="686">686</span>
 <span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -848,7 +852,9 @@
         <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
     {
         <span class="kw">match</span> <span class="ident">header</span>.<span class="ident">try_into_header_pair</span>() {
-            <span class="prelude-val">Ok</span>((<span class="ident">key</span>, <span class="ident">value</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>),
+            <span class="prelude-val">Ok</span>((<span class="ident">key</span>, <span class="ident">value</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
+            }
             <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
         };
 
@@ -921,7 +927,9 @@
         <span class="op">&lt;</span><span class="ident">HeaderValue</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
     {
         <span class="kw">match</span> <span class="ident">HeaderValue</span>::<span class="ident">try_from</span>(<span class="ident">value</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">value</span>),
+            <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">value</span>);
+            }
             <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
         }
         <span class="self">self</span>
