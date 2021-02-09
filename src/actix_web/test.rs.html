@@ -1299,6 +1299,8 @@
 <span id="1298">1298</span>
 <span id="1299">1299</span>
 <span id="1300">1300</span>
+<span id="1301">1301</span>
+<span id="1302">1302</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
@@ -2579,8 +2581,10 @@
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">actor_handler</span>(
             <span class="ident">addr</span>: <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">MyActor</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Responder</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-            <span class="comment">// `?` operator tests &quot;actors&quot; feature flag on actix-http</span>
-            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">addr</span>.<span class="ident">send</span>(<span class="ident">Num</span>(<span class="number">1</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">addr</span>
+                .<span class="ident">send</span>(<span class="ident">Num</span>(<span class="number">1</span>))
+                .<span class="kw">await</span>
+                .<span class="ident">map_err</span>(<span class="kw">crate</span>::<span class="ident">error</span>::<span class="ident">ErrorInternalServerError</span>)<span class="question-mark">?</span>;
 
             <span class="kw">if</span> <span class="ident">res</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>())

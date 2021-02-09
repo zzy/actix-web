@@ -1209,12 +1209,6 @@
 <span id="1208">1208</span>
 <span id="1209">1209</span>
 <span id="1210">1210</span>
-<span id="1211">1211</span>
-<span id="1212">1212</span>
-<span id="1213">1213</span>
-<span id="1214">1214</span>
-<span id="1215">1215</span>
-<span id="1216">1216</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Error and Result module</span>
 
@@ -2185,12 +2179,6 @@
 {
     <span class="ident">InternalError</span>::<span class="ident">new</span>(<span class="ident">err</span>, <span class="ident">StatusCode</span>::<span class="ident">NETWORK_AUTHENTICATION_REQUIRED</span>).<span class="ident">into</span>()
 }
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actors&quot;</span>)]</span>
-<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`actix::MailboxError`].</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This is only supported when the feature `actors` is enabled.</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">actix</span>::<span class="ident">MailboxError</span> {}
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
