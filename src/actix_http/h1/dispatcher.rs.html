@@ -1306,9 +1306,6 @@
 <span id="1305">1305</span>
 <span id="1306">1306</span>
 <span id="1307">1307</span>
-<span id="1308">1308</span>
-<span id="1309">1309</span>
-<span id="1310">1310</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1621,11 +1618,8 @@
             }
         }
 
-        <span class="comment">// SAFETY: setting length to 0 is safe</span>
-        <span class="comment">// skips one length check vs truncate</span>
-        <span class="kw">unsafe</span> {
-            <span class="ident">write_buf</span>.<span class="ident">set_len</span>(<span class="number">0</span>);
-        }
+        <span class="comment">// everything has written to io. clear buffer.</span>
+        <span class="ident">write_buf</span>.<span class="ident">clear</span>();
 
         <span class="comment">// flush the io and check if get blocked.</span>
         <span class="kw">let</span> <span class="ident">blocked</span> <span class="op">=</span> <span class="ident">io</span>.<span class="ident">poll_flush</span>(<span class="ident">cx</span>)<span class="question-mark">?</span>.<span class="ident">is_pending</span>();
