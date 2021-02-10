@@ -197,9 +197,9 @@
 <span id="194">194</span>
 <span id="195">195</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Macros for reducing boilerplate code in Actix Web applications.</span>
+<span class="doccomment">//! Routing and runtime macros for Actix Web.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ## Actix Web Re-exports</span>
+<span class="doccomment">//! # Actix Web Re-exports</span>
 <span class="doccomment">//! Actix Web re-exports a version of this crate in it&#39;s entirety so you usually don&#39;t have to</span>
 <span class="doccomment">//! specify a dependency on this crate explicitly. Sometimes, however, updates are made to this</span>
 <span class="doccomment">//! crate before the actix-web dependency is updated. Therefore, code examples here will show</span>
@@ -209,7 +209,7 @@
 <span class="doccomment">//! # Runtime Setup</span>
 <span class="doccomment">//! Used for setting up the actix async runtime. See [macro@main] macro docs.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! ```</span>
 <span class="doccomment">//! #[actix_web_codegen::main] // or `#[actix_web::main]` in Actix Web apps</span>
 <span class="doccomment">//! async fn main() {</span>
 <span class="doccomment">//!     async { println!(&quot;Hello world&quot;); }.await</span>
@@ -222,7 +222,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! See docs for: [GET], [POST], [PATCH], [PUT], [DELETE], [HEAD], [CONNECT], [OPTIONS], [TRACE]</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! ```</span>
 <span class="doccomment">//! # use actix_web::HttpResponse;</span>
 <span class="doccomment">//! # use actix_web_codegen::get;</span>
 <span class="doccomment">//! #[get(&quot;/test&quot;)]</span>
@@ -235,7 +235,7 @@
 <span class="doccomment">//! Similar to the single method handler macro but takes one or more arguments for the HTTP methods</span>
 <span class="doccomment">//! it should respond to. See [macro@route] macro docs.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! ```</span>
 <span class="doccomment">//! # use actix_web::HttpResponse;</span>
 <span class="doccomment">//! # use actix_web_codegen::route;</span>
 <span class="doccomment">//! #[route(&quot;/test&quot;, method=&quot;GET&quot;, method=&quot;HEAD&quot;)]</span>
