@@ -1309,7 +1309,6 @@
 <span id="1308">1308</span>
 <span id="1309">1309</span>
 <span id="1310">1310</span>
-<span id="1311">1311</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -2154,9 +2153,8 @@
                     <span class="kw">if</span> <span class="ident">inner</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">WRITE_DISCONNECT</span>) {
                         <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(()))
                     } <span class="kw">else</span> {
-                        <span class="comment">// flush buffer</span>
-                        <span class="ident">inner</span>.<span class="ident">as_mut</span>().<span class="ident">poll_flush</span>(<span class="ident">cx</span>)<span class="question-mark">?</span>;
-                        <span class="kw">if</span> <span class="op">!</span><span class="ident">inner</span>.<span class="ident">write_buf</span>.<span class="ident">is_empty</span>() {
+                        <span class="comment">// flush buffer and wait on block.</span>
+                        <span class="kw">if</span> <span class="ident">inner</span>.<span class="ident">as_mut</span>().<span class="ident">poll_flush</span>(<span class="ident">cx</span>)<span class="question-mark">?</span> {
                             <span class="ident">Poll</span>::<span class="ident">Pending</span>
                         } <span class="kw">else</span> {
                             <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">inner</span>.<span class="ident">project</span>().<span class="ident">io</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>())
