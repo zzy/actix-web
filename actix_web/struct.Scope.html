@@ -98,9 +98,9 @@ some of the resource's configuration could be moved to different module.</p>
         )
         .<span class="ident">route</span>(<span class="string">&quot;/index.html&quot;</span>, <span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()));
 }</pre></div>
-</div><h4 id="method.service" class="method"><code>pub fn <a href="#method.service" class="fnname">service</a>&lt;F&gt;(mut self: Self, factory: F) -&gt; Self <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="../actix_web/dev/trait.HttpServiceFactory.html" title="trait actix_web::dev::HttpServiceFactory">HttpServiceFactory</a> + 'static,&nbsp;</span></code><a class="srclink" href="../src/actix_web/scope.rs.html#236-243" title="goto source code">[src]</a></h4><div class="docblock"><p>Register http service.</p>
+</div><h4 id="method.service" class="method"><code>pub fn <a href="#method.service" class="fnname">service</a>&lt;F&gt;(mut self: Self, factory: F) -&gt; Self <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="../actix_web/dev/trait.HttpServiceFactory.html" title="trait actix_web::dev::HttpServiceFactory">HttpServiceFactory</a> + 'static,&nbsp;</span></code><a class="srclink" href="../src/actix_web/scope.rs.html#236-243" title="goto source code">[src]</a></h4><div class="docblock"><p>Register HTTP service.</p>
 <p>This is similar to <code>App's</code> service registration.</p>
-<p>Actix web provides several services implementations:</p>
+<p>Actix Web provides several services implementations:</p>
 <ul>
 <li><em>Resource</em> is an entry in resource table which corresponds to requested URL.</li>
 <li><em>Scope</em> is a set of resources with common root path.</li>
