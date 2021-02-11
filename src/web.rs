@@ -2,7 +2,7 @@
 
 use actix_http::http::Method;
 use actix_router::IntoPattern;
-use std::future::Future;
+use std::{borrow::Cow, future::Future};
 
 pub use actix_http::Response as HttpResponse;
 pub use bytes::{Buf, BufMut, Bytes, BytesMut};
@@ -239,11 +239,14 @@ pub fn method(method: Method) -> Route {
 /// use actix_web::{web, App};
 ///
 /// let app = App::new().service(
-///     web::redirect("/one").to_relative("/two")
+///     web::redirect("/one", "/two")
 /// );
 /// ```
-pub fn redirect(path: impl Into<String>) -> Redirect {
-    Redirect::from(path)
+pub fn redirect(
+    from: impl Into<Cow<'static, str>>,
+    to: impl Into<Cow<'static, str>>,
+) -> Redirect {
+    Redirect::new(from, to)
 }
 
 /// Create a new route and add handler.
