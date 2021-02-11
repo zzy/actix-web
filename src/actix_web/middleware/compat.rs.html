@@ -192,8 +192,6 @@
 <span id="191">191</span>
 <span id="192">192</span>
 <span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! For middleware documentation, see [`Compat`].</span>
 
@@ -340,9 +338,7 @@
                 <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;app&quot;</span>)
                     .<span class="ident">wrap</span>(<span class="ident">Compat</span>::<span class="ident">new</span>(<span class="ident">logger</span>))
                     .<span class="ident">wrap</span>(<span class="ident">Compat</span>::<span class="ident">new</span>(<span class="ident">compress</span>))
-                    .<span class="ident">service</span>(
-                        <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>)),
-                    ),
+                    .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>))),
             ),
         )
         .<span class="kw">await</span>;

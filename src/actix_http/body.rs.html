@@ -709,10 +709,18 @@
 <span id="708">708</span>
 <span id="709">709</span>
 <span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">mem</span>};
+<span class="doccomment">//! Traits and structures to aid consuming and writing HTTP payloads.</span>
+
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">fmt</span>, <span class="ident">mem</span>,
+    <span class="ident">pin</span>::<span class="ident">Pin</span>,
+    <span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>},
+};
 
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">ready</span>, <span class="ident">Stream</span>};
@@ -720,8 +728,8 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
 
+<span class="doccomment">/// Body size hint.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
-<span class="doccomment">/// Body size hint</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BodySize</span> {
     <span class="prelude-val">None</span>,
     <span class="ident">Empty</span>,
@@ -735,7 +743,7 @@
     }
 }
 
-<span class="doccomment">/// Type that provides this trait can be streamed to a peer.</span>
+<span class="doccomment">/// Type that implement this trait can be streamed to a peer.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">MessageBody</span> {
     <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BodySize</span>;
 
@@ -792,7 +800,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take_body</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">replace</span>(<span class="self">self</span>, <span class="ident">ResponseBody</span>::<span class="ident">Other</span>(<span class="ident">Body</span>::<span class="prelude-val">None</span>))
+        <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="self">self</span>, <span class="ident">ResponseBody</span>::<span class="ident">Other</span>(<span class="ident">Body</span>::<span class="prelude-val">None</span>))
     }
 }
 
@@ -839,7 +847,7 @@
     }
 }
 
-<span class="doccomment">/// Represents various types of http message body.</span>
+<span class="doccomment">/// Represents various types of HTTP message body.</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Body</span> {
     <span class="doccomment">/// Empty response. `Content-Length` header is not set.</span>
     <span class="prelude-val">None</span>,

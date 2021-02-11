@@ -347,17 +347,6 @@
 <span id="346">346</span>
 <span id="347">347</span>
 <span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
-<span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
-<span id="358">358</span>
-<span id="359">359</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">SocketAddr</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
@@ -378,8 +367,7 @@
 };
 
 <span class="kw">type</span> <span class="ident">Guards</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-<span class="kw">type</span> <span class="ident">HttpNewService</span> <span class="op">=</span>
-    <span class="ident">boxed</span>::<span class="ident">BoxServiceFactory</span><span class="op">&lt;</span>(), <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">Error</span>, ()<span class="op">&gt;</span>;
+<span class="kw">type</span> <span class="ident">HttpNewService</span> <span class="op">=</span> <span class="ident">boxed</span>::<span class="ident">BoxServiceFactory</span><span class="op">&lt;</span>(), <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">Error</span>, ()<span class="op">&gt;</span>;
 
 <span class="doccomment">/// Application configuration</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AppService</span> {
@@ -460,12 +448,8 @@
                 <span class="ident">InitError</span> <span class="op">=</span> (),
             <span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
-        <span class="self">self</span>.<span class="ident">services</span>.<span class="ident">push</span>((
-            <span class="ident">rdef</span>,
-            <span class="ident">boxed</span>::<span class="ident">factory</span>(<span class="ident">factory</span>.<span class="ident">into_factory</span>()),
-            <span class="ident">guards</span>,
-            <span class="ident">nested</span>,
-        ));
+        <span class="self">self</span>.<span class="ident">services</span>
+            .<span class="ident">push</span>((<span class="ident">rdef</span>, <span class="ident">boxed</span>::<span class="ident">factory</span>(<span class="ident">factory</span>.<span class="ident">into_factory</span>()), <span class="ident">guards</span>, <span class="ident">nested</span>));
     }
 }
 
@@ -624,12 +608,12 @@
             <span class="ident">cfg</span>.<span class="ident">app_data</span>(<span class="number">15u8</span>);
         };
 
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">configure</span>(<span class="ident">cfg</span>).<span class="ident">service</span>(
-            <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="kw">_</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">req</span>: <span class="ident">HttpRequest</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">configure</span>(<span class="ident">cfg</span>).<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(
+            <span class="op">|</span><span class="kw">_</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">req</span>: <span class="ident">HttpRequest</span><span class="op">|</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="number">15u8</span>);
                 <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
-            }),
-        ))
+            },
+        )))
         .<span class="kw">await</span>;
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
@@ -673,17 +657,13 @@
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App</span>::<span class="ident">new</span>()
                 .<span class="ident">configure</span>(<span class="op">|</span><span class="ident">cfg</span><span class="op">|</span> {
-                    <span class="ident">cfg</span>.<span class="ident">external_resource</span>(
-                        <span class="string">&quot;youtube&quot;</span>,
-                        <span class="string">&quot;https://youtube.com/watch/{video_id}&quot;</span>,
-                    );
+                    <span class="ident">cfg</span>.<span class="ident">external_resource</span>(<span class="string">&quot;youtube&quot;</span>, <span class="string">&quot;https://youtube.com/watch/{video_id}&quot;</span>);
                 })
                 .<span class="ident">route</span>(
                     <span class="string">&quot;/test&quot;</span>,
                     <span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">HttpRequest</span><span class="op">|</span> {
-                        <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(
-                            <span class="ident">req</span>.<span class="ident">url_for</span>(<span class="string">&quot;youtube&quot;</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;12345&quot;</span>]).<span class="ident">unwrap</span>().<span class="ident">to_string</span>(),
-                        )
+                        <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
+                            .<span class="ident">body</span>(<span class="ident">req</span>.<span class="ident">url_for</span>(<span class="string">&quot;youtube&quot;</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;12345&quot;</span>]).<span class="ident">unwrap</span>().<span class="ident">to_string</span>())
                     }),
                 ),
         )
@@ -698,10 +678,8 @@
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_service</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">configure</span>(<span class="op">|</span><span class="ident">cfg</span><span class="op">|</span> {
-            <span class="ident">cfg</span>.<span class="ident">service</span>(
-                <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="ident">Created</span>)),
-            )
-            .<span class="ident">route</span>(<span class="string">&quot;/index.html&quot;</span>, <span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>));
+            <span class="ident">cfg</span>.<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="ident">Created</span>)))
+                .<span class="ident">route</span>(<span class="string">&quot;/index.html&quot;</span>, <span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>));
         }))
         .<span class="kw">await</span>;
 

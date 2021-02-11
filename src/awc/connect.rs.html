@@ -146,10 +146,6 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">net</span>,
@@ -235,8 +231,7 @@
             <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="comment">// send request</span>
-            <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span>
-                <span class="ident">connection</span>.<span class="ident">open_tunnel</span>(<span class="ident">RequestHeadType</span>::<span class="ident">from</span>(<span class="ident">head</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">open_tunnel</span>(<span class="ident">RequestHeadType</span>::<span class="ident">from</span>(<span class="ident">head</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="kw">let</span> <span class="ident">framed</span> <span class="op">=</span> <span class="ident">framed</span>.<span class="ident">into_map_io</span>(<span class="op">|</span><span class="ident">io</span><span class="op">|</span> <span class="ident">BoxedSocket</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Socket</span>(<span class="ident">io</span>))));
             <span class="prelude-val">Ok</span>((<span class="ident">head</span>, <span class="ident">framed</span>))
@@ -295,10 +290,7 @@
         <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">get_mut</span>().<span class="number">0</span>.<span class="ident">as_write</span>()).<span class="ident">poll_flush</span>(<span class="ident">cx</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">poll_shutdown</span>(
-        <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
-        <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_shutdown</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">get_mut</span>().<span class="number">0</span>.<span class="ident">as_write</span>()).<span class="ident">poll_shutdown</span>(<span class="ident">cx</span>)
     }
 }

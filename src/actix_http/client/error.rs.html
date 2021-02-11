@@ -143,6 +143,18 @@
 <span id="142">142</span>
 <span id="143">143</span>
 <span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 
@@ -211,13 +223,16 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InvalidUrl</span> {
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Missing url scheme&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Missing URL scheme&quot;</span>)]</span>
     <span class="ident">MissingScheme</span>,
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unknown url scheme&quot;</span>)]</span>
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unknown URL scheme&quot;</span>)]</span>
     <span class="ident">UnknownScheme</span>,
+
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Missing host name&quot;</span>)]</span>
     <span class="ident">MissingHost</span>,
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Url parse error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;URL parse error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">HttpError</span>(<span class="ident">http</span>::<span class="ident">Error</span>),
 }
 
@@ -229,25 +244,33 @@
     <span class="doccomment">/// Invalid URL</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid URL: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Url</span>(<span class="ident">InvalidUrl</span>),
+
     <span class="doccomment">/// Failed to connect to host</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Failed to connect to host: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Connect</span>(<span class="ident">ConnectError</span>),
+
     <span class="doccomment">/// Error sending request</span>
     <span class="ident">Send</span>(<span class="ident">io</span>::<span class="ident">Error</span>),
+
     <span class="doccomment">/// Error parsing response</span>
     <span class="ident">Response</span>(<span class="ident">ParseError</span>),
+
     <span class="doccomment">/// Http error</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Http</span>(<span class="ident">HttpError</span>),
+
     <span class="doccomment">/// Http2 error</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">H2</span>(<span class="ident">h2</span>::<span class="ident">Error</span>),
+
     <span class="doccomment">/// Response took too long</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Timeout while waiting for response&quot;</span>)]</span>
     <span class="ident">Timeout</span>,
-    <span class="doccomment">/// Tunnels are not supported for http2 connection</span>
+
+    <span class="doccomment">/// Tunnels are not supported for HTTP/2 connection</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Tunnels are not supported for http2 connection&quot;</span>)]</span>
     <span class="ident">TunnelNotSupported</span>,
+
     <span class="doccomment">/// Error sending request body</span>
     <span class="ident">Body</span>(<span class="ident">Error</span>),
 }
@@ -273,7 +296,8 @@
     <span class="doccomment">/// Invalid URL</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid URL: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Url</span>(<span class="ident">InvalidUrl</span>),
-    <span class="doccomment">/// Http error</span>
+
+    <span class="doccomment">/// HTTP error</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Http</span>(<span class="ident">HttpError</span>),
 }

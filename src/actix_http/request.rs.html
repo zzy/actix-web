@@ -216,6 +216,8 @@
 <span id="215">215</span>
 <span id="216">216</span>
 <span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP requests.</span>
 
@@ -228,9 +230,9 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">extensions</span>::<span class="ident">Extensions</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">header</span>::<span class="ident">HeaderMap</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">httpmessage</span>::<span class="ident">HttpMessage</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">message</span>::{<span class="ident">Message</span>, <span class="ident">RequestHead</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadStream</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">HttpMessage</span>;
 
 <span class="doccomment">/// Request</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">P</span> <span class="op">=</span> <span class="ident">PayloadStream</span><span class="op">&gt;</span> {
@@ -326,7 +328,7 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="doccomment">/// Mutable reference to a http message part of the request</span>
+    <span class="doccomment">/// Mutable reference to a HTTP message part of the request</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">RequestHead</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">head</span>
     }
@@ -377,10 +379,12 @@
         <span class="self">self</span>.<span class="ident">head</span>().<span class="ident">method</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Method</span>::<span class="ident">CONNECT</span>
     }
 
-    <span class="doccomment">/// Peer socket address</span>
+    <span class="doccomment">/// Peer socket address.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Peer address is actual socket address, if proxy is used in front of</span>
-    <span class="doccomment">/// actix http server, then peer address would be address of this proxy.</span>
+    <span class="doccomment">/// Peer address is the directly connected peer&#39;s socket address. If a proxy is used in front of</span>
+    <span class="doccomment">/// the Actix Web server, then it would be address of this proxy.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Will only return None when called in unit tests.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peer_addr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">head</span>().<span class="ident">peer_addr</span>

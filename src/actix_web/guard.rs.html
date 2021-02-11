@@ -677,7 +677,7 @@
     }
 }
 
-<span class="doccomment">/// Http method guard</span>
+<span class="doccomment">/// HTTP method guard.</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>);
 
@@ -687,52 +687,52 @@
     }
 }
 
-<span class="doccomment">/// Guard to match *GET* http method</span>
+<span class="doccomment">/// Guard to match *GET* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Get</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">GET</span>)
 }
 
-<span class="doccomment">/// Predicate to match *POST* http method</span>
+<span class="doccomment">/// Predicate to match *POST* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Post</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">POST</span>)
 }
 
-<span class="doccomment">/// Predicate to match *PUT* http method</span>
+<span class="doccomment">/// Predicate to match *PUT* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Put</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">PUT</span>)
 }
 
-<span class="doccomment">/// Predicate to match *DELETE* http method</span>
+<span class="doccomment">/// Predicate to match *DELETE* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Delete</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">DELETE</span>)
 }
 
-<span class="doccomment">/// Predicate to match *HEAD* http method</span>
+<span class="doccomment">/// Predicate to match *HEAD* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Head</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">HEAD</span>)
 }
 
-<span class="doccomment">/// Predicate to match *OPTIONS* http method</span>
+<span class="doccomment">/// Predicate to match *OPTIONS* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Options</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">OPTIONS</span>)
 }
 
-<span class="doccomment">/// Predicate to match *CONNECT* http method</span>
+<span class="doccomment">/// Predicate to match *CONNECT* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Connect</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">CONNECT</span>)
 }
 
-<span class="doccomment">/// Predicate to match *PATCH* http method</span>
+<span class="doccomment">/// Predicate to match *PATCH* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Patch</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">PATCH</span>)
 }
 
-<span class="doccomment">/// Predicate to match *TRACE* http method</span>
+<span class="doccomment">/// Predicate to match *TRACE* HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Trace</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">TRACE</span>)
 }
 
-<span class="doccomment">/// Predicate to match specified http method</span>
+<span class="doccomment">/// Predicate to match specified HTTP method.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Method</span>(<span class="ident">method</span>: <span class="ident">http</span>::<span class="ident">Method</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MethodGuard</span> {
     <span class="ident">MethodGuard</span>(<span class="ident">method</span>)
 }

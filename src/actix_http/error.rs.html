@@ -1250,7 +1250,7 @@
 <span class="doccomment">/// converting errors with `into()`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Whenever it is created from an external object a response error is created</span>
-<span class="doccomment">/// for it that can be used to create an http response from it this means that</span>
+<span class="doccomment">/// for it that can be used to create an HTTP response from it this means that</span>
 <span class="doccomment">/// if you have access to an actix `Error` you can always get a</span>
 <span class="doccomment">/// `ResponseError` reference from it.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Error</span> {
@@ -1616,7 +1616,7 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
-<span class="doccomment">/// A set of errors that can occur during dispatching http requests</span>
+<span class="doccomment">/// A set of errors that can occur during dispatching HTTP requests</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DispatchError</span> {
     <span class="doccomment">/// Service error</span>
     <span class="ident">Service</span>(<span class="ident">Error</span>),

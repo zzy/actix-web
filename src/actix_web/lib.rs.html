@@ -199,37 +199,6 @@
 <span id="198">198</span>
 <span id="199">199</span>
 <span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust.</span>
 <span class="doccomment">//!</span>
@@ -289,7 +258,6 @@
 <span class="doccomment">//! * SSL support using OpenSSL or Rustls</span>
 <span class="doccomment">//! * Middlewares ([Logger, Session, CORS, etc](https://actix.rs/docs/middleware/))</span>
 <span class="doccomment">//! * Includes an async [HTTP client](https://actix.rs/actix-web/actix_web/client/index.html)</span>
-<span class="doccomment">//! * Supports [Actix actor framework](https://github.com/actix/actix)</span>
 <span class="doccomment">//! * Runs on stable Rust 1.46+</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Crate Features</span>
@@ -364,9 +332,7 @@
     <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">handler</span>::<span class="ident">Handler</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">info</span>::<span class="ident">ConnectionInfo</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rmap</span>::<span class="ident">ResourceMap</span>;
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">service</span>::{
-        <span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">WebService</span>,
-    };
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">service</span>::{<span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">WebService</span>};
 
     <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">form</span>::<span class="ident">UrlEncoded</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">json</span>::<span class="ident">JsonBody</span>;
@@ -376,9 +342,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">encoding</span>::<span class="ident">Decoder</span> <span class="kw">as</span> <span class="ident">Decompress</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">ResponseBuilder</span> <span class="kw">as</span> <span class="ident">HttpResponseBuilder</span>;
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{
-        <span class="ident">Extensions</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>, <span class="ident">ResponseHead</span>,
-    };
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>, <span class="ident">ResponseHead</span>};
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">ResourcePath</span>, <span class="ident">Url</span>};
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_server</span>::<span class="ident">Server</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">Service</span>, <span class="ident">Transform</span>};
@@ -435,32 +399,6 @@
             <span class="self">self</span>
         }
     }
-}
-
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">client</span> {
-    <span class="doccomment">//! Actix Web async HTTP client.</span>
-    <span class="doccomment">//!</span>
-    <span class="doccomment">//! ```rust</span>
-    <span class="doccomment">//! use actix_web::client::Client;</span>
-    <span class="doccomment">//!</span>
-    <span class="doccomment">//! #[actix_web::main]</span>
-    <span class="doccomment">//! async fn main() {</span>
-    <span class="doccomment">//!    let mut client = Client::default();</span>
-    <span class="doccomment">//!</span>
-    <span class="doccomment">//!    // Create request builder and send request</span>
-    <span class="doccomment">//!    let response = client.get(&quot;http://www.rust-lang.org&quot;)</span>
-    <span class="doccomment">//!       .insert_header((&quot;User-Agent&quot;, &quot;actix-web/3.0&quot;))</span>
-    <span class="doccomment">//!       .send()     // &lt;- Send request</span>
-    <span class="doccomment">//!       .await;     // &lt;- Wait for response</span>
-    <span class="doccomment">//!</span>
-    <span class="doccomment">//!    println!(&quot;Response: {:?}&quot;, response);</span>
-    <span class="doccomment">//! }</span>
-    <span class="doccomment">//! ```</span>
-
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">awc</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">awc</span>::{
-        <span class="ident">test</span>, <span class="ident">Client</span>, <span class="ident">ClientBuilder</span>, <span class="ident">ClientRequest</span>, <span class="ident">ClientResponse</span>, <span class="ident">Connector</span>,
-    };
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web"></div>

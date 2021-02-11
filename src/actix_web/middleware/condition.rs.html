@@ -147,10 +147,6 @@
 <span id="146">146</span>
 <span id="147">147</span>
 <span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! For middleware documentation, see [`Condition`].</span>
 
@@ -273,15 +269,13 @@
             <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse</span>::<span class="ident">InternalServerError</span>().<span class="ident">finish</span>()))
         };
 
-        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span>
-            <span class="ident">ErrorHandlers</span>::<span class="ident">new</span>().<span class="ident">handler</span>(<span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>, <span class="ident">render_500</span>);
+        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">ErrorHandlers</span>::<span class="ident">new</span>().<span class="ident">handler</span>(<span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>, <span class="ident">render_500</span>);
 
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">Condition</span>::<span class="ident">new</span>(<span class="bool-val">true</span>, <span class="ident">mw</span>)
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span>
-            <span class="ident">test</span>::<span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">mw</span>, <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>()).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">mw</span>, <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>()).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;0001&quot;</span>);
     }
 
@@ -291,16 +285,14 @@
             <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse</span>::<span class="ident">InternalServerError</span>().<span class="ident">finish</span>()))
         };
 
-        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span>
-            <span class="ident">ErrorHandlers</span>::<span class="ident">new</span>().<span class="ident">handler</span>(<span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>, <span class="ident">render_500</span>);
+        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">ErrorHandlers</span>::<span class="ident">new</span>().<span class="ident">handler</span>(<span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>, <span class="ident">render_500</span>);
 
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">Condition</span>::<span class="ident">new</span>(<span class="bool-val">false</span>, <span class="ident">mw</span>)
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
 
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span>
-            <span class="ident">test</span>::<span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">mw</span>, <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>()).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">mw</span>, <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">to_srv_request</span>()).<span class="kw">await</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>), <span class="prelude-val">None</span>);
     }
 }

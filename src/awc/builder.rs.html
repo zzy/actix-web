@@ -236,6 +236,7 @@
 <span id="235">235</span>
 <span id="236">236</span>
 <span id="237">237</span>
+<span id="238">238</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
@@ -321,8 +322,9 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Maximum supported http major version</span>
-    <span class="doccomment">/// Supported versions http/1.1, http/2</span>
+    <span class="doccomment">/// Maximum supported HTTP major version.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Supported versions are HTTP/1.1 and HTTP/2.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_http_version</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">http</span>::<span class="ident">Version</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">max_http_version</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>);
         <span class="self">self</span>

@@ -1116,12 +1116,6 @@
 <span id="1115">1115</span>
 <span id="1116">1116</span>
 <span id="1117">1117</span>
-<span id="1118">1118</span>
-<span id="1119">1119</span>
-<span id="1120">1120</span>
-<span id="1121">1121</span>
-<span id="1122">1122</span>
-<span id="1123">1123</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
@@ -1133,8 +1127,8 @@
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">ResourceDef</span>, <span class="ident">Router</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{
-    <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>,
-    <span class="ident">ServiceFactoryExt</span>, <span class="ident">Transform</span>,
+    <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>, <span class="ident">ServiceFactoryExt</span>,
+    <span class="ident">Transform</span>,
 };
 <span class="kw">use</span> <span class="ident">futures_core</span>::<span class="ident">future</span>::<span class="ident">LocalBoxFuture</span>;
 <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::<span class="ident">join_all</span>;
@@ -1601,16 +1595,15 @@
         <span class="kw">let</span> <span class="ident">default_fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">default</span>.<span class="ident">new_service</span>(());
 
         <span class="comment">// construct all services factory future with it&#39;s resource def and guards.</span>
-        <span class="kw">let</span> <span class="ident">factory_fut</span> <span class="op">=</span>
-            <span class="ident">join_all</span>(<span class="self">self</span>.<span class="ident">services</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">path</span>, <span class="ident">factory</span>, <span class="ident">guards</span>)<span class="op">|</span> {
-                <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">clone</span>();
-                <span class="kw">let</span> <span class="ident">guards</span> <span class="op">=</span> <span class="ident">guards</span>.<span class="ident">borrow_mut</span>().<span class="ident">take</span>();
-                <span class="kw">let</span> <span class="ident">factory_fut</span> <span class="op">=</span> <span class="ident">factory</span>.<span class="ident">new_service</span>(());
-                <span class="kw">async</span> <span class="kw">move</span> {
-                    <span class="kw">let</span> <span class="ident">service</span> <span class="op">=</span> <span class="ident">factory_fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
-                    <span class="prelude-val">Ok</span>((<span class="ident">path</span>, <span class="ident">guards</span>, <span class="ident">service</span>))
-                }
-            }));
+        <span class="kw">let</span> <span class="ident">factory_fut</span> <span class="op">=</span> <span class="ident">join_all</span>(<span class="self">self</span>.<span class="ident">services</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">path</span>, <span class="ident">factory</span>, <span class="ident">guards</span>)<span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">clone</span>();
+            <span class="kw">let</span> <span class="ident">guards</span> <span class="op">=</span> <span class="ident">guards</span>.<span class="ident">borrow_mut</span>().<span class="ident">take</span>();
+            <span class="kw">let</span> <span class="ident">factory_fut</span> <span class="op">=</span> <span class="ident">factory</span>.<span class="ident">new_service</span>(());
+            <span class="kw">async</span> <span class="kw">move</span> {
+                <span class="kw">let</span> <span class="ident">service</span> <span class="op">=</span> <span class="ident">factory_fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="prelude-val">Ok</span>((<span class="ident">path</span>, <span class="ident">guards</span>, <span class="ident">service</span>))
+            }
+        }));
 
         <span class="kw">let</span> <span class="ident">app_data</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">app_data</span>.<span class="ident">clone</span>();
 
@@ -1714,10 +1707,11 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_scope</span>() {
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
-            <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/app&quot;</span>).<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/path1&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>)),
-        ))
-        .<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span>
+            <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
+                <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/app&quot;</span>).<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/path1&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>)),
+            ))
+            .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/app/path1&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
@@ -1746,9 +1740,10 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_scope_root2</span>() {
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
-            <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/app/&quot;</span>).<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>)),
-        ))
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
+            <span class="ident">App</span>::<span class="ident">new</span>()
+                .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/app/&quot;</span>).<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>))),
+        )
         .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/app&quot;</span>).<span class="ident">to_request</span>();
@@ -1762,9 +1757,10 @@
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_scope_root3</span>() {
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
-            <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/app/&quot;</span>).<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>)),
-        ))
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
+            <span class="ident">App</span>::<span class="ident">new</span>()
+                .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/app/&quot;</span>).<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>))),
+        )
         .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">with_uri</span>(<span class="string">&quot;/app&quot;</span>).<span class="ident">to_request</span>();
@@ -1862,8 +1858,7 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_scope_variable_segment</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;/ab-{project}&quot;</span>).<span class="ident">service</span>(
             <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/path1&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="ident">r</span>: <span class="ident">HttpRequest</span><span class="op">|</span> {
-                <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
-                    .<span class="ident">body</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;project: {}&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">r</span>.<span class="ident">match_info</span>()[<span class="string">&quot;project&quot;</span>]))
+                <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;project: {}&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">r</span>.<span class="ident">match_info</span>()[<span class="string">&quot;project&quot;</span>]))
             }),
         )))
         .<span class="kw">await</span>;
@@ -2070,14 +2065,10 @@
             <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
                 <span class="ident">web</span>::<span class="ident">scope</span>(<span class="string">&quot;app&quot;</span>)
                     .<span class="ident">wrap</span>(
-                        <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>().<span class="ident">header</span>(
-                            <span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>,
-                            <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;0001&quot;</span>),
-                        ),
+                        <span class="ident">DefaultHeaders</span>::<span class="ident">new</span>()
+                            .<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;0001&quot;</span>)),
                     )
-                    .<span class="ident">service</span>(
-                        <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>)),
-                    ),
+                    .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>))),
             ),
         )
         .<span class="kw">await</span>;
@@ -2100,10 +2091,8 @@
                         <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>);
                         <span class="kw">async</span> <span class="kw">move</span> {
                             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
-                            <span class="ident">res</span>.<span class="ident">headers_mut</span>().<span class="ident">insert</span>(
-                                <span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>,
-                                <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;0001&quot;</span>),
-                            );
+                            <span class="ident">res</span>.<span class="ident">headers_mut</span>()
+                                .<span class="ident">insert</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;0001&quot;</span>));
                             <span class="prelude-val">Ok</span>(<span class="ident">res</span>)
                         }
                     })
@@ -2208,9 +2197,8 @@
                 <span class="ident">s</span>.<span class="ident">route</span>(
                     <span class="string">&quot;/&quot;</span>,
                     <span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">HttpRequest</span><span class="op">|</span> {
-                        <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">body</span>(
-                            <span class="ident">req</span>.<span class="ident">url_for</span>(<span class="string">&quot;youtube&quot;</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;xxxxxx&quot;</span>]).<span class="ident">unwrap</span>().<span class="ident">to_string</span>(),
-                        )
+                        <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
+                            .<span class="ident">body</span>(<span class="ident">req</span>.<span class="ident">url_for</span>(<span class="string">&quot;youtube&quot;</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;xxxxxx&quot;</span>]).<span class="ident">unwrap</span>().<span class="ident">to_string</span>())
                     }),
                 );
             }));

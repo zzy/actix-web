@@ -1295,6 +1295,16 @@
 <span id="1294">1294</span>
 <span id="1295">1295</span>
 <span id="1296">1296</span>
+<span id="1297">1297</span>
+<span id="1298">1298</span>
+<span id="1299">1299</span>
+<span id="1300">1300</span>
+<span id="1301">1301</span>
+<span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1476,7 +1486,7 @@
         )
     }
 
-    <span class="doccomment">/// Create http/1 dispatcher with slow request timeout.</span>
+    <span class="doccomment">/// Create HTTP/1 dispatcher with slow request timeout.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_timeout</span>(
         <span class="ident">io</span>: <span class="ident">T</span>,
         <span class="ident">codec</span>: <span class="ident">Codec</span>,
@@ -1654,6 +1664,7 @@
                             <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">State</span>::<span class="ident">ServiceCall</span>(<span class="ident">task</span>));
                         };
                     }
+
                     <span class="comment">// handle error message.</span>
                     <span class="prelude-val">Some</span>(<span class="ident">DispatcherMessage</span>::<span class="ident">Error</span>(<span class="ident">res</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="comment">// send_response would update InnerDispatcher state to SendPayload or</span>
@@ -1662,10 +1673,12 @@
                         <span class="self">self</span>.<span class="ident">as_mut</span>()
                             .<span class="ident">send_response</span>(<span class="ident">res</span>, <span class="ident">ResponseBody</span>::<span class="ident">Other</span>(<span class="ident">Body</span>::<span class="ident">Empty</span>))<span class="question-mark">?</span>;
                     }
+
                     <span class="comment">// return with upgrade request and poll it exclusively.</span>
                     <span class="prelude-val">Some</span>(<span class="ident">DispatcherMessage</span>::<span class="ident">Upgrade</span>(<span class="ident">req</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">PollResponse</span>::<span class="ident">Upgrade</span>(<span class="ident">req</span>));
                     }
+
                     <span class="comment">// all messages are dealt with.</span>
                     <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">PollResponse</span>::<span class="ident">DoNothing</span>),
                 },
@@ -1675,12 +1688,14 @@
                         <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">into</span>().<span class="ident">replace_body</span>(());
                         <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_response</span>(<span class="ident">res</span>, <span class="ident">body</span>)<span class="question-mark">?</span>;
                     }
+
                     <span class="comment">// send service call error as response</span>
-                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>().<span class="ident">into</span>();
+                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">into</span>();
                         <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                         <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_response</span>(<span class="ident">res</span>, <span class="ident">body</span>.<span class="ident">into_body</span>())<span class="question-mark">?</span>;
                     }
+
                     <span class="comment">// service call pending and could be waiting for more chunk messages.</span>
                     <span class="comment">// (pipeline message limit and/or payload can_read limit)</span>
                     <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> {
@@ -1692,6 +1707,7 @@
                         <span class="comment">// otherwise keep loop.</span>
                     }
                 },
+
                 <span class="ident">StateProj</span>::<span class="ident">SendPayload</span>(<span class="kw-2">mut</span> <span class="ident">stream</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="comment">// keep populate writer buffer until buffer size limit hit,</span>
                     <span class="comment">// get blocked or finished.</span>
@@ -1703,6 +1719,7 @@
                                     <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">write_buf</span>,
                                 )<span class="question-mark">?</span>;
                             }
+
                             <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
                                 <span class="ident">this</span>.<span class="ident">codec</span>
                                     .<span class="ident">encode</span>(<span class="ident">Message</span>::<span class="ident">Chunk</span>(<span class="prelude-val">None</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">write_buf</span>)<span class="question-mark">?</span>;
@@ -1711,9 +1728,11 @@
                                 <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">State</span>::<span class="prelude-val">None</span>);
                                 <span class="kw">continue</span> <span class="lifetime">&#39;res</span>;
                             }
-                            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>))) <span class="op">=</span><span class="op">&gt;</span> {
-                                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">Service</span>(<span class="ident">e</span>))
+
+                            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">Service</span>(<span class="ident">err</span>))
                             }
+
                             <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">PollResponse</span>::<span class="ident">DoNothing</span>),
                         }
                     }
@@ -1721,6 +1740,7 @@
                     <span class="comment">// return and try to write the whole buffer to io stream.</span>
                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">PollResponse</span>::<span class="ident">DrainWriteBuf</span>);
                 }
+
                 <span class="ident">StateProj</span>::<span class="ident">ExpectCall</span>(<span class="ident">fut</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">fut</span>.<span class="ident">poll</span>(<span class="ident">cx</span>) {
                     <span class="comment">// expect resolved. write continue to buffer and set InnerDispatcher state</span>
                     <span class="comment">// to service call.</span>
@@ -1731,8 +1751,8 @@
                         <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">State</span>::<span class="ident">ServiceCall</span>(<span class="ident">fut</span>));
                     }
                     <span class="comment">// send expect error as response</span>
-                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>().<span class="ident">into</span>();
+                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">into</span>();
                         <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                         <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_response</span>(<span class="ident">res</span>, <span class="ident">body</span>.<span class="ident">into_body</span>())<span class="question-mark">?</span>;
                     }
@@ -1780,9 +1800,9 @@
                         <span class="comment">// future is error. send response and return a result. On success</span>
                         <span class="comment">// to notify the dispatcher a new state is set and the outer loop</span>
                         <span class="comment">// should be continue.</span>
-                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">let</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>();
-                            <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>();
+                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
+                            <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
                             <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                             <span class="kw">return</span> <span class="self">self</span>.<span class="ident">send_response</span>(<span class="ident">res</span>, <span class="ident">body</span>.<span class="ident">into_body</span>());
                         }
@@ -1800,9 +1820,9 @@
                         }
                         <span class="comment">// see the comment on ExpectCall state branch&#39;s Pending.</span>
                         <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
-                        <span class="comment">// see the comment on ExpectCall state branch&#39;s Ready(Err(e)).</span>
-                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>().<span class="ident">into</span>();
+                        <span class="comment">// see the comment on ExpectCall state branch&#39;s Ready(Err(err)).</span>
+                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">into</span>();
                             <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                             <span class="self">self</span>.<span class="ident">send_response</span>(<span class="ident">res</span>, <span class="ident">body</span>.<span class="ident">into_body</span>())
                         }
@@ -1894,25 +1914,25 @@
                 <span class="comment">// decode is partial and buffer is not full yet.</span>
                 <span class="comment">// break and wait for more read.</span>
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
-                <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">Io</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">Io</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">client_disconnected</span>();
                     <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
-                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">DispatchError</span>::<span class="ident">Io</span>(<span class="ident">e</span>));
+                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">DispatchError</span>::<span class="ident">Io</span>(<span class="ident">err</span>));
                     <span class="kw">break</span>;
                 }
                 <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">TooLarge</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">take</span>() {
                         <span class="ident">payload</span>.<span class="ident">set_error</span>(<span class="ident">PayloadError</span>::<span class="ident">Overflow</span>);
                     }
-                    <span class="comment">// Requests overflow buffer size should be responded with 413</span>
+                    <span class="comment">// Requests overflow buffer size should be responded with 431</span>
                     <span class="ident">this</span>.<span class="ident">messages</span>.<span class="ident">push_back</span>(<span class="ident">DispatcherMessage</span>::<span class="ident">Error</span>(
-                        <span class="ident">Response</span>::<span class="ident">PayloadTooLarge</span>().<span class="ident">finish</span>().<span class="ident">drop_body</span>(),
+                        <span class="ident">Response</span>::<span class="ident">RequestHeaderFieldsTooLarge</span>().<span class="ident">finish</span>().<span class="ident">drop_body</span>(),
                     ));
                     <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">READ_DISCONNECT</span>);
                     <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ParseError</span>::<span class="ident">TooLarge</span>.<span class="ident">into</span>());
                     <span class="kw">break</span>;
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">take</span>() {
                         <span class="ident">payload</span>.<span class="ident">set_error</span>(<span class="ident">PayloadError</span>::<span class="ident">EncodingCorrupted</span>);
                     }
@@ -1922,7 +1942,7 @@
                         <span class="ident">Response</span>::<span class="ident">BadRequest</span>().<span class="ident">finish</span>().<span class="ident">drop_body</span>(),
                     ));
                     <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">READ_DISCONNECT</span>);
-                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>());
+                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">err</span>.<span class="ident">into</span>());
                     <span class="kw">break</span>;
                 }
             }

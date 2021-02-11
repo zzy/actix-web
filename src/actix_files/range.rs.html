@@ -380,8 +380,6 @@
 <span id="377">377</span>
 <span id="378">378</span>
 <span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">Error</span>};
 
@@ -431,8 +429,7 @@
                 <span class="kw">if</span> <span class="ident">start_str</span>.<span class="ident">is_empty</span>() {
                     <span class="comment">// If no start is specified, end specifies the</span>
                     <span class="comment">// range start relative to the end of the file.</span>
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">length</span>: <span class="ident">i64</span> <span class="op">=</span>
-                        <span class="ident">end_str</span>.<span class="ident">parse</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseRangeErr</span>(()))<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">length</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="ident">end_str</span>.<span class="ident">parse</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseRangeErr</span>(()))<span class="question-mark">?</span>;
 
                     <span class="kw">if</span> <span class="ident">length</span> <span class="op">&gt;</span> <span class="ident">size_sig</span> {
                         <span class="ident">length</span> <span class="op">=</span> <span class="ident">size_sig</span>;
@@ -457,8 +454,7 @@
                         <span class="comment">// If no end is specified, range extends to end of the file.</span>
                         <span class="ident">size_sig</span> <span class="op">-</span> <span class="ident">start</span>
                     } <span class="kw">else</span> {
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">end</span>: <span class="ident">i64</span> <span class="op">=</span>
-                            <span class="ident">end_str</span>.<span class="ident">parse</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseRangeErr</span>(()))<span class="question-mark">?</span>;
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">end</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="ident">end_str</span>.<span class="ident">parse</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseRangeErr</span>(()))<span class="question-mark">?</span>;
 
                         <span class="kw">if</span> <span class="ident">start</span> <span class="op">&gt;</span> <span class="ident">end</span> {
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRangeErr</span>(()));

@@ -807,12 +807,6 @@
 <span id="806">806</span>
 <span id="807">807</span>
 <span id="808">808</span>
-<span id="809">809</span>
-<span id="810">810</span>
-<span id="811">811</span>
-<span id="812">812</span>
-<span id="813">813</span>
-<span id="814">814</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! For middleware documentation, see [`Logger`].</span>
 
@@ -953,9 +947,9 @@
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>).<span class="ident">unwrap</span>();
 
-        <span class="kw">let</span> <span class="ident">ft</span> <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">format</span>.<span class="number">0</span>.<span class="ident">iter_mut</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">ft</span><span class="op">|</span> {
-            <span class="macro">matches</span><span class="macro">!</span>(<span class="ident">ft</span>, <span class="ident">FormatText</span>::<span class="ident">CustomRequest</span>(<span class="ident">unit_label</span>, <span class="kw">_</span>) <span class="kw">if</span> <span class="ident">label</span> <span class="op">=</span><span class="op">=</span> <span class="ident">unit_label</span>)
-        });
+        <span class="kw">let</span> <span class="ident">ft</span> <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">format</span>.<span class="number">0</span>.<span class="ident">iter_mut</span>().<span class="ident">find</span>(
+            <span class="op">|</span><span class="ident">ft</span><span class="op">|</span> <span class="macro">matches</span><span class="macro">!</span>(<span class="ident">ft</span>, <span class="ident">FormatText</span>::<span class="ident">CustomRequest</span>(<span class="ident">unit_label</span>, <span class="kw">_</span>) <span class="kw">if</span> <span class="ident">label</span> <span class="op">=</span><span class="op">=</span> <span class="ident">unit_label</span>),
+        );
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">FormatText</span>::<span class="ident">CustomRequest</span>(<span class="kw">_</span>, <span class="ident">request_fn</span>)) <span class="op">=</span> <span class="ident">ft</span> {
             <span class="comment">// replace into None or previously registered fn using same label</span>
@@ -1179,8 +1173,7 @@
     <span class="doccomment">/// Returns `None` if the format string syntax is incorrect.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Format</span> {
         <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Access log format: {}&quot;</span>, <span class="ident">s</span>);
-        <span class="kw">let</span> <span class="ident">fmt</span> <span class="op">=</span>
-            <span class="ident">Regex</span>::<span class="ident">new</span>(<span class="string">r&quot;%(\{([A-Za-z0-9\-_]+)\}([aioe]|xi)|[atPrUsbTD]?)&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">fmt</span> <span class="op">=</span> <span class="ident">Regex</span>::<span class="ident">new</span>(<span class="string">r&quot;%(\{([A-Za-z0-9\-_]+)\}([aioe]|xi)|[atPrUsbTD]?)&quot;</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">idx</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
@@ -1201,12 +1194,12 @@
                             <span class="macro">unreachable</span><span class="macro">!</span>()
                         }
                     }
-                    <span class="string">&quot;i&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FormatText</span>::<span class="ident">RequestHeader</span>(
-                        <span class="ident">HeaderName</span>::<span class="ident">try_from</span>(<span class="ident">key</span>.<span class="ident">as_str</span>()).<span class="ident">unwrap</span>(),
-                    ),
-                    <span class="string">&quot;o&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FormatText</span>::<span class="ident">ResponseHeader</span>(
-                        <span class="ident">HeaderName</span>::<span class="ident">try_from</span>(<span class="ident">key</span>.<span class="ident">as_str</span>()).<span class="ident">unwrap</span>(),
-                    ),
+                    <span class="string">&quot;i&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="ident">FormatText</span>::<span class="ident">RequestHeader</span>(<span class="ident">HeaderName</span>::<span class="ident">try_from</span>(<span class="ident">key</span>.<span class="ident">as_str</span>()).<span class="ident">unwrap</span>())
+                    }
+                    <span class="string">&quot;o&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="ident">FormatText</span>::<span class="ident">ResponseHeader</span>(<span class="ident">HeaderName</span>::<span class="ident">try_from</span>(<span class="ident">key</span>.<span class="ident">as_str</span>()).<span class="ident">unwrap</span>())
+                    }
                     <span class="string">&quot;e&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FormatText</span>::<span class="ident">EnvironHeader</span>(<span class="ident">key</span>.<span class="ident">as_str</span>().<span class="ident">to_owned</span>()),
                     <span class="string">&quot;xi&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FormatText</span>::<span class="ident">CustomRequest</span>(<span class="ident">key</span>.<span class="ident">as_str</span>().<span class="ident">to_owned</span>(), <span class="prelude-val">None</span>),
                     <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
@@ -1349,9 +1342,7 @@
                 };
             }
             <span class="ident">FormatText</span>::<span class="ident">UrlPath</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">FormatText</span>::<span class="ident">Str</span>(<span class="ident">req</span>.<span class="ident">path</span>().<span class="ident">to_string</span>()),
-            <span class="ident">FormatText</span>::<span class="ident">RequestTime</span> <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">FormatText</span>::<span class="ident">Str</span>(<span class="ident">now</span>.<span class="ident">format</span>(<span class="string">&quot;%Y-%m-%dT%H:%M:%S&quot;</span>))
-            }
+            <span class="ident">FormatText</span>::<span class="ident">RequestTime</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">FormatText</span>::<span class="ident">Str</span>(<span class="ident">now</span>.<span class="ident">format</span>(<span class="string">&quot;%Y-%m-%dT%H:%M:%S&quot;</span>)),
             <span class="ident">FormatText</span>::<span class="ident">RequestHeader</span>(<span class="kw-2">ref</span> <span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">name</span>) {
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">val</span>.<span class="ident">to_str</span>() {
@@ -1373,8 +1364,7 @@
                 <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">s</span>;
             }
             <span class="ident">FormatText</span>::<span class="ident">RealIPRemoteAddr</span> <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">remote</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">connection_info</span>().<span class="ident">realip_remote_addr</span>()
-                {
+                <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">remote</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">connection_info</span>().<span class="ident">realip_remote_addr</span>() {
                     <span class="ident">FormatText</span>::<span class="ident">Str</span>(<span class="ident">remote</span>.<span class="ident">to_string</span>())
                 } <span class="kw">else</span> {
                     <span class="ident">FormatText</span>::<span class="ident">Str</span>(<span class="string">&quot;-&quot;</span>.<span class="ident">to_string</span>())
@@ -1445,8 +1435,8 @@
                     .<span class="ident">finish</span>(),
             ))
         };
-        <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">Logger</span>::<span class="ident">new</span>(<span class="string">&quot;%% %{User-Agent}i %{X-Test}o %{HOME}e %D test&quot;</span>)
-            .<span class="ident">exclude_regex</span>(<span class="string">&quot;\\w&quot;</span>);
+        <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span>
+            <span class="ident">Logger</span>::<span class="ident">new</span>(<span class="string">&quot;%% %{User-Agent}i %{X-Test}o %{HOME}e %D test&quot;</span>).<span class="ident">exclude_regex</span>(<span class="string">&quot;\\w&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
 
@@ -1559,9 +1549,7 @@
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>()
             .<span class="ident">insert_header</span>((
                 <span class="ident">header</span>::<span class="ident">FORWARDED</span>,
-                <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(
-                    <span class="string">&quot;for=192.0.2.60;proto=http;by=203.0.113.43&quot;</span>,
-                ),
+                <span class="ident">header</span>::<span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;for=192.0.2.60;proto=http;by=203.0.113.43&quot;</span>),
             ))
             .<span class="ident">to_srv_request</span>();
 

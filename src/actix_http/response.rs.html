@@ -1134,7 +1134,6 @@
 <span id="1133">1133</span>
 <span id="1134">1134</span>
 <span id="1135">1135</span>
-<span id="1136">1136</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP responses.</span>
 
@@ -1170,13 +1169,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Create http response builder with specific status.</span>
+    <span class="doccomment">/// Create HTTP response builder with specific status.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="ident">ResponseBuilder</span>::<span class="ident">new</span>(<span class="ident">status</span>)
     }
 
-    <span class="doccomment">/// Create http response builder</span>
+    <span class="doccomment">/// Create HTTP response builder</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build_from</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">source</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="ident">source</span>.<span class="ident">into</span>()
@@ -1235,7 +1234,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Mutable reference to a http message part of the response</span>
+    <span class="doccomment">/// Mutable reference to a HTTP message part of the response</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">head</span>
     }
@@ -2005,6 +2004,7 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">body</span>::<span class="ident">Body</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>, <span class="ident">COOKIE</span>, <span class="ident">SET_COOKIE</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">HttpMessage</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_debug</span>() {
@@ -2018,8 +2018,6 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_response_cookies</span>() {
-        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">httpmessage</span>::<span class="ident">HttpMessage</span>;
-
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">test</span>::<span class="ident">TestRequest</span>::<span class="ident">default</span>()
             .<span class="ident">append_header</span>((<span class="ident">COOKIE</span>, <span class="string">&quot;cookie1=value1&quot;</span>))
             .<span class="ident">append_header</span>((<span class="ident">COOKIE</span>, <span class="string">&quot;cookie2=value2&quot;</span>))

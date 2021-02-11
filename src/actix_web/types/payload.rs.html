@@ -516,13 +516,6 @@
 <span id="515">515</span>
 <span id="516">516</span>
 <span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Basic binary and string payload extractors.</span>
 
@@ -581,10 +574,7 @@
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">poll_next</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
-        <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>)
     }
 }
@@ -922,9 +912,7 @@
             <span class="ident">App</span>::<span class="ident">new</span>()
                 .<span class="ident">service</span>(
                     <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/bytes-app-data&quot;</span>)
-                        .<span class="ident">app_data</span>(
-                            <span class="ident">PayloadConfig</span>::<span class="ident">default</span>().<span class="ident">mimetype</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>),
-                        )
+                        .<span class="ident">app_data</span>(<span class="ident">PayloadConfig</span>::<span class="ident">default</span>().<span class="ident">mimetype</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>))
                         .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">bytes_handler</span>)),
                 )
                 .<span class="ident">service</span>(
@@ -934,9 +922,7 @@
                 )
                 .<span class="ident">service</span>(
                     <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/string-app-data&quot;</span>)
-                        .<span class="ident">app_data</span>(
-                            <span class="ident">PayloadConfig</span>::<span class="ident">default</span>().<span class="ident">mimetype</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>),
-                        )
+                        .<span class="ident">app_data</span>(<span class="ident">PayloadConfig</span>::<span class="ident">default</span>().<span class="ident">mimetype</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>))
                         .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">string_handler</span>)),
                 )
                 .<span class="ident">service</span>(

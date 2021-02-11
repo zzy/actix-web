@@ -4,7 +4,7 @@
 Application data is available to all routes and can be added during the application
 configuration process via <code>App::data()</code>.</p>
 <p>Application data can be accessed by using <code>Data&lt;T&gt;</code> extractor where <code>T</code> is data type.</p>
-<p><strong>Note</strong>: http server accepts an application factory rather than an application instance. HTTP
+<p><strong>Note</strong>: HTTP server accepts an application factory rather than an application instance. HTTP
 server constructs an application instance for each thread, thus application data must be
 constructed multiple times. If you want to share data between different threads, a shareable
 object should be used, e.g. <code>Send + Sync</code>. Application data does not need to be <code>Send</code>
