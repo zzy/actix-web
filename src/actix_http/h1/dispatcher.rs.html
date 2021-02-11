@@ -1295,7 +1295,6 @@
 <span id="1294">1294</span>
 <span id="1295">1295</span>
 <span id="1296">1296</span>
-<span id="1297">1297</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1336,15 +1335,14 @@
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Flags</span>: <span class="ident">u8</span> {
         <span class="kw">const</span> <span class="ident">STARTED</span>            <span class="op">=</span> <span class="number">0b0000_0001</span>;
         <span class="kw">const</span> <span class="ident">KEEPALIVE</span>          <span class="op">=</span> <span class="number">0b0000_0010</span>;
-        <span class="kw">const</span> <span class="ident">POLLED</span>             <span class="op">=</span> <span class="number">0b0000_0100</span>;
-        <span class="kw">const</span> <span class="ident">SHUTDOWN</span>           <span class="op">=</span> <span class="number">0b0000_1000</span>;
-        <span class="kw">const</span> <span class="ident">READ_DISCONNECT</span>    <span class="op">=</span> <span class="number">0b0001_0000</span>;
-        <span class="kw">const</span> <span class="ident">WRITE_DISCONNECT</span>   <span class="op">=</span> <span class="number">0b0010_0000</span>;
-        <span class="kw">const</span> <span class="ident">UPGRADE</span>            <span class="op">=</span> <span class="number">0b0100_0000</span>;
+        <span class="kw">const</span> <span class="ident">SHUTDOWN</span>           <span class="op">=</span> <span class="number">0b0000_0100</span>;
+        <span class="kw">const</span> <span class="ident">READ_DISCONNECT</span>    <span class="op">=</span> <span class="number">0b0000_1000</span>;
+        <span class="kw">const</span> <span class="ident">WRITE_DISCONNECT</span>   <span class="op">=</span> <span class="number">0b0001_0000</span>;
+        <span class="kw">const</span> <span class="ident">UPGRADE</span>            <span class="op">=</span> <span class="number">0b0010_0000</span>;
     }
 }
 
-<span class="attribute">#[<span class="ident">pin_project</span>::<span class="ident">pin_project</span>]</span>
+<span class="attribute">#[<span class="ident">pin_project</span>]</span>
 <span class="doccomment">/// Dispatcher for HTTP/1.1 protocol</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
