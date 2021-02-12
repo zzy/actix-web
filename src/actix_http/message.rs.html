@@ -490,6 +490,8 @@
 <span id="489">489</span>
 <span id="490">490</span>
 <span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>;
@@ -506,8 +508,10 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ConnectionType</span> {
     <span class="doccomment">/// Close connection after response</span>
     <span class="ident">Close</span>,
+
     <span class="doccomment">/// Keep connection alive after response</span>
     <span class="ident">KeepAlive</span>,
+
     <span class="doccomment">/// Connection is upgraded to different type</span>
     <span class="ident">Upgrade</span>,
 }
