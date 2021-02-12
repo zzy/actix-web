@@ -328,7 +328,6 @@
 <span id="327">327</span>
 <span id="328">328</span>
 <span id="329">329</span>
-<span id="330">330</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::{<span class="ident">From</span>, <span class="ident">Into</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
@@ -406,8 +405,7 @@
     }
 }
 
-<span class="doccomment">/// Status code used to indicate why an endpoint is closing the `WebSocket`</span>
-<span class="doccomment">/// connection.</span>
+<span class="doccomment">/// Status code used to indicate why an endpoint is closing the WebSocket connection.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CloseCode</span> {
     <span class="doccomment">/// Indicates a normal closure, meaning that the purpose for</span>

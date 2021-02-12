@@ -331,9 +331,9 @@
 <span id="330">330</span>
 <span id="331">331</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! WebSocket protocol support.</span>
+<span class="doccomment">//! WebSocket protocol.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! To setup a WebSocket, first do web socket handshake then on success convert `Payload` into a</span>
+<span class="doccomment">//! To setup a WebSocket, first perform the WebSocket handshake then on success convert `Payload` into a</span>
 <span class="doccomment">//! `WsStream` stream and then use `WsWriter` to communicate with the peer.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
@@ -409,7 +409,7 @@
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Method not allowed.&quot;</span>)]</span>
     <span class="ident">GetMethodRequired</span>,
 
-    <span class="doccomment">/// Upgrade header if not set to websocket.</span>
+    <span class="doccomment">/// Upgrade header if not set to WebSocket.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;WebSocket upgrade is expected.&quot;</span>)]</span>
     <span class="ident">NoWebsocketUpgrade</span>,
 
@@ -421,7 +421,7 @@
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;WebSocket version header is required.&quot;</span>)]</span>
     <span class="ident">NoVersionHeader</span>,
 
-    <span class="doccomment">/// Unsupported websocket version.</span>
+    <span class="doccomment">/// Unsupported WebSocket version.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unsupported version.&quot;</span>)]</span>
     <span class="ident">UnsupportedVersion</span>,
 
@@ -460,20 +460,20 @@
     }
 }
 
-<span class="doccomment">/// Verify `WebSocket` handshake request and create handshake response.</span>
+<span class="doccomment">/// Verify WebSocket handshake request and create handshake response.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handshake</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">RequestHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span>, <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
     <span class="ident">verify_handshake</span>(<span class="ident">req</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">handshake_response</span>(<span class="ident">req</span>))
 }
 
-<span class="doccomment">/// Verify `WebSocket` handshake request.</span>
+<span class="doccomment">/// Verify WebSocket handshake request.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">verify_handshake</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">RequestHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
     <span class="comment">// WebSocket accepts only GET</span>
     <span class="kw">if</span> <span class="ident">req</span>.<span class="ident">method</span> <span class="op">!</span><span class="op">=</span> <span class="ident">Method</span>::<span class="ident">GET</span> {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError</span>::<span class="ident">GetMethodRequired</span>);
     }
 
-    <span class="comment">// Check for &quot;UPGRADE&quot; to websocket header</span>
+    <span class="comment">// Check for &quot;UPGRADE&quot; to WebSocket header</span>
     <span class="kw">let</span> <span class="ident">has_hdr</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">hdr</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header</span>::<span class="ident">UPGRADE</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">hdr</span>.<span class="ident">to_str</span>() {
             <span class="ident">s</span>.<span class="ident">to_ascii_lowercase</span>().<span class="ident">contains</span>(<span class="string">&quot;websocket&quot;</span>)
@@ -514,7 +514,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="doccomment">/// Create websocket handshake response</span>
+<span class="doccomment">/// Create WebSocket handshake response.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This function returns handshake `Response`, ready to send to peer.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handshake_response</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">RequestHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {

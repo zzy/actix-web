@@ -1471,7 +1471,7 @@
         <span class="kw">let</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">length</span> {
             <span class="ident">PayloadLength</span>::<span class="ident">Payload</span>(<span class="ident">pl</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">pl</span>,
             <span class="ident">PayloadLength</span>::<span class="ident">UpgradeWebSocket</span> <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="comment">// upgrade(websocket)</span>
+                <span class="comment">// upgrade (WebSocket)</span>
                 <span class="ident">PayloadType</span>::<span class="ident">Stream</span>(<span class="ident">PayloadDecoder</span>::<span class="ident">eof</span>())
             }
             <span class="ident">PayloadLength</span>::<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
