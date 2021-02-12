@@ -1184,8 +1184,8 @@
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_camel_case</span>() {
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_camel_case</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="number">2048</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">RequestHead</span>::<span class="ident">default</span>();
         <span class="ident">head</span>.<span class="ident">set_camel_case_headers</span>(<span class="bool-val">true</span>);
@@ -1248,8 +1248,8 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">data</span>.<span class="ident">contains</span>(<span class="string">&quot;date: date\r\n&quot;</span>));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_extra_headers</span>() {
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_extra_headers</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="number">2048</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">RequestHead</span>::<span class="ident">default</span>();
@@ -1282,8 +1282,8 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">data</span>.<span class="ident">contains</span>(<span class="string">&quot;date: date\r\n&quot;</span>));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_no_content_length</span>() {
+    <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_no_content_length</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="number">2048</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="op">=</span>
