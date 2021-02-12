@@ -1278,6 +1278,11 @@
 <span id="1277">1277</span>
 <span id="1278">1278</span>
 <span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
+<span id="1284">1284</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -2026,7 +2031,12 @@
                             <span class="comment">// at this point it&#39;s not known io is still scheduled to</span>
                             <span class="comment">// be waked up. so force wake up dispatcher just in case.</span>
                             <span class="comment">// TODO: figure out the overhead.</span>
-                            <span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">wake_by_ref</span>();
+                            <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">is_none</span>() {
+                                <span class="comment">// When dispatcher has a payload. The responsibility of</span>
+                                <span class="comment">// wake up stream would be shift to PayloadSender.</span>
+                                <span class="comment">// Therefore no self wake up is needed.</span>
+                                <span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">wake_by_ref</span>();
+                            }
                             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
                         }
 
