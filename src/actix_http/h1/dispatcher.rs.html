@@ -1278,33 +1278,6 @@
 <span id="1277">1277</span>
 <span id="1278">1278</span>
 <span id="1279">1279</span>
-<span id="1280">1280</span>
-<span id="1281">1281</span>
-<span id="1282">1282</span>
-<span id="1283">1283</span>
-<span id="1284">1284</span>
-<span id="1285">1285</span>
-<span id="1286">1286</span>
-<span id="1287">1287</span>
-<span id="1288">1288</span>
-<span id="1289">1289</span>
-<span id="1290">1290</span>
-<span id="1291">1291</span>
-<span id="1292">1292</span>
-<span id="1293">1293</span>
-<span id="1294">1294</span>
-<span id="1295">1295</span>
-<span id="1296">1296</span>
-<span id="1297">1297</span>
-<span id="1298">1298</span>
-<span id="1299">1299</span>
-<span id="1300">1300</span>
-<span id="1301">1301</span>
-<span id="1302">1302</span>
-<span id="1303">1303</span>
-<span id="1304">1304</span>
-<span id="1305">1305</span>
-<span id="1306">1306</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1468,62 +1441,35 @@
 {
     <span class="doccomment">/// Create HTTP/1 dispatcher.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">stream</span>: <span class="ident">T</span>,
-        <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
-        <span class="ident">services</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect_data</span>: <span class="ident">OnConnectData</span>,
-        <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Dispatcher</span>::<span class="ident">with_timeout</span>(
-            <span class="ident">stream</span>,
-            <span class="ident">Codec</span>::<span class="ident">new</span>(<span class="ident">config</span>.<span class="ident">clone</span>()),
-            <span class="ident">config</span>,
-            <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="ident">HW_BUFFER_SIZE</span>),
-            <span class="prelude-val">None</span>,
-            <span class="ident">services</span>,
-            <span class="ident">on_connect_data</span>,
-            <span class="ident">peer_addr</span>,
-        )
-    }
-
-    <span class="doccomment">/// Create HTTP/1 dispatcher with slow request timeout.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_timeout</span>(
         <span class="ident">io</span>: <span class="ident">T</span>,
-        <span class="ident">codec</span>: <span class="ident">Codec</span>,
         <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
-        <span class="ident">read_buf</span>: <span class="ident">BytesMut</span>,
-        <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span>,
-        <span class="ident">services</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">flow</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">on_connect_data</span>: <span class="ident">OnConnectData</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">keepalive</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">keep_alive_enabled</span>();
-        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">keepalive</span> {
+        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">keep_alive_enabled</span>() {
             <span class="ident">Flags</span>::<span class="ident">KEEPALIVE</span>
         } <span class="kw">else</span> {
             <span class="ident">Flags</span>::<span class="ident">empty</span>()
         };
 
         <span class="comment">// keep-alive timer</span>
-        <span class="kw">let</span> (<span class="ident">ka_expire</span>, <span class="ident">ka_timer</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">delay</span>) <span class="op">=</span> <span class="ident">timeout</span> {
-            (<span class="ident">delay</span>.<span class="ident">deadline</span>(), <span class="prelude-val">Some</span>(<span class="ident">delay</span>))
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">delay</span>) <span class="op">=</span> <span class="ident">config</span>.<span class="ident">keep_alive_timer</span>() {
-            (<span class="ident">delay</span>.<span class="ident">deadline</span>(), <span class="prelude-val">Some</span>(<span class="ident">delay</span>))
-        } <span class="kw">else</span> {
-            (<span class="ident">config</span>.<span class="ident">now</span>(), <span class="prelude-val">None</span>)
+        <span class="kw">let</span> (<span class="ident">ka_expire</span>, <span class="ident">ka_timer</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">keep_alive_timer</span>() {
+            <span class="prelude-val">Some</span>(<span class="ident">delay</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">delay</span>.<span class="ident">deadline</span>(), <span class="prelude-val">Some</span>(<span class="ident">delay</span>)),
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">config</span>.<span class="ident">now</span>(), <span class="prelude-val">None</span>),
         };
 
         <span class="ident">Dispatcher</span> {
             <span class="ident">inner</span>: <span class="ident">DispatcherState</span>::<span class="ident">Normal</span>(<span class="ident">InnerDispatcher</span> {
+                <span class="ident">read_buf</span>: <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="ident">HW_BUFFER_SIZE</span>),
                 <span class="ident">write_buf</span>: <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="ident">HW_BUFFER_SIZE</span>),
                 <span class="ident">payload</span>: <span class="prelude-val">None</span>,
                 <span class="ident">state</span>: <span class="ident">State</span>::<span class="prelude-val">None</span>,
                 <span class="ident">error</span>: <span class="prelude-val">None</span>,
                 <span class="ident">messages</span>: <span class="ident">VecDeque</span>::<span class="ident">new</span>(),
                 <span class="ident">io</span>: <span class="prelude-val">Some</span>(<span class="ident">io</span>),
-                <span class="ident">codec</span>,
-                <span class="ident">read_buf</span>,
-                <span class="ident">flow</span>: <span class="ident">services</span>,
+                <span class="ident">codec</span>: <span class="ident">Codec</span>::<span class="ident">new</span>(<span class="ident">config</span>),
+                <span class="ident">flow</span>,
                 <span class="ident">on_connect_data</span>,
                 <span class="ident">flags</span>,
                 <span class="ident">peer_addr</span>,
