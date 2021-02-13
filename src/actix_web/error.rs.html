@@ -201,6 +201,8 @@
 <span id="200">200</span>
 <span id="201">201</span>
 <span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Error and Result module</span>
 
@@ -217,9 +219,11 @@
     <span class="doccomment">/// Resource not found</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Resource not found&quot;</span>)]</span>
     <span class="ident">ResourceNotFound</span>,
+
     <span class="doccomment">/// Not all path pattern covered</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Not all path pattern covered&quot;</span>)]</span>
     <span class="ident">NotEnoughElements</span>,
+
     <span class="doccomment">/// URL parse error</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">ParseError</span>(<span class="ident">UrlParseError</span>),

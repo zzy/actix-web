@@ -521,6 +521,12 @@
 <span id="520">520</span>
 <span id="521">521</span>
 <span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Websockets client</span>
 <span class="doccomment">//!</span>
@@ -556,6 +562,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">str</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::<span class="ident">Framed</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">ws</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>};
 <span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::<span class="ident">timeout</span>;
@@ -578,8 +585,10 @@
     <span class="ident">addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SocketAddr</span><span class="op">&gt;</span>,
     <span class="ident">max_size</span>: <span class="ident">usize</span>,
     <span class="ident">server_mode</span>: <span class="ident">bool</span>,
-    <span class="ident">cookies</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CookieJar</span><span class="op">&gt;</span>,
     <span class="ident">config</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ClientConfig</span><span class="op">&gt;</span>,
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
+    <span class="ident">cookies</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CookieJar</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">WebsocketsRequest</span> {
@@ -613,6 +622,7 @@
             <span class="ident">protocols</span>: <span class="prelude-val">None</span>,
             <span class="ident">max_size</span>: <span class="number">65_536</span>,
             <span class="ident">server_mode</span>: <span class="bool-val">false</span>,
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
             <span class="ident">cookies</span>: <span class="prelude-val">None</span>,
         }
     }
@@ -641,6 +651,7 @@
     }
 
     <span class="doccomment">/// Set a cookie</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookie</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cookies</span>.<span class="ident">is_none</span>() {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jar</span> <span class="op">=</span> <span class="ident">CookieJar</span>::<span class="ident">new</span>();
@@ -794,6 +805,7 @@
         }
 
         <span class="comment">// set cookies</span>
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">jar</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">cookies</span> {
             <span class="kw">let</span> <span class="ident">cookie</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">jar</span>
                 .<span class="ident">delta</span>()
