@@ -200,6 +200,8 @@
 <span id="199">199</span>
 <span id="200">200</span>
 <span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust.</span>
 <span class="doccomment">//!</span>
@@ -302,8 +304,10 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">types</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">web</span>;
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">cookie</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">Response</span> <span class="kw">as</span> <span class="ident">HttpResponse</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body</span>, <span class="ident">cookie</span>, <span class="ident">http</span>, <span class="ident">Error</span>, <span class="ident">HttpMessage</span>, <span class="ident">ResponseError</span>, <span class="prelude-ty">Result</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body</span>, <span class="ident">http</span>, <span class="ident">Error</span>, <span class="ident">HttpMessage</span>, <span class="ident">ResponseError</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_rt</span> <span class="kw">as</span> <span class="ident">rt</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_web_codegen</span>::<span class="kw-2">*</span>;
 

@@ -192,6 +192,15 @@
 <span id="191">191</span>
 <span id="192">192</span>
 <span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! For middleware documentation, see [`Compat`].</span>
 
@@ -318,18 +327,24 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="comment">// easier to code when cookies feature is disabled</span>
+    <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
+
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">IntoService</span>;
 
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">dev</span>::<span class="ident">ServiceRequest</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">http</span>::<span class="ident">StatusCode</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">middleware</span>::{<span class="ident">Compress</span>, <span class="ident">Condition</span>, <span class="ident">Logger</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">middleware</span>::{<span class="self">self</span>, <span class="ident">Condition</span>, <span class="ident">Logger</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">test</span>::{<span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">TestRequest</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_scope_middleware</span>() {
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">middleware</span>::<span class="ident">Compress</span>;
+
         <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">Logger</span>::<span class="ident">default</span>();
         <span class="kw">let</span> <span class="ident">compress</span> <span class="op">=</span> <span class="ident">Compress</span>::<span class="ident">default</span>();
 
@@ -349,7 +364,10 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_resource_scope_middleware</span>() {
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">middleware</span>::<span class="ident">Compress</span>;
+
         <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">Logger</span>::<span class="ident">default</span>();
         <span class="kw">let</span> <span class="ident">compress</span> <span class="op">=</span> <span class="ident">Compress</span>::<span class="ident">default</span>();
 
