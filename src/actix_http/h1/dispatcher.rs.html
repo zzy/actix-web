@@ -1283,6 +1283,36 @@
 <span id="1282">1282</span>
 <span id="1283">1283</span>
 <span id="1284">1284</span>
+<span id="1285">1285</span>
+<span id="1286">1286</span>
+<span id="1287">1287</span>
+<span id="1288">1288</span>
+<span id="1289">1289</span>
+<span id="1290">1290</span>
+<span id="1291">1291</span>
+<span id="1292">1292</span>
+<span id="1293">1293</span>
+<span id="1294">1294</span>
+<span id="1295">1295</span>
+<span id="1296">1296</span>
+<span id="1297">1297</span>
+<span id="1298">1298</span>
+<span id="1299">1299</span>
+<span id="1300">1300</span>
+<span id="1301">1301</span>
+<span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
+<span id="1307">1307</span>
+<span id="1308">1308</span>
+<span id="1309">1309</span>
+<span id="1310">1310</span>
+<span id="1311">1311</span>
+<span id="1312">1312</span>
+<span id="1313">1313</span>
+<span id="1314">1314</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -2014,6 +2044,53 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">read_some</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
         <span class="kw">loop</span> {
+            <span class="comment">// Return early when read buf exceed decoder&#39;s max buffer size.</span>
+            <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">read_buf</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="kw">super</span>::<span class="ident">decoder</span>::<span class="ident">MAX_BUFFER_SIZE</span> {
+                <span class="comment">/*
+                 At this point it&#39;s not known IO stream is still scheduled
+                 to be waked up. so force wake up dispatcher just in case.
+
+                 Reason:
+                 AsyncRead mostly would only have guarantee wake up
+                 when the poll_read return Poll::Pending.
+
+                 Case:
+                 When read_buf is beyond max buffer size the early return
+                 could be successfully be parsed as a new Request.
+                 This case would not generate ParseError::TooLarge
+                 and at this point IO stream is not fully read to Pending
+                 and would result in dispatcher stuck until timeout (KA)
+
+                 Note:
+                 This is a perf choice to reduce branch on
+                 &lt;Request as MessageType&gt;::decode.
+
+                 A Request head too large to parse is only checked on
+                 httparse::Status::Partial condition.
+                */</span>
+                <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">is_none</span>() {
+                    <span class="comment">/*
+                    When dispatcher has a payload the responsibility of
+                    wake up it would be shift to h1::payload::Payload.
+
+                    Reason:
+                    Self wake up when there is payload would waste poll
+                    and/or result in over read.
+
+                    Case:
+                    When payload is (partial) dropped by user there is
+                    no need to do read anymore.
+                    At this case read_buf could always remain beyond
+                    MAX_BUFFER_SIZE and self wake up would be busy poll
+                    dispatcher and waste resource.
+
+                    */</span>
+                    <span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">wake_by_ref</span>();
+                }
+
+                <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
+            }
+
             <span class="comment">// grow buffer if necessary.</span>
             <span class="kw">let</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">read_buf</span>.<span class="ident">capacity</span>() <span class="op">-</span> <span class="ident">this</span>.<span class="ident">read_buf</span>.<span class="ident">len</span>();
             <span class="kw">if</span> <span class="ident">remaining</span> <span class="op">&lt;</span> <span class="ident">LW_BUFFER_SIZE</span> {
@@ -2021,35 +2098,18 @@
             }
 
             <span class="kw">match</span> <span class="ident">actix_codec</span>::<span class="ident">poll_read_buf</span>(<span class="ident">io</span>.<span class="ident">as_mut</span>(), <span class="ident">cx</span>, <span class="ident">this</span>.<span class="ident">read_buf</span>) {
-                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
                 <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">n</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="ident">n</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
-                    } <span class="kw">else</span> {
-                        <span class="comment">// Return early when read buf exceed decoder&#39;s max buffer size.</span>
-                        <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">read_buf</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="kw">super</span>::<span class="ident">decoder</span>::<span class="ident">MAX_BUFFER_SIZE</span> {
-                            <span class="comment">// at this point it&#39;s not known io is still scheduled to</span>
-                            <span class="comment">// be waked up. so force wake up dispatcher just in case.</span>
-                            <span class="comment">// TODO: figure out the overhead.</span>
-                            <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">is_none</span>() {
-                                <span class="comment">// When dispatcher has a payload. The responsibility of</span>
-                                <span class="comment">// wake up stream would be shift to PayloadSender.</span>
-                                <span class="comment">// Therefore no self wake up is needed.</span>
-                                <span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">wake_by_ref</span>();
-                            }
-                            <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
-                        }
-
-                        <span class="ident">read_some</span> <span class="op">=</span> <span class="bool-val">true</span>;
                     }
+                    <span class="ident">read_some</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 }
+                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
                 <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">return</span> <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">WouldBlock</span> {
-                        <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
-                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">ConnectionReset</span> <span class="op">&amp;&amp;</span> <span class="ident">read_some</span> {
-                        <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>)
-                    } <span class="kw">else</span> {
-                        <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">Io</span>(<span class="ident">err</span>))
+                    <span class="kw">return</span> <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
+                        <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">WouldBlock</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
+                        <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">ConnectionReset</span> <span class="kw">if</span> <span class="ident">read_some</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
+                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">Io</span>(<span class="ident">err</span>)),
                     }
                 }
             }
@@ -2271,7 +2331,7 @@
                 <span class="prelude-val">None</span>,
             );
 
-            <span class="ident">futures_util</span>::<span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">h1</span>);
+            <span class="ident">actix_rt</span>::<span class="macro">pin</span><span class="macro">!</span>(<span class="ident">h1</span>);
 
             <span class="kw">match</span> <span class="ident">h1</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>) {
                 <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(),
@@ -2311,7 +2371,7 @@
                 <span class="prelude-val">None</span>,
             );
 
-            <span class="ident">futures_util</span>::<span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">h1</span>);
+            <span class="ident">actix_rt</span>::<span class="macro">pin</span><span class="macro">!</span>(<span class="ident">h1</span>);
 
             <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">h1</span>.<span class="ident">inner</span>, <span class="ident">DispatcherState</span>::<span class="ident">Normal</span>(<span class="kw">_</span>)));
 
@@ -2365,7 +2425,7 @@
                 <span class="prelude-val">None</span>,
             );
 
-            <span class="ident">futures_util</span>::<span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">h1</span>);
+            <span class="ident">actix_rt</span>::<span class="macro">pin</span><span class="macro">!</span>(<span class="ident">h1</span>);
 
             <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">h1</span>.<span class="ident">inner</span>, <span class="ident">DispatcherState</span>::<span class="ident">Normal</span>(<span class="kw">_</span>)));
 
@@ -2424,7 +2484,7 @@
                 &quot;</span>,
             );
 
-            <span class="ident">futures_util</span>::<span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">h1</span>);
+            <span class="ident">actix_rt</span>::<span class="macro">pin</span><span class="macro">!</span>(<span class="ident">h1</span>);
 
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">h1</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>).<span class="ident">is_pending</span>());
             <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">h1</span>.<span class="ident">inner</span>, <span class="ident">DispatcherState</span>::<span class="ident">Normal</span>(<span class="kw">_</span>)));
@@ -2496,7 +2556,7 @@
                 &quot;</span>,
             );
 
-            <span class="ident">futures_util</span>::<span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">h1</span>);
+            <span class="ident">actix_rt</span>::<span class="macro">pin</span><span class="macro">!</span>(<span class="ident">h1</span>);
 
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">h1</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>).<span class="ident">is_ready</span>());
             <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">h1</span>.<span class="ident">inner</span>, <span class="ident">DispatcherState</span>::<span class="ident">Normal</span>(<span class="kw">_</span>)));
@@ -2557,7 +2617,7 @@
                 &quot;</span>,
             );
 
-            <span class="ident">futures_util</span>::<span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">h1</span>);
+            <span class="ident">actix_rt</span>::<span class="macro">pin</span><span class="macro">!</span>(<span class="ident">h1</span>);
 
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">h1</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>).<span class="ident">is_ready</span>());
             <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">h1</span>.<span class="ident">inner</span>, <span class="ident">DispatcherState</span>::<span class="ident">Upgrade</span>(<span class="kw">_</span>)));
