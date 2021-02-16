@@ -203,7 +203,6 @@
 <span id="202">202</span>
 <span id="203">203</span>
 <span id="204">204</span>
-<span id="205">205</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
@@ -212,7 +211,6 @@
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::<span class="ident">poll_fn</span>;
-<span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">pin_mut</span>;
 <span class="kw">use</span> <span class="ident">h2</span>::{
     <span class="ident">client</span>::{<span class="ident">Builder</span>, <span class="ident">Connection</span>, <span class="ident">SendRequest</span>},
     <span class="ident">SendStream</span>,
@@ -338,7 +336,7 @@
     <span class="kw-2">mut</span> <span class="ident">send</span>: <span class="ident">SendStream</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SendRequestError</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-    <span class="macro">pin_mut</span><span class="macro">!</span>(<span class="ident">body</span>);
+    <span class="ident">actix_rt</span>::<span class="macro">pin</span><span class="macro">!</span>(<span class="ident">body</span>);
     <span class="kw">loop</span> {
         <span class="kw">if</span> <span class="ident">buf</span>.<span class="ident">is_none</span>() {
             <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="kw">await</span> {
