@@ -359,6 +359,7 @@
 <span id="358">358</span>
 <span id="359">359</span>
 <span id="360">360</span>
+<span id="361">361</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>};
@@ -388,9 +389,10 @@
     <span class="ident">H2</span>(<span class="ident">H2Connection</span>),
 }
 
-<span class="comment">// h2 connection has two parts: SendRequest and Connection.</span>
-<span class="comment">// Connection is spawned as async task on runtime and H2Connection would hold a handle for</span>
-<span class="comment">// this task. So it can wake up and quit the task when SendRequest is dropped.</span>
+<span class="doccomment">/// `H2Connection` has two parts: `SendRequest` and `Connection`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `Connection` is spawned as an async task on runtime and `H2Connection` holds a handle for</span>
+<span class="doccomment">/// this task. Therefore, it can wake up and quit the task when SendRequest is dropped.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">H2Connection</span> {
     <span class="ident">handle</span>: <span class="ident">JoinHandle</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
     <span class="ident">sender</span>: <span class="ident">SendRequest</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
