@@ -144,6 +144,32 @@
 <span id="143">143</span>
 <span id="144">144</span>
 <span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">net</span>,
@@ -163,74 +189,100 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">response</span>::<span class="ident">ClientResponse</span>;
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ConnectorWrapper</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">T</span>);
-
-<span class="kw">type</span> <span class="ident">TunnelResponse</span> <span class="op">=</span> (<span class="ident">ResponseHead</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">BoxedSocket</span>, <span class="ident">ClientCodec</span><span class="op">&gt;</span>);
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">Connect</span> {
-    <span class="kw">fn</span> <span class="ident">send_request</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">head</span>: <span class="ident">RequestHeadType</span>,
-        <span class="ident">body</span>: <span class="ident">Body</span>,
-        <span class="ident">addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientResponse</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// Send request, returns Response and Framed</span>
-    <span class="kw">fn</span> <span class="ident">open_tunnel</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">head</span>: <span class="ident">RequestHead</span>,
-        <span class="ident">addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TunnelResponse</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ConnectorWrapper</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="ident">connector</span>: <span class="ident">T</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Connect</span> <span class="kw">for</span> <span class="ident">ConnectorWrapper</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ConnectorWrapper</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connector</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">connector</span> }
+    }
+}
+
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ConnectService</span> <span class="op">=</span> <span class="ident">Box</span><span class="op">&lt;</span>
+    <span class="kw">dyn</span> <span class="ident">Service</span><span class="op">&lt;</span>
+        <span class="ident">ConnectRequest</span>,
+        <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ConnectResponse</span>,
+        <span class="ident">Error</span> <span class="op">=</span> <span class="ident">SendRequestError</span>,
+        <span class="ident">Future</span> <span class="op">=</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ConnectResponse</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="op">&gt;</span>,
+<span class="op">&gt;</span>;
+
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ConnectRequest</span> {
+    <span class="ident">Client</span>(<span class="ident">RequestHeadType</span>, <span class="ident">Body</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>),
+    <span class="ident">Tunnel</span>(<span class="ident">RequestHead</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>),
+}
+
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ConnectResponse</span> {
+    <span class="ident">Client</span>(<span class="ident">ClientResponse</span>),
+    <span class="ident">Tunnel</span>(<span class="ident">ResponseHead</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">BoxedSocket</span>, <span class="ident">ClientCodec</span><span class="op">&gt;</span>),
+}
+
+<span class="kw">impl</span> <span class="ident">ConnectResponse</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_client_response</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientResponse</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">ConnectResponse</span>::<span class="ident">Client</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">res</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(
+                <span class="string">&quot;ClientResponse only reachable with ConnectResponse::ClientResponse variant&quot;</span>
+            ),
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_tunnel_response</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">ResponseHead</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">BoxedSocket</span>, <span class="ident">ClientCodec</span><span class="op">&gt;</span>) {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">ConnectResponse</span>::<span class="ident">Tunnel</span>(<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">head</span>, <span class="ident">framed</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(
+                <span class="string">&quot;TunnelResponse only reachable with ConnectResponse::TunnelResponse variant&quot;</span>
+            ),
+        }
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ConnectRequest</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ConnectorWrapper</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ClientConnect</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">ConnectError</span><span class="op">&gt;</span>,
     <span class="ident">T</span>::<span class="ident">Response</span>: <span class="ident">Connection</span>,
     <span class="op">&lt;</span><span class="ident">T</span>::<span class="ident">Response</span> <span class="kw">as</span> <span class="ident">Connection</span><span class="op">&gt;</span>::<span class="ident">Io</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">T</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">send_request</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">head</span>: <span class="ident">RequestHeadType</span>,
-        <span class="ident">body</span>: <span class="ident">Body</span>,
-        <span class="ident">addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientResponse</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ConnectResponse</span>;
+    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">SendRequestError</span>;
+    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Response</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+
+    <span class="ident">actix_service</span>::<span class="macro">forward_ready</span><span class="macro">!</span>(<span class="ident">connector</span>);
+
+    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ConnectRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="comment">// connect to the host</span>
-        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">call</span>(<span class="ident">ClientConnect</span> {
-            <span class="ident">uri</span>: <span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">uri</span>.<span class="ident">clone</span>(),
-            <span class="ident">addr</span>,
-        });
+        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">req</span> {
+            <span class="ident">ConnectRequest</span>::<span class="ident">Client</span>(<span class="kw-2">ref</span> <span class="ident">head</span>, .., <span class="ident">addr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">connector</span>.<span class="ident">call</span>(<span class="ident">ClientConnect</span> {
+                <span class="ident">uri</span>: <span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">uri</span>.<span class="ident">clone</span>(),
+                <span class="ident">addr</span>,
+            }),
+            <span class="ident">ConnectRequest</span>::<span class="ident">Tunnel</span>(<span class="kw-2">ref</span> <span class="ident">head</span>, <span class="ident">addr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">connector</span>.<span class="ident">call</span>(<span class="ident">ClientConnect</span> {
+                <span class="ident">uri</span>: <span class="ident">head</span>.<span class="ident">uri</span>.<span class="ident">clone</span>(),
+                <span class="ident">addr</span>,
+            }),
+        };
 
         <span class="ident">Box</span>::<span class="ident">pin</span>(<span class="kw">async</span> <span class="kw">move</span> {
             <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
 
-            <span class="comment">// send request</span>
-            <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">send_request</span>(<span class="ident">head</span>, <span class="ident">body</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">match</span> <span class="ident">req</span> {
+                <span class="ident">ConnectRequest</span>::<span class="ident">Client</span>(<span class="ident">head</span>, <span class="ident">body</span>, ..) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="comment">// send request</span>
+                    <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">send_request</span>(<span class="ident">head</span>, <span class="ident">body</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-            <span class="prelude-val">Ok</span>(<span class="ident">ClientResponse</span>::<span class="ident">new</span>(<span class="ident">head</span>, <span class="ident">payload</span>))
-        })
-    }
+                    <span class="prelude-val">Ok</span>(<span class="ident">ConnectResponse</span>::<span class="ident">Client</span>(<span class="ident">ClientResponse</span>::<span class="ident">new</span>(<span class="ident">head</span>, <span class="ident">payload</span>)))
+                }
+                <span class="ident">ConnectRequest</span>::<span class="ident">Tunnel</span>(<span class="ident">head</span>, ..) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="comment">// send request</span>
+                    <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span>
+                        <span class="ident">connection</span>.<span class="ident">open_tunnel</span>(<span class="ident">RequestHeadType</span>::<span class="ident">from</span>(<span class="ident">head</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">fn</span> <span class="ident">open_tunnel</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">head</span>: <span class="ident">RequestHead</span>,
-        <span class="ident">addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TunnelResponse</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="comment">// connect to the host</span>
-        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">call</span>(<span class="ident">ClientConnect</span> {
-            <span class="ident">uri</span>: <span class="ident">head</span>.<span class="ident">uri</span>.<span class="ident">clone</span>(),
-            <span class="ident">addr</span>,
-        });
-
-        <span class="ident">Box</span>::<span class="ident">pin</span>(<span class="kw">async</span> <span class="kw">move</span> {
-            <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>;
-
-            <span class="comment">// send request</span>
-            <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">open_tunnel</span>(<span class="ident">RequestHeadType</span>::<span class="ident">from</span>(<span class="ident">head</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
-
-            <span class="kw">let</span> <span class="ident">framed</span> <span class="op">=</span> <span class="ident">framed</span>.<span class="ident">into_map_io</span>(<span class="op">|</span><span class="ident">io</span><span class="op">|</span> <span class="ident">BoxedSocket</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Socket</span>(<span class="ident">io</span>))));
-            <span class="prelude-val">Ok</span>((<span class="ident">head</span>, <span class="ident">framed</span>))
+                    <span class="kw">let</span> <span class="ident">framed</span> <span class="op">=</span> <span class="ident">framed</span>.<span class="ident">into_map_io</span>(<span class="op">|</span><span class="ident">io</span><span class="op">|</span> <span class="ident">BoxedSocket</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Socket</span>(<span class="ident">io</span>))));
+                    <span class="prelude-val">Ok</span>(<span class="ident">ConnectResponse</span>::<span class="ident">Tunnel</span>(<span class="ident">head</span>, <span class="ident">framed</span>))
+                }
+            }
         })
     }
 }

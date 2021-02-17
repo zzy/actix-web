@@ -527,6 +527,10 @@
 <span id="526">526</span>
 <span id="527">527</span>
 <span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Websockets client</span>
 <span class="doccomment">//!</span>
@@ -566,10 +570,11 @@
 <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">ws</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>};
 <span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">time</span>::<span class="ident">timeout</span>;
+<span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">ws</span>::{<span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">Codec</span>, <span class="ident">Frame</span>, <span class="ident">Message</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">connect</span>::<span class="ident">BoxedSocket</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">connect</span>::{<span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>, <span class="ident">WsClientError</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">http</span>::<span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">AUTHORIZATION</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">http</span>::{<span class="ident">ConnectionType</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>};
@@ -857,17 +862,20 @@
         <span class="kw">let</span> <span class="ident">max_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">max_size</span>;
         <span class="kw">let</span> <span class="ident">server_mode</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">server_mode</span>;
 
-        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">connector</span>.<span class="ident">open_tunnel</span>(<span class="ident">head</span>, <span class="self">self</span>.<span class="ident">addr</span>);
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">ConnectRequest</span>::<span class="ident">Tunnel</span>(<span class="ident">head</span>, <span class="self">self</span>.<span class="ident">addr</span>);
+
+        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">connector</span>.<span class="ident">call</span>(<span class="ident">req</span>);
 
         <span class="comment">// set request timeout</span>
-        <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">to</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">timeout</span> {
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">to</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">timeout</span> {
             <span class="ident">timeout</span>(<span class="ident">to</span>, <span class="ident">fut</span>)
                 .<span class="kw">await</span>
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">SendRequestError</span>::<span class="ident">Timeout</span>)
-                .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>)<span class="question-mark">?</span>
+                .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">SendRequestError</span>::<span class="ident">Timeout</span>)<span class="question-mark">?</span><span class="question-mark">?</span>
         } <span class="kw">else</span> {
             <span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>
         };
+
+        <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">framed</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">into_tunnel_response</span>();
 
         <span class="comment">// verify response</span>
         <span class="kw">if</span> <span class="ident">head</span>.<span class="ident">status</span> <span class="op">!</span><span class="op">=</span> <span class="ident">StatusCode</span>::<span class="ident">SWITCHING_PROTOCOLS</span> {
