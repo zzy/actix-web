@@ -1035,7 +1035,7 @@
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take</span>();
 
         <span class="ident">JsonBody</span>::<span class="ident">Body</span> {
-            <span class="ident">limit</span>: <span class="number">262_144</span>,
+            <span class="ident">limit</span>: <span class="number">32_768</span>,
             <span class="ident">length</span>,
             <span class="ident">payload</span>,
             <span class="ident">buf</span>: <span class="ident">BytesMut</span>::<span class="ident">with_capacity</span>(<span class="number">8192</span>),
@@ -1043,7 +1043,7 @@
         }
     }
 
-    <span class="doccomment">/// Set maximum accepted payload size. The default limit is 256kB.</span>
+    <span class="doccomment">/// Set maximum accepted payload size. The default limit is 32kB.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">JsonBody</span>::<span class="ident">Body</span> {
