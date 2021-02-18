@@ -236,65 +236,89 @@
 <span id="235">235</span>
 <span id="236">236</span>
 <span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>;
 
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">client</span>::{<span class="ident">Connect</span> <span class="kw">as</span> <span class="ident">HttpConnect</span>, <span class="ident">ConnectError</span>, <span class="ident">Connection</span>, <span class="ident">Connector</span>};
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">http</span>::{<span class="self">self</span>, <span class="ident">header</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>};
+<span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
+<span class="kw">use</span> <span class="ident">actix_http</span>::{
+    <span class="ident">client</span>::{<span class="ident">Connector</span>, <span class="ident">TcpConnect</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>},
+    <span class="ident">http</span>::{<span class="self">self</span>, <span class="ident">header</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">Uri</span>},
+};
+<span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">net</span>::<span class="ident">TcpStream</span>;
 <span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">connect</span>::{<span class="ident">ConnectService</span>, <span class="ident">ConnectorWrapper</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">connect</span>::<span class="ident">ConnectorWrapper</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Client</span>, <span class="ident">ClientConfig</span>};
 
 <span class="doccomment">/// An HTTP Client builder</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This type can be used to construct an instance of `Client` through a</span>
 <span class="doccomment">/// builder-like pattern.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ClientBuilder</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ClientBuilder</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> (), <span class="ident">U</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
     <span class="ident">default_headers</span>: <span class="ident">bool</span>,
-    <span class="ident">allow_redirects</span>: <span class="ident">bool</span>,
-    <span class="ident">max_redirects</span>: <span class="ident">usize</span>,
     <span class="ident">max_http_version</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">http</span>::<span class="ident">Version</span><span class="op">&gt;</span>,
     <span class="ident">stream_window_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
     <span class="ident">conn_window_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
     <span class="ident">headers</span>: <span class="ident">HeaderMap</span>,
     <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
-    <span class="ident">connector</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ConnectService</span><span class="op">&gt;</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ClientBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>()
-    }
+    <span class="ident">connector</span>: <span class="ident">Connector</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">U</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ClientBuilder</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">new_ret_no_self</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientBuilder</span><span class="op">&lt;</span>
+        <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span>
+                <span class="ident">TcpConnect</span><span class="op">&lt;</span><span class="ident">Uri</span><span class="op">&gt;</span>,
+                <span class="ident">Response</span> <span class="op">=</span> <span class="ident">TcpConnection</span><span class="op">&lt;</span><span class="ident">Uri</span>, <span class="ident">TcpStream</span><span class="op">&gt;</span>,
+                <span class="ident">Error</span> <span class="op">=</span> <span class="ident">TcpConnectError</span>,
+            <span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span>,
+        <span class="ident">TcpStream</span>,
+    <span class="op">&gt;</span> {
         <span class="ident">ClientBuilder</span> {
             <span class="ident">default_headers</span>: <span class="bool-val">true</span>,
-            <span class="ident">allow_redirects</span>: <span class="bool-val">true</span>,
-            <span class="ident">max_redirects</span>: <span class="number">10</span>,
             <span class="ident">headers</span>: <span class="ident">HeaderMap</span>::<span class="ident">new</span>(),
             <span class="ident">timeout</span>: <span class="prelude-val">Some</span>(<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">5</span>)),
-            <span class="ident">connector</span>: <span class="prelude-val">None</span>,
+            <span class="ident">connector</span>: <span class="ident">Connector</span>::<span class="ident">new</span>(),
             <span class="ident">max_http_version</span>: <span class="prelude-val">None</span>,
             <span class="ident">stream_window_size</span>: <span class="prelude-val">None</span>,
             <span class="ident">conn_window_size</span>: <span class="prelude-val">None</span>,
         }
     }
+}
 
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Io</span><span class="op">&gt;</span> <span class="ident">ClientBuilder</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Io</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">TcpConnect</span><span class="op">&lt;</span><span class="ident">Uri</span><span class="op">&gt;</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">TcpConnection</span><span class="op">&lt;</span><span class="ident">Uri</span>, <span class="ident">Io</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">TcpConnectError</span><span class="op">&gt;</span>
+        <span class="op">+</span> <span class="ident">Clone</span>
+        <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">Io</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+{
     <span class="doccomment">/// Use custom connector service.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connector</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">connector</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connector</span><span class="op">&lt;</span><span class="ident">S1</span>, <span class="ident">Io1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">connector</span>: <span class="ident">Connector</span><span class="op">&lt;</span><span class="ident">S1</span>, <span class="ident">Io1</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientBuilder</span><span class="op">&lt;</span><span class="ident">S1</span>, <span class="ident">Io1</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">HttpConnect</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">ConnectError</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-        <span class="ident">T</span>::<span class="ident">Response</span>: <span class="ident">Connection</span>,
-        <span class="ident">T</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
+        <span class="ident">S1</span>: <span class="ident">Service</span><span class="op">&lt;</span>
+                <span class="ident">TcpConnect</span><span class="op">&lt;</span><span class="ident">Uri</span><span class="op">&gt;</span>,
+                <span class="ident">Response</span> <span class="op">=</span> <span class="ident">TcpConnection</span><span class="op">&lt;</span><span class="ident">Uri</span>, <span class="ident">Io1</span><span class="op">&gt;</span>,
+                <span class="ident">Error</span> <span class="op">=</span> <span class="ident">TcpConnectError</span>,
+            <span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span>
+            <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">Io1</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
-        <span class="self">self</span>.<span class="ident">connector</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ConnectorWrapper</span>::<span class="ident">new</span>(<span class="ident">connector</span>)));
-        <span class="self">self</span>
+        <span class="ident">ClientBuilder</span> {
+            <span class="ident">default_headers</span>: <span class="self">self</span>.<span class="ident">default_headers</span>,
+            <span class="ident">headers</span>: <span class="self">self</span>.<span class="ident">headers</span>,
+            <span class="ident">timeout</span>: <span class="self">self</span>.<span class="ident">timeout</span>,
+            <span class="ident">connector</span>,
+            <span class="ident">max_http_version</span>: <span class="self">self</span>.<span class="ident">max_http_version</span>,
+            <span class="ident">stream_window_size</span>: <span class="self">self</span>.<span class="ident">stream_window_size</span>,
+            <span class="ident">conn_window_size</span>: <span class="self">self</span>.<span class="ident">conn_window_size</span>,
+        }
     }
 
     <span class="doccomment">/// Set request timeout</span>
@@ -309,14 +333,6 @@
     <span class="doccomment">/// Disable request timeout.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_timeout</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">timeout</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="self">self</span>
-    }
-
-    <span class="doccomment">/// Do not follow redirects.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Redirects are allowed by default.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_redirects</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">allow_redirects</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="self">self</span>
     }
 
@@ -343,14 +359,6 @@
     <span class="doccomment">/// The default value is 65,535 and is good for APIs, but not for big objects.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initial_connection_window_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">conn_window_size</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">size</span>);
-        <span class="self">self</span>
-    }
-
-    <span class="doccomment">/// Set max number of redirects.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Max redirects is set to 10 by default.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_redirects</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">max_redirects</span> <span class="op">=</span> <span class="ident">num</span>;
         <span class="self">self</span>
     }
 
@@ -383,9 +391,9 @@
     }
 
     <span class="doccomment">/// Set client wide HTTP basic authorization header</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">basic_auth</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">username</span>: <span class="ident">U</span>, <span class="ident">password</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">basic_auth</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">username</span>: <span class="ident">N</span>, <span class="ident">password</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">U</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
+        <span class="ident">N</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
     {
         <span class="kw">let</span> <span class="ident">auth</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">password</span> {
             <span class="prelude-val">Some</span>(<span class="ident">password</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}:{}&quot;</span>, <span class="ident">username</span>, <span class="ident">password</span>),
@@ -407,26 +415,24 @@
 
     <span class="doccomment">/// Finish build process and create `Client` instance.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Client</span> {
-        <span class="kw">let</span> <span class="ident">connector</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">connector</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">connector</span> {
-            <span class="ident">connector</span>
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">connector</span> <span class="op">=</span> <span class="ident">Connector</span>::<span class="ident">new</span>();
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">max_http_version</span> {
-                <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">max_http_version</span>(<span class="ident">val</span>)
-            };
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn_window_size</span> {
-                <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">initial_connection_window_size</span>(<span class="ident">val</span>)
-            };
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">stream_window_size</span> {
-                <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">initial_window_size</span>(<span class="ident">val</span>)
-            };
-            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ConnectorWrapper</span>::<span class="ident">new</span>(<span class="ident">connector</span>.<span class="ident">finish</span>())) <span class="kw">as</span> <span class="kw">_</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">connector</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">connector</span>;
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">max_http_version</span> {
+            <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">max_http_version</span>(<span class="ident">val</span>);
         };
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn_window_size</span> {
+            <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">initial_connection_window_size</span>(<span class="ident">val</span>)
+        };
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">stream_window_size</span> {
+            <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">initial_window_size</span>(<span class="ident">val</span>)
+        };
+
         <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">ClientConfig</span> {
             <span class="ident">headers</span>: <span class="self">self</span>.<span class="ident">headers</span>,
             <span class="ident">timeout</span>: <span class="self">self</span>.<span class="ident">timeout</span>,
-            <span class="ident">connector</span>,
+            <span class="ident">connector</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ConnectorWrapper</span>::<span class="ident">new</span>(<span class="ident">connector</span>.<span class="ident">finish</span>())) <span class="kw">as</span> <span class="kw">_</span>,
         };
+
         <span class="ident">Client</span>(<span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">config</span>))
     }
 }

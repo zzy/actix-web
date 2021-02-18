@@ -21,6 +21,10 @@
 <span id="20">20</span>
 <span id="21">21</span>
 <span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP client.</span>
 
@@ -33,6 +37,10 @@
 <span class="kw">mod</span> <span class="ident">h1proto</span>;
 <span class="kw">mod</span> <span class="ident">h2proto</span>;
 <span class="kw">mod</span> <span class="ident">pool</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_tls</span>::<span class="ident">connect</span>::{
+    <span class="ident">Connect</span> <span class="kw">as</span> <span class="ident">TcpConnect</span>, <span class="ident">ConnectError</span> <span class="kw">as</span> <span class="ident">TcpConnectError</span>, <span class="ident">Connection</span> <span class="kw">as</span> <span class="ident">TcpConnection</span>,
+};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">connection</span>::<span class="ident">Connection</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">connector</span>::<span class="ident">Connector</span>;

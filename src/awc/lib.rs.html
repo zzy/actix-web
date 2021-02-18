@@ -281,6 +281,18 @@
 <span id="280">280</span>
 <span id="281">281</span>
 <span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! `awc` is a HTTP and WebSocket client library built on the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
@@ -385,8 +397,13 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">cookie</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">client</span>::<span class="ident">Connector</span>, <span class="ident">http</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>};
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">RequestHead</span>;
+<span class="kw">use</span> <span class="ident">actix_http</span>::{
+    <span class="ident">client</span>::{<span class="ident">TcpConnect</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>},
+    <span class="ident">http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>},
+    <span class="ident">RequestHead</span>,
+};
+<span class="kw">use</span> <span class="ident">actix_rt</span>::<span class="ident">net</span>::<span class="ident">TcpStream</span>;
+<span class="kw">use</span> <span class="ident">actix_service</span>::<span class="ident">Service</span>;
 
 <span class="kw">mod</span> <span class="ident">builder</span>;
 <span class="kw">mod</span> <span class="ident">connect</span>;
@@ -453,7 +470,14 @@
 
     <span class="doccomment">/// Create `Client` builder.</span>
     <span class="doccomment">/// This function is equivalent of `ClientBuilder::new()`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">builder</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientBuilder</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">builder</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientBuilder</span><span class="op">&lt;</span>
+        <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span>
+                <span class="ident">TcpConnect</span><span class="op">&lt;</span><span class="ident">Uri</span><span class="op">&gt;</span>,
+                <span class="ident">Response</span> <span class="op">=</span> <span class="ident">TcpConnection</span><span class="op">&lt;</span><span class="ident">Uri</span>, <span class="ident">TcpStream</span><span class="op">&gt;</span>,
+                <span class="ident">Error</span> <span class="op">=</span> <span class="ident">TcpConnectError</span>,
+            <span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span>,
+        <span class="ident">TcpStream</span>,
+    <span class="op">&gt;</span> {
         <span class="ident">ClientBuilder</span>::<span class="ident">new</span>()
     }
 
