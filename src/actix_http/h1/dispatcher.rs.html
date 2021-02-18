@@ -1300,6 +1300,24 @@
 <span id="1299">1299</span>
 <span id="1300">1300</span>
 <span id="1301">1301</span>
+<span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
+<span id="1307">1307</span>
+<span id="1308">1308</span>
+<span id="1309">1309</span>
+<span id="1310">1310</span>
+<span id="1311">1311</span>
+<span id="1312">1312</span>
+<span id="1313">1313</span>
+<span id="1314">1314</span>
+<span id="1315">1315</span>
+<span id="1316">1316</span>
+<span id="1317">1317</span>
+<span id="1318">1318</span>
+<span id="1319">1319</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::<span class="ident">VecDeque</span>,
@@ -1813,25 +1831,43 @@
 
                     <span class="kw">match</span> <span class="ident">msg</span> {
                         <span class="ident">Message</span>::<span class="ident">Item</span>(<span class="kw-2">mut</span> <span class="ident">req</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">message_type</span>();
                             <span class="ident">req</span>.<span class="ident">head_mut</span>().<span class="ident">peer_addr</span> <span class="op">=</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">peer_addr</span>;
 
                             <span class="comment">// merge on_connect_ext data into request extensions</span>
                             <span class="ident">this</span>.<span class="ident">on_connect_data</span>.<span class="ident">merge_into</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">req</span>);
 
-                            <span class="kw">if</span> <span class="ident">pl</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MessageType</span>::<span class="ident">Stream</span> <span class="op">&amp;&amp;</span> <span class="ident">this</span>.<span class="ident">flow</span>.<span class="ident">upgrade</span>.<span class="ident">is_some</span>() {
-                                <span class="ident">this</span>.<span class="ident">messages</span>.<span class="ident">push_back</span>(<span class="ident">DispatcherMessage</span>::<span class="ident">Upgrade</span>(<span class="ident">req</span>));
-                                <span class="kw">break</span>;
-                            }
-                            <span class="kw">if</span> <span class="ident">pl</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MessageType</span>::<span class="ident">Payload</span> <span class="op">|</span><span class="op">|</span> <span class="ident">pl</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MessageType</span>::<span class="ident">Stream</span> {
-                                <span class="kw">let</span> (<span class="ident">ps</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">Payload</span>::<span class="ident">create</span>(<span class="bool-val">false</span>);
-                                <span class="kw">let</span> (<span class="ident">req1</span>, <span class="kw">_</span>) <span class="op">=</span>
-                                    <span class="ident">req</span>.<span class="ident">replace_payload</span>(<span class="kw">crate</span>::<span class="ident">Payload</span>::<span class="ident">H1</span>(<span class="ident">pl</span>));
-                                <span class="ident">req</span> <span class="op">=</span> <span class="ident">req1</span>;
-                                <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ps</span>);
+                            <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">message_type</span>() {
+                                <span class="comment">// Request is upgradable. add upgrade message and break.</span>
+                                <span class="comment">// everything remain in read buffer would be handed to</span>
+                                <span class="comment">// upgraded Request.</span>
+                                <span class="ident">MessageType</span>::<span class="ident">Stream</span> <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">flow</span>.<span class="ident">upgrade</span>.<span class="ident">is_some</span>() <span class="op">=</span><span class="op">&gt;</span> {
+                                    <span class="ident">this</span>.<span class="ident">messages</span>
+                                        .<span class="ident">push_back</span>(<span class="ident">DispatcherMessage</span>::<span class="ident">Upgrade</span>(<span class="ident">req</span>));
+                                    <span class="kw">break</span>;
+                                }
+
+                                <span class="comment">// Request is not upgradable.</span>
+                                <span class="ident">MessageType</span>::<span class="ident">Payload</span> <span class="op">|</span> <span class="ident">MessageType</span>::<span class="ident">Stream</span> <span class="op">=</span><span class="op">&gt;</span> {
+                                    <span class="comment">/*
+                                    PayloadSender and Payload are smart pointers share the
+                                    same state.
+                                    PayloadSender is attached to dispatcher and used to sink
+                                    new chunked request data to state.
+                                    Payload is attached to Request and passed to Service::call
+                                    where the state can be collected and consumed.
+                                    */</span>
+                                    <span class="kw">let</span> (<span class="ident">ps</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">Payload</span>::<span class="ident">create</span>(<span class="bool-val">false</span>);
+                                    <span class="kw">let</span> (<span class="ident">req1</span>, <span class="kw">_</span>) <span class="op">=</span>
+                                        <span class="ident">req</span>.<span class="ident">replace_payload</span>(<span class="kw">crate</span>::<span class="ident">Payload</span>::<span class="ident">H1</span>(<span class="ident">pl</span>));
+                                    <span class="ident">req</span> <span class="op">=</span> <span class="ident">req1</span>;
+                                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ps</span>);
+                                }
+
+                                <span class="comment">// Request has no payload.</span>
+                                <span class="ident">MessageType</span>::<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {}
                             }
 
-                            <span class="comment">// handle request early</span>
+                            <span class="comment">// handle request early when no future in InnerDispatcher state.</span>
                             <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">is_empty</span>() {
                                 <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">handle_request</span>(<span class="ident">req</span>, <span class="ident">cx</span>)<span class="question-mark">?</span>;
                                 <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
