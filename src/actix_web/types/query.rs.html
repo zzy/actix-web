@@ -272,6 +272,20 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! For query parameter extractor documentation, see [`Query`].</span>
 
@@ -304,7 +318,7 @@
 <span class="doccomment">///    Code</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Deserialize)]</span>
+<span class="doccomment">/// #[derive(Debug, Deserialize)]</span>
 <span class="doccomment">/// pub struct AuthRequest {</span>
 <span class="doccomment">///    id: u64,</span>
 <span class="doccomment">///    response_type: ResponseType,</span>
@@ -317,9 +331,23 @@
 <span class="doccomment">/// async fn index(info: web::Query&lt;AuthRequest&gt;) -&gt; String {</span>
 <span class="doccomment">///     format!(&quot;Authorization request for id={} and type={:?}!&quot;, info.id, info.response_type)</span>
 <span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// // To access the entire underlying query struct, use `.into_inner()`.</span>
+<span class="doccomment">/// #[get(&quot;/debug1&quot;)]</span>
+<span class="doccomment">/// async fn debug1(info: web::Query&lt;AuthRequest&gt;) -&gt; String {</span>
+<span class="doccomment">///     dbg!(&quot;Authorization object={:?}&quot;, info.into_inner());</span>
+<span class="doccomment">///     &quot;OK&quot;.to_string()</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// // Or use `.0`, which is equivalent to `.into_inner()`.</span>
+<span class="doccomment">/// #[get(&quot;/debug2&quot;)]</span>
+<span class="doccomment">/// async fn debug2(info: web::Query&lt;AuthRequest&gt;) -&gt; String {</span>
+<span class="doccomment">///     dbg!(&quot;Authorization object={:?}&quot;, info.0);</span>
+<span class="doccomment">///     &quot;OK&quot;.to_string()</span>
+<span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Query</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">T</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Query</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">T</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Query</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Unwrap into inner `T` value.</span>
