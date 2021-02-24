@@ -1179,6 +1179,13 @@
 <span id="1176">1176</span>
 <span id="1177">1177</span>
 <span id="1178">1178</span>
+<span id="1179">1179</span>
+<span id="1180">1180</span>
+<span id="1181">1181</span>
+<span id="1182">1182</span>
+<span id="1183">1183</span>
+<span id="1184">1184</span>
+<span id="1185">1185</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Multipart payload support</span>
 
@@ -1986,12 +1993,13 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">h1</span>::<span class="ident">Payload</span>;
-    <span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">mpsc</span>;
     <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">DispositionParam</span>, <span class="ident">DispositionType</span>};
     <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">test</span>::<span class="ident">TestRequest</span>;
     <span class="kw">use</span> <span class="ident">actix_web</span>::<span class="ident">FromRequest</span>;
     <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
     <span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::<span class="ident">lazy</span>;
+    <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">sync</span>::<span class="ident">mpsc</span>;
+    <span class="kw">use</span> <span class="ident">tokio_stream</span>::<span class="ident">wrappers</span>::<span class="ident">UnboundedReceiverStream</span>;
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_boundary</span>() {
@@ -2037,13 +2045,17 @@
     }
 
     <span class="kw">fn</span> <span class="ident">create_stream</span>() <span class="op">-</span><span class="op">&gt;</span> (
-        <span class="ident">mpsc</span>::<span class="ident">Sender</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">mpsc</span>::<span class="ident">UnboundedSender</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) {
-        <span class="kw">let</span> (<span class="ident">tx</span>, <span class="ident">rx</span>) <span class="op">=</span> <span class="ident">mpsc</span>::<span class="ident">channel</span>();
+        <span class="kw">let</span> (<span class="ident">tx</span>, <span class="ident">rx</span>) <span class="op">=</span> <span class="ident">mpsc</span>::<span class="ident">unbounded_channel</span>();
 
-        (<span class="ident">tx</span>, <span class="ident">rx</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>())))
+        (
+            <span class="ident">tx</span>,
+            <span class="ident">UnboundedReceiverStream</span>::<span class="ident">new</span>(<span class="ident">rx</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>())),
+        )
     }
+
     <span class="comment">// Stream that returns from a Bytes, one char at a time and Pending every other poll()</span>
     <span class="kw">struct</span> <span class="ident">SlowStream</span> {
         <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
@@ -2071,9 +2083,11 @@
                 <span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">wake_by_ref</span>();
                 <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>;
             }
+
             <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">pos</span> <span class="op">=</span><span class="op">=</span> <span class="ident">this</span>.<span class="ident">bytes</span>.<span class="ident">len</span>() {
                 <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>);
             }
+
             <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">this</span>.<span class="ident">bytes</span>.<span class="ident">slice</span>(<span class="ident">this</span>.<span class="ident">pos</span>..(<span class="ident">this</span>.<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span>)))));
             <span class="ident">this</span>.<span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="ident">this</span>.<span class="ident">ready</span> <span class="op">=</span> <span class="bool-val">false</span>;
