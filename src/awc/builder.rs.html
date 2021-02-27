@@ -239,9 +239,23 @@
 <span id="238">238</span>
 <span id="239">239</span>
 <span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">IpAddr</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>;
 
@@ -267,6 +281,7 @@
     <span class="ident">conn_window_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
     <span class="ident">headers</span>: <span class="ident">HeaderMap</span>,
     <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
+    <span class="ident">local_address</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">IpAddr</span><span class="op">&gt;</span>,
     <span class="ident">connector</span>: <span class="ident">Connector</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">U</span><span class="op">&gt;</span>,
 }
 
@@ -284,6 +299,7 @@
             <span class="ident">default_headers</span>: <span class="bool-val">true</span>,
             <span class="ident">headers</span>: <span class="ident">HeaderMap</span>::<span class="ident">new</span>(),
             <span class="ident">timeout</span>: <span class="prelude-val">Some</span>(<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">5</span>)),
+            <span class="ident">local_address</span>: <span class="prelude-val">None</span>,
             <span class="ident">connector</span>: <span class="ident">Connector</span>::<span class="ident">new</span>(),
             <span class="ident">max_http_version</span>: <span class="prelude-val">None</span>,
             <span class="ident">stream_window_size</span>: <span class="prelude-val">None</span>,
@@ -314,6 +330,7 @@
             <span class="ident">default_headers</span>: <span class="self">self</span>.<span class="ident">default_headers</span>,
             <span class="ident">headers</span>: <span class="self">self</span>.<span class="ident">headers</span>,
             <span class="ident">timeout</span>: <span class="self">self</span>.<span class="ident">timeout</span>,
+            <span class="ident">local_address</span>: <span class="prelude-val">None</span>,
             <span class="ident">connector</span>,
             <span class="ident">max_http_version</span>: <span class="self">self</span>.<span class="ident">max_http_version</span>,
             <span class="ident">stream_window_size</span>: <span class="self">self</span>.<span class="ident">stream_window_size</span>,
@@ -333,6 +350,12 @@
     <span class="doccomment">/// Disable request timeout.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_timeout</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">timeout</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Set local IP Address the connector would use for establishing connection.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">local_address</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">addr</span>: <span class="ident">IpAddr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">local_address</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">addr</span>);
         <span class="self">self</span>
     }
 
@@ -426,6 +449,9 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">stream_window_size</span> {
             <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">initial_window_size</span>(<span class="ident">val</span>)
         };
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">local_address</span> {
+            <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">local_address</span>(<span class="ident">val</span>);
+        }
 
         <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">ClientConfig</span> {
             <span class="ident">headers</span>: <span class="self">self</span>.<span class="ident">headers</span>,
