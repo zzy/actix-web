@@ -984,8 +984,6 @@
 <span id="983">983</span>
 <span id="984">984</span>
 <span id="985">985</span>
-<span id="986">986</span>
-<span id="987">987</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! # References</span>
 <span class="doccomment">//!</span>
@@ -995,7 +993,7 @@
 <span class="doccomment">//! Browser conformance tests at: http://greenbytes.de/tech/tc2231/</span>
 <span class="doccomment">//! IANA assignment: http://www.iana.org/assignments/cont-disp/cont-disp.xhtml</span>
 
-<span class="kw">use</span> <span class="ident">lazy_static</span>::<span class="ident">lazy_static</span>;
+<span class="kw">use</span> <span class="ident">once_cell</span>::<span class="ident">sync</span>::<span class="ident">Lazy</span>;
 <span class="kw">use</span> <span class="ident">regex</span>::<span class="ident">Regex</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 
@@ -1509,9 +1507,7 @@
         <span class="comment">//</span>
         <span class="comment">//</span>
         <span class="comment">// See also comments in test_from_raw_unnecessary_percent_decode.</span>
-        <span class="macro">lazy_static</span><span class="macro">!</span> {
-            <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">RE</span>: <span class="ident">Regex</span> <span class="op">=</span> <span class="ident">Regex</span>::<span class="ident">new</span>(<span class="string">&quot;[\x00-\x08\x10-\x1F\x7F\&quot;\\\\]&quot;</span>).<span class="ident">unwrap</span>();
-        }
+        <span class="kw">static</span> <span class="ident">RE</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">Regex</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy</span>::<span class="ident">new</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Regex</span>::<span class="ident">new</span>(<span class="string">&quot;[\x00-\x08\x10-\x1F\x7F\&quot;\\\\]&quot;</span>).<span class="ident">unwrap</span>());
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">DispositionParam</span>::<span class="ident">Name</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;name={}&quot;</span>, <span class="ident">value</span>),
             <span class="ident">DispositionParam</span>::<span class="ident">Filename</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
