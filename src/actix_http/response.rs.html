@@ -1168,6 +1168,7 @@
 <span id="1167">1167</span>
 <span id="1168">1168</span>
 <span id="1169">1169</span>
+<span id="1170">1170</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP responses.</span>
 
@@ -1669,7 +1670,8 @@
     <span class="doccomment">/// Disable chunked transfer encoding for HTTP/1.1 streaming responses.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_chunking</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_LENGTH</span>, <span class="ident">len</span>));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">itoa</span>::<span class="ident">Buffer</span>::<span class="ident">new</span>();
+        <span class="self">self</span>.<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_LENGTH</span>, <span class="ident">buf</span>.<span class="ident">format</span>(<span class="ident">len</span>)));
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="ident">parts</span>.<span class="ident">no_chunking</span>(<span class="bool-val">true</span>);
