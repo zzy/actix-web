@@ -1245,12 +1245,12 @@
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">Url</span>};
 <span class="kw">use</span> <span class="ident">actix_rt</span>::{<span class="ident">time</span>::<span class="ident">sleep</span>, <span class="ident">System</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">map_config</span>, <span class="ident">IntoService</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
+<span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">future</span>::<span class="ident">ok</span>;
 <span class="kw">use</span> <span class="ident">awc</span>::<span class="ident">error</span>::<span class="ident">PayloadError</span>;
 <span class="kw">use</span> <span class="ident">awc</span>::{<span class="ident">Client</span>, <span class="ident">ClientRequest</span>, <span class="ident">ClientResponse</span>, <span class="ident">Connector</span>};
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 <span class="kw">use</span> <span class="ident">futures_core</span>::<span class="ident">Stream</span>;
-<span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">future</span>::<span class="ident">ok</span>;
-<span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">StreamExt</span>;
+<span class="kw">use</span> <span class="ident">futures_util</span>::<span class="ident">StreamExt</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">DeserializeOwned</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">Serialize</span>;
 <span class="kw">use</span> <span class="ident">socket2</span>::{<span class="ident">Domain</span>, <span class="ident">Protocol</span>, <span class="ident">Socket</span>, <span class="ident">Type</span>};
