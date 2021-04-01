@@ -1219,6 +1219,14 @@
 <span id="1218">1218</span>
 <span id="1219">1219</span>
 <span id="1220">1220</span>
+<span id="1221">1221</span>
+<span id="1222">1222</span>
+<span id="1223">1223</span>
+<span id="1224">1224</span>
+<span id="1225">1225</span>
+<span id="1226">1226</span>
+<span id="1227">1227</span>
+<span id="1228">1228</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
@@ -1230,7 +1238,7 @@
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Framed</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">cookie</span>::<span class="ident">Cookie</span>;
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">ContentType</span>, <span class="ident">IntoHeaderPair</span>};
+<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">http</span>::<span class="ident">header</span>::{<span class="ident">ContentType</span>, <span class="ident">HeaderMap</span>, <span class="ident">IntoHeaderPair</span>};
 <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>};
 <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">test</span>::<span class="ident">TestRequest</span> <span class="kw">as</span> <span class="ident">HttpTestRequest</span>;
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">ws</span>, <span class="ident">Extensions</span>, <span class="ident">HttpService</span>, <span class="ident">Request</span>};
@@ -2182,6 +2190,14 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Framed</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span>, <span class="ident">ws</span>::<span class="ident">Codec</span><span class="op">&gt;</span>, <span class="ident">awc</span>::<span class="ident">error</span>::<span class="ident">WsClientError</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">ws_at</span>(<span class="string">&quot;/&quot;</span>).<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Get default HeaderMap of Client.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns Some(&amp;mut HeaderMap) when Client object is unique</span>
+    <span class="doccomment">/// (No other clone of client exists at the same time).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_headers</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">headers</span>()
     }
 
     <span class="doccomment">/// Gracefully stop HTTP server</span>
