@@ -546,13 +546,13 @@
         <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
                 <span class="ident">DispatcherError</span>::<span class="ident">Service</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;DispatcherError::Service({:?})&quot;</span>, <span class="ident">e</span>)
+                    <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;DispatcherError::Service({:?})&quot;</span>, <span class="ident">e</span>)
                 }
                 <span class="ident">DispatcherError</span>::<span class="ident">Encoder</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;DispatcherError::Encoder({:?})&quot;</span>, <span class="ident">e</span>)
+                    <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;DispatcherError::Encoder({:?})&quot;</span>, <span class="ident">e</span>)
                 }
                 <span class="ident">DispatcherError</span>::<span class="ident">Decoder</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;DispatcherError::Decoder({:?})&quot;</span>, <span class="ident">e</span>)
+                    <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;DispatcherError::Decoder({:?})&quot;</span>, <span class="ident">e</span>)
                 }
             }
         }
@@ -567,9 +567,9 @@
     {
         <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-                <span class="ident">DispatcherError</span>::<span class="ident">Service</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
-                <span class="ident">DispatcherError</span>::<span class="ident">Encoder</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>),
-                <span class="ident">DispatcherError</span>::<span class="ident">Decoder</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>),
+                <span class="ident">DispatcherError</span>::<span class="ident">Service</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
+                <span class="ident">DispatcherError</span>::<span class="ident">Encoder</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>),
+                <span class="ident">DispatcherError</span>::<span class="ident">Decoder</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>),
             }
         }
     }
@@ -592,7 +592,7 @@
         <span class="ident">Close</span>,
     }
 
-    <span class="macro">pin_project</span><span class="macro">!</span> {
+    <span class="macro">pin_project!</span> {
         <span class="doccomment">/// A future that reads frames from a [`Framed`] object and passes them to a [`Service`].</span>
         <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">T</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span>
         <span class="kw">where</span>
@@ -635,14 +635,14 @@
         <span class="kw">fn</span> <span class="ident">take_error</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatcherError</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Error</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span> {
             <span class="kw">match</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="self">self</span>, <span class="ident">State</span>::<span class="ident">Processing</span>) {
                 <span class="ident">State</span>::<span class="ident">Error</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(),
             }
         }
 
         <span class="kw">fn</span> <span class="ident">take_framed_error</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatcherError</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Error</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span> {
             <span class="kw">match</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="self">self</span>, <span class="ident">State</span>::<span class="ident">Processing</span>) {
                 <span class="ident">State</span>::<span class="ident">FramedError</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(),
             }
         }
     }
@@ -801,7 +801,7 @@
                         <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
                         <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> {}
                         <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Error sending data: {:?}&quot;</span>, <span class="ident">err</span>);
+                            <span class="macro">debug!</span>(<span class="string">&quot;Error sending data: {:?}&quot;</span>, <span class="ident">err</span>);
                             <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">state</span> <span class="op">=</span>
                                 <span class="ident">State</span>::<span class="ident">FramedError</span>(<span class="ident">DispatcherError</span>::<span class="ident">Encoder</span>(<span class="ident">err</span>));
                             <span class="kw">return</span> <span class="bool-val">true</span>;
@@ -854,7 +854,7 @@
                         <span class="kw">if</span> <span class="op">!</span><span class="ident">this</span>.<span class="ident">framed</span>.<span class="ident">is_write_buf_empty</span>() {
                             <span class="ident">this</span>.<span class="ident">framed</span>.<span class="ident">flush</span>(<span class="ident">cx</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> {
                                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">res</span> {
-                                    <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Error sending data: {:?}&quot;</span>, <span class="ident">err</span>);
+                                    <span class="macro">debug!</span>(<span class="string">&quot;Error sending data: {:?}&quot;</span>, <span class="ident">err</span>);
                                 }
 
                                 <span class="prelude-val">Ok</span>(())

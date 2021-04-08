@@ -139,7 +139,7 @@
     <span class="doccomment">/// Is the content compressed?</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_compression</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="macro">matches</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">ContentEncoding</span>::<span class="ident">Identity</span> <span class="op">|</span> <span class="ident">ContentEncoding</span>::<span class="ident">Auto</span>)
+        <span class="macro">matches!</span>(<span class="self">self</span>, <span class="ident">ContentEncoding</span>::<span class="ident">Identity</span> <span class="op">|</span> <span class="ident">ContentEncoding</span>::<span class="ident">Auto</span>)
     }
 
     <span class="doccomment">/// Convert content encoding to string</span>

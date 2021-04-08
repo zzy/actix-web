@@ -726,7 +726,7 @@
                 <span class="ident">builder</span>.<span class="ident">set_verify</span>(<span class="ident">SslVerifyMode</span>::<span class="ident">NONE</span>);
                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">builder</span>
                     .<span class="ident">set_alpn_protos</span>(<span class="string">b&quot;\x02h2\x08http/1.1&quot;</span>)
-                    .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Can not set alpn protocol: {:?}&quot;</span>, <span class="ident">e</span>));
+                    .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">log</span>::<span class="macro">error!</span>(<span class="string">&quot;Can not set alpn protocol: {:?}&quot;</span>, <span class="ident">e</span>));
                 <span class="ident">Connector</span>::<span class="ident">new</span>()
                     .<span class="ident">conn_lifetime</span>(<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">0</span>))
                     .<span class="ident">timeout</span>(<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">30000</span>))
@@ -852,9 +852,9 @@
         <span class="kw">let</span> <span class="ident">scheme</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">tls</span> { <span class="string">&quot;https&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;http&quot;</span> };
 
         <span class="kw">if</span> <span class="ident">uri</span>.<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>) {
-            <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}://localhost:{}{}&quot;</span>, <span class="ident">scheme</span>, <span class="self">self</span>.<span class="ident">addr</span>.<span class="ident">port</span>(), <span class="ident">uri</span>)
+            <span class="macro">format!</span>(<span class="string">&quot;{}://localhost:{}{}&quot;</span>, <span class="ident">scheme</span>, <span class="self">self</span>.<span class="ident">addr</span>.<span class="ident">port</span>(), <span class="ident">uri</span>)
         } <span class="kw">else</span> {
-            <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}://localhost:{}/{}&quot;</span>, <span class="ident">scheme</span>, <span class="self">self</span>.<span class="ident">addr</span>.<span class="ident">port</span>(), <span class="ident">uri</span>)
+            <span class="macro">format!</span>(<span class="string">&quot;{}://localhost:{}/{}&quot;</span>, <span class="ident">scheme</span>, <span class="self">self</span>.<span class="ident">addr</span>.<span class="ident">port</span>(), <span class="ident">uri</span>)
         }
     }
 

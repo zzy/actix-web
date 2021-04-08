@@ -279,7 +279,7 @@
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">qitem</span>, <span class="ident">QualityItem</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">http</span>::<span class="ident">header</span>;
 
-<span class="kw">crate</span>::<span class="macro">header</span><span class="macro">!</span> {
+<span class="kw">crate</span>::<span class="macro">header!</span> {
     <span class="doccomment">/// `Accept` header, defined in [RFC7231](http://tools.ietf.org/html/rfc7231#section-5.3.2)</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `Accept` header field can be used by user agents to specify</span>
@@ -355,17 +355,17 @@
 
     <span class="ident">test_accept</span> {
         <span class="comment">// Tests from the RFC</span>
-         <span class="macro">test_header</span><span class="macro">!</span>(
+         <span class="macro">test_header!</span>(
             <span class="ident">test1</span>,
-            <span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;audio/*; q=0.2, audio/basic&quot;</span>],
-            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+            <span class="macro">vec!</span>[<span class="string">b&quot;audio/*; q=0.2, audio/basic&quot;</span>],
+            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
                 <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="string">&quot;audio/*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">200</span>)),
                 <span class="ident">qitem</span>(<span class="string">&quot;audio/basic&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
                 ])));
-        <span class="macro">test_header</span><span class="macro">!</span>(
+        <span class="macro">test_header!</span>(
             <span class="ident">test2</span>,
-            <span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c&quot;</span>],
-            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+            <span class="macro">vec!</span>[<span class="string">b&quot;text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c&quot;</span>],
+            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
                 <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">mime</span>::<span class="ident">TEXT_PLAIN</span>, <span class="ident">q</span>(<span class="number">500</span>)),
                 <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>),
                 <span class="ident">QualityItem</span>::<span class="ident">new</span>(
@@ -374,16 +374,16 @@
                 <span class="ident">qitem</span>(<span class="string">&quot;text/x-c&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
                 ])));
         <span class="comment">// Custom tests</span>
-        <span class="macro">test_header</span><span class="macro">!</span>(
+        <span class="macro">test_header!</span>(
             <span class="ident">test3</span>,
-            <span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;text/plain; charset=utf-8&quot;</span>],
-            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+            <span class="macro">vec!</span>[<span class="string">b&quot;text/plain; charset=utf-8&quot;</span>],
+            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
                 <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_PLAIN_UTF_8</span>),
                 ])));
-        <span class="macro">test_header</span><span class="macro">!</span>(
+        <span class="macro">test_header!</span>(
             <span class="ident">test4</span>,
-            <span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;text/plain; charset=utf-8; q=0.5&quot;</span>],
-            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+            <span class="macro">vec!</span>[<span class="string">b&quot;text/plain; charset=utf-8; q=0.5&quot;</span>],
+            <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
                 <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">mime</span>::<span class="ident">TEXT_PLAIN_UTF_8</span>,
                     <span class="ident">q</span>(<span class="number">500</span>)),
             ])));
@@ -393,7 +393,7 @@
             <span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">test</span>::<span class="ident">TestRequest</span>;
             <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">default</span>().<span class="ident">insert_header</span>((<span class="kw">crate</span>::<span class="ident">http</span>::<span class="ident">header</span>::<span class="ident">ACCEPT</span>, <span class="string">&quot;chunk#;e&quot;</span>)).<span class="ident">finish</span>();
             <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">Accept</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>);
-            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">header</span>.<span class="ident">is_ok</span>());
+            <span class="macro">assert!</span>(<span class="ident">header</span>.<span class="ident">is_ok</span>());
         }
     }
 }
@@ -401,27 +401,27 @@
 <span class="kw">impl</span> <span class="ident">Accept</span> {
     <span class="doccomment">/// Construct `Accept: */*`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">star</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">STAR_STAR</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">STAR_STAR</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: application/json`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: text/*`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">text</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_STAR</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_STAR</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: image/*`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">image</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_STAR</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_STAR</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: text/html`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">html</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>)])
     }
 
     <span class="doccomment">/// Returns a sorted list of mime types from highest to lowest preference, accounting for</span>
@@ -491,21 +491,21 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_mime_precedence</span>() {
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[]);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">test</span>.<span class="ident">mime_precedence</span>().<span class="ident">is_empty</span>());
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[]);
+        <span class="macro">assert!</span>(<span class="ident">test</span>.<span class="ident">mime_precedence</span>().<span class="ident">is_empty</span>());
 
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>)]);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test</span>.<span class="ident">mime_precedence</span>(), <span class="macro">vec</span><span class="macro">!</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>));
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>)]);
+        <span class="macro">assert_eq!</span>(<span class="ident">test</span>.<span class="ident">mime_precedence</span>(), <span class="macro">vec!</span>(<span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>));
 
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
             <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>),
             <span class="string">&quot;application/xhtml+xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
             <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="string">&quot;application/xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.9</span>)),
             <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">mime</span>::<span class="ident">STAR_STAR</span>, <span class="ident">q</span>(<span class="number">0.8</span>)),
         ]);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">test</span>.<span class="ident">mime_precedence</span>(),
-            <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="macro">vec!</span>[
                 <span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>,
                 <span class="string">&quot;application/xhtml+xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
                 <span class="string">&quot;application/xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
@@ -513,35 +513,35 @@
             ]
         );
 
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
             <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">STAR_STAR</span>),
             <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_STAR</span>),
             <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_PNG</span>),
         ]);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">test</span>.<span class="ident">mime_precedence</span>(),
-            <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">mime</span>::<span class="ident">IMAGE_PNG</span>, <span class="ident">mime</span>::<span class="ident">IMAGE_STAR</span>, <span class="ident">mime</span>::<span class="ident">STAR_STAR</span>]
+            <span class="macro">vec!</span>[<span class="ident">mime</span>::<span class="ident">IMAGE_PNG</span>, <span class="ident">mime</span>::<span class="ident">IMAGE_STAR</span>, <span class="ident">mime</span>::<span class="ident">STAR_STAR</span>]
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_mime_preference</span>() {
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
             <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>),
             <span class="string">&quot;application/xhtml+xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
             <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="string">&quot;application/xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.9</span>)),
             <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">mime</span>::<span class="ident">STAR_STAR</span>, <span class="ident">q</span>(<span class="number">0.8</span>)),
         ]);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test</span>.<span class="ident">mime_preference</span>(), <span class="prelude-val">Some</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">test</span>.<span class="ident">mime_preference</span>(), <span class="prelude-val">Some</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>));
 
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec</span><span class="macro">!</span>[
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
             <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="string">&quot;video/*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.8</span>)),
             <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_PNG</span>),
             <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">mime</span>::<span class="ident">STAR_STAR</span>, <span class="ident">q</span>(<span class="number">0.5</span>)),
             <span class="ident">qitem</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_SVG</span>),
             <span class="ident">QualityItem</span>::<span class="ident">new</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_STAR</span>, <span class="ident">q</span>(<span class="number">0.8</span>)),
         ]);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test</span>.<span class="ident">mime_preference</span>(), <span class="prelude-val">Some</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_PNG</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">test</span>.<span class="ident">mime_preference</span>(), <span class="prelude-val">Some</span>(<span class="ident">mime</span>::<span class="ident">IMAGE_PNG</span>));
     }
 }
 </pre></div>

@@ -185,7 +185,7 @@
             <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
             <span class="kw">return</span> <span class="self">self</span>;
         }
-        <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Can not set header&quot;</span>);
+        <span class="macro">panic!</span>(<span class="string">&quot;Can not set header&quot;</span>);
     }
 
     <span class="doccomment">/// Append a header</span>
@@ -197,7 +197,7 @@
             <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">append</span>(<span class="ident">key</span>, <span class="ident">value</span>);
             <span class="kw">return</span> <span class="self">self</span>;
         }
-        <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Can not create header&quot;</span>);
+        <span class="macro">panic!</span>(<span class="string">&quot;Can not create header&quot;</span>);
     }
 
     <span class="doccomment">/// Set cookie for this response</span>
@@ -253,9 +253,9 @@
             .<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">DATE</span>, <span class="ident">HttpDate</span>::<span class="ident">from</span>(<span class="ident">SystemTime</span>::<span class="ident">now</span>())))
             .<span class="ident">cookie</span>(<span class="ident">cookie</span>::<span class="ident">Cookie</span>::<span class="ident">build</span>(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;value&quot;</span>).<span class="ident">finish</span>())
             .<span class="ident">finish</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">SET_COOKIE</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">DATE</span>));
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">version</span>(), <span class="ident">Version</span>::<span class="ident">HTTP_2</span>);
+        <span class="macro">assert!</span>(<span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">SET_COOKIE</span>));
+        <span class="macro">assert!</span>(<span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">DATE</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">version</span>(), <span class="ident">Version</span>::<span class="ident">HTTP_2</span>);
     }
 }
 </pre></div>

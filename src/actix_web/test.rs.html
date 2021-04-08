@@ -970,7 +970,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">app</span>
         .<span class="ident">call</span>(<span class="ident">req</span>)
         .<span class="kw">await</span>
-        .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;read_response failed at application call: {}&quot;</span>, <span class="ident">e</span>));
+        .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">panic!</span>(<span class="string">&quot;read_response failed at application call: {}&quot;</span>, <span class="ident">e</span>));
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">take_body</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
@@ -1065,7 +1065,7 @@
     <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">read_body</span>(<span class="ident">res</span>).<span class="kw">await</span>;
 
     <span class="ident">serde_json</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-        <span class="macro">panic</span><span class="macro">!</span>(
+        <span class="macro">panic!</span>(
             <span class="string">&quot;read_response_json failed during deserialization of body: {:?}, {}&quot;</span>,
             <span class="ident">body</span>, <span class="ident">e</span>
         )
@@ -1126,7 +1126,7 @@
     <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
 
     <span class="ident">serde_json</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
-        <span class="macro">panic</span><span class="macro">!</span>(
+        <span class="macro">panic!</span>(
             <span class="string">&quot;read_response_json failed during deserialization of body: {:?}&quot;</span>,
             <span class="ident">body</span>
         )
@@ -1404,21 +1404,21 @@
             .<span class="ident">app_data</span>(<span class="number">20u64</span>)
             .<span class="ident">peer_addr</span>(<span class="string">&quot;127.0.0.1:8081&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>())
             .<span class="ident">to_http_request</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">DATE</span>));
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert!</span>(<span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>));
+        <span class="macro">assert!</span>(<span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">DATE</span>));
+        <span class="macro">assert_eq!</span>(
             <span class="ident">req</span>.<span class="ident">head</span>().<span class="ident">peer_addr</span>,
             <span class="prelude-val">Some</span>(<span class="string">&quot;127.0.0.1:8081&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>())
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">match_info</span>()[<span class="string">&quot;test&quot;</span>], <span class="string">&quot;123&quot;</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">version</span>(), <span class="ident">Version</span>::<span class="ident">HTTP_2</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">match_info</span>()[<span class="string">&quot;test&quot;</span>], <span class="string">&quot;123&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">req</span>.<span class="ident">version</span>(), <span class="ident">Version</span>::<span class="ident">HTTP_2</span>);
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">is_none</span>());
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">data</span>.<span class="ident">get_ref</span>(), <span class="number">10</span>);
+        <span class="macro">assert!</span>(<span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">is_none</span>());
+        <span class="macro">assert_eq!</span>(<span class="kw-2">*</span><span class="ident">data</span>.<span class="ident">get_ref</span>(), <span class="number">10</span>);
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>().<span class="ident">is_none</span>());
+        <span class="macro">assert!</span>(<span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>().<span class="ident">is_none</span>());
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">data</span>, <span class="number">20</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">*</span><span class="ident">data</span>, <span class="number">20</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
@@ -1439,7 +1439,7 @@
             .<span class="ident">to_request</span>();
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">put_req</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;put!&quot;</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;put!&quot;</span>));
 
         <span class="kw">let</span> <span class="ident">patch_req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">patch</span>()
             .<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>)
@@ -1447,11 +1447,11 @@
             .<span class="ident">to_request</span>();
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">patch_req</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;patch!&quot;</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;patch!&quot;</span>));
 
         <span class="kw">let</span> <span class="ident">delete_req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">delete</span>().<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">delete_req</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;delete!&quot;</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;delete!&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
@@ -1470,7 +1470,7 @@
             .<span class="ident">to_request</span>();
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_response</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;welcome!&quot;</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;welcome!&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
@@ -1489,7 +1489,7 @@
             .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">read_body</span>(<span class="ident">resp</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;welcome!&quot;</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">result</span>, <span class="ident">Bytes</span>::<span class="ident">from_static</span>(<span class="string">b&quot;welcome!&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
@@ -1514,7 +1514,7 @@
             .<span class="ident">to_request</span>();
 
         <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
@@ -1534,7 +1534,7 @@
             .<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_body_json</span>(<span class="ident">resp</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
@@ -1554,11 +1554,11 @@
             .<span class="ident">set_form</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>)
             .<span class="ident">to_request</span>();
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">content_type</span>(), <span class="string">&quot;application/x-www-form-urlencoded&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">req</span>.<span class="ident">content_type</span>(), <span class="string">&quot;application/x-www-form-urlencoded&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
@@ -1578,11 +1578,11 @@
             .<span class="ident">set_json</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>)
             .<span class="ident">to_request</span>();
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">req</span>.<span class="ident">content_type</span>(), <span class="string">&quot;application/json&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">req</span>.<span class="ident">content_type</span>(), <span class="string">&quot;application/json&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">Person</span> <span class="op">=</span> <span class="ident">read_response_json</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">id</span>, <span class="string">&quot;12345&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">name</span>, <span class="string">&quot;User name&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
@@ -1593,8 +1593,8 @@
             <span class="kw">match</span> <span class="ident">res</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
                     .<span class="ident">content_type</span>(<span class="string">&quot;text/plain&quot;</span>)
-                    .<span class="ident">body</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Async with block value: {:?}&quot;</span>, <span class="ident">value</span>))),
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected&quot;</span>),
+                    .<span class="ident">body</span>(<span class="macro">format!</span>(<span class="string">&quot;Async with block value: {:?}&quot;</span>, <span class="ident">value</span>))),
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;Unexpected&quot;</span>),
             }
         }
 
@@ -1604,13 +1604,13 @@
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">post</span>().<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
+        <span class="macro">assert!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 
     <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_server_data</span>() {
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handler</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">data</span>, <span class="number">10</span>);
+            <span class="macro">assert_eq!</span>(<span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">data</span>, <span class="number">10</span>);
             <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
         }
 
@@ -1623,7 +1623,7 @@
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest</span>::<span class="ident">post</span>().<span class="ident">uri</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
+        <span class="macro">assert!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">is_success</span>());
     }
 }
 </pre></div>
