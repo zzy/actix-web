@@ -13,7 +13,7 @@ or <code>Sync</code>. Internally <code>Data</code> uses <code>Arc</code>.</p>
 Server Error</em> response.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Mutex</span>;
+<span class="kw">use</span> <span class="ident">std::sync::Mutex</span>;
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>};
 
 <span class="kw">struct</span> <span class="ident">MyData</span> {
@@ -21,21 +21,21 @@ Server Error</em> response.</p>
 }
 
 <span class="doccomment">/// Use the `Data&lt;T&gt;` extractor to access data in a handler.</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">MyData</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">data</span>: <span class="ident">web::Data</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">MyData</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
     <span class="ident">data</span>.<span class="ident">counter</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-    <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
+    <span class="ident">HttpResponse::Ok</span>()
 }
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">web</span>::<span class="ident">Data</span>::<span class="ident">new</span>(<span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">MyData</span>{ <span class="ident">counter</span>: <span class="number">0</span> }));
+    <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">web::Data::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">MyData</span>{ <span class="ident">counter</span>: <span class="number">0</span> }));
 
-    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span>::<span class="ident">new</span>()
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>()
         <span class="comment">// Store `MyData` in application storage.</span>
         .<span class="ident">app_data</span>(<span class="ident">data</span>.<span class="ident">clone</span>())
         .<span class="ident">service</span>(
-            <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">route</span>(
-                <span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">index</span>)));
+            <span class="ident">web::resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">route</span>(
+                <span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">index</span>)));
 }</pre></div>
 </div><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor"></a></h2><h3 id="impl" class="impl"><code class="in-band">impl&lt;T&gt; <a class="struct" href="../../actix_web/web/struct.Data.html" title="struct actix_web::web::Data">Data</a>&lt;T&gt;</code><a href="#impl" class="anchor"></a><a class="srclink" href="../../src/actix_web/data.rs.html#70-85" title="goto source code">[src]</a></h3><div class="impl-items"><h4 id="method.new" class="method"><code>pub fn <a href="#method.new" class="fnname">new</a>(state: T) -&gt; <a class="struct" href="../../actix_web/web/struct.Data.html" title="struct actix_web::web::Data">Data</a>&lt;T&gt;</code><a class="srclink" href="../../src/actix_web/data.rs.html#72-74" title="goto source code">[src]</a></h4><div class="docblock"><p>Create new <code>Data</code> instance.</p>
 </div><h4 id="method.get_ref" class="method"><code>pub fn <a href="#method.get_ref" class="fnname">get_ref</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>T</code><a class="srclink" href="../../src/actix_web/data.rs.html#77-79" title="goto source code">[src]</a></h4><div class="docblock"><p>Get reference to inner app data.</p>

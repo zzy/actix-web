@@ -5,11 +5,11 @@
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">guard</span>, <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">route</span>(
-        <span class="ident">web</span>::<span class="ident">route</span>()
+    <span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">route</span>(
+        <span class="ident">web::route</span>()
             .<span class="ident">guard</span>(
-                <span class="ident">guard</span>::<span class="ident">All</span>(<span class="ident">guard</span>::<span class="ident">Get</span>()).<span class="ident">and</span>(<span class="ident">guard</span>::<span class="ident">Header</span>(<span class="string">&quot;content-type&quot;</span>, <span class="string">&quot;text/plain&quot;</span>)))
-            .<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
+                <span class="ident">guard::All</span>(<span class="ident">guard::Get</span>()).<span class="ident">and</span>(<span class="ident">guard::Header</span>(<span class="string">&quot;content-type&quot;</span>, <span class="string">&quot;text/plain&quot;</span>)))
+            .<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::MethodNotAllowed</span>()))
     );
 }</pre></div>
 </div></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-search-js="../../search-index.js"></div>

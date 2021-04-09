@@ -6,12 +6,12 @@
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">http</span>, <span class="ident">middleware</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span>::<span class="ident">new</span>()
-        .<span class="ident">wrap</span>(<span class="ident">middleware</span>::<span class="ident">DefaultHeaders</span>::<span class="ident">new</span>().<span class="ident">header</span>(<span class="string">&quot;X-Version&quot;</span>, <span class="string">&quot;0.2&quot;</span>))
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>()
+        .<span class="ident">wrap</span>(<span class="ident">middleware::DefaultHeaders::new</span>().<span class="ident">header</span>(<span class="string">&quot;X-Version&quot;</span>, <span class="string">&quot;0.2&quot;</span>))
         .<span class="ident">service</span>(
-            <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>)
-                .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()))
-                .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">method</span>(<span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">HEAD</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
+            <span class="ident">web::resource</span>(<span class="string">&quot;/test&quot;</span>)
+                .<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::Ok</span>()))
+                .<span class="ident">route</span>(<span class="ident">web::method</span>(<span class="ident">http::Method::HEAD</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::MethodNotAllowed</span>()))
         );
 }</pre></div>
 </div><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor"></a></h2><h3 id="impl" class="impl"><code class="in-band">impl <a class="struct" href="../../actix_web/middleware/struct.DefaultHeaders.html" title="struct actix_web::middleware::DefaultHeaders">DefaultHeaders</a></code><a href="#impl" class="anchor"></a><a class="srclink" href="../../src/actix_web/middleware/default_headers.rs.html#62-107" title="goto source code">[src]</a></h3><div class="impl-items"><h4 id="method.new" class="method"><code>pub fn <a href="#method.new" class="fnname">new</a>() -&gt; <a class="struct" href="../../actix_web/middleware/struct.DefaultHeaders.html" title="struct actix_web::middleware::DefaultHeaders">DefaultHeaders</a></code><a class="srclink" href="../../src/actix_web/middleware/default_headers.rs.html#64-66" title="goto source code">[src]</a></h4><div class="docblock"><p>Constructs an empty <code>DefaultHeaders</code> middleware.</p>

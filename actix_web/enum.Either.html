@@ -12,7 +12,7 @@ as part of its implementation. Though, it does respect any <code>PayloadConfig</
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">post</span>, <span class="ident">web</span>, <span class="ident">Either</span>};
-<span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">Deserialize</span>;
+<span class="kw">use</span> <span class="ident">serde::Deserialize</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
 <span class="kw">struct</span> <span class="ident">Info</span> {
@@ -21,10 +21,10 @@ as part of its implementation. Though, it does respect any <code>PayloadConfig</
 
 <span class="comment">// handler that accepts form as JSON or form-urlencoded.</span>
 <span class="attribute">#[<span class="ident">post</span>(<span class="string">&quot;/&quot;</span>)]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">form</span>: <span class="ident">Either</span><span class="op">&lt;</span><span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>, <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">form</span>: <span class="ident">Either</span><span class="op">&lt;</span><span class="ident">web::Json</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>, <span class="ident">web::Form</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="kw">let</span> <span class="ident">name</span>: <span class="ident">String</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">form</span> {
-        <span class="ident">Either</span>::<span class="ident">Left</span>(<span class="ident">json</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">json</span>.<span class="ident">name</span>.<span class="ident">to_owned</span>(),
-        <span class="ident">Either</span>::<span class="ident">Right</span>(<span class="ident">form</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">form</span>.<span class="ident">name</span>.<span class="ident">to_owned</span>(),
+        <span class="ident">Either::Left</span>(<span class="ident">json</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">json</span>.<span class="ident">name</span>.<span class="ident">to_owned</span>(),
+        <span class="ident">Either::Right</span>(<span class="ident">form</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">form</span>.<span class="ident">name</span>.<span class="ident">to_owned</span>(),
     };
 
     <span class="macro">format!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">name</span>)
@@ -42,12 +42,12 @@ handler’s return type.</p>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Either</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">2</span> {
         <span class="comment">// respond with Left variant</span>
-        <span class="ident">Either</span>::<span class="ident">Left</span>(<span class="string">&quot;Bad data&quot;</span>)
+        <span class="ident">Either::Left</span>(<span class="string">&quot;Bad data&quot;</span>)
     } <span class="kw">else</span> {
         <span class="comment">// respond with Right variant</span>
-        <span class="ident">Either</span>::<span class="ident">Right</span>(
-            <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()
-                .<span class="ident">content_type</span>(<span class="ident">mime</span>::<span class="ident">TEXT_HTML</span>)
+        <span class="ident">Either::Right</span>(
+            <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse::Ok</span>()
+                .<span class="ident">content_type</span>(<span class="ident">mime::TEXT_HTML</span>)
                 .<span class="ident">body</span>(<span class="string">&quot;&lt;p&gt;Hello!&lt;/p&gt;&quot;</span>))
         )
     }

@@ -6,19 +6,19 @@
 </div><h4 id="method.insert_header" class="method"><code>pub fn <a href="#method.insert_header" class="fnname">insert_header</a>&lt;H&gt;(&amp;mut self, header: H) -&gt; &amp;mut <a class="struct" href="../../actix_web/dev/struct.HttpResponseBuilder.html" title="struct actix_web::dev::HttpResponseBuilder">ResponseBuilder</a><span class="notable-traits"><span class="notable-traits-tooltip">ⓘ<div class="notable-traits-tooltiptext"><span class="docblock"><h3 class="notable">Notable traits for <a class="struct" href="../../actix_web/dev/struct.HttpResponseBuilder.html" title="struct actix_web::dev::HttpResponseBuilder">ResponseBuilder</a></h3><code class="content"><span class="where fmt-newline">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a> for <a class="struct" href="../../actix_web/dev/struct.HttpResponseBuilder.html" title="struct actix_web::dev::HttpResponseBuilder">ResponseBuilder</a></span><span class="where fmt-newline">    type <a href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output" class="type">Output</a> = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../../actix_web/struct.HttpResponse.html" title="struct actix_web::HttpResponse">Response</a>&lt;<a class="enum" href="../../actix_web/body/enum.Body.html" title="enum actix_web::body::Body">Body</a>&gt;, <a class="struct" href="../../actix_web/struct.Error.html" title="struct actix_web::Error">Error</a>&gt;;</span></code></span></div></span></span> <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;H: <a class="trait" href="../../actix_web/http/header/trait.IntoHeaderPair.html" title="trait actix_web::http::header::IntoHeaderPair">IntoHeaderPair</a>,&nbsp;</span></code><a class="srclink" href="../../src/actix_http/response.rs.html#369-371" title="goto source code">[src]</a></h4><div class="docblock"><p>Insert a header, replacing any that were set with an equivalent field name.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">http</span>::<span class="ident">header</span>;
+<span class="kw">use</span> <span class="ident">actix_http::http::header</span>;
 
-<span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
-    .<span class="ident">insert_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>))
+<span class="ident">Response::Ok</span>()
+    .<span class="ident">insert_header</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">mime::APPLICATION_JSON</span>))
     .<span class="ident">insert_header</span>((<span class="string">&quot;X-TEST&quot;</span>, <span class="string">&quot;value&quot;</span>))
     .<span class="ident">finish</span>();</pre></div>
 </div><h4 id="method.append_header" class="method"><code>pub fn <a href="#method.append_header" class="fnname">append_header</a>&lt;H&gt;(&amp;mut self, header: H) -&gt; &amp;mut <a class="struct" href="../../actix_web/dev/struct.HttpResponseBuilder.html" title="struct actix_web::dev::HttpResponseBuilder">ResponseBuilder</a><span class="notable-traits"><span class="notable-traits-tooltip">ⓘ<div class="notable-traits-tooltiptext"><span class="docblock"><h3 class="notable">Notable traits for <a class="struct" href="../../actix_web/dev/struct.HttpResponseBuilder.html" title="struct actix_web::dev::HttpResponseBuilder">ResponseBuilder</a></h3><code class="content"><span class="where fmt-newline">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a> for <a class="struct" href="../../actix_web/dev/struct.HttpResponseBuilder.html" title="struct actix_web::dev::HttpResponseBuilder">ResponseBuilder</a></span><span class="where fmt-newline">    type <a href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output" class="type">Output</a> = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../../actix_web/struct.HttpResponse.html" title="struct actix_web::HttpResponse">Response</a>&lt;<a class="enum" href="../../actix_web/body/enum.Body.html" title="enum actix_web::body::Body">Body</a>&gt;, <a class="struct" href="../../actix_web/struct.Error.html" title="struct actix_web::Error">Error</a>&gt;;</span></code></span></div></span></span> <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;H: <a class="trait" href="../../actix_web/http/header/trait.IntoHeaderPair.html" title="trait actix_web::http::header::IntoHeaderPair">IntoHeaderPair</a>,&nbsp;</span></code><a class="srclink" href="../../src/actix_http/response.rs.html#397-399" title="goto source code">[src]</a></h4><div class="docblock"><p>Append a header, keeping any that were set with an equivalent field name.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">actix_http</span>::<span class="ident">http</span>::<span class="ident">header</span>;
+<span class="kw">use</span> <span class="ident">actix_http::http::header</span>;
 
-<span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
-    .<span class="ident">append_header</span>((<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">mime</span>::<span class="ident">APPLICATION_JSON</span>))
+<span class="ident">Response::Ok</span>()
+    .<span class="ident">append_header</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">mime::APPLICATION_JSON</span>))
     .<span class="ident">append_header</span>((<span class="string">&quot;X-TEST&quot;</span>, <span class="string">&quot;value1&quot;</span>))
     .<span class="ident">append_header</span>((<span class="string">&quot;X-TEST&quot;</span>, <span class="string">&quot;value2&quot;</span>))
     .<span class="ident">finish</span>();</pre></div>
@@ -38,9 +38,9 @@
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">http</span>, <span class="ident">Request</span>, <span class="ident">Response</span>};
 
 <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
-    <span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
+    <span class="ident">Response::Ok</span>()
         .<span class="ident">cookie</span>(
-            <span class="ident">http</span>::<span class="ident">Cookie</span>::<span class="ident">build</span>(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;value&quot;</span>)
+            <span class="ident">http::Cookie::build</span>(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;value&quot;</span>)
                 .<span class="ident">domain</span>(<span class="string">&quot;www.rust-lang.org&quot;</span>)
                 .<span class="ident">path</span>(<span class="string">&quot;/&quot;</span>)
                 .<span class="ident">secure</span>(<span class="bool-val">true</span>)
@@ -55,7 +55,7 @@
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">http</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">HttpMessage</span>};
 
 <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">Response</span>::<span class="prelude-val">Ok</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">Response::Ok</span>();
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">cookie</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">cookie</span>(<span class="string">&quot;name&quot;</span>) {
         <span class="ident">builder</span>.<span class="ident">del_cookie</span>(<span class="ident">cookie</span>);

@@ -11,13 +11,13 @@ real-world cases than using <code>init_service</code>, which skips HTTP encoding
 
 <span class="attribute">#[<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>)]</span>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">my_handler</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Responder</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>())
+    <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse::Ok</span>())
 }
 
-<span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">test</span>]</span>
+<span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_example</span>() {
-    <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">actix_test</span>::<span class="ident">start</span>(<span class="op">|</span><span class="op">|</span>
-        <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">my_handler</span>)
+    <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">actix_test::start</span>(<span class="op">|</span><span class="op">|</span>
+        <span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">my_handler</span>)
     );
 
     <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">get</span>(<span class="string">&quot;/&quot;</span>);

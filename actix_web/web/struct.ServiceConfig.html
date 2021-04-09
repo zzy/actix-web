@@ -8,15 +8,15 @@ resources services have similar methods.</p>
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
 <span class="comment">// this function could be located in different module</span>
-<span class="kw">fn</span> <span class="ident">config</span>(<span class="ident">cfg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">web</span>::<span class="ident">ServiceConfig</span>) {
-    <span class="ident">cfg</span>.<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>)
-        .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()))
-        .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">head</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
+<span class="kw">fn</span> <span class="ident">config</span>(<span class="ident">cfg</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">web::ServiceConfig</span>) {
+    <span class="ident">cfg</span>.<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/test&quot;</span>)
+        .<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::Ok</span>()))
+        .<span class="ident">route</span>(<span class="ident">web::head</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::MethodNotAllowed</span>()))
     );
 }
 
 <span class="comment">// merge `/test` routes from config function to App</span>
-<span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">configure</span>(<span class="ident">config</span>);</pre></div>
+<span class="ident">App::new</span>().<span class="ident">configure</span>(<span class="ident">config</span>);</pre></div>
 </div><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor"></a></h2><h3 id="impl" class="impl"><code class="in-band">impl <a class="struct" href="../../actix_web/web/struct.ServiceConfig.html" title="struct actix_web::web::ServiceConfig">ServiceConfig</a></code><a href="#impl" class="anchor"></a><a class="srclink" href="../../src/actix_web/config.rs.html#182-247" title="goto source code">[src]</a></h3><div class="impl-items"><h4 id="method.data" class="method"><code>pub fn <a href="#method.data" class="fnname">data</a>&lt;U:&nbsp;'static&gt;(&amp;mut self, data: U) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code><a class="srclink" href="../../src/actix_web/config.rs.html#194-197" title="goto source code">[src]</a></h4><div class="docblock"><p>Add shared app data item.</p>
 <p>Counterpart to <a href="../../actix_web/struct.App.html#method.data"><code>App::data()</code></a>.</p>
 </div><h4 id="method.app_data" class="method"><code>pub fn <a href="#method.app_data" class="fnname">app_data</a>&lt;U:&nbsp;'static&gt;(&amp;mut self, ext: U) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code><a class="srclink" href="../../src/actix_web/config.rs.html#202-205" title="goto source code">[src]</a></h4><div class="docblock"><p>Add arbitrary app data item.</p>

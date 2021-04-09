@@ -26,14 +26,14 @@ to <code>/user/123/profile</code> this function would return <code>Some(&quot;/u
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpResponse</span> {
     <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">url_for</span>(<span class="string">&quot;foo&quot;</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>]); <span class="comment">// &lt;- generate url for &quot;foo&quot; resource</span>
-    <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">into</span>()
+    <span class="ident">HttpResponse::Ok</span>().<span class="ident">into</span>()
 }
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span>::<span class="ident">new</span>()
-        .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test/{one}/{two}/{three}&quot;</span>)
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>()
+        .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/test/{one}/{two}/{three}&quot;</span>)
              .<span class="ident">name</span>(<span class="string">&quot;foo&quot;</span>)  <span class="comment">// &lt;- set resource name, then it could be used in `url_for`</span>
-             .<span class="ident">route</span>(<span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>()))
+             .<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::Ok</span>()))
         );
 }</pre></div>
 </div><h4 id="method.url_for_static" class="method"><code>pub fn <a href="#method.url_for_static" class="fnname">url_for_static</a>(&amp;self, name: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="https://docs.rs/url/2.2.1/url/struct.Url.html" title="struct url::Url">Url</a>, <a class="enum" href="../../actix_web/error/enum.UrlGenerationError.html" title="enum actix_web::error::UrlGenerationError">UrlGenerationError</a>&gt;</code><a class="srclink" href="../../src/actix_web/request.rs.html#202-205" title="goto source code">[src]</a></h4><div class="docblock"><p>Generate url for named resource</p>
@@ -63,7 +63,7 @@ methods during application configuration.</p>
 <h2 id="example" class="section-header"><a href="#example">Example</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpRequest</span>};
-<span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="ident">Deserialize</span>;
+<span class="kw">use</span> <span class="ident">serde_derive::Deserialize</span>;
 
 <span class="doccomment">/// extract `Thing` from request</span>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
@@ -71,9 +71,9 @@ methods during application configuration.</p>
 }
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(
-        <span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/users/{first}&quot;</span>).<span class="ident">route</span>(
-            <span class="ident">web</span>::<span class="ident">get</span>().<span class="ident">to</span>(<span class="ident">index</span>))
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>().<span class="ident">service</span>(
+        <span class="ident">web::resource</span>(<span class="string">&quot;/users/{first}&quot;</span>).<span class="ident">route</span>(
+            <span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">index</span>))
     );
 }</pre></div>
 </div><div class="impl-items"><h4 id="associatedtype.Config" class="type"><code>type <a href="../../actix_web/trait.FromRequest.html#associatedtype.Config" class="type">Config</a> = <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a></code></h4><div class='docblock'><p>Configuration for this extractor.</p>
