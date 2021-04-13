@@ -58,6 +58,10 @@
 <span id="57">57</span>
 <span id="58">58</span>
 <span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">pin::Pin</span>,
@@ -66,23 +70,27 @@
 
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">ready</span>, <span class="ident">Stream</span>};
+<span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">BodySize</span>, <span class="ident">MessageBody</span>};
 
-<span class="doccomment">/// Known sized streaming response wrapper.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This body implementation should be used if total size of stream is known. Data get sent as is</span>
-<span class="doccomment">/// without using transfer encoding.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Unpin</span><span class="op">&gt;</span> {
-    <span class="ident">size</span>: <span class="ident">u64</span>,
-    <span class="ident">stream</span>: <span class="ident">S</span>,
+<span class="macro">pin_project!</span> {
+    <span class="doccomment">/// Known sized streaming response wrapper.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This body implementation should be used if total size of stream is known. Data get sent as is</span>
+    <span class="doccomment">/// without using transfer encoding.</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
+        <span class="ident">size</span>: <span class="ident">u64</span>,
+        <span class="attribute">#[<span class="ident">pin</span>]</span>
+        <span class="ident">stream</span>: <span class="ident">S</span>,
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span>,
+    <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">u64</span>, <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">SizedStream</span> { <span class="ident">size</span>, <span class="ident">stream</span> }
@@ -91,7 +99,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">MessageBody</span> <span class="kw">for</span> <span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span>,
+    <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
     <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BodySize</span> {
         <span class="ident">BodySize::Sized</span>(<span class="self">self</span>.<span class="ident">size</span> <span class="kw">as</span> <span class="ident">u64</span>)
@@ -107,9 +115,9 @@
         <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">loop</span> {
-            <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">stream</span>;
+            <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>().<span class="ident">stream</span>;
 
-            <span class="kw">let</span> <span class="ident">chunk</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">Pin::new</span>(<span class="ident">stream</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>)) {
+            <span class="kw">let</span> <span class="ident">chunk</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">stream</span>.<span class="ident">poll_next</span>(<span class="ident">cx</span>)) {
                 <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="kw-2">ref</span> <span class="ident">bytes</span>)) <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">is_empty</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
                 <span class="ident">val</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>,
             };
