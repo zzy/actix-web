@@ -790,6 +790,31 @@
 <span id="789">789</span>
 <span id="790">790</span>
 <span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP responses.</span>
 
@@ -822,18 +847,6 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Create HTTP response builder with specific status.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
-        <span class="ident">ResponseBuilder::new</span>(<span class="ident">status</span>)
-    }
-
-    <span class="doccomment">/// Create HTTP response builder</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build_from</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">source</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
-        <span class="ident">source</span>.<span class="ident">into</span>()
-    }
-
     <span class="doccomment">/// Constructs a response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
@@ -843,6 +856,41 @@
             <span class="ident">error</span>: <span class="prelude-val">None</span>,
         }
     }
+
+    <span class="doccomment">/// Create HTTP response builder with specific status.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
+        <span class="ident">ResponseBuilder::new</span>(<span class="ident">status</span>)
+    }
+
+    <span class="comment">// just a couple frequently used shortcuts</span>
+    <span class="comment">// this list should not grow larger than a few</span>
+
+    <span class="doccomment">/// Creates a new response with status 200 OK.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ok</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
+        <span class="ident">Response::new</span>(<span class="ident">StatusCode::OK</span>)
+    }
+
+    <span class="doccomment">/// Creates a new response with status 400 Bad Request.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bad_request</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
+        <span class="ident">Response::new</span>(<span class="ident">StatusCode::BAD_REQUEST</span>)
+    }
+
+    <span class="doccomment">/// Creates a new response with status 404 Not Found.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_found</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
+        <span class="ident">Response::new</span>(<span class="ident">StatusCode::NOT_FOUND</span>)
+    }
+
+    <span class="doccomment">/// Creates a new response with status 500 Internal Server Error.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">internal_server_error</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
+        <span class="ident">Response::new</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>)
+    }
+
+    <span class="comment">// end shortcuts</span>
 
     <span class="doccomment">/// Constructs an error response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
@@ -1074,9 +1122,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use actix_http::Response;</span>
-    <span class="doccomment">/// use actix_http::http::header;</span>
+    <span class="doccomment">/// use actix_http::http::{header, StatusCode};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Response::Ok()</span>
+    <span class="doccomment">/// Response::build(StatusCode::OK)</span>
     <span class="doccomment">///     .insert_header((header::CONTENT_TYPE, mime::APPLICATION_JSON))</span>
     <span class="doccomment">///     .insert_header((&quot;X-TEST&quot;, &quot;value&quot;))</span>
     <span class="doccomment">///     .finish();</span>
@@ -1101,9 +1149,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use actix_http::Response;</span>
-    <span class="doccomment">/// use actix_http::http::header;</span>
+    <span class="doccomment">/// use actix_http::http::{header, StatusCode};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Response::Ok()</span>
+    <span class="doccomment">/// Response::build(StatusCode::OK)</span>
     <span class="doccomment">///     .append_header((header::CONTENT_TYPE, mime::APPLICATION_JSON))</span>
     <span class="doccomment">///     .append_header((&quot;X-TEST&quot;, &quot;value1&quot;))</span>
     <span class="doccomment">///     .append_header((&quot;X-TEST&quot;, &quot;value2&quot;))</span>
@@ -1350,7 +1398,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Response::Ok</span>()
+        <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">content_type</span>(<span class="ident">mime::TEXT_PLAIN_UTF_8</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
     }
@@ -1358,7 +1406,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Response::Ok</span>()
+        <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">content_type</span>(<span class="ident">mime::APPLICATION_OCTET_STREAM</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
     }
@@ -1366,7 +1414,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Response::Ok</span>()
+        <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">content_type</span>(<span class="ident">mime::TEXT_PLAIN_UTF_8</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
     }
@@ -1374,7 +1422,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Response::Ok</span>()
+        <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">content_type</span>(<span class="ident">mime::TEXT_PLAIN_UTF_8</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
     }
@@ -1382,7 +1430,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">Bytes</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Response::Ok</span>()
+        <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">content_type</span>(<span class="ident">mime::APPLICATION_OCTET_STREAM</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
     }
@@ -1390,7 +1438,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BytesMut</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">BytesMut</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Response::Ok</span>()
+        <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">content_type</span>(<span class="ident">mime::APPLICATION_OCTET_STREAM</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
     }
@@ -1404,7 +1452,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_debug</span>() {
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Response::Ok</span>()
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">append_header</span>((<span class="ident">COOKIE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;cookie1=value1; &quot;</span>)))
             .<span class="ident">append_header</span>((<span class="ident">COOKIE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;cookie2=value2; &quot;</span>)))
             .<span class="ident">finish</span>();
@@ -1414,7 +1462,9 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_basic_builder</span>() {
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Response::Ok</span>().<span class="ident">insert_header</span>((<span class="string">&quot;X-TEST&quot;</span>, <span class="string">&quot;value&quot;</span>)).<span class="ident">finish</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>)
+            .<span class="ident">insert_header</span>((<span class="string">&quot;X-TEST&quot;</span>, <span class="string">&quot;value&quot;</span>))
+            .<span class="ident">finish</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
     }
 
@@ -1534,7 +1584,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">response_builder_header_insert_kv</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::Ok</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>);
         <span class="ident">res</span>.<span class="ident">insert_header</span>((<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/octet-stream&quot;</span>));
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">finish</span>();
 
@@ -1546,7 +1596,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">response_builder_header_insert_typed</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::Ok</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>);
         <span class="ident">res</span>.<span class="ident">insert_header</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">mime::APPLICATION_OCTET_STREAM</span>));
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">finish</span>();
 
@@ -1558,7 +1608,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">response_builder_header_append_kv</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::Ok</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>);
         <span class="ident">res</span>.<span class="ident">append_header</span>((<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/octet-stream&quot;</span>));
         <span class="ident">res</span>.<span class="ident">append_header</span>((<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/json&quot;</span>));
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">finish</span>();
@@ -1571,7 +1621,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">response_builder_header_append_typed</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::Ok</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::build</span>(<span class="ident">StatusCode::OK</span>);
         <span class="ident">res</span>.<span class="ident">append_header</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">mime::APPLICATION_OCTET_STREAM</span>));
         <span class="ident">res</span>.<span class="ident">append_header</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">mime::APPLICATION_JSON</span>));
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">finish</span>();
