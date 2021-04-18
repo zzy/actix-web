@@ -4,7 +4,7 @@
     ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">x</span>:<span class="ident">expr</span>),<span class="op">+</span> $(,)<span class="question-mark">?</span>) <span class="op">=</span><span class="op">&gt;</span> { ... };
 }</pre></div>
 </div><div class="docblock"><p>Macro helping register different types of services at the sametime.</p>
-<p>The service type must be implementing <a href="../actix_web/dev/trait.HttpServiceFactory.html"><code>HttpServiceFactory</code></a> trait.</p>
+<p>The service type must be implementing <a href="dev/trait.HttpServiceFactory.html"><code>HttpServiceFactory</code></a> trait.</p>
 <p>The max number of services can be grouped together is 12.</p>
 <h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
@@ -23,5 +23,5 @@
     <span class="ident">web::resource</span>(<span class="string">&quot;/test2&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="string">&quot;test2&quot;</span> }),
     <span class="ident">web::scope</span>(<span class="string">&quot;/test3&quot;</span>).<span class="ident">route</span>(<span class="string">&quot;/&quot;</span>, <span class="ident">web::get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="string">&quot;test3&quot;</span> }))
 ));</pre></div>
-</div></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_web" data-search-js="../search-index.js"></div>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_web" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
     <script src="../main.js"></script></body></html>
