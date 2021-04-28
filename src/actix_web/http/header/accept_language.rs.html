@@ -65,10 +65,6 @@
 <span id="64">64</span>
 <span id="65">65</span>
 <span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
 
@@ -96,14 +92,11 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use language_tags::langtag;</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
     <span class="doccomment">/// use actix_web::http::header::{AcceptLanguage, LanguageTag, qitem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
-    <span class="doccomment">/// let mut langtag: LanguageTag = Default::default();</span>
-    <span class="doccomment">/// langtag.language = Some(&quot;en&quot;.to_owned());</span>
-    <span class="doccomment">/// langtag.region = Some(&quot;US&quot;.to_owned());</span>
+    <span class="doccomment">/// let langtag = LanguageTag::parse(&quot;en-US&quot;).unwrap();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptLanguage(vec![</span>
     <span class="doccomment">///         qitem(langtag),</span>
@@ -112,16 +105,15 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use language_tags::langtag;</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptLanguage, QualityItem, q, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptLanguage, LanguageTag, QualityItem, q, qitem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptLanguage(vec![</span>
-    <span class="doccomment">///         qitem(langtag!(da)),</span>
-    <span class="doccomment">///         QualityItem::new(langtag!(en;;;GB), q(800)),</span>
-    <span class="doccomment">///         QualityItem::new(langtag!(en), q(700)),</span>
+    <span class="doccomment">///         qitem(LanguageTag::parse(&quot;da&quot;).unwrap()),</span>
+    <span class="doccomment">///         QualityItem::new(LanguageTag::parse(&quot;en-GB&quot;).unwrap(), q(800)),</span>
+    <span class="doccomment">///         QualityItem::new(LanguageTag::parse(&quot;en&quot;).unwrap(), q(700)),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>

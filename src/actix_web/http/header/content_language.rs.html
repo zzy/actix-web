@@ -55,8 +55,6 @@
 <span id="54">54</span>
 <span id="55">55</span>
 <span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">QualityItem</span>, <span class="ident">CONTENT_LANGUAGE</span>};
 <span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
@@ -84,28 +82,26 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use language_tags::langtag;</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, LanguageTag, qitem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     ContentLanguage(vec![</span>
-    <span class="doccomment">///         qitem(langtag!(en)),</span>
+    <span class="doccomment">///         qitem(LanguageTag::parse(&quot;en&quot;).unwrap()),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use language_tags::langtag;</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, LanguageTag, qitem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     ContentLanguage(vec![</span>
-    <span class="doccomment">///         qitem(langtag!(da)),</span>
-    <span class="doccomment">///         qitem(langtag!(en;;;GB)),</span>
+    <span class="doccomment">///         qitem(LanguageTag::parse(&quot;da&quot;).unwrap()),</span>
+    <span class="doccomment">///         qitem(LanguageTag::parse(&quot;en-GB&quot;).unwrap()),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
