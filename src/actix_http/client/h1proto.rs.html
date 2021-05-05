@@ -226,6 +226,9 @@
 <span id="225">225</span>
 <span id="226">226</span>
 <span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">io::Write</span>,
@@ -240,7 +243,6 @@
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">ready</span>, <span class="ident">Stream</span>};
 <span class="kw">use</span> <span class="ident">futures_util::SinkExt</span> <span class="kw">as</span> <span class="kw">_</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::PayloadError</span>;
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::h1</span>;
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http</span>::{
     <span class="ident">header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">EXPECT</span>, <span class="ident">HOST</span>},
@@ -248,6 +250,7 @@
 };
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::message</span>::{<span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>};
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::payload::Payload</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::PayloadError</span>, <span class="ident">Error</span>};
 
 <span class="kw">use</span> <span class="kw">super</span><span class="ident">::connection</span>::{<span class="ident">ConnectionIo</span>, <span class="ident">H1Connection</span>};
 <span class="kw">use</span> <span class="kw">super</span><span class="ident">::error</span>::{<span class="ident">ConnectError</span>, <span class="ident">SendRequestError</span>};
@@ -261,6 +264,7 @@
 <span class="kw">where</span>
     <span class="ident">Io</span>: <span class="ident">ConnectionIo</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
 {
     <span class="comment">// set request host header</span>
     <span class="kw">if</span> <span class="op">!</span><span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">headers</span>.<span class="ident">contains_key</span>(<span class="ident">HOST</span>)
@@ -383,6 +387,7 @@
 <span class="kw">where</span>
     <span class="ident">Io</span>: <span class="ident">ConnectionIo</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
 {
     <span class="macro">actix_rt::pin!</span>(<span class="ident">body</span>);
 
@@ -390,9 +395,10 @@
     <span class="kw">while</span> <span class="op">!</span><span class="ident">eof</span> {
         <span class="kw">while</span> <span class="op">!</span><span class="ident">eof</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">framed</span>.<span class="ident">as_ref</span>().<span class="ident">is_write_buf_full</span>() {
             <span class="kw">match</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="kw">await</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">result</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">framed</span>.<span class="ident">as_mut</span>().<span class="ident">write</span>(<span class="ident">h1::Message::Chunk</span>(<span class="prelude-val">Some</span>(<span class="ident">result</span><span class="question-mark">?</span>)))<span class="question-mark">?</span>;
+                <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">chunk</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">framed</span>.<span class="ident">as_mut</span>().<span class="ident">write</span>(<span class="ident">h1::Message::Chunk</span>(<span class="prelude-val">Some</span>(<span class="ident">chunk</span>)))<span class="question-mark">?</span>;
                 }
+                <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">into</span>()),
                 <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">eof</span> <span class="op">=</span> <span class="bool-val">true</span>;
                     <span class="ident">framed</span>.<span class="ident">as_mut</span>().<span class="ident">write</span>(<span class="ident">h1::Message::Chunk</span>(<span class="prelude-val">None</span>))<span class="question-mark">?</span>;
