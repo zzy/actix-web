@@ -640,6 +640,16 @@
 <span id="639">639</span>
 <span id="640">640</span>
 <span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">any::Any</span>,
@@ -814,6 +824,16 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_connection_rate</span>(<span class="self">self</span>, <span class="ident">num</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>))]</span>
         <span class="ident">actix_tls::accept::max_concurrent_tls_connect</span>(<span class="ident">num</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Set max number of threads for each worker&#39;s blocking task thread pool.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// One thread pool is set up **per worker**; not shared across workers.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// By default set to 512 / workers.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">worker_max_blocking_threads</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">builder</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">worker_max_blocking_threads</span>(<span class="ident">num</span>);
         <span class="self">self</span>
     }
 
