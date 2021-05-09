@@ -154,7 +154,6 @@
 <span id="151">151</span>
 <span id="152">152</span>
 <span id="153">153</span>
-<span id="154">154</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">path::PathBuf</span>, <span class="ident">rc::Rc</span>};
 
@@ -254,8 +253,7 @@
                     <span class="kw">return</span> <span class="ident">Box::pin</span>(<span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(
                         <span class="ident">HttpResponse::Found</span>()
                             .<span class="ident">insert_header</span>((<span class="ident">header::LOCATION</span>, <span class="ident">redirect_to</span>))
-                            .<span class="ident">body</span>(<span class="string">&quot;&quot;</span>)
-                            .<span class="ident">into_body</span>(),
+                            .<span class="ident">finish</span>(),
                     )));
                 }
 

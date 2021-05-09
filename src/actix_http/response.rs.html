@@ -397,52 +397,18 @@
 <span id="396">396</span>
 <span id="397">397</span>
 <span id="398">398</span>
-<span id="399">399</span>
-<span id="400">400</span>
-<span id="401">401</span>
-<span id="402">402</span>
-<span id="403">403</span>
-<span id="404">404</span>
-<span id="405">405</span>
-<span id="406">406</span>
-<span id="407">407</span>
-<span id="408">408</span>
-<span id="409">409</span>
-<span id="410">410</span>
-<span id="411">411</span>
-<span id="412">412</span>
-<span id="413">413</span>
-<span id="414">414</span>
-<span id="415">415</span>
-<span id="416">416</span>
-<span id="417">417</span>
-<span id="418">418</span>
-<span id="419">419</span>
-<span id="420">420</span>
-<span id="421">421</span>
-<span id="422">422</span>
-<span id="423">423</span>
-<span id="424">424</span>
-<span id="425">425</span>
-<span id="426">426</span>
-<span id="427">427</span>
-<span id="428">428</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! HTTP response.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
-    <span class="ident">fmt</span>,
-    <span class="ident">future::Future</span>,
-    <span class="ident">pin::Pin</span>,
-    <span class="ident">str</span>,
-    <span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>},
+    <span class="ident">fmt</span>, <span class="ident">str</span>,
 };
 
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">body</span>::{<span class="ident">Body</span>, <span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>},
+    <span class="ident">body</span>::{<span class="ident">Body</span>, <span class="ident">MessageBody</span>},
     <span class="ident">error::Error</span>,
     <span class="ident">extensions::Extensions</span>,
     <span class="ident">http</span>::{<span class="ident">HeaderMap</span>, <span class="ident">StatusCode</span>},
@@ -453,22 +419,22 @@
 <span class="doccomment">/// An HTTP response.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">head</span>: <span class="ident">BoxedResponseHead</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">body</span>: <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">body</span>: <span class="ident">B</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">error</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Constructs a response</span>
+    <span class="doccomment">/// Constructs a new response with default body.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="ident">BoxedResponseHead::new</span>(<span class="ident">status</span>),
-            <span class="ident">body</span>: <span class="ident">ResponseBody::Body</span>(<span class="ident">Body::Empty</span>),
+            <span class="ident">body</span>: <span class="ident">Body::Empty</span>,
             <span class="ident">error</span>: <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="doccomment">/// Create HTTP response builder with specific status.</span>
+    <span class="doccomment">/// Constructs a new response builder.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="ident">ResponseBuilder::new</span>(<span class="ident">status</span>)
@@ -477,25 +443,25 @@
     <span class="comment">// just a couple frequently used shortcuts</span>
     <span class="comment">// this list should not grow larger than a few</span>
 
-    <span class="doccomment">/// Creates a new response with status 200 OK.</span>
+    <span class="doccomment">/// Constructs a new response with status 200 OK.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ok</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
         <span class="ident">Response::new</span>(<span class="ident">StatusCode::OK</span>)
     }
 
-    <span class="doccomment">/// Creates a new response with status 400 Bad Request.</span>
+    <span class="doccomment">/// Constructs a new response with status 400 Bad Request.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bad_request</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
         <span class="ident">Response::new</span>(<span class="ident">StatusCode::BAD_REQUEST</span>)
     }
 
-    <span class="doccomment">/// Creates a new response with status 404 Not Found.</span>
+    <span class="doccomment">/// Constructs a new response with status 404 Not Found.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_found</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
         <span class="ident">Response::new</span>(<span class="ident">StatusCode::NOT_FOUND</span>)
     }
 
-    <span class="doccomment">/// Creates a new response with status 500 Internal Server Error.</span>
+    <span class="doccomment">/// Constructs a new response with status 500 Internal Server Error.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">internal_server_error</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
         <span class="ident">Response::new</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>)
@@ -503,7 +469,7 @@
 
     <span class="comment">// end shortcuts</span>
 
-    <span class="doccomment">/// Constructs an error response</span>
+    <span class="doccomment">/// Constructs a new response from an error.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_error</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">error</span>.<span class="ident">as_response_error</span>().<span class="ident">error_response</span>();
@@ -513,162 +479,142 @@
         <span class="ident">resp</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">error</span>);
         <span class="ident">resp</span>
     }
-
-    <span class="doccomment">/// Convert response to response with body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">body</span> {
-            <span class="ident">ResponseBody::Body</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>,
-            <span class="ident">ResponseBody::Other</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>,
-        };
-        <span class="ident">Response</span> {
-            <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
-            <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>,
-            <span class="ident">body</span>: <span class="ident">ResponseBody::Other</span>(<span class="ident">b</span>),
-        }
-    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Constructs a response with body</span>
+    <span class="doccomment">/// Constructs a new response with given body.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_body</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>, <span class="ident">body</span>: <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="ident">BoxedResponseHead::new</span>(<span class="ident">status</span>),
-            <span class="ident">body</span>: <span class="ident">ResponseBody::Body</span>(<span class="ident">body</span>),
+            <span class="ident">body</span>: <span class="ident">body</span>,
             <span class="ident">error</span>: <span class="prelude-val">None</span>,
         }
     }
 
+    <span class="doccomment">/// Returns a reference to the head of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Http message part of the response</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ResponseHead</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="ident">head</span>
     }
 
+    <span class="doccomment">/// Returns a mutable reference to the head of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Mutable reference to a HTTP message part of the response</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">head</span>
     }
 
-    <span class="doccomment">/// The source `error` for this response</span>
+    <span class="doccomment">/// Returns the source `error` for this response, if one is set.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">as_ref</span>()
     }
 
-    <span class="doccomment">/// Get the response status code</span>
+    <span class="doccomment">/// Returns the status code of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">status</span>
     }
 
-    <span class="doccomment">/// Set the `StatusCode` for this response</span>
+    <span class="doccomment">/// Returns a mutable reference the status code of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StatusCode</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">status</span>
     }
 
-    <span class="doccomment">/// Get the headers from the response</span>
+    <span class="doccomment">/// Returns a reference to response headers.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>
     }
 
-    <span class="doccomment">/// Get a mutable reference to the headers</span>
+    <span class="doccomment">/// Returns a mutable reference to response headers.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>
     }
 
-    <span class="doccomment">/// Connection upgrade status</span>
+    <span class="doccomment">/// Returns true if connection upgrade is enabled.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">upgrade</span>()
     }
 
-    <span class="doccomment">/// Keep-alive status for this connection</span>
+    <span class="doccomment">/// Returns true if keep-alive is enabled.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">keep_alive</span>()
     }
 
-    <span class="doccomment">/// Responses extensions</span>
+    <span class="doccomment">/// Returns a reference to the extensions of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">extensions</span>.<span class="ident">borrow</span>()
     }
 
-    <span class="doccomment">/// Mutable reference to a the response&#39;s extensions</span>
+    <span class="doccomment">/// Returns a mutable reference to the extensions of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>()
     }
 
-    <span class="doccomment">/// Get body of this response</span>
+    <span class="doccomment">/// Returns a reference to the body of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">B</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">body</span>
     }
 
-    <span class="doccomment">/// Set a body</span>
+    <span class="doccomment">/// Sets new body.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_body</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
-            <span class="ident">body</span>: <span class="ident">ResponseBody::Body</span>(<span class="ident">body</span>),
+            <span class="ident">body</span>,
             <span class="ident">error</span>: <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="doccomment">/// Split response and body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_parts</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
-        (
-            <span class="ident">Response</span> {
-                <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
-                <span class="ident">body</span>: <span class="ident">ResponseBody::Body</span>(()),
-                <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>,
-            },
-            <span class="self">self</span>.<span class="ident">body</span>,
-        )
-    }
-
-    <span class="doccomment">/// Drop request&#39;s body</span>
+    <span class="doccomment">/// Drops body and returns new response.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">drop_body</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">Response</span> {
-            <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
-            <span class="ident">body</span>: <span class="ident">ResponseBody::Body</span>(()),
-            <span class="ident">error</span>: <span class="prelude-val">None</span>,
-        }
+        <span class="self">self</span>.<span class="ident">set_body</span>(())
     }
 
-    <span class="doccomment">/// Set a body and return previous body value</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">replace_body</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B2</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+    <span class="doccomment">/// Sets new body, returning new response and previous body value.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">replace_body</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B2</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>, <span class="ident">B</span>) {
         (
             <span class="ident">Response</span> {
                 <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
-                <span class="ident">body</span>: <span class="ident">ResponseBody::Body</span>(<span class="ident">body</span>),
+                <span class="ident">body</span>,
                 <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>,
             },
             <span class="self">self</span>.<span class="ident">body</span>,
         )
     }
 
-    <span class="doccomment">/// Set a body and return previous body value</span>
+    <span class="doccomment">/// Returns split head and body.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Implementation Notes</span>
+    <span class="doccomment">/// Due to internal performance optimisations, the first element of the returned tuple is a</span>
+    <span class="doccomment">/// `Response` as well but only contains the head of the response this was called on.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_parts</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span>, <span class="ident">B</span>) {
+        <span class="self">self</span>.<span class="ident">replace_body</span>(())
+    }
+
+    <span class="doccomment">/// Returns new response with mapped body.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_body</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">B2</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span>, <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">B2</span>,
     {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="self">self</span>.<span class="ident">body</span>);
 
         <span class="ident">Response</span> {
-            <span class="ident">body</span>,
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
+            <span class="ident">body</span>,
             <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>,
         }
     }
 
-    <span class="doccomment">/// Extract response body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take_body</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">body</span>.<span class="ident">take_body</span>()
+    <span class="doccomment">/// Returns body, consuming this response.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_body</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">B</span> {
+        <span class="self">self</span>.<span class="ident">body</span>
     }
 }
 
@@ -694,19 +640,13 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Unpin</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
-        <span class="ident">Poll::Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">Response</span> {
-            <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">take</span>(),
-            <span class="ident">body</span>: <span class="self">self</span>.<span class="ident">body</span>.<span class="ident">take_body</span>(),
-            <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">take</span>(),
-        }))
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Default</span><span class="op">&gt;</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+        <span class="ident">Response::with_body</span>(<span class="ident">StatusCode::default</span>(), <span class="ident">B::default</span>())
     }
 }
 
-<span class="doccomment">/// Helper converters</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">res</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">res</span> {

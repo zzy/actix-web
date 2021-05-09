@@ -367,7 +367,6 @@
 <span id="366">366</span>
 <span id="367">367</span>
 <span id="368">368</span>
-<span id="369">369</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
@@ -537,8 +536,7 @@
         <span class="ident">Rc::new</span>(<span class="ident">AppInitServiceState</span> {
             <span class="ident">rmap</span>,
             <span class="ident">config</span>,
-            <span class="comment">// TODO: AppConfig can be used to pass user defined HttpRequestPool</span>
-            <span class="comment">// capacity.</span>
+            <span class="comment">// TODO: AppConfig can be used to pass user defined HttpRequestPool capacity.</span>
             <span class="ident">pool</span>: <span class="ident">HttpRequestPool::default</span>(),
         })
     }
