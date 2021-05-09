@@ -22,7 +22,7 @@ working directory.</p>
 be inaccessible. Register more specific handlers and services first.</p>
 <p><code>Files</code> utilizes the existing Tokio thread-pool for blocking filesystem operations.
 The number of running threads is adjusted over time as needed, up to a maximum of 512 times
-the number of server <a href="HttpServer::workers">workers</a>, by default.</p>
+the number of server <a href="../actix_web/server/struct.HttpServer.html#method.workers">workers</a>, by default.</p>
 </div></details><details class="rustdoc-toggle" open><summary><h4 id="method.show_files_listing" class="method"><code>pub fn <a href="#method.show_files_listing" class="fnname">show_files_listing</a>(self) -&gt; Self</code><a href="#method.show_files_listing" class="anchor"></a><a class="srclink" href="../src/actix_files/files.rs.html#117-120" title="goto source code">[src]</a></h4></summary><div class="docblock"><p>Show files listing for directories.</p>
 <p>By default show files listing is disabled.</p>
 </div></details><details class="rustdoc-toggle" open><summary><h4 id="method.redirect_to_slash_directory" class="method"><code>pub fn <a href="#method.redirect_to_slash_directory" class="fnname">redirect_to_slash_directory</a>(self) -&gt; Self</code><a href="#method.redirect_to_slash_directory" class="anchor"></a><a class="srclink" href="../src/actix_files/files.rs.html#125-128" title="goto source code">[src]</a></h4></summary><div class="docblock"><p>Redirects to a slash-ended path when browsing a directory.</p>
