@@ -295,23 +295,17 @@
 <span id="294">294</span>
 <span id="295">295</span>
 <span id="296">296</span>
-<span id="297">297</span>
-<span id="298">298</span>
-<span id="299">299</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="ident">std::any::type_name</span>;
-<span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
-<span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">any::type_name</span>, <span class="ident">ops::Deref</span>, <span class="ident">sync::Arc</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http::error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorInternalServerError</span>};
-<span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">error::Error</span>, <span class="ident">Extensions</span>};
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">err</span>, <span class="ident">ok</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">futures_core::future::LocalBoxFuture</span>;
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::dev::Payload</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::extract::FromRequest</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::request::HttpRequest</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">dev::Payload</span>, <span class="ident">error::ErrorInternalServerError</span>, <span class="ident">extract::FromRequest</span>, <span class="ident">request::HttpRequest</span>,
+};
 
 <span class="doccomment">/// Data factory.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">DataFactory</span> {

@@ -309,17 +309,25 @@
 <span id="308">308</span>
 <span id="309">309</span>
 <span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
 </pre><pre class="rust">
 <span class="doccomment">//! For path segment extractor documentation, see [`Path`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">ops</span>, <span class="ident">sync::Arc</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http::error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorNotFound</span>};
+<span class="kw">use</span> <span class="ident">actix_http::error::Error</span>;
 <span class="kw">use</span> <span class="ident">actix_router::PathDeserializer</span>;
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ready</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">serde::de</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">dev::Payload</span>, <span class="ident">error::PathError</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpRequest</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">dev::Payload</span>,
+    <span class="ident">error</span>::{<span class="ident">ErrorNotFound</span>, <span class="ident">PathError</span>},
+    <span class="ident">FromRequest</span>, <span class="ident">HttpRequest</span>,
+};
 
 <span class="doccomment">/// Extract typed data from request path segments.</span>
 <span class="doccomment">///</span>
