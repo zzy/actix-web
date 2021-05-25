@@ -10,24 +10,102 @@ communication, such as programming languages.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.into_string" class="method"><code>pub fn <a href="#method.into_string" class="fnname">into_string</a>(self) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code><a href="#method.into_string" class="anchor"></a></h4></summary><div class="docblock"><p>Return the serialization of this language tag.</p>
 <p>This consumes the <code>LanguageTag</code> and takes ownership of the <code>String</code> stored in it.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.primary_language" class="method"><code>pub fn <a href="#method.primary_language" class="fnname">primary_language</a>(&amp;self) -&gt; &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a></code><a href="#method.primary_language" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.1">primary language subtag</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-cmn-Hans-CN&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">primary_language</span>(), <span class="string">&quot;zh&quot;</span>);</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.extended_language" class="method"><code>pub fn <a href="#method.extended_language" class="fnname">extended_language</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.extended_language" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.2">extended language subtags</a>.</p>
 <p>Valid language tags have at most one extended language.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-cmn-Hans-CN&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">extended_language</span>(), <span class="prelude-val">Some</span>(<span class="string">&quot;cmn&quot;</span>));</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.extended_language_subtags" class="method"><code>pub fn <a href="#method.extended_language_subtags" class="fnname">extended_language_subtags</a>(&amp;self) -&gt; impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>&lt;Item = &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.extended_language_subtags" class="anchor"></a></h4></summary><div class="docblock"><p>Iterate on the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.2">extended language subtags</a>.</p>
 <p>Valid language tags have at most one extended language.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-cmn-Hans-CN&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">extended_language_subtags</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(), <span class="macro">vec!</span>[<span class="string">&quot;cmn&quot;</span>]);</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.full_language" class="method"><code>pub fn <a href="#method.full_language" class="fnname">full_language</a>(&amp;self) -&gt; &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a></code><a href="#method.full_language" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.1">primary language subtag</a>
 and its <a href="https://tools.ietf.org/html/rfc5646#section-2.2.2">extended language subtags</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-cmn-Hans-CN&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">full_language</span>(), <span class="string">&quot;zh-cmn&quot;</span>);</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.script" class="method"><code>pub fn <a href="#method.script" class="fnname">script</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.script" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.3">script subtag</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-cmn-Hans-CN&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">script</span>(), <span class="prelude-val">Some</span>(<span class="string">&quot;Hans&quot;</span>));</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.region" class="method"><code>pub fn <a href="#method.region" class="fnname">region</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.region" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.4">region subtag</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-cmn-Hans-CN&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">region</span>(), <span class="prelude-val">Some</span>(<span class="string">&quot;CN&quot;</span>));</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.variant" class="method"><code>pub fn <a href="#method.variant" class="fnname">variant</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.variant" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.5">variant subtags</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-Latn-TW-pinyin&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">variant</span>(), <span class="prelude-val">Some</span>(<span class="string">&quot;pinyin&quot;</span>));</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.variant_subtags" class="method"><code>pub fn <a href="#method.variant_subtags" class="fnname">variant_subtags</a>(&amp;self) -&gt; impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>&lt;Item = &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.variant_subtags" class="anchor"></a></h4></summary><div class="docblock"><p>Iterate on the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.5">variant subtags</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;zh-Latn-TW-pinyin&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">variant_subtags</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(), <span class="macro">vec!</span>[<span class="string">&quot;pinyin&quot;</span>]);</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.extension" class="method"><code>pub fn <a href="#method.extension" class="fnname">extension</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.extension" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.6">extension subtags</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;de-DE-u-co-phonebk&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">extension</span>(), <span class="prelude-val">Some</span>(<span class="string">&quot;u-co-phonebk&quot;</span>));</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.extension_subtags" class="method"><code>pub fn <a href="#method.extension_subtags" class="fnname">extension_subtags</a>(&amp;self) -&gt; impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>&lt;Item = <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.char.html">char</a>, &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;</code><a href="#method.extension_subtags" class="anchor"></a></h4></summary><div class="docblock"><p>Iterate on the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.6">extension subtags</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;de-DE-u-co-phonebk&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">extension_subtags</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(), <span class="macro">vec!</span>[(<span class="string">&#39;u&#39;</span>, <span class="string">&quot;co-phonebk&quot;</span>)]);</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.private_use" class="method"><code>pub fn <a href="#method.private_use" class="fnname">private_use</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.private_use" class="anchor"></a></h4></summary><div class="docblock"><p>Return the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.7">private use subtags</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;de-x-foo-bar&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">private_use</span>(), <span class="prelude-val">Some</span>(<span class="string">&quot;x-foo-bar&quot;</span>));</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.private_use_subtags" class="method"><code>pub fn <a href="#method.private_use_subtags" class="fnname">private_use_subtags</a>(&amp;self) -&gt; impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>&lt;Item = &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</code><a href="#method.private_use_subtags" class="anchor"></a></h4></summary><div class="docblock"><p>Iterate on the <a href="https://tools.ietf.org/html/rfc5646#section-2.2.7">private use subtags</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;de-x-foo-bar&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">private_use_subtags</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(), <span class="macro">vec!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>]);</pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.parse" class="method"><code>pub fn <a href="#method.parse" class="fnname">parse</a>(input: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.LanguageTag.html" title="struct actix_web::http::header::LanguageTag">LanguageTag</a>, ParseError&gt;</code><a href="#method.parse" class="anchor"></a></h4></summary><div class="docblock"><p>Create a <code>LanguageTag</code> from its serialization.</p>
 <p>This parser accepts the language tags that are “well-formed” according to
 <a href="https://tools.ietf.org/html/rfc5646#section-2.2.9">RFC 5646</a>.
 Full validation could be done with the <code>validate</code> method.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
+<span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;en-us&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">into_string</span>(), <span class="string">&quot;en-US&quot;</span>)</pre></div>
 <h1 id="errors" class="section-header"><a href="#errors">Errors</a></h1>
 <p>If the language tag is not “well-formed” a <code>ParseError</code> variant will be returned.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><h4 id="method.validate" class="method"><code>pub fn <a href="#method.validate" class="fnname">validate</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, ValidationError&gt;</code><a href="#method.validate" class="anchor"></a></h4></summary><div class="docblock"><p>Check if the language tag is “valid” according to
@@ -73,6 +151,7 @@ The range <code>en</code> matches all language tags starting with <code>en</code
 <h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
+
 <span class="kw">let</span> <span class="ident">range_italian</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;it&quot;</span>).<span class="ident">unwrap</span>();
 <span class="kw">let</span> <span class="ident">tag_german</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;de&quot;</span>).<span class="ident">unwrap</span>();
 <span class="kw">let</span> <span class="ident">tag_italian_switzerland</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;it-CH&quot;</span>).<span class="ident">unwrap</span>();
