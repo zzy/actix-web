@@ -847,6 +847,19 @@
 <span id="844">844</span>
 <span id="845">845</span>
 <span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Static file serving for Actix Web.</span>
 <span class="doccomment">//!</span>
@@ -1482,7 +1495,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_redirect_to_slash_directory</span>() {
-        <span class="comment">// should not redirect if no index</span>
+        <span class="comment">// should not redirect if no index and files listing is disabled</span>
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(
             <span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>).<span class="ident">redirect_to_slash_directory</span>()),
         )
@@ -1496,6 +1509,19 @@
             <span class="ident">App::new</span>().<span class="ident">service</span>(
                 <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
                     .<span class="ident">index_file</span>(<span class="string">&quot;test.png&quot;</span>)
+                    .<span class="ident">redirect_to_slash_directory</span>(),
+            ),
+        )
+        .<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::with_uri</span>(<span class="string">&quot;/tests&quot;</span>).<span class="ident">to_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">srv</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::FOUND</span>);
+
+        <span class="comment">// should redirect if files listing is enabled</span>
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(
+            <span class="ident">App::new</span>().<span class="ident">service</span>(
+                <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
+                    .<span class="ident">show_files_listing</span>()
                     .<span class="ident">redirect_to_slash_directory</span>(),
             ),
         )
