@@ -558,6 +558,8 @@
 <span id="556">556</span>
 <span id="557">557</span>
 <span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ok</span>, <span class="ident">ready</span>, <span class="ident">Ready</span>};
@@ -796,6 +798,8 @@
     }
 
     <span class="doccomment">/// Set content encoding for serving this file</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Must be used with [`actix_web::middleware::Compress`] to take effect.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_content_encoding</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enc</span>: <span class="ident">ContentEncoding</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">encoding</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">enc</span>);
