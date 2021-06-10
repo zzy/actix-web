@@ -1020,7 +1020,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)]</span>
     <span class="doccomment">/// Use listener for accepting incoming tls connection requests</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This method sets alpn protocols to &quot;h2&quot; and &quot;http/1.1&quot;</span>
+    <span class="doccomment">/// This method prepends alpn protocols &quot;h2&quot; and &quot;http/1.1&quot; to configured ones</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">listen_rustls</span>(
         <span class="self">self</span>,
         <span class="ident">lst</span>: <span class="ident">net::TcpListener</span>,
@@ -1134,7 +1134,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)]</span>
     <span class="doccomment">/// Start listening for incoming tls connections.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This method sets alpn protocols to &quot;h2&quot; and &quot;http/1.1&quot;</span>
+    <span class="doccomment">/// This method prepends alpn protocols &quot;h2&quot; and &quot;http/1.1&quot; to configured ones</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bind_rustls</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">net::ToSocketAddrs</span><span class="op">&gt;</span>(
         <span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">addr</span>: <span class="ident">A</span>,
