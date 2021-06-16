@@ -231,6 +231,24 @@
 <span id="231">231</span>
 <span id="232">232</span>
 <span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Error and Result module</span>
 
@@ -327,9 +345,17 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Error</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">JsonPayloadError</span> {
-    <span class="doccomment">/// Payload size is bigger than allowed. (default: 32kB)</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Json payload size is bigger than allowed&quot;</span>)]</span>
-    <span class="ident">Overflow</span>,
+    <span class="doccomment">/// Payload size is bigger than allowed &amp; content length header set. (default: 2MB)</span>
+    <span class="attribute">#[<span class="ident">display</span>(
+        <span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;JSON payload ({} bytes) is larger than allowed (limit: {} bytes).&quot;</span>,
+        <span class="ident">length</span>,
+        <span class="ident">limit</span>
+    )]</span>
+    <span class="ident">OverflowKnownLength</span> { <span class="ident">length</span>: <span class="ident">usize</span>, <span class="ident">limit</span>: <span class="ident">usize</span> },
+
+    <span class="doccomment">/// Payload size is bigger than allowed but no content length header set. (default: 2MB)</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;JSON payload has exceeded limit ({} bytes).&quot;</span>, <span class="ident">limit</span>)]</span>
+    <span class="ident">Overflow</span> { <span class="ident">limit</span>: <span class="ident">usize</span> },
 
     <span class="doccomment">/// Content type error</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Content type error&quot;</span>)]</span>
@@ -357,7 +383,11 @@
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">JsonPayloadError</span> {
     <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="self">Self</span><span class="ident">::Overflow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::PAYLOAD_TOO_LARGE</span>,
+            <span class="self">Self</span><span class="ident">::OverflowKnownLength</span> {
+                <span class="ident">length</span>: <span class="kw">_</span>,
+                <span class="ident">limit</span>: <span class="kw">_</span>,
+            } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::PAYLOAD_TOO_LARGE</span>,
+            <span class="self">Self</span><span class="ident">::Overflow</span> { <span class="ident">limit</span>: <span class="kw">_</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::PAYLOAD_TOO_LARGE</span>,
             <span class="self">Self</span><span class="ident">::Serialize</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>,
             <span class="self">Self</span><span class="ident">::Payload</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>.<span class="ident">status_code</span>(),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::BAD_REQUEST</span>,
@@ -442,7 +472,13 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_json_payload_error</span>() {
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">JsonPayloadError::Overflow</span>.<span class="ident">error_response</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">JsonPayloadError::OverflowKnownLength</span> {
+            <span class="ident">length</span>: <span class="number">0</span>,
+            <span class="ident">limit</span>: <span class="number">0</span>,
+        }
+        .<span class="ident">error_response</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::PAYLOAD_TOO_LARGE</span>);
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">JsonPayloadError::Overflow</span> { <span class="ident">limit</span>: <span class="number">0</span> }.<span class="ident">error_response</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::PAYLOAD_TOO_LARGE</span>);
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">JsonPayloadError::ContentType</span>.<span class="ident">error_response</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::BAD_REQUEST</span>);
