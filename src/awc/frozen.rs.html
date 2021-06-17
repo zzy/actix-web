@@ -237,24 +237,24 @@
 <span id="237">237</span>
 <span id="238">238</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
-<span class="kw">use</span> <span class="ident">std::net</span>;
-<span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
-<span class="kw">use</span> <span class="ident">std::time::Duration</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>, <span class="ident">net</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core::Stream</span>;
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
-<span class="kw">use</span> <span class="ident">actix_http::body::Body</span>;
-<span class="kw">use</span> <span class="ident">actix_http::http::header::IntoHeaderValue</span>;
-<span class="kw">use</span> <span class="ident">actix_http::http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>};
-<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Error</span>, <span class="ident">RequestHead</span>};
+<span class="kw">use</span> <span class="ident">actix_http</span>::{
+    <span class="ident">body::Body</span>,
+    <span class="ident">http</span>::{<span class="ident">header::IntoHeaderValue</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>},
+    <span class="ident">RequestHead</span>,
+};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::sender</span>::{<span class="ident">RequestSender</span>, <span class="ident">SendClientRequest</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ClientConfig</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">sender</span>::{<span class="ident">RequestSender</span>, <span class="ident">SendClientRequest</span>},
+    <span class="ident">ClientConfig</span>,
+};
 
-<span class="doccomment">/// `FrozenClientRequest` struct represents clonable client request.</span>
+<span class="doccomment">/// `FrozenClientRequest` struct represents cloneable client request.</span>
 <span class="doccomment">/// It could be used to send same request multiple times.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FrozenClientRequest</span> {
@@ -321,7 +321,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_stream</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SendClientRequest</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-        <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="ident">RequestSender::Rc</span>(<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>(), <span class="prelude-val">None</span>).<span class="ident">send_stream</span>(
             <span class="self">self</span>.<span class="ident">addr</span>,
@@ -446,7 +446,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_stream</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SendClientRequest</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-        <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">err</span> {
             <span class="kw">return</span> <span class="ident">e</span>.<span class="ident">into</span>();

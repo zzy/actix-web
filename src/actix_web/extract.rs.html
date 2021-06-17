@@ -412,8 +412,6 @@
 <span id="412">412</span>
 <span id="413">413</span>
 <span id="414">414</span>
-<span id="415">415</span>
-<span id="416">416</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Request extractors</span>
 
@@ -464,8 +462,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// If the FromRequest for T fails, return None rather than returning an error response</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ## Example</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{web, dev, App, Error, HttpRequest, FromRequest};</span>
 <span class="doccomment">/// use actix_web::error::ErrorBadRequest;</span>
@@ -556,8 +553,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// If the `FromRequest` for T fails, inject Err into handler rather than returning an error response</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ## Example</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{web, dev, App, Result, Error, HttpRequest, FromRequest};</span>
 <span class="doccomment">/// use actix_web::error::ErrorBadRequest;</span>

@@ -274,19 +274,19 @@
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">future::Future</span>, <span class="ident">rc::Rc</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">http::Method</span>, <span class="ident">Error</span>};
+<span class="kw">use</span> <span class="ident">actix_http::http::Method</span>;
 <span class="kw">use</span> <span class="ident">actix_service</span>::{
     <span class="ident">boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>},
     <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>,
 };
 <span class="kw">use</span> <span class="ident">futures_core::future::LocalBoxFuture</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::extract::FromRequest</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::guard</span>::{<span class="self">self</span>, <span class="ident">Guard</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::handler</span>::{<span class="ident">Handler</span>, <span class="ident">HandlerService</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::responder::Responder</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::HttpResponse</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">guard</span>::{<span class="self">self</span>, <span class="ident">Guard</span>},
+    <span class="ident">handler</span>::{<span class="ident">Handler</span>, <span class="ident">HandlerService</span>},
+    <span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
+    <span class="ident">Error</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>,
+};
 
 <span class="doccomment">/// Resource route definition</span>
 <span class="doccomment">///</span>
@@ -460,7 +460,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::Infallible</span>, <span class="ident">time::Duration</span>};
 
     <span class="kw">use</span> <span class="ident">actix_rt::time::sleep</span>;
     <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
@@ -487,7 +487,7 @@
                         }))
                         .<span class="ident">route</span>(<span class="ident">web::post</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
                             <span class="ident">sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
-                            <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, ()<span class="op">&gt;</span>(<span class="ident">HttpResponse::Created</span>())
+                            <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Infallible</span><span class="op">&gt;</span>(<span class="ident">HttpResponse::Created</span>())
                         }))
                         .<span class="ident">route</span>(<span class="ident">web::delete</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
                             <span class="ident">sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;

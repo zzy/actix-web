@@ -1426,9 +1426,12 @@
 <span id="1426">1426</span>
 <span id="1427">1427</span>
 <span id="1428">1428</span>
+<span id="1429">1429</span>
+<span id="1430">1430</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::VecDeque</span>,
+    <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
     <span class="ident">fmt</span>,
     <span class="ident">future::Future</span>,
     <span class="ident">io</span>, <span class="ident">mem</span>, <span class="ident">net</span>,
@@ -1446,19 +1449,19 @@
 <span class="kw">use</span> <span class="ident">log</span>::{<span class="ident">error</span>, <span class="ident">trace</span>};
 <span class="kw">use</span> <span class="ident">pin_project::pin_project</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::body</span>::{<span class="ident">Body</span>, <span class="ident">BodySize</span>, <span class="ident">MessageBody</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config::ServiceConfig</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::{<span class="ident">DispatchError</span>, <span class="ident">Error</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::{<span class="ident">ParseError</span>, <span class="ident">PayloadError</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http::StatusCode</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::request::Request</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::response::Response</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service::HttpFlow</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::OnConnectData</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">body</span>::{<span class="ident">AnyBody</span>, <span class="ident">BodySize</span>, <span class="ident">MessageBody</span>},
+    <span class="ident">config::ServiceConfig</span>,
+    <span class="ident">error</span>::{<span class="ident">DispatchError</span>, <span class="ident">ParseError</span>, <span class="ident">PayloadError</span>},
+    <span class="ident">service::HttpFlow</span>,
+    <span class="ident">OnConnectData</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">StatusCode</span>,
+};
 
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::codec::Codec</span>;
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadSender</span>, <span class="ident">PayloadStatus</span>};
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Message</span>, <span class="ident">MessageType</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{
+    <span class="ident">codec::Codec</span>,
+    <span class="ident">payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadSender</span>, <span class="ident">PayloadStatus</span>},
+    <span class="ident">Message</span>, <span class="ident">MessageType</span>,
+};
 
 <span class="kw">const</span> <span class="ident">LW_BUFFER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1024</span>;
 <span class="kw">const</span> <span class="ident">HW_BUFFER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">8</span>;
@@ -1479,13 +1482,13 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
@@ -1501,13 +1504,13 @@
 <span class="kw">enum</span> <span class="ident">DispatcherState</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
@@ -1520,13 +1523,13 @@
 <span class="kw">struct</span> <span class="ident">InnerDispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
@@ -1565,13 +1568,13 @@
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
     <span class="prelude-val">None</span>,
     <span class="ident">ExpectCall</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">X::Future</span>),
     <span class="ident">ServiceCall</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">S::Future</span>),
     <span class="ident">SendPayload</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">B</span>),
-    <span class="ident">SendErrorPayload</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">Body</span>),
+    <span class="ident">SendErrorPayload</span>(<span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">AnyBody</span>),
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span><span class="op">&gt;</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span><span class="op">&gt;</span>
@@ -1581,7 +1584,7 @@
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
     <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="macro">matches!</span>(<span class="self">self</span>, <span class="ident">State::None</span>)
@@ -1599,14 +1602,14 @@
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">S::Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
@@ -1660,14 +1663,14 @@
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">S::Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
@@ -1763,7 +1766,7 @@
     <span class="kw">fn</span> <span class="ident">send_error_response</span>(
         <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">message</span>: <span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
-        <span class="ident">body</span>: <span class="ident">Body</span>,
+        <span class="ident">body</span>: <span class="ident">AnyBody</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_response_inner</span>(<span class="ident">message</span>, <span class="kw-2">&amp;</span><span class="ident">body</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">size</span> {
@@ -1808,7 +1811,7 @@
                         <span class="comment">// send_response would update InnerDispatcher state to SendPayload or</span>
                         <span class="comment">// None(If response body is empty).</span>
                         <span class="comment">// continue loop to poll it.</span>
-                        <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_error_response</span>(<span class="ident">res</span>, <span class="ident">Body::Empty</span>)<span class="question-mark">?</span>;
+                        <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_error_response</span>(<span class="ident">res</span>, <span class="ident">AnyBody::Empty</span>)<span class="question-mark">?</span>;
                     }
 
                     <span class="comment">// return with upgrade request and poll it exclusively.</span>
@@ -1828,7 +1831,7 @@
 
                     <span class="comment">// send service call error as response</span>
                     <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::from_error</span>(<span class="ident">err</span>);
+                        <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
                         <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                         <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_error_response</span>(<span class="ident">res</span>, <span class="ident">body</span>)<span class="question-mark">?</span>;
                     }
@@ -1867,7 +1870,7 @@
                             }
 
                             <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))) <span class="op">=</span><span class="op">&gt;</span> {
-                                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError::Service</span>(<span class="ident">err</span>.<span class="ident">into</span>()))
+                                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError::Body</span>(<span class="ident">err</span>.<span class="ident">into</span>()))
                             }
 
                             <span class="ident">Poll::Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">PollResponse::DoNothing</span>),
@@ -1902,7 +1905,7 @@
                             }
 
                             <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))) <span class="op">=</span><span class="op">&gt;</span> {
-                                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError::Service</span>(<span class="ident">err</span>))
+                                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError::Service</span>(<span class="ident">err</span>.<span class="ident">into</span>()))
                             }
 
                             <span class="ident">Poll::Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">PollResponse::DoNothing</span>),
@@ -1925,7 +1928,7 @@
 
                     <span class="comment">// send expect error as response</span>
                     <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::from_error</span>(<span class="ident">err</span>);
+                        <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
                         <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                         <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_error_response</span>(<span class="ident">res</span>, <span class="ident">body</span>)<span class="question-mark">?</span>;
                     }
@@ -1975,7 +1978,7 @@
                         <span class="comment">// to notify the dispatcher a new state is set and the outer loop</span>
                         <span class="comment">// should be continue.</span>
                         <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::from_error</span>(<span class="ident">err</span>);
+                            <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
                             <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                             <span class="kw">return</span> <span class="self">self</span>.<span class="ident">send_error_response</span>(<span class="ident">res</span>, <span class="ident">body</span>);
                         }
@@ -1995,7 +1998,7 @@
                         <span class="ident">Poll::Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
                         <span class="comment">// see the comment on ExpectCall state branch&#39;s Ready(Err(err)).</span>
                         <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::from_error</span>(<span class="ident">err</span>);
+                            <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
                             <span class="kw">let</span> (<span class="ident">res</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">replace_body</span>(());
                             <span class="self">self</span>.<span class="ident">send_error_response</span>(<span class="ident">res</span>, <span class="ident">body</span>)
                         }
@@ -2201,7 +2204,7 @@
                                 <span class="macro">trace!</span>(<span class="string">&quot;Slow request timeout&quot;</span>);
                                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">send_error_response</span>(
                                     <span class="ident">Response::with_body</span>(<span class="ident">StatusCode::REQUEST_TIMEOUT</span>, ()),
-                                    <span class="ident">Body::Empty</span>,
+                                    <span class="ident">AnyBody::Empty</span>,
                                 );
                                 <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">project</span>();
                                 <span class="ident">this</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::STARTED</span> <span class="op">|</span> <span class="ident">Flags::SHUTDOWN</span>);
@@ -2338,14 +2341,14 @@
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">S::Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
-    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
+    <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
@@ -2496,16 +2499,17 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">ok_service</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">ok_service</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span>
+    {
         <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">_req</span>: <span class="ident">Request</span><span class="op">|</span> <span class="ident">ready</span>(<span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(<span class="ident">Response::ok</span>())))
     }
 
     <span class="kw">fn</span> <span class="ident">echo_path_service</span>(
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">Request</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">path</span>().<span class="ident">as_bytes</span>();
             <span class="ident">ready</span>(<span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(
-                <span class="ident">Response::ok</span>().<span class="ident">set_body</span>(<span class="ident">Body::from_slice</span>(<span class="ident">path</span>)),
+                <span class="ident">Response::ok</span>().<span class="ident">set_body</span>(<span class="ident">AnyBody::from_slice</span>(<span class="ident">path</span>)),
             ))
         })
     }

@@ -172,14 +172,12 @@
 <span id="172">172</span>
 <span id="173">173</span>
 <span id="174">174</span>
-<span id="175">175</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">any::type_name</span>, <span class="ident">ops::Deref</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http::error::Error</span>;
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">err</span>, <span class="ident">ok</span>, <span class="ident">Ready</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">dev::Payload</span>, <span class="ident">error::ErrorInternalServerError</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpRequest</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">dev::Payload</span>, <span class="ident">error::ErrorInternalServerError</span>, <span class="ident">Error</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpRequest</span>};
 
 <span class="doccomment">/// Request-local data extractor.</span>
 <span class="doccomment">///</span>

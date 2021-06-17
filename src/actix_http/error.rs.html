@@ -506,218 +506,159 @@
 <span id="506">506</span>
 <span id="507">507</span>
 <span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Error and Result module</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
-    <span class="ident">fmt</span>,
-    <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span>},
-    <span class="ident">str::Utf8Error</span>,
-    <span class="ident">string::FromUtf8Error</span>,
-};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>, <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">str::Utf8Error</span>, <span class="ident">string::FromUtf8Error</span>};
 
-<span class="kw">use</span> <span class="ident">bytes::BytesMut</span>;
 <span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">From</span>};
-<span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">uri::InvalidUri</span>, <span class="ident">StatusCode</span>};
-<span class="kw">use</span> <span class="ident">serde::de::value::Error</span> <span class="kw">as</span> <span class="ident">DeError</span>;
+<span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">uri::InvalidUri</span>, <span class="ident">StatusCode</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">body::Body</span>, <span class="ident">helpers::Writer</span>, <span class="ident">Response</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>},
+    <span class="ident">ws</span>, <span class="ident">Response</span>,
+};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">http::Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>;
 
-<span class="doccomment">/// General purpose actix web error.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// An actix web error is used to carry errors from `std::error`</span>
-<span class="doccomment">/// through actix in a convenient way.  It can be created through</span>
-<span class="doccomment">/// converting errors with `into()`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Whenever it is created from an external object a response error is created</span>
-<span class="doccomment">/// for it that can be used to create an HTTP response from it this means that</span>
-<span class="doccomment">/// if you have access to an actix `Error` you can always get a</span>
-<span class="doccomment">/// `ResponseError` reference from it.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Error</span> {
-    <span class="ident">cause</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ResponseError</span><span class="op">&gt;</span>,
+    <span class="ident">inner</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ErrorInner</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ErrorInner</span> {
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
+    <span class="ident">kind</span>: <span class="ident">Kind</span>,
+    <span class="ident">cause</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// Returns the reference to the underlying `ResponseError`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_response_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ResponseError</span> {
-        <span class="self">self</span>.<span class="ident">cause</span>.<span class="ident">as_ref</span>()
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">kind</span>: <span class="ident">Kind</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">inner</span>: <span class="ident">Box::new</span>(<span class="ident">ErrorInner</span> { <span class="ident">kind</span>, <span class="ident">cause</span>: <span class="prelude-val">None</span> }),
+        }
     }
 
-    <span class="doccomment">/// Similar to `as_response_error` but downcasts.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_error</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ResponseError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ResponseError</span><span class="op">&gt;</span><span class="ident">::downcast_ref</span>(<span class="self">self</span>.<span class="ident">cause</span>.<span class="ident">as_ref</span>())
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_http</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Http</span>)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_parse</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Parse</span>)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_payload</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Payload</span>)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_body</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Body</span>)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_send_response</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::SendResponse</span>)
+    }
+
+    <span class="comment">// TODO: remove allow</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_io</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Io</span>)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_encoder</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Encoder</span>)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_ws</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Ws</span>)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_cause</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cause</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">cause</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">cause</span>.<span class="ident">into</span>());
+        <span class="self">self</span>
     }
 }
 
-<span class="doccomment">/// Errors that can generate responses.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ResponseError</span>: <span class="ident">fmt::Debug</span> <span class="op">+</span> <span class="ident">fmt::Display</span> {
-    <span class="doccomment">/// Returns appropriate status code for error.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// A 500 Internal Server Error is used by default. If [error_response](Self::error_response) is</span>
-    <span class="doccomment">/// also implemented and does not call `self.status_code()`, then this will not be used.</span>
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>
-    }
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">status_code</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">inner</span>.<span class="ident">kind</span> {
+            <span class="ident">Kind::Parse</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::BAD_REQUEST</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>,
+        };
 
-    <span class="doccomment">/// Creates full response for error.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// By default, the generated response uses a 500 Internal Server Error status code, a</span>
-    <span class="doccomment">/// `Content-Type` of `text/plain`, and the body is set to `Self`&#39;s `Display` impl.</span>
-    <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Response::new</span>(<span class="self">self</span>.<span class="ident">status_code</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">BytesMut::new</span>();
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">Writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>), <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>);
-        <span class="ident">resp</span>.<span class="ident">headers_mut</span>().<span class="ident">insert</span>(
-            <span class="ident">header::CONTENT_TYPE</span>,
-            <span class="ident">header::HeaderValue::from_static</span>(<span class="string">&quot;text/plain; charset=utf-8&quot;</span>),
-        );
-        <span class="ident">resp</span>.<span class="ident">set_body</span>(<span class="ident">Body::from</span>(<span class="ident">buf</span>))
+        <span class="ident">Response::new</span>(<span class="ident">status_code</span>).<span class="ident">set_body</span>(<span class="ident">Body::from</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))
     }
-
-    <span class="macro">downcast_get_type_id!</span>();
 }
 
-<span class="macro">downcast!</span>(<span class="ident">ResponseError</span>);
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Display</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Kind</span> {
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;error processing HTTP&quot;</span>)]</span>
+    <span class="ident">Http</span>,
 
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
-        <span class="ident">fmt::Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cause</span>, <span class="ident">f</span>)
-    }
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;error parsing HTTP message&quot;</span>)]</span>
+    <span class="ident">Parse</span>,
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;request payload read error&quot;</span>)]</span>
+    <span class="ident">Payload</span>,
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;response body write error&quot;</span>)]</span>
+    <span class="ident">Body</span>,
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;send response error&quot;</span>)]</span>
+    <span class="ident">SendResponse</span>,
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;error in WebSocket process&quot;</span>)]</span>
+    <span class="ident">Ws</span>,
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;connection error&quot;</span>)]</span>
+    <span class="ident">Io</span>,
+
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;encoder error&quot;</span>)]</span>
+    <span class="ident">Encoder</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cause</span>)
+        <span class="comment">// TODO: more detail</span>
+        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;actix_http::Error&quot;</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">std::error::Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
-        <span class="prelude-val">None</span>
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">cause</span>.<span class="ident">as_ref</span>() {
+            <span class="prelude-val">Some</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}: {}&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">kind</span>, <span class="ident">err</span>),
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">kind</span>),
+        }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: ()) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Error::from</span>(<span class="ident">UnitError</span>)
+<span class="kw">impl</span> <span class="ident">StdError</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">cause</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">as_ref</span>())
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">std::convert::Infallible</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">std::convert::Infallible</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="comment">// hint that an error that will never happen</span>
-        <span class="macro">unreachable!</span>()
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">std::convert::Infallible</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">match</span> <span class="ident">err</span> {}
     }
 }
 
-<span class="doccomment">/// Convert `Error` to a `Response` instance</span>
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Response::from_error</span>(<span class="ident">err</span>)
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ws::ProtocolError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">ws::ProtocolError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new_ws</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
-<span class="doccomment">/// `Error` for any error that implements `ResponseError`</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ResponseError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
-        <span class="ident">Error</span> {
-            <span class="ident">cause</span>: <span class="ident">Box::new</span>(<span class="ident">err</span>),
-        }
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">HttpError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new_http</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Error</span>)]</span>
-<span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Unknown Error&quot;</span>)]</span>
-<span class="kw">struct</span> <span class="ident">UnitError</span>;
-
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> {}
-
-<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`UnitError`].</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">UnitError</span> {}
-
-<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`actix_tls::accept::openssl::SslError`].</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">actix_tls::accept::openssl::SslError</span> {}
-
-<span class="doccomment">/// Returns [`StatusCode::BAD_REQUEST`] for [`DeError`].</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">DeError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="ident">StatusCode::BAD_REQUEST</span>
-    }
-}
-
-<span class="doccomment">/// Returns [`StatusCode::BAD_REQUEST`] for [`Utf8Error`].</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Utf8Error</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="ident">StatusCode::BAD_REQUEST</span>
-    }
-}
-
-<span class="doccomment">/// Returns [`StatusCode::INTERNAL_SERVER_ERROR`] for [`HttpError`].</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">HttpError</span> {}
-
-<span class="doccomment">/// Inspects the underlying [`io::ErrorKind`] and returns an appropriate status code.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// If the error is [`io::ErrorKind::NotFound`], [`StatusCode::NOT_FOUND`] is returned. If the</span>
-<span class="doccomment">/// error is [`io::ErrorKind::PermissionDenied`], [`StatusCode::FORBIDDEN`] is returned. Otherwise,</span>
-<span class="doccomment">/// [`StatusCode::INTERNAL_SERVER_ERROR`] is returned.</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">io::Error</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span>() {
-            <span class="ident">io::ErrorKind::NotFound</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::NOT_FOUND</span>,
-            <span class="ident">io::ErrorKind::PermissionDenied</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::FORBIDDEN</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>,
-        }
-    }
-}
-
-<span class="doccomment">/// Returns [`StatusCode::BAD_REQUEST`] for [`header::InvalidHeaderValue`].</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">header::InvalidHeaderValue</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="ident">StatusCode::BAD_REQUEST</span>
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ws::HandshakeError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">ws::HandshakeError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new_ws</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
@@ -767,13 +708,6 @@
     <span class="ident">Utf8</span>(<span class="ident">Utf8Error</span>),
 }
 
-<span class="doccomment">/// Return `BadRequest` for `ParseError`</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="ident">StatusCode::BAD_REQUEST</span>
-    }
-}
-
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">io::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">io::Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseError</span> {
         <span class="ident">ParseError::Io</span>(<span class="ident">err</span>)
@@ -812,13 +746,22 @@
     }
 }
 
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ParseError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">ParseError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new_parse</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ParseError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">ParseError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">Error::from</span>(<span class="ident">err</span>).<span class="ident">into</span>()
+    }
+}
+
 <span class="doccomment">/// A set of errors that can occur running blocking tasks in thread pool.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Error</span>)]</span>
 <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Blocking thread pool is gone&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BlockingError</span>;
-
-<span class="doccomment">/// `InternalServerError` for `BlockingError`</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">BlockingError</span> {}
 
 <span class="doccomment">/// A set of errors that can occur during payload parsing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>)]</span>
@@ -893,16 +836,9 @@
     }
 }
 
-<span class="doccomment">/// `PayloadError` returns two possible results:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - `Overflow` returns `PayloadTooLarge`</span>
-<span class="doccomment">/// - Other errors returns `BadRequest`</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">PayloadError::Overflow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::PAYLOAD_TOO_LARGE</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::BAD_REQUEST</span>,
-        }
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PayloadError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">PayloadError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span><span class="ident">::new_payload</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
@@ -911,13 +847,19 @@
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DispatchError</span> {
     <span class="doccomment">/// Service error</span>
-    <span class="ident">Service</span>(<span class="ident">Error</span>),
+    <span class="comment">// FIXME: display and error type</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Service Error&quot;</span>)]</span>
+    <span class="ident">Service</span>(<span class="attribute">#[<span class="ident">error</span>(<span class="ident">not</span>(<span class="ident">source</span>))]</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>),
+
+    <span class="doccomment">/// Body error</span>
+    <span class="comment">// FIXME: display and error type</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Body Error&quot;</span>)]</span>
+    <span class="ident">Body</span>(<span class="attribute">#[<span class="ident">error</span>(<span class="ident">not</span>(<span class="ident">source</span>))]</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span>),
 
     <span class="doccomment">/// Upgrade service error</span>
     <span class="ident">Upgrade</span>,
 
-    <span class="doccomment">/// An `io::Error` that occurred while trying to read or write to a network</span>
-    <span class="doccomment">/// stream.</span>
+    <span class="doccomment">/// An `io::Error` that occurred while trying to read or write to a network stream.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;IO error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Io</span>(<span class="ident">io::Error</span>),
 
@@ -983,12 +925,6 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">ContentTypeError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="ident">StatusCode::BAD_REQUEST</span>
-    }
-}
-
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
@@ -997,42 +933,36 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_into_response</span>() {
-        <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ParseError::Incomplete</span>.<span class="ident">error_response</span>();
+        <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ParseError::Incomplete</span>.<span class="ident">into</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::BAD_REQUEST</span>);
 
         <span class="kw">let</span> <span class="ident">err</span>: <span class="ident">HttpError</span> <span class="op">=</span> <span class="ident">StatusCode::from_u16</span>(<span class="number">10000</span>).<span class="ident">err</span>().<span class="ident">unwrap</span>().<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">error_response</span>();
+        <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Error::new_http</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>).<span class="ident">into</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_as_response</span>() {
         <span class="kw">let</span> <span class="ident">orig</span> <span class="op">=</span> <span class="ident">io::Error::new</span>(<span class="ident">io::ErrorKind::Other</span>, <span class="string">&quot;other&quot;</span>);
-        <span class="kw">let</span> <span class="ident">e</span>: <span class="ident">Error</span> <span class="op">=</span> <span class="ident">ParseError::Io</span>(<span class="ident">orig</span>).<span class="ident">into</span>();
-        <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>.<span class="ident">as_response_error</span>()), <span class="string">&quot;IO error: other&quot;</span>);
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_error_cause</span>() {
-        <span class="kw">let</span> <span class="ident">orig</span> <span class="op">=</span> <span class="ident">io::Error::new</span>(<span class="ident">io::ErrorKind::Other</span>, <span class="string">&quot;other&quot;</span>);
-        <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">orig</span>.<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">Error::from</span>(<span class="ident">orig</span>);
-        <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>.<span class="ident">as_response_error</span>()), <span class="ident">desc</span>);
+        <span class="kw">let</span> <span class="ident">err</span>: <span class="ident">Error</span> <span class="op">=</span> <span class="ident">ParseError::Io</span>(<span class="ident">orig</span>).<span class="ident">into</span>();
+        <span class="macro">assert_eq!</span>(
+            <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">err</span>),
+            <span class="string">&quot;error parsing HTTP message: IO error: other&quot;</span>
+        );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_error_display</span>() {
         <span class="kw">let</span> <span class="ident">orig</span> <span class="op">=</span> <span class="ident">io::Error::new</span>(<span class="ident">io::ErrorKind::Other</span>, <span class="string">&quot;other&quot;</span>);
-        <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">orig</span>.<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">Error::from</span>(<span class="ident">orig</span>);
-        <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>), <span class="ident">desc</span>);
+        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::new_io</span>().<span class="ident">with_cause</span>(<span class="ident">orig</span>);
+        <span class="macro">assert_eq!</span>(<span class="string">&quot;connection error: other&quot;</span>, <span class="ident">err</span>.<span class="ident">to_string</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_error_http_response</span>() {
         <span class="kw">let</span> <span class="ident">orig</span> <span class="op">=</span> <span class="ident">io::Error::new</span>(<span class="ident">io::ErrorKind::Other</span>, <span class="string">&quot;other&quot;</span>);
-        <span class="kw">let</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">Error::from</span>(<span class="ident">orig</span>);
-        <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::new_io</span>().<span class="ident">with_cause</span>(<span class="ident">orig</span>);
+        <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
     }
 
@@ -1083,16 +1013,6 @@
         <span class="macro">from!</span>(<span class="ident">httparse::Error::Token</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError::Header</span>);
         <span class="macro">from!</span>(<span class="ident">httparse::Error::TooManyHeaders</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError::TooLarge</span>);
         <span class="macro">from!</span>(<span class="ident">httparse::Error::Version</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError::Version</span>);
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_error_casting</span>() {
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">PayloadError::Overflow</span>;
-        <span class="kw">let</span> <span class="ident">resp_err</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ResponseError</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">err</span>;
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">resp_err</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">PayloadError</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">err</span>.<span class="ident">to_string</span>(), <span class="string">&quot;Payload reached size limit.&quot;</span>);
-        <span class="kw">let</span> <span class="ident">not_err</span> <span class="op">=</span> <span class="ident">resp_err</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">ContentTypeError</span><span class="op">&gt;</span>();
-        <span class="macro">assert!</span>(<span class="ident">not_err</span>.<span class="ident">is_none</span>());
     }
 }
 </pre></div>

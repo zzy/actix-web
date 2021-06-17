@@ -826,7 +826,6 @@
 <span id="826">826</span>
 <span id="827">827</span>
 <span id="828">828</span>
-<span id="829">829</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
@@ -837,7 +836,7 @@
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
     <span class="ident">http</span>::{<span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>},
-    <span class="ident">Error</span>, <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Message</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>,
+    <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Message</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">Url</span>};
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ok</span>, <span class="ident">Ready</span>};
@@ -847,7 +846,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">app_service::AppInitServiceState</span>, <span class="ident">config::AppConfig</span>, <span class="ident">error::UrlGenerationError</span>,
-    <span class="ident">extract::FromRequest</span>, <span class="ident">info::ConnectionInfo</span>, <span class="ident">rmap::ResourceMap</span>,
+    <span class="ident">info::ConnectionInfo</span>, <span class="ident">rmap::ResourceMap</span>, <span class="ident">Error</span>, <span class="ident">FromRequest</span>,
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
@@ -1186,8 +1185,7 @@
 
 <span class="doccomment">/// It is possible to get `HttpRequest` as an extractor handler parameter</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ## Example</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{web, App, HttpRequest};</span>
 <span class="doccomment">/// use serde_derive::Deserialize;</span>

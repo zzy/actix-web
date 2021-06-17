@@ -233,7 +233,6 @@
     <span class="ident">body</span>::{<span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>},
     <span class="ident">encoding::Encoder</span>,
     <span class="ident">http::header</span>::{<span class="ident">ContentEncoding</span>, <span class="ident">ACCEPT_ENCODING</span>},
-    <span class="ident">Error</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">Service</span>, <span class="ident">Transform</span>};
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ok</span>, <span class="ident">Ready</span>};
@@ -243,6 +242,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">dev::BodyEncoding</span>,
     <span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
+    <span class="ident">Error</span>,
 };
 
 <span class="doccomment">/// Middleware for compressing response payloads.</span>

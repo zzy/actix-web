@@ -434,6 +434,9 @@
 <span id="434">434</span>
 <span id="435">435</span>
 <span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::future::Future</span>;
 <span class="kw">use</span> <span class="ident">std::pin::Pin</span>;
@@ -509,7 +512,7 @@
 
     <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Decoder</span>, <span class="ident">Encoder</span>, <span class="ident">Framed</span>};
 
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ResponseError</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">body::AnyBody</span>, <span class="ident">Response</span>};
 
     <span class="doccomment">/// Framed transport errors</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DispatcherError</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span>
@@ -573,13 +576,16 @@
         }
     }
 
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">DispatcherError</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span>
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DispatcherError</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">E</span>: <span class="ident">fmt::Debug</span> <span class="op">+</span> <span class="ident">fmt::Display</span>,
         <span class="ident">U</span>: <span class="ident">Encoder</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Decoder</span>,
         <span class="op">&lt;</span><span class="ident">U</span> <span class="kw">as</span> <span class="ident">Encoder</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span>: <span class="ident">fmt::Debug</span>,
         <span class="op">&lt;</span><span class="ident">U</span> <span class="kw">as</span> <span class="ident">Decoder</span><span class="op">&gt;</span><span class="ident">::Error</span>: <span class="ident">fmt::Debug</span>,
     {
+        <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">DispatcherError</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="ident">Response::internal_server_error</span>().<span class="ident">set_body</span>(<span class="ident">AnyBody::from</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))
+        }
     }
 
     <span class="doccomment">/// Message type wrapper for signalling end of message stream.</span>

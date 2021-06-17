@@ -726,7 +726,7 @@
             <span class="prelude-val">Ok</span>(<span class="ident">body</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">HttpResponse::Ok</span>()
                 .<span class="ident">content_type</span>(<span class="ident">mime::APPLICATION_WWW_FORM_URLENCODED</span>)
                 .<span class="ident">body</span>(<span class="ident">body</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">HttpResponse::from_error</span>(<span class="ident">UrlencodedError::Serialize</span>(<span class="ident">err</span>).<span class="ident">into</span>()),
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">HttpResponse::from_error</span>(<span class="ident">UrlencodedError::Serialize</span>(<span class="ident">err</span>)),
         }
     }
 }

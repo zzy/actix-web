@@ -76,10 +76,6 @@
 <span id="76">76</span>
 <span id="77">77</span>
 <span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
 </pre><pre class="rust">
 <span class="doccomment">//! HTTP client errors</span>
 
@@ -89,7 +85,6 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::ws::HandshakeError</span> <span class="kw">as</span> <span class="ident">WsHandshakeError</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::ws::ProtocolError</span> <span class="kw">as</span> <span class="ident">WsProtocolError</span>;
 
-<span class="kw">use</span> <span class="ident">actix_http::ResponseError</span>;
 <span class="kw">use</span> <span class="ident">serde_json::error::Error</span> <span class="kw">as</span> <span class="ident">JsonError</span>;
 
 <span class="kw">use</span> <span class="ident">actix_http::http</span>::{<span class="ident">header::HeaderValue</span>, <span class="ident">StatusCode</span>};
@@ -160,8 +155,5 @@
 }
 
 <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">JsonPayloadError</span> {}
-
-<span class="doccomment">/// Return `InternalServerError` for `JsonPayloadError`</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">JsonPayloadError</span> {}
 </pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>

@@ -323,12 +323,6 @@
 <span id="323">323</span>
 <span id="324">324</span>
 <span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
@@ -340,7 +334,7 @@
 };
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">body</span>::{<span class="ident">Body</span>, <span class="ident">MessageBody</span>},
+    <span class="ident">body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>, <span class="ident">MessageBody</span>},
     <span class="ident">http</span>::{<span class="ident">header::HeaderMap</span>, <span class="ident">StatusCode</span>},
     <span class="ident">Extensions</span>, <span class="ident">Response</span>, <span class="ident">ResponseHead</span>,
 };
@@ -357,12 +351,12 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::Error</span>, <span class="ident">HttpResponseBuilder</span>};
 
 <span class="doccomment">/// An HTTP Response</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">B</span> <span class="op">=</span> <span class="ident">Body</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">B</span> <span class="op">=</span> <span class="ident">AnyBody</span><span class="op">&gt;</span> {
     <span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">error</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create HTTP response builder with specific status.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpResponseBuilder</span> {
@@ -380,13 +374,8 @@
 
     <span class="doccomment">/// Create an error response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_error</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">error</span>.<span class="ident">as_response_error</span>().<span class="ident">error_response</span>();
-
-        <span class="self">Self</span> {
-            <span class="ident">res</span>,
-            <span class="ident">error</span>: <span class="prelude-val">Some</span>(<span class="ident">error</span>),
-        }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_error</span>(<span class="ident">error</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">error</span>.<span class="ident">into</span>().<span class="ident">as_response_error</span>().<span class="ident">error_response</span>()
     }
 }
 
@@ -570,7 +559,6 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
 {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;HttpResponse&quot;</span>)

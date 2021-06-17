@@ -155,18 +155,19 @@
 <span id="155">155</span>
 <span id="156">156</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="ident">std::io</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>, <span class="ident">fmt</span>, <span class="ident">io</span>};
 
 <span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">From</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">actix_tls::accept::openssl::SslError</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::{<span class="ident">Error</span>, <span class="ident">ParseError</span>, <span class="ident">ResponseError</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">StatusCode</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::{<span class="ident">Error</span>, <span class="ident">ParseError</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http::Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>;
 
 <span class="doccomment">/// A set of errors that can occur while connecting to an HTTP host</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ConnectError</span> {
     <span class="doccomment">/// SSL feature is not enabled</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;SSL is not supported&quot;</span>)]</span>
@@ -221,6 +222,7 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InvalidUrl</span> {
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Missing URL scheme&quot;</span>)]</span>
     <span class="ident">MissingScheme</span>,
@@ -239,6 +241,7 @@
 
 <span class="doccomment">/// A set of errors that can occur during request sending and response reading</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">SendRequestError</span> {
     <span class="doccomment">/// Invalid URL</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid URL: {}&quot;</span>, <span class="ident">_0</span>)]</span>
@@ -272,25 +275,17 @@
 
     <span class="doccomment">/// Error sending request body</span>
     <span class="ident">Body</span>(<span class="ident">Error</span>),
+
+    <span class="doccomment">/// Other errors that can occur after submitting a request.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{:?}: {}&quot;</span>, <span class="ident">_1</span>, <span class="ident">_0</span>)]</span>
+    <span class="ident">Custom</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">fmt::Debug</span><span class="op">&gt;</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">SendRequestError</span> {}
 
-<span class="doccomment">/// Convert `SendRequestError` to a server `Response`</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">SendRequestError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">SendRequestError::Connect</span>(<span class="ident">ConnectError::Timeout</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">StatusCode::GATEWAY_TIMEOUT</span>
-            }
-            <span class="ident">SendRequestError::Connect</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::BAD_REQUEST</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>,
-        }
-    }
-}
-
 <span class="doccomment">/// A set of errors that can occur during freezing a request</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FreezeRequestError</span> {
     <span class="doccomment">/// Invalid URL</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Invalid URL: {}&quot;</span>, <span class="ident">_0</span>)]</span>
@@ -299,15 +294,20 @@
     <span class="doccomment">/// HTTP error</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Http</span>(<span class="ident">HttpError</span>),
+
+    <span class="doccomment">/// Other errors that can occur after submitting a request.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{:?}: {}&quot;</span>, <span class="ident">_1</span>, <span class="ident">_0</span>)]</span>
+    <span class="ident">Custom</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">fmt::Debug</span><span class="op">&gt;</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">FreezeRequestError</span> {}
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">FreezeRequestError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SendRequestError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">FreezeRequestError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="ident">e</span> {
-            <span class="ident">FreezeRequestError::Url</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="ident">into</span>(),
-            <span class="ident">FreezeRequestError::Http</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="ident">into</span>(),
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">FreezeRequestError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">match</span> <span class="ident">err</span> {
+            <span class="ident">FreezeRequestError::Url</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>.<span class="ident">into</span>(),
+            <span class="ident">FreezeRequestError::Http</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>.<span class="ident">into</span>(),
+            <span class="ident">FreezeRequestError::Custom</span>(<span class="ident">err</span>, <span class="ident">msg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SendRequestError::Custom</span>(<span class="ident">err</span>, <span class="ident">msg</span>),
         }
     }
 }
