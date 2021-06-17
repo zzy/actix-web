@@ -2,6 +2,7 @@
 
 ## Unreleased - 2021-xx-xx
 ### Added
+* `guard::Acceptable` for matching against `Accept` header mime types. [#????]
 * `HttpServer::worker_max_blocking_threads` for setting block thread pool. [#2200]
 
 ### Changed
