@@ -293,11 +293,24 @@
 <span id="293">293</span>
 <span id="294">294</span>
 <span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
 </pre><pre class="rust">
 <span class="doccomment">//! `awc` is a HTTP and WebSocket client library built on the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ## Making a GET request</span>
-<span class="doccomment">//!</span>
+<span class="doccomment">//! # Making a GET request</span>
 <span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
@@ -312,10 +325,8 @@
 <span class="doccomment">//! # }</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ## Making POST requests</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Raw body contents</span>
-<span class="doccomment">//!</span>
+<span class="doccomment">//! # Making POST requests</span>
+<span class="doccomment">//! ## Raw body contents</span>
 <span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
@@ -327,8 +338,7 @@
 <span class="doccomment">//! # }</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ### Forms</span>
-<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Forms</span>
 <span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
@@ -342,8 +352,7 @@
 <span class="doccomment">//! # }</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ### JSON</span>
-<span class="doccomment">//!</span>
+<span class="doccomment">//! ## JSON</span>
 <span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), awc::error::SendRequestError&gt; {</span>
@@ -360,8 +369,24 @@
 <span class="doccomment">//! # }</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ## WebSocket support</span>
+<span class="doccomment">//! # Response Compression</span>
+<span class="doccomment">//! All [official][iana-encodings] and common content encoding codecs are supported, optionally.</span>
 <span class="doccomment">//!</span>
+<span class="doccomment">//! The `Accept-Encoding` header will automatically be populated with enabled codecs and added to</span>
+<span class="doccomment">//! outgoing requests, allowing servers to select their `Content-Encoding` accordingly.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Feature flags enable these codecs according to the table below. By default, all `compress-*`</span>
+<span class="doccomment">//! features are enabled.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! | Feature           | Codecs        |</span>
+<span class="doccomment">//! | ----------------- | ------------- |</span>
+<span class="doccomment">//! | `compress-brotli` | brotli        |</span>
+<span class="doccomment">//! | `compress-gzip`   | gzip, deflate |</span>
+<span class="doccomment">//! | `compress-zstd`   | zstd          |</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! [iana-encodings]: https://www.iana.org/assignments/http-parameters/http-parameters.xhtml#content-coding</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # WebSocket support</span>
 <span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # #[actix_rt::main]</span>
 <span class="doccomment">//! # async fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
@@ -424,6 +449,9 @@
 
 <span class="doccomment">/// An asynchronous HTTP and WebSocket client.</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// You should take care to create, at most, one `Client` per thread. Otherwise, expect higher CPU</span>
+<span class="doccomment">/// and memory usage.</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use awc::Client;</span>
@@ -432,10 +460,10 @@
 <span class="doccomment">/// async fn main() {</span>
 <span class="doccomment">///     let mut client = Client::default();</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///     let res = client.get(&quot;http://www.rust-lang.org&quot;) // &lt;- Create request builder</span>
-<span class="doccomment">///         .insert_header((&quot;User-Agent&quot;, &quot;Actix-web&quot;))</span>
-<span class="doccomment">///         .send()                             // &lt;- Send HTTP request</span>
-<span class="doccomment">///         .await;                             // &lt;- send request and wait for response</span>
+<span class="doccomment">///     let res = client.get(&quot;http://www.rust-lang.org&quot;)</span>
+<span class="doccomment">///         .insert_header((&quot;User-Agent&quot;, &quot;my-app/1.2&quot;))</span>
+<span class="doccomment">///         .send()</span>
+<span class="doccomment">///         .await;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///      println!(&quot;Response: {:?}&quot;, res);</span>
 <span class="doccomment">/// }</span>
