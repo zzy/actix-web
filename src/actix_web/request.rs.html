@@ -814,18 +814,6 @@
 <span id="814">814</span>
 <span id="815">815</span>
 <span id="816">816</span>
-<span id="817">817</span>
-<span id="818">818</span>
-<span id="819">819</span>
-<span id="820">820</span>
-<span id="821">821</span>
-<span id="822">822</span>
-<span id="823">823</span>
-<span id="824">824</span>
-<span id="825">825</span>
-<span id="826">826</span>
-<span id="827">827</span>
-<span id="828">828</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
@@ -888,18 +876,6 @@
                 <span class="ident">app_data</span>: <span class="ident">data</span>,
             }),
         }
-    }
-
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">__priv_test_new</span>(
-        <span class="ident">path</span>: <span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span>,
-        <span class="ident">head</span>: <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span>,
-        <span class="ident">rmap</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ResourceMap</span><span class="op">&gt;</span>,
-        <span class="ident">config</span>: <span class="ident">AppConfig</span>,
-        <span class="ident">app_data</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpRequest</span> {
-        <span class="kw">let</span> <span class="ident">app_state</span> <span class="op">=</span> <span class="ident">AppInitServiceState::new</span>(<span class="ident">rmap</span>, <span class="ident">config</span>);
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">path</span>, <span class="ident">head</span>, <span class="ident">app_state</span>, <span class="ident">app_data</span>)
     }
 }
 

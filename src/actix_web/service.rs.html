@@ -765,12 +765,6 @@
 <span id="765">765</span>
 <span id="766">766</span>
 <span id="767">767</span>
-<span id="768">768</span>
-<span id="769">769</span>
-<span id="770">770</span>
-<span id="771">771</span>
-<span id="772">772</span>
-<span id="773">773</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
@@ -846,12 +840,6 @@
     <span class="doccomment">/// Construct service request</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">req</span>, <span class="ident">payload</span> }
-    }
-
-    <span class="doccomment">/// Construct service request.</span>
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">__priv_test_new</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">req</span>, <span class="ident">payload</span>)
     }
 
     <span class="doccomment">/// Deconstruct request into parts</span>
