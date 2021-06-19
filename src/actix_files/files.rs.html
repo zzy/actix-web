@@ -335,6 +335,12 @@
 <span id="333">333</span>
 <span id="334">334</span>
 <span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">path::PathBuf</span>, <span class="ident">rc::Rc</span>};
 
@@ -452,6 +458,9 @@
     <span class="doccomment">/// Show files listing for directories.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default show files listing is disabled.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// When used with [`Files::index_file()`], files listing is shown as a fallback</span>
+    <span class="doccomment">/// when the index file is not found.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_files_listing</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">show_index</span> <span class="op">=</span> <span class="bool-val">true</span>;
         <span class="self">self</span>
@@ -486,8 +495,11 @@
 
     <span class="doccomment">/// Set index file</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Shows specific index file for directory &quot;/&quot; instead of</span>
+    <span class="doccomment">/// Shows specific index file for directories instead of</span>
     <span class="doccomment">/// showing files listing.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the index file is not found, files listing is shown as a fallback if</span>
+    <span class="doccomment">/// [`Files::show_files_listing()`] is set.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">index_file</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">index</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">index</span>.<span class="ident">into</span>());
         <span class="self">self</span>
