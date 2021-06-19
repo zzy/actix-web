@@ -135,16 +135,21 @@
 <span id="135">135</span>
 <span id="136">136</span>
 <span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
 </pre><pre class="rust">
 <span class="doccomment">//! HTTP primitives for the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Crate Features</span>
-<span class="doccomment">//! | Feature          | Functionality                                         |</span>
-<span class="doccomment">//! | ---------------- | ----------------------------------------------------- |</span>
-<span class="doccomment">//! | `openssl`        | TLS support via [OpenSSL].                            |</span>
-<span class="doccomment">//! | `rustls`         | TLS support via [rustls].                             |</span>
-<span class="doccomment">//! | `compress`       | Payload compression support. (Deflate, Gzip &amp; Brotli) |</span>
-<span class="doccomment">//! | `trust-dns`      | Use [trust-dns] as the client DNS resolver.           |</span>
+<span class="doccomment">//! | Feature             | Functionality                               |</span>
+<span class="doccomment">//! | ------------------- | ------------------------------------------- |</span>
+<span class="doccomment">//! | `openssl`           | TLS support via [OpenSSL].                  |</span>
+<span class="doccomment">//! | `rustls`            | TLS support via [rustls].                   |</span>
+<span class="doccomment">//! | `compress-brotli`   | Payload compression support: Brotli.        |</span>
+<span class="doccomment">//! | `compress-gzip`     | Payload compression support: Deflate, Gzip. |</span>
+<span class="doccomment">//! | `compress-zstd`     | Payload compression support: Zstd.          |</span>
+<span class="doccomment">//! | `trust-dns`         | Use [trust-dns] as the client DNS resolver. |</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [OpenSSL]: https://crates.io/crates/openssl</span>
 <span class="doccomment">//! [rustls]: https://crates.io/crates/rustls</span>
@@ -170,7 +175,8 @@
 <span class="kw">mod</span> <span class="ident">builder</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">client</span>;
 <span class="kw">mod</span> <span class="ident">config</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">encoding</span>;
 <span class="kw">mod</span> <span class="ident">extensions</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">header</span>;

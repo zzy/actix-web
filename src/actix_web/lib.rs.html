@@ -217,6 +217,7 @@
 <span id="217">217</span>
 <span id="218">218</span>
 <span id="219">219</span>
+<span id="220">220</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust.</span>
 <span class="doccomment">//!</span>
@@ -267,7 +268,7 @@
 <span class="doccomment">//! * Streaming and pipelining</span>
 <span class="doccomment">//! * Keep-alive and slow requests handling</span>
 <span class="doccomment">//! * Client/server [WebSockets](https://actix.rs/docs/websockets/) support</span>
-<span class="doccomment">//! * Transparent content compression/decompression (br, gzip, deflate)</span>
+<span class="doccomment">//! * Transparent content compression/decompression (br, gzip, deflate, zstd)</span>
 <span class="doccomment">//! * Powerful [request routing](https://actix.rs/docs/url-dispatch/)</span>
 <span class="doccomment">//! * Multipart streams</span>
 <span class="doccomment">//! * Static assets</span>
@@ -360,7 +361,8 @@
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::body</span>::{
         <span class="ident">AnyBody</span>, <span class="ident">Body</span>, <span class="ident">BodySize</span>, <span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>, <span class="ident">SizedStream</span>,
     };
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::encoding::Decoder</span> <span class="kw">as</span> <span class="ident">Decompress</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::ResponseBuilder</span> <span class="kw">as</span> <span class="ident">BaseHttpResponseBuilder</span>;
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>, <span class="ident">ResponseHead</span>};

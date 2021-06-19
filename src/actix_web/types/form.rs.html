@@ -535,6 +535,11 @@
 <span id="535">535</span>
 <span id="536">536</span>
 <span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
 </pre><pre class="rust">
 <span class="doccomment">//! For URL encoded form helper documentation, see [`Form`].</span>
 
@@ -554,7 +559,7 @@
 <span class="kw">use</span> <span class="ident">futures_util</span>::{<span class="ident">FutureExt</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">StreamExt</span> <span class="kw">as</span> <span class="kw">_</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::DeserializeOwned</span>, <span class="ident">Serialize</span>};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::dev::Decompress</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">error::UrlencodedError</span>, <span class="ident">extract::FromRequest</span>, <span class="ident">http::header::CONTENT_LENGTH</span>, <span class="ident">web</span>, <span class="ident">Error</span>,
@@ -793,9 +798,9 @@
 <span class="doccomment">/// - content type is not `application/x-www-form-urlencoded`</span>
 <span class="doccomment">/// - content length is greater than [limit](UrlEncoded::limit())</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UrlEncoded</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
     <span class="ident">stream</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Decompress</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>))]</span>
     <span class="ident">stream</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
 
     <span class="ident">limit</span>: <span class="ident">usize</span>,
@@ -831,10 +836,15 @@
             }
         };
 
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
-        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">Decompress::from_headers</span>(<span class="ident">payload</span>.<span class="ident">take</span>(), <span class="ident">req</span>.<span class="ident">headers</span>());
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>))]</span>
-        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take</span>();
+        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> {
+            <span class="macro">cfg_if::cfg_if!</span> {
+                <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span> {
+                    <span class="ident">Decompress::from_headers</span>(<span class="ident">payload</span>.<span class="ident">take</span>(), <span class="ident">req</span>.<span class="ident">headers</span>())
+                } <span class="kw">else</span> {
+                    <span class="ident">payload</span>.<span class="ident">take</span>()
+                }
+            }
+        };
 
         <span class="ident">UrlEncoded</span> {
             <span class="ident">encoding</span>,

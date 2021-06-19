@@ -529,6 +529,11 @@
 <span id="529">529</span>
 <span id="530">530</span>
 <span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Basic binary and string payload extractors.</span>
 
@@ -814,9 +819,9 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpMessageBody</span> {
     <span class="ident">limit</span>: <span class="ident">usize</span>,
     <span class="ident">length</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
     <span class="ident">stream</span>: <span class="ident">dev::Decompress</span><span class="op">&lt;</span><span class="ident">dev::Payload</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>))]</span>
     <span class="ident">stream</span>: <span class="ident">dev::Payload</span>,
     <span class="ident">buf</span>: <span class="ident">BytesMut</span>,
     <span class="ident">err</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PayloadError</span><span class="op">&gt;</span>,
@@ -844,10 +849,15 @@
             }
         }
 
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
-        <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="ident">dev::Decompress::from_headers</span>(<span class="ident">payload</span>.<span class="ident">take</span>(), <span class="ident">req</span>.<span class="ident">headers</span>());
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>))]</span>
-        <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take</span>();
+        <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> {
+            <span class="macro">cfg_if::cfg_if!</span> {
+                <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span> {
+                    <span class="ident">dev::Decompress::from_headers</span>(<span class="ident">payload</span>.<span class="ident">take</span>(), <span class="ident">req</span>.<span class="ident">headers</span>())
+                } <span class="kw">else</span> {
+                    <span class="ident">payload</span>.<span class="ident">take</span>()
+                }
+            }
+        };
 
         <span class="ident">HttpMessageBody</span> {
             <span class="ident">stream</span>,

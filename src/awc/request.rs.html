@@ -654,6 +654,16 @@
 <span id="654">654</span>
 <span id="655">655</span>
 <span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>, <span class="ident">fmt</span>, <span class="ident">net</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
@@ -665,7 +675,7 @@
     <span class="ident">body::Body</span>,
     <span class="ident">http</span>::{
         <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">IntoHeaderPair</span>},
-        <span class="ident">uri</span>, <span class="ident">ConnectionType</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
+        <span class="ident">ConnectionType</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
     },
     <span class="ident">RequestHead</span>,
 };
@@ -678,11 +688,6 @@
     <span class="ident">sender</span>::{<span class="ident">PrepForSendingError</span>, <span class="ident">RequestSender</span>, <span class="ident">SendClientRequest</span>},
     <span class="ident">ClientConfig</span>,
 };
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
-<span class="kw">const</span> <span class="ident">HTTPS_ENCODING</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;br, gzip, deflate&quot;</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>))]</span>
-<span class="kw">const</span> <span class="ident">HTTPS_ENCODING</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;br&quot;</span>;
 
 <span class="doccomment">/// An HTTP Client request builder</span>
 <span class="doccomment">///</span>
@@ -1137,22 +1142,37 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">slf</span> <span class="op">=</span> <span class="self">self</span>;
 
+        <span class="comment">// Set Accept-Encoding HTTP header depending on enabled feature.</span>
+        <span class="comment">// If decompress is not ask, then we are not able to find which encoding is</span>
+        <span class="comment">// supported, so we cannot guess Accept-Encoding HTTP header.</span>
         <span class="kw">if</span> <span class="ident">slf</span>.<span class="ident">response_decompress</span> {
-            <span class="kw">let</span> <span class="ident">https</span> <span class="op">=</span> <span class="ident">slf</span>
-                .<span class="ident">head</span>
-                .<span class="ident">uri</span>
-                .<span class="ident">scheme</span>()
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">uri::Scheme::HTTPS</span>)
-                .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>);
+            <span class="comment">// Set Accept-Encoding with compression algorithm awc is built with.</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
+            <span class="kw">let</span> <span class="ident">accept_encoding</span> <span class="op">=</span> {
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoding</span> <span class="op">=</span> <span class="macro">vec!</span>[];
 
-            <span class="kw">if</span> <span class="ident">https</span> {
-                <span class="ident">slf</span> <span class="op">=</span> <span class="ident">slf</span>.<span class="ident">insert_header_if_none</span>((<span class="ident">header::ACCEPT_ENCODING</span>, <span class="ident">HTTPS_ENCODING</span>));
-            } <span class="kw">else</span> {
-                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress&quot;</span>)]</span>
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
+                <span class="ident">encoding</span>.<span class="ident">push</span>(<span class="string">&quot;br&quot;</span>);
+
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
                 {
-                    <span class="ident">slf</span> <span class="op">=</span> <span class="ident">slf</span>.<span class="ident">insert_header_if_none</span>((<span class="ident">header::ACCEPT_ENCODING</span>, <span class="string">&quot;gzip, deflate&quot;</span>));
+                    <span class="ident">encoding</span>.<span class="ident">push</span>(<span class="string">&quot;gzip&quot;</span>);
+                    <span class="ident">encoding</span>.<span class="ident">push</span>(<span class="string">&quot;deflate&quot;</span>);
                 }
+
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-zstd&quot;</span>)]</span>
+                <span class="ident">encoding</span>.<span class="ident">push</span>(<span class="string">&quot;zstd&quot;</span>);
+
+                <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">encoding</span>.<span class="ident">is_empty</span>(), <span class="string">&quot;encoding cannot be empty unless __compress feature has been explictily enabled.&quot;</span>);
+                <span class="ident">encoding</span>.<span class="ident">join</span>(<span class="string">&quot;, &quot;</span>)
             };
+
+            <span class="comment">// Otherwise tell the server, we do not support any compression algorithm.</span>
+            <span class="comment">// So we clearly indicate that we do want identity encoding.</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>))]</span>
+            <span class="kw">let</span> <span class="ident">accept_encoding</span> <span class="op">=</span> <span class="string">&quot;identity&quot;</span>;
+
+            <span class="ident">slf</span> <span class="op">=</span> <span class="ident">slf</span>.<span class="ident">insert_header_if_none</span>((<span class="ident">header::ACCEPT_ENCODING</span>, <span class="ident">accept_encoding</span>));
         }
 
         <span class="prelude-val">Ok</span>(<span class="ident">slf</span>)
