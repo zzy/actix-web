@@ -351,6 +351,7 @@
 <span id="351">351</span>
 <span id="352">352</span>
 <span id="353">353</span>
+<span id="354">354</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::net::SocketAddr</span>;
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
@@ -470,6 +471,7 @@
         <span class="ident">AppConfig</span> { <span class="ident">secure</span>, <span class="ident">host</span>, <span class="ident">addr</span> }
     }
 
+    <span class="doccomment">/// Needed in actix-test crate.</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">__priv_test_new</span>(<span class="ident">secure</span>: <span class="ident">bool</span>, <span class="ident">host</span>: <span class="ident">String</span>, <span class="ident">addr</span>: <span class="ident">SocketAddr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">AppConfig::new</span>(<span class="ident">secure</span>, <span class="ident">host</span>, <span class="ident">addr</span>)
