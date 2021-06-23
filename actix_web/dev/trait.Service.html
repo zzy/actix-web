@@ -36,7 +36,7 @@ makes composition easier.</p>
      <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="self">Self</span><span class="ident">::Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Future</span> { ... }
 }</pre></div>
 <p>Sometimes it is not necessary to implement the Service trait. For example, the above service
-could be rewritten as a simple function and passed to <a href="fn_service()"><code>fn_service</code></a>.</p>
+could be rewritten as a simple function and passed to <a href="fn.fn_service.html"><code>fn_service</code></a>.</p>
 
 <div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">my_service</span>(<span class="ident">req</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">MyError</span><span class="op">&gt;</span>;
