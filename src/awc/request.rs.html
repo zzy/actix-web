@@ -664,6 +664,11 @@
 <span id="664">664</span>
 <span id="665">665</span>
 <span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>, <span class="ident">fmt</span>, <span class="ident">net</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
@@ -1147,6 +1152,7 @@
         <span class="comment">// supported, so we cannot guess Accept-Encoding HTTP header.</span>
         <span class="kw">if</span> <span class="ident">slf</span>.<span class="ident">response_decompress</span> {
             <span class="comment">// Set Accept-Encoding with compression algorithm awc is built with.</span>
+            <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::vec_init_then_push</span>)]</span>
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
             <span class="kw">let</span> <span class="ident">accept_encoding</span> <span class="op">=</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoding</span> <span class="op">=</span> <span class="macro">vec!</span>[];
@@ -1163,7 +1169,11 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-zstd&quot;</span>)]</span>
                 <span class="ident">encoding</span>.<span class="ident">push</span>(<span class="string">&quot;zstd&quot;</span>);
 
-                <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">encoding</span>.<span class="ident">is_empty</span>(), <span class="string">&quot;encoding cannot be empty unless __compress feature has been explictily enabled.&quot;</span>);
+                <span class="macro">assert!</span>(
+                    <span class="op">!</span><span class="ident">encoding</span>.<span class="ident">is_empty</span>(),
+                    <span class="string">&quot;encoding can not be empty unless __compress feature has been explicitly enabled&quot;</span>
+                );
+
                 <span class="ident">encoding</span>.<span class="ident">join</span>(<span class="string">&quot;, &quot;</span>)
             };
 

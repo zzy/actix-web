@@ -1119,32 +1119,29 @@
 <span id="1119">1119</span>
 <span id="1120">1120</span>
 <span id="1121">1121</span>
+<span id="1122">1122</span>
+<span id="1123">1123</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
-<span class="kw">use</span> <span class="ident">std::fmt</span>;
-<span class="kw">use</span> <span class="ident">std::future::Future</span>;
-<span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">ResourceDef</span>, <span class="ident">Router</span>};
-<span class="kw">use</span> <span class="ident">actix_service::boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{
-    <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>, <span class="ident">ServiceFactoryExt</span>,
-    <span class="ident">Transform</span>,
+    <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>,
+    <span class="ident">boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>},
+    <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>, <span class="ident">ServiceFactoryExt</span>, <span class="ident">Transform</span>,
 };
 <span class="kw">use</span> <span class="ident">futures_core::future::LocalBoxFuture</span>;
 <span class="kw">use</span> <span class="ident">futures_util::future::join_all</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config::ServiceConfig</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::data::Data</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::dev</span>::{<span class="ident">AppService</span>, <span class="ident">HttpServiceFactory</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::guard::Guard</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::resource::Resource</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::rmap::ResourceMap</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::route::Route</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service</span>::{
-    <span class="ident">AppServiceFactory</span>, <span class="ident">ServiceFactoryWrapper</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>,
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">config::ServiceConfig</span>,
+    <span class="ident">data::Data</span>,
+    <span class="ident">dev</span>::{<span class="ident">AppService</span>, <span class="ident">HttpServiceFactory</span>},
+    <span class="ident">guard::Guard</span>,
+    <span class="ident">rmap::ResourceMap</span>,
+    <span class="ident">service</span>::{<span class="ident">AppServiceFactory</span>, <span class="ident">ServiceFactoryWrapper</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
+    <span class="ident">Error</span>, <span class="ident">Resource</span>, <span class="ident">Route</span>,
 };
 
 <span class="kw">type</span> <span class="ident">Guards</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>;
@@ -1193,16 +1190,17 @@
 <span class="kw">impl</span> <span class="ident">Scope</span> {
     <span class="doccomment">/// Create a new scope</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Scope</span> {
-        <span class="kw">let</span> <span class="ident">fref</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>));
+        <span class="kw">let</span> <span class="ident">factory_ref</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>));
+
         <span class="ident">Scope</span> {
-            <span class="ident">endpoint</span>: <span class="ident">ScopeEndpoint::new</span>(<span class="ident">fref</span>.<span class="ident">clone</span>()),
+            <span class="ident">endpoint</span>: <span class="ident">ScopeEndpoint::new</span>(<span class="ident">Rc::clone</span>(<span class="kw-2">&amp;</span><span class="ident">factory_ref</span>)),
             <span class="ident">rdef</span>: <span class="ident">path</span>.<span class="ident">to_string</span>(),
             <span class="ident">app_data</span>: <span class="prelude-val">None</span>,
             <span class="ident">guards</span>: <span class="ident">Vec::new</span>(),
             <span class="ident">services</span>: <span class="ident">Vec::new</span>(),
             <span class="ident">default</span>: <span class="prelude-val">None</span>,
             <span class="ident">external</span>: <span class="ident">Vec::new</span>(),
-            <span class="ident">factory_ref</span>: <span class="ident">fref</span>,
+            <span class="ident">factory_ref</span>,
         }
     }
 }
@@ -1242,40 +1240,38 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Set or override application data. Application data could be accessed</span>
-    <span class="doccomment">/// by using `Data&lt;T&gt;` extractor where `T` is data type.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use std::cell::Cell;</span>
-    <span class="doccomment">/// use actix_web::{web, App, HttpResponse, Responder};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// struct MyData {</span>
-    <span class="doccomment">///     counter: Cell&lt;usize&gt;,</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// async fn index(data: web::Data&lt;MyData&gt;) -&gt; impl Responder {</span>
-    <span class="doccomment">///     data.counter.set(data.counter.get() + 1);</span>
-    <span class="doccomment">///     HttpResponse::Ok()</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// fn main() {</span>
-    <span class="doccomment">///     let app = App::new().service(</span>
-    <span class="doccomment">///         web::scope(&quot;/app&quot;)</span>
-    <span class="doccomment">///             .data(MyData{ counter: Cell::new(0) })</span>
-    <span class="doccomment">///             .service(</span>
-    <span class="doccomment">///                 web::resource(&quot;/index.html&quot;).route(</span>
-    <span class="doccomment">///                     web::get().to(index)))</span>
-    <span class="doccomment">///     );</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use `.app_data(Data::new(val))` instead.&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">app_data</span>(<span class="ident">Data::new</span>(<span class="ident">data</span>))
-    }
-
     <span class="doccomment">/// Add scope data.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Data of different types from parent contexts will still be accessible.</span>
+    <span class="doccomment">/// Data of different types from parent contexts will still be accessible. Any `Data&lt;T&gt;` types</span>
+    <span class="doccomment">/// set here can be extracted in handlers using the `Data&lt;T&gt;` extractor.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use std::cell::Cell;</span>
+    <span class="doccomment">/// use actix_web::{web, App, HttpRequest, HttpResponse, Responder};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// struct MyData {</span>
+    <span class="doccomment">///     count: std::cell::Cell&lt;usize&gt;,</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// async fn handler(req: HttpRequest, counter: web::Data&lt;MyData&gt;) -&gt; impl Responder {</span>
+    <span class="doccomment">///     // note this cannot use the Data&lt;T&gt; extractor because it was not added with it</span>
+    <span class="doccomment">///     let incr = *req.app_data::&lt;usize&gt;().unwrap();</span>
+    <span class="doccomment">///     assert_eq!(incr, 3);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // update counter using other value from app data</span>
+    <span class="doccomment">///     counter.count.set(counter.count.get() + incr);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     HttpResponse::Ok().body(counter.count.get().to_string())</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let app = App::new().service(</span>
+    <span class="doccomment">///     web::scope(&quot;/app&quot;)</span>
+    <span class="doccomment">///         .app_data(3usize)</span>
+    <span class="doccomment">///         .app_data(web::Data::new(MyData { count: Default::default() }))</span>
+    <span class="doccomment">///         .route(&quot;/&quot;, web::get().to(handler))</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">app_data</span>
             .<span class="ident">get_or_insert_with</span>(<span class="ident">Extensions::new</span>)
@@ -1284,15 +1280,20 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Run external configuration as part of the scope building</span>
-    <span class="doccomment">/// process</span>
+    <span class="doccomment">/// Add scope data after wrapping in `Data&lt;T&gt;`.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This function is useful for moving parts of configuration to a</span>
-    <span class="doccomment">/// different module or even library. For example,</span>
-    <span class="doccomment">/// some of the resource&#39;s configuration could be moved to different module.</span>
+    <span class="doccomment">/// Deprecated in favor of [`app_data`](Self::app_data).</span>
+    <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use `.app_data(Data::new(val))` instead.&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">app_data</span>(<span class="ident">Data::new</span>(<span class="ident">data</span>))
+    }
+
+    <span class="doccomment">/// Run external configuration as part of the scope building process.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This function is useful for moving parts of configuration to a different module or library.</span>
+    <span class="doccomment">/// For example, some of the resource&#39;s configuration could be moved to different module.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # extern crate actix_web;</span>
     <span class="doccomment">/// use actix_web::{web, middleware, App, HttpResponse};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// // this function could be located in different module</span>
@@ -1313,18 +1314,21 @@
     <span class="doccomment">///         .route(&quot;/index.html&quot;, web::get().to(|| HttpResponse::Ok()));</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">configure</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">configure</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cfg_fn</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ServiceConfig</span>),
     {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig::new</span>();
-        <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cfg</span>);
+        <span class="ident">cfg_fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cfg</span>);
+
         <span class="self">self</span>.<span class="ident">services</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">services</span>);
         <span class="self">self</span>.<span class="ident">external</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">external</span>);
 
+        <span class="comment">// TODO: add Extensions::is_empty check and conditionally insert data</span>
         <span class="self">self</span>.<span class="ident">app_data</span>
             .<span class="ident">get_or_insert_with</span>(<span class="ident">Extensions::new</span>)
             .<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">app_data</span>);
+
         <span class="self">self</span>
     }
 
@@ -1541,7 +1545,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::root_prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">rdef</span>));
 
         <span class="comment">// external resources</span>
-        <span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="kw">in</span> <span class="ident">std::mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">external</span>) {
+        <span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="kw">in</span> <span class="ident">mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">external</span>) {
             <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="prelude-val">None</span>);
         }
 
@@ -2113,7 +2117,7 @@
         );
     }
 
-    <span class="comment">// allow deprecated App::data</span>
+    <span class="comment">// allow deprecated {App, Scope}::data</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_override_data</span>() {
@@ -2133,7 +2137,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
     }
 
-    <span class="comment">// allow deprecated App::data</span>
+    <span class="comment">// allow deprecated `{App, Scope}::data`</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_override_data_default_service</span>() {

@@ -750,6 +750,10 @@
 <span id="750">750</span>
 <span id="751">751</span>
 <span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
@@ -922,47 +926,52 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Provide resource specific data. This method allows to add extractor</span>
-    <span class="doccomment">/// configuration or specific state available via `Data&lt;T&gt;` extractor.</span>
-    <span class="doccomment">/// Provided data is available for all routes registered for the current resource.</span>
-    <span class="doccomment">/// Resource data overrides data registered by `App::data()` method.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use actix_web::{web, App, FromRequest};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// /// extract text data from request</span>
-    <span class="doccomment">/// async fn index(body: String) -&gt; String {</span>
-    <span class="doccomment">///     format!(&quot;Body {}!&quot;, body)</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// fn main() {</span>
-    <span class="doccomment">///     let app = App::new().service(</span>
-    <span class="doccomment">///         web::resource(&quot;/index.html&quot;)</span>
-    <span class="doccomment">///           // limit size of the payload</span>
-    <span class="doccomment">///           .data(String::configure(|cfg| {</span>
-    <span class="doccomment">///                cfg.limit(4096)</span>
-    <span class="doccomment">///           }))</span>
-    <span class="doccomment">///           .route(</span>
-    <span class="doccomment">///               web::get()</span>
-    <span class="doccomment">///                  // register handler</span>
-    <span class="doccomment">///                  .to(index)</span>
-    <span class="doccomment">///           ));</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use `.app_data(Data::new(val))` instead.&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">app_data</span>(<span class="ident">Data::new</span>(<span class="ident">data</span>))
-    }
-
     <span class="doccomment">/// Add resource data.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Data of different types from parent contexts will still be accessible.</span>
+    <span class="doccomment">/// Data of different types from parent contexts will still be accessible. Any `Data&lt;T&gt;` types</span>
+    <span class="doccomment">/// set here can be extracted in handlers using the `Data&lt;T&gt;` extractor.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use std::cell::Cell;</span>
+    <span class="doccomment">/// use actix_web::{web, App, HttpRequest, HttpResponse, Responder};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// struct MyData {</span>
+    <span class="doccomment">///     count: std::cell::Cell&lt;usize&gt;,</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// async fn handler(req: HttpRequest, counter: web::Data&lt;MyData&gt;) -&gt; impl Responder {</span>
+    <span class="doccomment">///     // note this cannot use the Data&lt;T&gt; extractor because it was not added with it</span>
+    <span class="doccomment">///     let incr = *req.app_data::&lt;usize&gt;().unwrap();</span>
+    <span class="doccomment">///     assert_eq!(incr, 3);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // update counter using other value from app data</span>
+    <span class="doccomment">///     counter.count.set(counter.count.get() + incr);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     HttpResponse::Ok().body(counter.count.get().to_string())</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let app = App::new().service(</span>
+    <span class="doccomment">///     web::resource(&quot;/&quot;)</span>
+    <span class="doccomment">///         .app_data(3usize)</span>
+    <span class="doccomment">///         .app_data(web::Data::new(MyData { count: Default::default() }))</span>
+    <span class="doccomment">///         .route(web::get().to(handler))</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">app_data</span>
             .<span class="ident">get_or_insert_with</span>(<span class="ident">Extensions::new</span>)
             .<span class="ident">insert</span>(<span class="ident">data</span>);
 
         <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Add resource data after wrapping in `Data&lt;T&gt;`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Deprecated in favor of [`app_data`](Self::app_data).</span>
+    <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use `.app_data(Data::new(val))` instead.&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">app_data</span>(<span class="ident">Data::new</span>(<span class="ident">data</span>))
     }
 
     <span class="doccomment">/// Register a new route and add handler. This route matches all requests.</span>
@@ -980,7 +989,6 @@
     <span class="doccomment">/// This is shortcut for:</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # extern crate actix_web;</span>
     <span class="doccomment">/// # use actix_web::*;</span>
     <span class="doccomment">/// # fn index(req: HttpRequest) -&gt; HttpResponse { unimplemented!() }</span>
     <span class="doccomment">/// App::new().service(web::resource(&quot;/&quot;).route(web::route().to(index)));</span>
@@ -1448,7 +1456,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::NO_CONTENT</span>);
     }
 
-    <span class="comment">// allow deprecated App::data</span>
+    <span class="comment">// allow deprecated `{App, Resource}::data`</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_data</span>() {
@@ -1482,7 +1490,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
     }
 
-    <span class="comment">// allow deprecated App::data</span>
+    <span class="comment">// allow deprecated `{App, Resource}::data`</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_data_default_service</span>() {

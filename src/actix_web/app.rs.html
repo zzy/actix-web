@@ -687,6 +687,29 @@
 <span id="687">687</span>
 <span id="688">688</span>
 <span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
@@ -758,36 +781,71 @@
         <span class="ident">InitError</span> <span class="op">=</span> (),
     <span class="op">&gt;</span>,
 {
-    <span class="doccomment">/// Set application data. Application data could be accessed</span>
-    <span class="doccomment">/// by using `Data&lt;T&gt;` extractor where `T` is data type.</span>
+    <span class="doccomment">/// Set application (root level) data.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// **Note**: HTTP server accepts an application factory rather than</span>
-    <span class="doccomment">/// an application instance. Http server constructs an application</span>
-    <span class="doccomment">/// instance for each thread, thus application data must be constructed</span>
-    <span class="doccomment">/// multiple times. If you want to share data between different</span>
-    <span class="doccomment">/// threads, a shared object should be used, e.g. `Arc`. Internally `Data` type</span>
-    <span class="doccomment">/// uses `Arc` so data could be created outside of app factory and clones could</span>
-    <span class="doccomment">/// be stored via `App::app_data()` method.</span>
+    <span class="doccomment">/// Application data stored with `App::app_data()` method is available through the</span>
+    <span class="doccomment">/// [`HttpRequest::app_data`](crate::HttpRequest::app_data) method at runtime.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # [`Data&lt;T&gt;`]</span>
+    <span class="doccomment">/// Any [`Data&lt;T&gt;`] type added here can utilize it&#39;s extractor implementation in handlers.</span>
+    <span class="doccomment">/// Types not wrapped in `Data&lt;T&gt;` cannot use this extractor. See [its docs](Data&lt;T&gt;) for more</span>
+    <span class="doccomment">/// about its usage and patterns.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use std::cell::Cell;</span>
-    <span class="doccomment">/// use actix_web::{web, App, HttpResponse, Responder};</span>
+    <span class="doccomment">/// use actix_web::{web, App, HttpRequest, HttpResponse, Responder};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// struct MyData {</span>
-    <span class="doccomment">///     counter: Cell&lt;usize&gt;,</span>
+    <span class="doccomment">///     count: std::cell::Cell&lt;usize&gt;,</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// async fn index(data: web::Data&lt;MyData&gt;) -&gt; impl Responder {</span>
-    <span class="doccomment">///     data.counter.set(data.counter.get() + 1);</span>
-    <span class="doccomment">///     HttpResponse::Ok()</span>
+    <span class="doccomment">/// async fn handler(req: HttpRequest, counter: web::Data&lt;MyData&gt;) -&gt; impl Responder {</span>
+    <span class="doccomment">///     // note this cannot use the Data&lt;T&gt; extractor because it was not added with it</span>
+    <span class="doccomment">///     let incr = *req.app_data::&lt;usize&gt;().unwrap();</span>
+    <span class="doccomment">///     assert_eq!(incr, 3);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // update counter using other value from app data</span>
+    <span class="doccomment">///     counter.count.set(counter.count.get() + incr);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     HttpResponse::Ok().body(counter.count.get().to_string())</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// let app = App::new()</span>
-    <span class="doccomment">///     .data(MyData{ counter: Cell::new(0) })</span>
-    <span class="doccomment">///     .service(</span>
-    <span class="doccomment">///         web::resource(&quot;/index.html&quot;).route(</span>
-    <span class="doccomment">///             web::get().to(index)));</span>
+    <span class="doccomment">/// let app = App::new().service(</span>
+    <span class="doccomment">///     web::resource(&quot;/&quot;)</span>
+    <span class="doccomment">///         .app_data(3usize)</span>
+    <span class="doccomment">///         .app_data(web::Data::new(MyData { count: Default::default() }))</span>
+    <span class="doccomment">///         .route(web::get().to(handler))</span>
+    <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Shared Mutable State</span>
+    <span class="doccomment">/// [`HttpServer::new`](crate::HttpServer::new) accepts an application factory rather than an</span>
+    <span class="doccomment">/// application instance; the factory closure is called on each worker thread independently.</span>
+    <span class="doccomment">/// Therefore, if you want to share a data object between different workers, a shareable object</span>
+    <span class="doccomment">/// needs to be created first, outside the `HttpServer::new` closure and cloned into it.</span>
+    <span class="doccomment">/// [`Data&lt;T&gt;`] is an example of such a sharable object.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```ignore</span>
+    <span class="doccomment">/// let counter = web::Data::new(AppStateWithCounter {</span>
+    <span class="doccomment">///     counter: Mutex::new(0),</span>
+    <span class="doccomment">/// });</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// HttpServer::new(move || {</span>
+    <span class="doccomment">///     // move counter object into the closure and clone for each worker</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     App::new()</span>
+    <span class="doccomment">///         .app_data(counter.clone())</span>
+    <span class="doccomment">///         .route(&quot;/&quot;, web::get().to(handler))</span>
+    <span class="doccomment">/// })</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ext</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">insert</span>(<span class="ident">ext</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Add application (root) data after wrapping in `Data&lt;T&gt;`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Deprecated in favor of [`app_data`](Self::app_data).</span>
     <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Use `.app_data(Data::new(val))` instead.&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">app_data</span>(<span class="ident">Data::new</span>(<span class="ident">data</span>))
@@ -825,18 +883,6 @@
             }
             .<span class="ident">boxed_local</span>()
         }));
-        <span class="self">self</span>
-    }
-
-    <span class="doccomment">/// Set application level arbitrary data item.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Application data stored with `App::app_data()` method is available</span>
-    <span class="doccomment">/// via `HttpRequest::app_data()` method at runtime.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This method could be used for storing `Data&lt;T&gt;` as well, in that case</span>
-    <span class="doccomment">/// data could be accessed by using `Data&lt;T&gt;` extractor.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ext</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">insert</span>(<span class="ident">ext</span>);
         <span class="self">self</span>
     }
 

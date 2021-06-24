@@ -772,7 +772,6 @@
 <span id="772">772</span>
 <span id="773">773</span>
 <span id="774">774</span>
-<span id="775">775</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
@@ -793,9 +792,8 @@
     <span class="ident">dev::insert_slash</span>,
     <span class="ident">guard::Guard</span>,
     <span class="ident">info::ConnectionInfo</span>,
-    <span class="ident">request::HttpRequest</span>,
     <span class="ident">rmap::ResourceMap</span>,
-    <span class="ident">Error</span>, <span class="ident">HttpResponse</span>,
+    <span class="ident">Error</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>,
 };
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">HttpServiceFactory</span> {
