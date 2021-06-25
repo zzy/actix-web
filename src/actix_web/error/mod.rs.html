@@ -255,6 +255,7 @@
 <span id="255">255</span>
 <span id="256">256</span>
 <span id="257">257</span>
+<span id="258">258</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Error and Result module</span>
 
@@ -276,6 +277,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::error::Error</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::internal</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::response_error::ResponseError</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">macros</span>::{<span class="ident">downcast_dyn</span>, <span class="ident">downcast_get_type_id</span>};
 
 <span class="doccomment">/// A convenience [`Result`](std::result::Result) for Actix Web operations.</span>
 <span class="doccomment">///</span>

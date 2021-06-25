@@ -296,12 +296,8 @@
 <span id="296">296</span>
 <span id="297">297</span>
 <span id="298">298</span>
-<span id="299">299</span>
-<span id="300">300</span>
 </pre><pre class="rust">
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">__common_header_deref</span> {
+<span class="macro">macro_rules!</span> <span class="ident">common_header_deref</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>:<span class="ident">ty</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">to</span>:<span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">impl</span> <span class="ident">::std::ops::Deref</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span> {
             <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">to</span>;
@@ -321,9 +317,7 @@
     };
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">__common_header_test_module</span> {
+<span class="macro">macro_rules!</span> <span class="ident">common_header_test_module</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span>:<span class="ident">ident</span>{$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>:<span class="ident">item</span>)<span class="kw-2">*</span>}) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -338,9 +332,8 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">__common_header_test</span> {
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="macro">macro_rules!</span> <span class="ident">common_header_test</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">raw</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>() {
@@ -400,9 +393,7 @@
     };
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">__define_common_header</span> {
+<span class="macro">macro_rules!</span> <span class="ident">common_header</span> {
     <span class="comment">// $a:meta: Attributes associated with the header item (usually docs)</span>
     <span class="comment">// $id:ident: Identifier of the header</span>
     <span class="comment">// $n:expr: Lowercase name of the header</span>
@@ -413,7 +404,7 @@
         $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>]</span>)<span class="op">*</span>
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
         <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>(<span class="kw">pub</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span><span class="op">&gt;</span>);
-        <span class="kw">crate</span><span class="macro">::__common_header_deref!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span><span class="op">&gt;</span>);
+        <span class="kw">crate</span><span class="macro">::http::header::common_header_deref!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span><span class="op">&gt;</span>);
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::http::header::Header</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">name</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::http::header::HeaderName</span> {
@@ -449,7 +440,7 @@
         $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>]</span>)<span class="op">*</span>
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
         <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>(<span class="kw">pub</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span><span class="op">&gt;</span>);
-        <span class="kw">crate</span><span class="macro">::__common_header_deref!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span><span class="op">&gt;</span>);
+        <span class="kw">crate</span><span class="macro">::http::header::common_header_deref!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span><span class="op">&gt;</span>);
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::http::header::Header</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">name</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::http::header::HeaderName</span> {
@@ -485,7 +476,7 @@
         $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>]</span>)<span class="op">*</span>
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
         <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>(<span class="kw">pub</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>);
-        <span class="kw">crate</span><span class="macro">::__common_header_deref!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>);
+        <span class="kw">crate</span><span class="macro">::http::header::common_header_deref!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>);
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::http::header::Header</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">name</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::http::header::HeaderName</span> {
@@ -568,37 +559,42 @@
 
     <span class="comment">// optional test module</span>
     ($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">meta</span>]</span>)<span class="kw-2">*</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">ty</span>)<span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span>:<span class="ident">ident</span>{$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>:<span class="ident">item</span>)<span class="kw-2">*</span>}) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">crate</span><span class="macro">::__define_common_header!</span> {
+        <span class="kw">crate</span><span class="macro">::http::header::common_header!</span> {
             $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>]</span>)<span class="op">*</span>
             (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>)<span class="op">*</span>
         }
 
-        <span class="kw">crate</span><span class="macro">::__common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
+        <span class="kw">crate</span><span class="macro">::http::header::common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
     };
     ($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">meta</span>]</span>)<span class="kw-2">*</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">ty</span>)<span class="op">+</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span>:<span class="ident">ident</span>{$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>:<span class="ident">item</span>)<span class="kw-2">*</span>}) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">crate</span><span class="macro">::__define_common_header!</span> {
+        <span class="kw">crate</span><span class="macro">::http::header::common_header!</span> {
             $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>]</span>)<span class="op">*</span>
             (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>)<span class="op">+</span>
         }
 
-        <span class="kw">crate</span><span class="macro">::__common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
+        <span class="kw">crate</span><span class="macro">::http::header::common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
     };
     ($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">meta</span>]</span>)<span class="kw-2">*</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> [<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">ty</span>] <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span>:<span class="ident">ident</span>{$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>:<span class="ident">item</span>)<span class="kw-2">*</span>}) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">crate</span><span class="macro">::__define_common_header!</span> {
+        <span class="kw">crate</span><span class="macro">::http::header::common_header!</span> {
             $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>]</span>)<span class="op">*</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>) <span class="op">=</span><span class="op">&gt;</span> [<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>]
         }
 
-        <span class="kw">crate</span><span class="macro">::__common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
+        <span class="kw">crate</span><span class="macro">::http::header::common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
     };
     ($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">meta</span>]</span>)<span class="kw-2">*</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {<span class="ident">Any</span> <span class="op">/</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">ty</span>)<span class="op">+</span>} <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span>:<span class="ident">ident</span>{$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>:<span class="ident">item</span>)<span class="kw-2">*</span>}) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">crate</span><span class="macro">::__define_common_header!</span> {
+        <span class="kw">crate</span><span class="macro">::http::header::common_header!</span> {
             $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>]</span>)<span class="op">*</span>
             (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>) <span class="op">=</span><span class="op">&gt;</span> {<span class="ident">Any</span> <span class="op">/</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>)<span class="op">+</span>}
         }
 
-        <span class="kw">crate</span><span class="macro">::__common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
+        <span class="kw">crate</span><span class="macro">::http::header::common_header_test_module!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tm</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tf</span>)<span class="op">*</span> }}
     };
 }
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> {<span class="ident">common_header</span>, <span class="ident">common_header_deref</span>, <span class="ident">common_header_test_module</span>};
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">common_header_test</span>;
 </pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-search-index-js="../../../../search-index.js" data-search-js="../../../../search.js"></div>
     <script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script>

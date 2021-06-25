@@ -105,12 +105,8 @@
 <span id="105">105</span>
 <span id="106">106</span>
 <span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
 </pre><pre class="rust">
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules!</span> <span class="ident">__downcast_get_type_id</span> {
+<span class="macro">macro_rules!</span> <span class="ident">downcast_get_type_id</span> {
     () <span class="op">=</span><span class="op">&gt;</span> {
         <span class="doccomment">/// A helper method to get the type ID of the type</span>
         <span class="doccomment">/// this trait is implemented on.</span>
@@ -140,10 +136,8 @@
     };
 }
 
-<span class="comment">//Generate implementation for dyn $name</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">__downcast_dyn</span> {
+<span class="comment">// Generate implementation for dyn $name</span>
+<span class="macro">macro_rules!</span> <span class="ident">downcast_dyn</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="doccomment">/// A struct with a private constructor, for use with</span>
         <span class="doccomment">/// `__private_get_type_id__`. Its single field is private,</span>
@@ -190,15 +184,17 @@
     };
 }
 
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> {<span class="ident">downcast_dyn</span>, <span class="ident">downcast_get_type_id</span>};
+
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::upper_case_acronyms</span>)]</span>
 
     <span class="kw">trait</span> <span class="ident">MB</span> {
-        <span class="macro">__downcast_get_type_id!</span>();
+        <span class="macro">downcast_get_type_id!</span>();
     }
 
-    <span class="macro">__downcast_dyn!</span>(<span class="ident">MB</span>);
+    <span class="macro">downcast_dyn!</span>(<span class="ident">MB</span>);
 
     <span class="kw">impl</span> <span class="ident">MB</span> <span class="kw">for</span> <span class="ident">String</span> {}
     <span class="kw">impl</span> <span class="ident">MB</span> <span class="kw">for</span> () {}

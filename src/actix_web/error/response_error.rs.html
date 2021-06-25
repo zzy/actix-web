@@ -154,7 +154,7 @@
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::AnyBody</span>, <span class="ident">header</span>, <span class="ident">Response</span>, <span class="ident">StatusCode</span>};
 <span class="kw">use</span> <span class="ident">bytes::BytesMut</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">__downcast_dyn</span>, <span class="ident">__downcast_get_type_id</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::{<span class="ident">downcast_dyn</span>, <span class="ident">downcast_get_type_id</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">helpers</span>, <span class="ident">HttpResponse</span>};
 
 <span class="doccomment">/// Errors that can generate responses.</span>
@@ -186,10 +186,10 @@
         <span class="ident">res</span>.<span class="ident">set_body</span>(<span class="ident">AnyBody::from</span>(<span class="ident">buf</span>))
     }
 
-    <span class="macro">__downcast_get_type_id!</span>();
+    <span class="macro">downcast_get_type_id!</span>();
 }
 
-<span class="macro">__downcast_dyn!</span>(<span class="ident">ResponseError</span>);
+<span class="macro">downcast_dyn!</span>(<span class="ident">ResponseError</span>);
 
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> {}
 

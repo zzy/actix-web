@@ -308,9 +308,9 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CacheControl</span>(<span class="kw">pub</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CacheDirective</span><span class="op">&gt;</span>);
 
-<span class="kw">crate</span><span class="macro">::__common_header_deref!</span>(<span class="ident">CacheControl</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CacheDirective</span><span class="op">&gt;</span>);
+<span class="kw">crate</span><span class="macro">::http::header::common_header_deref!</span>(<span class="ident">CacheControl</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CacheDirective</span><span class="op">&gt;</span>);
 
-<span class="comment">// TODO: this could just be the __define_common_header! macro</span>
+<span class="comment">// TODO: this could just be the crate::http::header::common_header! macro</span>
 <span class="kw">impl</span> <span class="ident">Header</span> <span class="kw">for</span> <span class="ident">CacheControl</span> {
     <span class="kw">fn</span> <span class="ident">name</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">header::HeaderName</span> {
         <span class="ident">header::CACHE_CONTROL</span>
