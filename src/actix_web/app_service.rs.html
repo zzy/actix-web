@@ -372,25 +372,25 @@
 <span id="372">372</span>
 <span id="373">373</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
-<span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Request</span>};
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">Router</span>, <span class="ident">Url</span>};
-<span class="kw">use</span> <span class="ident">actix_service::boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>};
-<span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">fn_service</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
+<span class="kw">use</span> <span class="ident">actix_service</span>::{
+    <span class="ident">boxed</span>::{<span class="self">self</span>, <span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>},
+    <span class="ident">fn_service</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>,
+};
 <span class="kw">use</span> <span class="ident">futures_core::future::LocalBoxFuture</span>;
 <span class="kw">use</span> <span class="ident">futures_util::future::join_all</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::data::FnDataFactory</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::guard::Guard</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::request</span>::{<span class="ident">HttpRequest</span>, <span class="ident">HttpRequestPool</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::rmap::ResourceMap</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service</span>::{<span class="ident">AppServiceFactory</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">config</span>::{<span class="ident">AppConfig</span>, <span class="ident">AppService</span>},
-    <span class="ident">HttpResponse</span>,
+    <span class="ident">data::FnDataFactory</span>,
+    <span class="ident">guard::Guard</span>,
+    <span class="ident">request</span>::{<span class="ident">HttpRequest</span>, <span class="ident">HttpRequestPool</span>},
+    <span class="ident">rmap::ResourceMap</span>,
+    <span class="ident">service</span>::{<span class="ident">AppServiceFactory</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
+    <span class="ident">Error</span>, <span class="ident">HttpResponse</span>,
 };
 
 <span class="kw">type</span> <span class="ident">Guards</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>;
@@ -449,7 +449,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">AppService::new</span>(<span class="ident">config</span>, <span class="ident">default</span>.<span class="ident">clone</span>());
 
         <span class="comment">// register services</span>
-        <span class="ident">std::mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">services</span>.<span class="ident">borrow_mut</span>())
+        <span class="ident">mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">services</span>.<span class="ident">borrow_mut</span>())
             .<span class="ident">into_iter</span>()
             .<span class="ident">for_each</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">srv</span><span class="op">|</span> <span class="ident">srv</span>.<span class="ident">register</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">config</span>));
 
@@ -472,7 +472,7 @@
         });
 
         <span class="comment">// external resources</span>
-        <span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="kw">in</span> <span class="ident">std::mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">external</span>.<span class="ident">borrow_mut</span>()) {
+        <span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="kw">in</span> <span class="ident">mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">external</span>.<span class="ident">borrow_mut</span>()) {
             <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="prelude-val">None</span>);
         }
 
