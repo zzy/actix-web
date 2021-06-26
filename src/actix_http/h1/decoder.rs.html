@@ -1349,7 +1349,7 @@
                     }
                     <span class="comment">// transfer-encoding</span>
                     <span class="ident">header::TRANSFER_ENCODING</span> <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">to_str</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">trim</span>()) {
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">to_str</span>().<span class="ident">map</span>(<span class="ident">str::trim</span>) {
                             <span class="ident">chunked</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;chunked&quot;</span>);
                         } <span class="kw">else</span> {
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError::Header</span>);
@@ -1357,7 +1357,7 @@
                     }
                     <span class="comment">// connection keep-alive state</span>
                     <span class="ident">header::CONNECTION</span> <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="ident">ka</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">conn</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">to_str</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="ident">conn</span>.<span class="ident">trim</span>()) {
+                        <span class="ident">ka</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">conn</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">to_str</span>().<span class="ident">map</span>(<span class="ident">str::trim</span>) {
                             <span class="kw">if</span> <span class="ident">conn</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;keep-alive&quot;</span>) {
                                 <span class="prelude-val">Some</span>(<span class="ident">ConnectionType::KeepAlive</span>)
                             } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">conn</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;close&quot;</span>) {
@@ -1372,7 +1372,7 @@
                         };
                     }
                     <span class="ident">header::UPGRADE</span> <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">to_str</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">val</span><span class="op">|</span> <span class="ident">val</span>.<span class="ident">trim</span>()) {
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">to_str</span>().<span class="ident">map</span>(<span class="ident">str::trim</span>) {
                             <span class="kw">if</span> <span class="ident">val</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;websocket&quot;</span>) {
                                 <span class="ident">has_upgrade_websocket</span> <span class="op">=</span> <span class="bool-val">true</span>;
                             }

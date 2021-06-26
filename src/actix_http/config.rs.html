@@ -545,8 +545,8 @@
         }
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Return keep-alive timer delay is configured.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive_timer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">keep_alive</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">ka</span><span class="op">|</span> <span class="ident">sleep_until</span>(<span class="self">self</span>.<span class="ident">now</span>() <span class="op">+</span> <span class="ident">ka</span>))
     }
@@ -758,11 +758,11 @@
         <span class="kw">let</span> <span class="ident">clone3</span> <span class="op">=</span> <span class="ident">service</span>.<span class="ident">clone</span>();
 
         <span class="ident">drop</span>(<span class="ident">clone1</span>);
-        <span class="macro">assert_eq!</span>(<span class="bool-val">false</span>, <span class="ident">notify_on_drop::is_dropped</span>());
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">notify_on_drop::is_dropped</span>());
         <span class="ident">drop</span>(<span class="ident">clone2</span>);
-        <span class="macro">assert_eq!</span>(<span class="bool-val">false</span>, <span class="ident">notify_on_drop::is_dropped</span>());
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">notify_on_drop::is_dropped</span>());
         <span class="ident">drop</span>(<span class="ident">clone3</span>);
-        <span class="macro">assert_eq!</span>(<span class="bool-val">false</span>, <span class="ident">notify_on_drop::is_dropped</span>());
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">notify_on_drop::is_dropped</span>());
 
         <span class="ident">drop</span>(<span class="ident">service</span>);
         <span class="macro">assert!</span>(<span class="ident">notify_on_drop::is_dropped</span>());

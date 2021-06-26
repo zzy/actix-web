@@ -1051,7 +1051,7 @@
             <span class="string">&quot;test-origin&quot;</span>
         );
         <span class="macro">assert_eq!</span>(<span class="ident">req</span>.<span class="ident">max_size</span>, <span class="number">100</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">req</span>.<span class="ident">server_mode</span>, <span class="bool-val">true</span>);
+        <span class="macro">assert!</span>(<span class="ident">req</span>.<span class="ident">server_mode</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">req</span>.<span class="ident">protocols</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;v1,v2&quot;</span>.<span class="ident">to_string</span>()));
         <span class="macro">assert_eq!</span>(
             <span class="ident">req</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">get</span>(<span class="ident">header::CONTENT_TYPE</span>).<span class="ident">unwrap</span>(),

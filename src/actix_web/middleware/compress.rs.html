@@ -216,7 +216,6 @@
 <span id="216">216</span>
 <span id="217">217</span>
 <span id="218">218</span>
-<span id="219">219</span>
 </pre><pre class="rust">
 <span class="doccomment">//! For middleware documentation, see [`Compress`].</span>
 
@@ -420,8 +419,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encodings</span> <span class="op">=</span> <span class="ident">raw</span>
             .<span class="ident">replace</span>(<span class="string">&#39; &#39;</span>, <span class="string">&quot;&quot;</span>)
             .<span class="ident">split</span>(<span class="string">&#39;,&#39;</span>)
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">AcceptEncoding::new</span>(<span class="ident">l</span>))
-            .<span class="ident">flatten</span>()
+            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">AcceptEncoding::new</span>(<span class="ident">l</span>))
             .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
 
         <span class="ident">encodings</span>.<span class="ident">sort</span>();

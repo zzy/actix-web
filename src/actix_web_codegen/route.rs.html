@@ -352,7 +352,6 @@
 <span id="352">352</span>
 <span id="353">353</span>
 <span id="354">354</span>
-<span id="355">355</span>
 </pre><pre class="rust">
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">proc_macro</span>;
 
@@ -362,7 +361,7 @@
 <span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
 <span class="kw">use</span> <span class="ident">proc_macro2</span>::{<span class="ident">Span</span>, <span class="ident">TokenStream</span> <span class="kw">as</span> <span class="ident">TokenStream2</span>};
 <span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">format_ident</span>, <span class="ident">quote</span>, <span class="ident">ToTokens</span>, <span class="ident">TokenStreamExt</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">parse_macro_input</span>, <span class="ident">AttributeArgs</span>, <span class="ident">Ident</span>, <span class="ident">NestedMeta</span>};
+<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">parse_macro_input</span>, <span class="ident">AttributeArgs</span>, <span class="ident">Ident</span>, <span class="ident">LitStr</span>, <span class="ident">NestedMeta</span>};
 
 <span class="kw">enum</span> <span class="ident">ResourceType</span> {
     <span class="ident">Async</span>,
@@ -583,8 +582,7 @@
                 <span class="macro">format!</span>(
                     <span class="string">r#&quot;invalid service definition, expected #[{}(&quot;&lt;some path&gt;&quot;)]&quot;#</span>,
                     <span class="ident">method</span>
-                        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">it</span><span class="op">|</span> <span class="ident">it</span>.<span class="ident">as_str</span>())
-                        .<span class="ident">unwrap_or</span>(<span class="string">&quot;route&quot;</span>)
+                        .<span class="ident">map_or</span>(<span class="string">&quot;route&quot;</span>, <span class="op">|</span><span class="ident">it</span><span class="op">|</span> <span class="ident">it</span>.<span class="ident">as_str</span>())
                         .<span class="ident">to_ascii_lowercase</span>()
                 ),
             ));
@@ -654,7 +652,7 @@
         } <span class="op">=</span> <span class="self">self</span>;
         <span class="kw">let</span> <span class="ident">resource_name</span> <span class="op">=</span> <span class="ident">resource_name</span>
             .<span class="ident">as_ref</span>()
-            .<span class="ident">map_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">name</span>.<span class="ident">to_string</span>(), <span class="op">|</span><span class="ident">n</span><span class="op">|</span> <span class="ident">n</span>.<span class="ident">value</span>());
+            .<span class="ident">map_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">name</span>.<span class="ident">to_string</span>(), <span class="ident">LitStr::value</span>);
         <span class="kw">let</span> <span class="ident">method_guards</span> <span class="op">=</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">others</span> <span class="op">=</span> <span class="ident">methods</span>.<span class="ident">iter</span>();
             <span class="comment">// unwrapping since length is checked to be at least one</span>

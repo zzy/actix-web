@@ -277,8 +277,6 @@
 <span id="277">277</span>
 <span id="278">278</span>
 <span id="279">279</span>
-<span id="280">280</span>
-<span id="281">281</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Payload stream</span>
 <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
@@ -468,8 +466,7 @@
         <span class="kw">if</span> <span class="self">self</span>
             .<span class="ident">task</span>
             .<span class="ident">as_ref</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">w</span><span class="op">|</span> <span class="op">!</span><span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">will_wake</span>(<span class="ident">w</span>))
-            .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>)
+            .<span class="ident">map_or</span>(<span class="bool-val">true</span>, <span class="op">|</span><span class="ident">w</span><span class="op">|</span> <span class="op">!</span><span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">will_wake</span>(<span class="ident">w</span>))
         {
             <span class="self">self</span>.<span class="ident">task</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">clone</span>());
         }
@@ -481,8 +478,7 @@
         <span class="kw">if</span> <span class="self">self</span>
             .<span class="ident">io_task</span>
             .<span class="ident">as_ref</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">w</span><span class="op">|</span> <span class="op">!</span><span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">will_wake</span>(<span class="ident">w</span>))
-            .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>)
+            .<span class="ident">map_or</span>(<span class="bool-val">true</span>, <span class="op">|</span><span class="ident">w</span><span class="op">|</span> <span class="op">!</span><span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">will_wake</span>(<span class="ident">w</span>))
         {
             <span class="self">self</span>.<span class="ident">io_task</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">clone</span>());
         }
