@@ -60,6 +60,11 @@ type.</p>
 <p>This function will yield once a new TCP connection is established. When
 established, the corresponding <a href="struct.TcpStream.html"><code>TcpStream</code></a> and the remote peer’s
 address will be returned.</p>
+<h1 id="cancel-safety" class="section-header"><a href="#cancel-safety">Cancel safety</a></h1>
+<p>This method is cancel safe. If the method is used as the event in a
+<a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
+completes first, then it is guaranteed that no new connections were
+accepted by this method.</p>
 <h1 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio::net::TcpListener</span>;

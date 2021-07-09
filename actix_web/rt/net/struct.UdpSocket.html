@@ -170,6 +170,11 @@ task without splitting the socket.</p>
 <p>The function may complete without the socket being ready. This is a
 false-positive and attempting an operation will return with
 <code>io::ErrorKind::WouldBlock</code>.</p>
+<h1 id="cancel-safety" class="section-header"><a href="#cancel-safety">Cancel safety</a></h1>
+<p>This method is cancel safe. Once a readiness event occurs, the method
+will continue to return immediately until the readiness event is
+consumed by an attempt to read or write that fails with <code>WouldBlock</code> or
+<code>Poll::Pending</code>.</p>
 <h1 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h1>
 <p>Concurrently receive from and send to the socket on the same task
 without splitting.</p>
@@ -223,6 +228,11 @@ usually paired with <code>try_send()</code> or <code>try_send_to()</code>.</p>
 <p>The function may complete without the socket being writable. This is a
 false-positive and attempting a <code>try_send()</code> will return with
 <code>io::ErrorKind::WouldBlock</code>.</p>
+<h1 id="cancel-safety-1" class="section-header"><a href="#cancel-safety-1">Cancel safety</a></h1>
+<p>This method is cancel safe. Once a readiness event occurs, the method
+will continue to return immediately until the readiness event is
+consumed by an attempt to write that fails with <code>WouldBlock</code> or
+<code>Poll::Pending</code>.</p>
 <h1 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio::net::UdpSocket</span>;
@@ -262,6 +272,10 @@ This method will fail if the socket is not connected.</p>
 <h1 id="return" class="section-header"><a href="#return">Return</a></h1>
 <p>On success, the number of bytes sent is returned, otherwise, the
 encountered error is returned.</p>
+<h1 id="cancel-safety-2" class="section-header"><a href="#cancel-safety-2">Cancel safety</a></h1>
+<p>This method is cancel safe. If <code>send</code> is used as the event in a
+<a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
+completes first, then it is guaranteed that the message was not sent.</p>
 <h1 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio::io</span>;
@@ -342,6 +356,11 @@ paired with <code>try_recv()</code>.</p>
 <p>The function may complete without the socket being readable. This is a
 false-positive and attempting a <code>try_recv()</code> will return with
 <code>io::ErrorKind::WouldBlock</code>.</p>
+<h1 id="cancel-safety-3" class="section-header"><a href="#cancel-safety-3">Cancel safety</a></h1>
+<p>This method is cancel safe. Once a readiness event occurs, the method
+will continue to return immediately until the readiness event is
+consumed by an attempt to read that fails with <code>WouldBlock</code> or
+<code>Poll::Pending</code>.</p>
 <h1 id="examples-5" class="section-header"><a href="#examples-5">Examples</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio::net::UdpSocket</span>;
@@ -386,6 +405,11 @@ size to hold the message bytes. If a message is too long to fit in the
 supplied buffer, excess bytes may be discarded.</p>
 <p>The <a href="struct.UdpSocket.html#method.connect"><code>connect</code></a> method will connect this socket to a remote address.
 This method will fail if the socket is not connected.</p>
+<h1 id="cancel-safety-4" class="section-header"><a href="#cancel-safety-4">Cancel safety</a></h1>
+<p>This method is cancel safe. If <code>recv_from</code> is used as the event in a
+<a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
+completes first, it is guaranteed that no messages were received on this
+socket.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio::net::UdpSocket</span>;
@@ -556,6 +580,10 @@ documentation for concrete examples.</p>
 will only send data to the first address yielded by <code>addr</code>.</p>
 <p>This will return an error when the IP version of the local socket does
 not match that returned from <a href="crate::net::ToSocketAddrs"><code>ToSocketAddrs</code></a>.</p>
+<h1 id="cancel-safety-5" class="section-header"><a href="#cancel-safety-5">Cancel safety</a></h1>
+<p>This method is cancel safe. If <code>send_to</code> is used as the event in a
+<a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
+completes first, then it is guaranteed that the message was not sent.</p>
 <h1 id="example-4" class="section-header"><a href="#example-4">Example</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio::net::UdpSocket</span>;
@@ -587,7 +615,7 @@ receive a wakeup.</p>
 blocked this will return right away.</p>
 <p>This function is usually paired with <code>writable()</code>.</p>
 <h1 id="returns-1" class="section-header"><a href="#returns-1">Returns</a></h1>
-<p>If successfull, returns the number of bytes sent</p>
+<p>If successful, returns the number of bytes sent</p>
 <p>Users should ensure that when the remote cannot receive, the
 <a href="https://doc.rust-lang.org/nightly/std/io/error/enum.ErrorKind.html#variant.WouldBlock"><code>ErrorKind::WouldBlock</code></a> is properly handled. An error can also occur
 if the IP version of the socket does not match that of <code>target</code>.</p>
@@ -626,6 +654,11 @@ the number of bytes read and the origin.</p>
 <p>The function must be called with valid byte array <code>buf</code> of sufficient
 size to hold the message bytes. If a message is too long to fit in the
 supplied buffer, excess bytes may be discarded.</p>
+<h1 id="cancel-safety-6" class="section-header"><a href="#cancel-safety-6">Cancel safety</a></h1>
+<p>This method is cancel safe. If <code>recv_from</code> is used as the event in a
+<a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
+completes first, it is guaranteed that no messages were received on this
+socket.</p>
 <h1 id="example-6" class="section-header"><a href="#example-6">Example</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio::net::UdpSocket</span>;
