@@ -506,6 +506,8 @@
 <span id="506">506</span>
 <span id="507">507</span>
 <span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Error and Result module</span>
 
@@ -564,6 +566,8 @@
         <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Io</span>)
     }
 
+    <span class="comment">// used in encoder behind feature flag so ignore unused warning</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_encoder</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Encoder</span>)
     }

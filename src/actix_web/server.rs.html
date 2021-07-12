@@ -670,6 +670,12 @@
 <span id="670">670</span>
 <span id="671">671</span>
 <span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">any::Any</span>,
@@ -968,6 +974,7 @@
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService::build</span>()
                         .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
                         .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
+                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>)
                         .<span class="ident">local_addr</span>(<span class="ident">addr</span>);
 
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handler</span>) <span class="op">=</span> <span class="ident">on_connect_fn</span>.<span class="ident">clone</span>() {
@@ -1025,7 +1032,8 @@
                     <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService::build</span>()
                         .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
                         .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
-                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>);
+                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>)
+                        .<span class="ident">local_addr</span>(<span class="ident">addr</span>);
 
                     <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handler</span>) <span class="op">=</span> <span class="ident">on_connect_fn</span>.<span class="ident">clone</span>() {
                         <span class="ident">svc</span>.<span class="ident">on_connect_ext</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">io</span>: <span class="kw-2">&amp;</span><span class="kw">_</span>, <span class="ident">ext</span>: <span class="kw">_</span><span class="op">|</span> {
@@ -1196,10 +1204,11 @@
             <span class="ident">addr</span>: <span class="ident">socket_addr</span>,
         });
 
-        <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;actix-web-service-{:?}&quot;</span>, <span class="ident">lst</span>.<span class="ident">local_addr</span>()<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">lst</span>.<span class="ident">local_addr</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;actix-web-service-{:?}&quot;</span>, <span class="ident">addr</span>);
         <span class="kw">let</span> <span class="ident">on_connect_fn</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">on_connect_fn</span>.<span class="ident">clone</span>();
 
-        <span class="self">self</span>.<span class="ident">builder</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">listen_uds</span>(<span class="ident">addr</span>, <span class="ident">lst</span>, <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+        <span class="self">self</span>.<span class="ident">builder</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">listen_uds</span>(<span class="ident">name</span>, <span class="ident">lst</span>, <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
             <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">AppConfig::new</span>(
                 <span class="bool-val">false</span>,
@@ -1210,7 +1219,8 @@
             <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">UnixStream</span><span class="op">|</span> <span class="kw">async</span> { <span class="prelude-val">Ok</span>((<span class="ident">io</span>, <span class="ident">Protocol::Http1</span>, <span class="prelude-val">None</span>)) }).<span class="ident">and_then</span>({
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService::build</span>()
                     .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
-                    .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>);
+                    .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
+                    .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>);
 
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handler</span>) <span class="op">=</span> <span class="ident">on_connect_fn</span>.<span class="ident">clone</span>() {
                     <span class="ident">svc</span> <span class="op">=</span> <span class="ident">svc</span>
@@ -1227,8 +1237,8 @@
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
     <span class="doccomment">/// Start listening for incoming unix domain connections.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bind_uds</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">addr</span>: <span class="ident">A</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">A</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">std::path::Path</span><span class="op">&gt;</span>,
@@ -1241,6 +1251,7 @@
         <span class="kw">let</span> <span class="ident">factory</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">factory</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">socket_addr</span> <span class="op">=</span>
             <span class="ident">net::SocketAddr::new</span>(<span class="ident">net::IpAddr::V4</span>(<span class="ident">net::Ipv4Addr::new</span>(<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)), <span class="number">8080</span>);
+
         <span class="self">self</span>.<span class="ident">sockets</span>.<span class="ident">push</span>(<span class="ident">Socket</span> {
             <span class="ident">scheme</span>: <span class="string">&quot;http&quot;</span>,
             <span class="ident">addr</span>: <span class="ident">socket_addr</span>,
@@ -1265,6 +1276,7 @@
                     <span class="ident">HttpService::build</span>()
                         .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
                         .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
+                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>)
                         .<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">config</span>.<span class="ident">clone</span>())),
                 )
             },
