@@ -838,10 +838,10 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
 <span class="kw">struct</span> <span class="ident">Cookies</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>);
 
+<span class="doccomment">/// An incoming request.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="doccomment">/// An HTTP Request</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpRequest</span> {
-    <span class="doccomment">/// # Panics</span>
+    <span class="doccomment">/// # Invariant</span>
     <span class="doccomment">/// `Rc&lt;HttpRequestInner&gt;` is used exclusively and NO `Weak&lt;HttpRequestInner&gt;`</span>
     <span class="doccomment">/// is allowed anywhere in the code. Weak pointer is purposely ignored when</span>
     <span class="doccomment">/// doing `Rc`&#39;s ref counter check. Expect panics if this invariant is violated.</span>

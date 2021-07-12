@@ -768,6 +768,7 @@
 <span id="768">768</span>
 <span id="769">769</span>
 <span id="770">770</span>
+<span id="771">771</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>};
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
@@ -785,7 +786,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">config</span>::{<span class="ident">AppConfig</span>, <span class="ident">AppService</span>},
-    <span class="ident">dev::insert_slash</span>,
+    <span class="ident">dev::insert_leading_slash</span>,
     <span class="ident">guard::Guard</span>,
     <span class="ident">info::ConnectionInfo</span>,
     <span class="ident">rmap::ResourceMap</span>,
@@ -830,9 +831,9 @@
     }
 }
 
-<span class="doccomment">/// An service http request</span>
+<span class="doccomment">/// A service level request wrapper.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ServiceRequest allows mutable access to request&#39;s internal structures</span>
+<span class="doccomment">/// Allows mutable access to request&#39;s internal structures.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServiceRequest</span> {
     <span class="ident">req</span>: <span class="ident">HttpRequest</span>,
     <span class="ident">payload</span>: <span class="ident">Payload</span>,
@@ -1096,6 +1097,7 @@
     }
 }
 
+<span class="doccomment">/// A service level response wrapper.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span> <span class="op">=</span> <span class="ident">AnyBody</span><span class="op">&gt;</span> {
     <span class="ident">request</span>: <span class="ident">HttpRequest</span>,
     <span class="ident">response</span>: <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
@@ -1321,7 +1323,7 @@
         };
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">is_root</span>() <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">rdef</span>.<span class="ident">is_empty</span>() {
-            <span class="ident">ResourceDef::new</span>(<span class="ident">insert_slash</span>(<span class="self">self</span>.<span class="ident">rdef</span>))
+            <span class="ident">ResourceDef::new</span>(<span class="ident">insert_leading_slash</span>(<span class="self">self</span>.<span class="ident">rdef</span>))
         } <span class="kw">else</span> {
             <span class="ident">ResourceDef::new</span>(<span class="self">self</span>.<span class="ident">rdef</span>)
         };

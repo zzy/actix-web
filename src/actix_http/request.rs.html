@@ -237,7 +237,7 @@
     <span class="ident">HttpMessage</span>,
 };
 
-<span class="doccomment">/// Request</span>
+<span class="doccomment">/// An HTTP request.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">P</span> <span class="op">=</span> <span class="ident">PayloadStream</span><span class="op">&gt;</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">payload</span>: <span class="ident">Payload</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">head</span>: <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span>,
