@@ -242,18 +242,18 @@
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">ready</span>, <span class="ident">Stream</span>};
 <span class="kw">use</span> <span class="ident">futures_util::SinkExt</span> <span class="kw">as</span> <span class="kw">_</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::h1</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http</span>::{
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::h1</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{
     <span class="ident">header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">EXPECT</span>, <span class="ident">HOST</span>},
     <span class="ident">StatusCode</span>,
 };
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::message</span>::{<span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::payload::Payload</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::message</span>::{<span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::payload::Payload</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::PayloadError</span>, <span class="ident">Error</span>};
 
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::connection</span>::{<span class="ident">ConnectionIo</span>, <span class="ident">H1Connection</span>};
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::error</span>::{<span class="ident">ConnectError</span>, <span class="ident">SendRequestError</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::body</span>::{<span class="ident">BodySize</span>, <span class="ident">MessageBody</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::connection</span>::{<span class="ident">ConnectionIo</span>, <span class="ident">H1Connection</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::error</span>::{<span class="ident">ConnectError</span>, <span class="ident">SendRequestError</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::body</span>::{<span class="ident">BodySize</span>, <span class="ident">MessageBody</span>};
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">Io</span>, <span class="ident">B</span><span class="op">&gt;</span>(
     <span class="ident">io</span>: <span class="ident">H1Connection</span><span class="op">&lt;</span><span class="ident">Io</span><span class="op">&gt;</span>,
@@ -445,7 +445,7 @@
     <span class="kw">fn</span> <span class="ident">poll_next</span>(
         <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">project</span>();
 
         <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">this</span>.<span class="ident">framed</span>.<span class="ident">as_mut</span>().<span class="ident">next_item</span>(<span class="ident">cx</span>)<span class="question-mark">?</span>) {

@@ -370,13 +370,13 @@
 <span class="kw">use</span> <span class="ident">actix_router::ResourceDef</span>;
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">ServiceFactory</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::data::Data</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::guard::Guard</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::resource::Resource</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::rmap::ResourceMap</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::route::Route</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service</span>::{
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::data::Data</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Error</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::guard::Guard</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::resource::Resource</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::rmap::ResourceMap</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::route::Route</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service</span>::{
     <span class="ident">AppServiceFactory</span>, <span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceFactoryWrapper</span>, <span class="ident">ServiceRequest</span>,
     <span class="ident">ServiceResponse</span>,
 };
@@ -626,8 +626,8 @@
     <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>};
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::test</span>::{<span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">read_body</span>, <span class="ident">TestRequest</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test</span>::{<span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">read_body</span>, <span class="ident">TestRequest</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>};
 
     <span class="comment">// allow deprecated `ServiceConfig::data`</span>

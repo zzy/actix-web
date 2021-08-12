@@ -134,8 +134,8 @@
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ClientResponse</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ClientResponse</span>;
 
 <span class="doccomment">/// Test `ClientResponse` builder</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestResponse</span> {
@@ -162,7 +162,7 @@
     <span class="kw">where</span>
         <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
     {
-        <span class="self">Self</span><span class="ident">::default</span>().<span class="ident">insert_header</span>(<span class="ident">header</span>)
+        <span class="ident"><span class="self">Self</span>::default</span>().<span class="ident">insert_header</span>(<span class="ident">header</span>)
     }
 
     <span class="doccomment">/// Set HTTP version of this response</span>

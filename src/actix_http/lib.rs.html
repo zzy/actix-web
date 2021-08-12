@@ -190,19 +190,19 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">test</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ws</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::builder::HttpServiceBuilder</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::config</span>::{<span class="ident">KeepAlive</span>, <span class="ident">ServiceConfig</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::error::Error</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::extensions::Extensions</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::header::ContentEncoding</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::http_message::HttpMessage</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::message::ConnectionType</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::message</span>::{<span class="ident">Message</span>, <span class="ident">RequestHead</span>, <span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadStream</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::request::Request</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::response::Response</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::response_builder::ResponseBuilder</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::service::HttpService</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::builder::HttpServiceBuilder</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::config</span>::{<span class="ident">KeepAlive</span>, <span class="ident">ServiceConfig</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::error::Error</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::extensions::Extensions</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::header::ContentEncoding</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::http_message::HttpMessage</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::message::ConnectionType</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::message</span>::{<span class="ident">Message</span>, <span class="ident">RequestHead</span>, <span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadStream</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::request::Request</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::response::Response</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::response_builder::ResponseBuilder</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::service::HttpService</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">uri</span>, <span class="ident">uri::Uri</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>};
@@ -217,14 +217,14 @@
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">uri</span>, <span class="ident">Error</span>, <span class="ident">Uri</span>};
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>};
 
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::header::HeaderMap</span>;
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::header::HeaderMap</span>;
 
     <span class="doccomment">/// A collection of HTTP headers and helpers.</span>
     <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">header</span> {
-        <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::header</span>::<span class="kw-2">*</span>;
+        <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::header</span>::<span class="kw-2">*</span>;
     }
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::header::ContentEncoding</span>;
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::message::ConnectionType</span>;
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::header::ContentEncoding</span>;
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::message::ConnectionType</span>;
 }
 
 <span class="doccomment">/// A major HTTP protocol version.</span>

@@ -494,7 +494,7 @@
 
     <span class="doccomment">/// Set request payload.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_payload</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">payload</span> <span class="op">=</span> <span class="kw">crate</span><span class="ident">::h1::Payload::empty</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::h1::Payload::empty</span>();
         <span class="ident">payload</span>.<span class="ident">unread_data</span>(<span class="ident">data</span>.<span class="ident">into</span>());
         <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>).<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">payload</span>.<span class="ident">into</span>());
         <span class="self">self</span>
@@ -511,7 +511,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pl</span>) <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">payload</span> {
             <span class="ident">Request::with_payload</span>(<span class="ident">pl</span>)
         } <span class="kw">else</span> {
-            <span class="ident">Request::with_payload</span>(<span class="kw">crate</span><span class="ident">::h1::Payload::empty</span>().<span class="ident">into</span>())
+            <span class="ident">Request::with_payload</span>(<span class="ident"><span class="kw">crate</span>::h1::Payload::empty</span>().<span class="ident">into</span>())
         };
 
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">head_mut</span>();
@@ -551,7 +551,7 @@
 
     <span class="doccomment">/// Create new empty `TestBuffer` instance.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="string">&quot;&quot;</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="string">&quot;&quot;</span>)
     }
 
     <span class="doccomment">/// Add data to read buffer.</span>
@@ -637,7 +637,7 @@
 
     <span class="doccomment">/// Create new empty `TestBuffer` instance.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="string">&quot;&quot;</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="string">&quot;&quot;</span>)
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read_buf</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">BytesMut</span><span class="op">&gt;</span> {

@@ -110,16 +110,16 @@
 <span class="doccomment">//! Most users will not have to interact with the types in this module, but it is useful for those</span>
 <span class="doccomment">//! writing extractors, middleware and libraries, or interacting with the service API directly.</span>
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config</span>::{<span class="ident">AppConfig</span>, <span class="ident">AppService</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config</span>::{<span class="ident">AppConfig</span>, <span class="ident">AppService</span>};
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::handler::Handler</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::info</span>::{<span class="ident">ConnectionInfo</span>, <span class="ident">PeerAddr</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::rmap::ResourceMap</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service</span>::{<span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">WebService</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::handler::Handler</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::info</span>::{<span class="ident">ConnectionInfo</span>, <span class="ident">PeerAddr</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::rmap::ResourceMap</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service</span>::{<span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">WebService</span>};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::types::form::UrlEncoded</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::types::json::JsonBody</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::types::readlines::Readlines</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::form::UrlEncoded</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::json::JsonBody</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::readlines::Readlines</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>, <span class="ident">BodySize</span>, <span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>, <span class="ident">SizedStream</span>};
 
@@ -132,7 +132,7 @@
     <span class="ident">always_ready</span>, <span class="ident">fn_factory</span>, <span class="ident">fn_service</span>, <span class="ident">forward_ready</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>, <span class="ident">Transform</span>,
 };
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http::header::ContentEncoding</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header::ContentEncoding</span>;
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Response</span>, <span class="ident">ResponseBuilder</span>};
 
 <span class="kw">use</span> <span class="ident">actix_router::Patterns</span>;
@@ -190,7 +190,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="kw">crate</span><span class="ident">::HttpResponseBuilder</span> {
+<span class="kw">impl</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::HttpResponseBuilder</span> {
     <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }
@@ -201,7 +201,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="kw">crate</span><span class="ident">::HttpResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::HttpResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }

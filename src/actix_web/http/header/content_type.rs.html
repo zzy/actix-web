@@ -115,10 +115,10 @@
 <span id="115">115</span>
 <span id="116">116</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::CONTENT_TYPE</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::CONTENT_TYPE</span>;
 <span class="kw">use</span> <span class="ident">mime::Mime</span>;
 
-<span class="kw">crate</span><span class="macro">::http::header::common_header!</span> {
+<span class="macro">crate::http::header::common_header!</span> {
     <span class="doccomment">/// `Content-Type` header, defined in</span>
     <span class="doccomment">/// [RFC7231](http://tools.ietf.org/html/rfc7231#section-3.1.1.5)</span>
     <span class="doccomment">///</span>
@@ -169,7 +169,7 @@
     (<span class="ident">ContentType</span>, <span class="ident">CONTENT_TYPE</span>) <span class="op">=</span><span class="op">&gt;</span> [<span class="ident">Mime</span>]
 
     <span class="ident">test_content_type</span> {
-        <span class="kw">crate</span><span class="macro">::http::header::common_header_test!</span>(
+        <span class="macro">crate::http::header::common_header_test!</span>(
             <span class="ident">test1</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;text/html&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">HeaderField</span>(<span class="ident">mime::TEXT_HTML</span>)));

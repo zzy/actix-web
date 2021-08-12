@@ -571,14 +571,14 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::ws</span>::{<span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">Codec</span>, <span class="ident">Frame</span>, <span class="ident">Message</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::connect</span>::{<span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect</span>::{<span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::{<span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>, <span class="ident">WsClientError</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http::header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">AUTHORIZATION</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http</span>::{<span class="ident">ConnectionType</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::response::ClientResponse</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ClientConfig</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error</span>::{<span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>, <span class="ident">WsClientError</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">AUTHORIZATION</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{<span class="ident">ConnectionType</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::response::ClientResponse</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ClientConfig</span>;
 
 <span class="doccomment">/// WebSocket connection.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WebsocketsRequest</span> {
@@ -964,7 +964,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::Client</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Client</span>;
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_debug</span>() {

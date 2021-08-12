@@ -368,10 +368,10 @@
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core::ready</span>;
 
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::Transform</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Transform</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::connect</span>::{<span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ClientResponse</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect</span>::{<span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ClientResponse</span>;
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Redirect</span> {
     <span class="ident">max_redirect_times</span>: <span class="ident">u8</span>,
@@ -379,7 +379,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Redirect</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>()
+        <span class="ident"><span class="self">Self</span>::new</span>()
     }
 }
 
@@ -402,7 +402,7 @@
 {
     <span class="kw">type</span> <span class="ident">Transform</span> <span class="op">=</span> <span class="ident">RedirectService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">new_transform</span>(<span class="self">self</span>, <span class="ident">service</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Transform</span> {
+    <span class="kw">fn</span> <span class="ident">new_transform</span>(<span class="self">self</span>, <span class="ident">service</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Transform</span> {
         <span class="ident">RedirectService</span> {
             <span class="ident">max_redirect_times</span>: <span class="self">self</span>.<span class="ident">max_redirect_times</span>,
             <span class="ident">connector</span>: <span class="ident">Rc::new</span>(<span class="ident">service</span>),
@@ -425,7 +425,7 @@
 
     <span class="macro">actix_service::forward_ready!</span>(<span class="ident">connector</span>);
 
-    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ConnectRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Future</span> {
+    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">ConnectRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Future</span> {
         <span class="kw">match</span> <span class="ident">req</span> {
             <span class="ident">ConnectRequest::Tunnel</span>(<span class="ident">head</span>, <span class="ident">addr</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">connector</span>.<span class="ident">call</span>(<span class="ident">ConnectRequest::Tunnel</span>(<span class="ident">head</span>, <span class="ident">addr</span>));
@@ -491,7 +491,7 @@
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ConnectResponse</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>() {
             <span class="ident">RedirectServiceProj::Tunnel</span> { <span class="ident">fut</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">fut</span>.<span class="ident">poll</span>(<span class="ident">cx</span>),
             <span class="ident">RedirectServiceProj::Client</span> {
@@ -637,7 +637,7 @@
     <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">Error</span>, <span class="ident">HttpResponse</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ClientBuilder</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ClientBuilder</span>;
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_basic_redirect</span>() {
@@ -670,7 +670,7 @@
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>()
             .<span class="ident">disable_redirects</span>()
             .<span class="ident">wrap</span>(<span class="ident">Redirect::new</span>().<span class="ident">max_redirect_times</span>(<span class="number">1</span>))
-            .<span class="ident">connector</span>(<span class="kw">crate</span><span class="ident">::Connector::new</span>())
+            .<span class="ident">connector</span>(<span class="ident"><span class="kw">crate</span>::Connector::new</span>())
             .<span class="ident">finish</span>();
 
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">actix_test::start</span>(<span class="op">|</span><span class="op">|</span> {

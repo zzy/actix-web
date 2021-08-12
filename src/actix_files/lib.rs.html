@@ -977,16 +977,16 @@
 <span class="kw">mod</span> <span class="ident">range</span>;
 <span class="kw">mod</span> <span class="ident">service</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::chunked::ChunkedReadFile</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::directory::Directory</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::files::Files</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::named::NamedFile</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::range::HttpRange</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service::FilesService</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::chunked::ChunkedReadFile</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::directory::Directory</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::files::Files</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::named::NamedFile</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::range::HttpRange</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service::FilesService</span>;
 
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::directory</span>::{<span class="ident">directory_listing</span>, <span class="ident">DirectoryRenderer</span>};
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::error::FilesError</span>;
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::path_buf::PathBufWrap</span>;
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::directory</span>::{<span class="ident">directory_listing</span>, <span class="ident">DirectoryRenderer</span>};
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::error::FilesError</span>;
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::path_buf::PathBufWrap</span>;
 
 <span class="kw">type</span> <span class="ident">HttpService</span> <span class="op">=</span> <span class="ident">BoxService</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 <span class="kw">type</span> <span class="ident">HttpNewService</span> <span class="op">=</span> <span class="ident">BoxServiceFactory</span><span class="op">&lt;</span>(), <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">Error</span>, ()<span class="op">&gt;</span>;

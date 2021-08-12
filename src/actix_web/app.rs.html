@@ -726,14 +726,14 @@
 };
 <span class="kw">use</span> <span class="ident">futures_util::future::FutureExt</span> <span class="kw">as</span> <span class="kw">_</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::app_service</span>::{<span class="ident">AppEntry</span>, <span class="ident">AppInit</span>, <span class="ident">AppRoutingFactory</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config::ServiceConfig</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::data</span>::{<span class="ident">Data</span>, <span class="ident">DataFactory</span>, <span class="ident">FnDataFactory</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::dev::ResourceDef</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::Error</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::resource::Resource</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::route::Route</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service</span>::{
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::app_service</span>::{<span class="ident">AppEntry</span>, <span class="ident">AppInit</span>, <span class="ident">AppRoutingFactory</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config::ServiceConfig</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::data</span>::{<span class="ident">Data</span>, <span class="ident">DataFactory</span>, <span class="ident">FnDataFactory</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dev::ResourceDef</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Error</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::resource::Resource</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::route::Route</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service</span>::{
     <span class="ident">AppServiceFactory</span>, <span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceFactoryWrapper</span>, <span class="ident">ServiceRequest</span>,
     <span class="ident">ServiceResponse</span>,
 };
@@ -1212,10 +1212,10 @@
     <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http</span>::{<span class="ident">header</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>};
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::middleware::DefaultHeaders</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service::ServiceRequest</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::test</span>::{<span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">read_body</span>, <span class="ident">try_init_service</span>, <span class="ident">TestRequest</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{<span class="ident">header</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::middleware::DefaultHeaders</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service::ServiceRequest</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test</span>::{<span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">read_body</span>, <span class="ident">try_init_service</span>, <span class="ident">TestRequest</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">web</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>};
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>

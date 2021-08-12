@@ -649,6 +649,7 @@
 <span id="649">649</span>
 <span id="650">650</span>
 <span id="651">651</span>
+<span id="652">652</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::io::Write</span>;
 <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
@@ -733,6 +734,7 @@
         <span class="kw">match</span> <span class="ident">length</span> {
             <span class="ident">BodySize::Stream</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="ident">chunked</span> {
+                    <span class="ident">skip_len</span> <span class="op">=</span> <span class="bool-val">true</span>;
                     <span class="kw">if</span> <span class="ident">camel_case</span> {
                         <span class="ident">dst</span>.<span class="ident">put_slice</span>(<span class="string">b&quot;\r\nTransfer-Encoding: chunked\r\n&quot;</span>)
                     } <span class="kw">else</span> {
@@ -1165,8 +1167,8 @@
     <span class="kw">use</span> <span class="ident">http::header::AUTHORIZATION</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http::header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>};
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::RequestHead</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::RequestHead</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_chunked_te</span>() {

@@ -63,7 +63,7 @@
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">str::FromStr</span>};
 
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::HeaderValue</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::HeaderValue</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::ParseError</span>, <span class="ident">header::HTTP_VALUE</span>};
 
 <span class="doccomment">/// Reads a comma-delimited raw header into a Vec.</span>

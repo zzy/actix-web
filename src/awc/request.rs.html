@@ -688,7 +688,7 @@
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">error</span>::{<span class="ident">FreezeRequestError</span>, <span class="ident">InvalidUrl</span>},
     <span class="ident">frozen::FrozenClientRequest</span>,
@@ -1215,7 +1215,7 @@
     <span class="kw">use</span> <span class="ident">actix_http::http::header::HttpDate</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::Client</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Client</span>;
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_debug</span>() {

@@ -541,39 +541,39 @@
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_http</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Http</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Http</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_parse</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Parse</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Parse</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_payload</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Payload</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Payload</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_body</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Body</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Body</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_send_response</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::SendResponse</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::SendResponse</span>)
     }
 
     <span class="comment">// TODO: remove allow</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_io</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Io</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Io</span>)
     }
 
     <span class="comment">// used in encoder behind feature flag so ignore unused warning</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_encoder</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Encoder</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Encoder</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_ws</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">Kind::Ws</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Ws</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_cause</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cause</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
@@ -650,19 +650,19 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ws::ProtocolError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">ws::ProtocolError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new_ws</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
+        <span class="ident"><span class="self">Self</span>::new_ws</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">HttpError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new_http</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
+        <span class="ident"><span class="self">Self</span>::new_http</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ws::HandshakeError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">ws::HandshakeError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new_ws</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
+        <span class="ident"><span class="self">Self</span>::new_ws</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
@@ -707,7 +707,7 @@
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;IO error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Io</span>(<span class="ident">io::Error</span>),
 
-    <span class="doccomment">/// Parsing a field as string failed</span>
+    <span class="doccomment">/// Parsing a field as string failed.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;UTF8 error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">Utf8</span>(<span class="ident">Utf8Error</span>),
 }
@@ -752,7 +752,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ParseError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">ParseError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new_parse</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
+        <span class="ident"><span class="self">Self</span>::new_parse</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
@@ -842,7 +842,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PayloadError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">PayloadError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new_payload</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
+        <span class="ident"><span class="self">Self</span>::new_payload</span>().<span class="ident">with_cause</span>(<span class="ident">err</span>)
     }
 }
 
@@ -920,8 +920,8 @@
     <span class="kw">impl</span> <span class="ident">std::cmp::PartialEq</span> <span class="kw">for</span> <span class="ident">ContentTypeError</span> {
         <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
             <span class="kw">match</span> <span class="self">self</span> {
-                <span class="self">Self</span><span class="ident">::ParseError</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">matches!</span>(<span class="ident">other</span>, <span class="ident">ContentTypeError::ParseError</span>),
-                <span class="self">Self</span><span class="ident">::UnknownEncoding</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident"><span class="self">Self</span>::ParseError</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">matches!</span>(<span class="ident">other</span>, <span class="ident">ContentTypeError::ParseError</span>),
+                <span class="ident"><span class="self">Self</span>::UnknownEncoding</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="macro">matches!</span>(<span class="ident">other</span>, <span class="ident">ContentTypeError::UnknownEncoding</span>)
                 }
             }

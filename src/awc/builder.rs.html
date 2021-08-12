@@ -336,9 +336,9 @@
 <span class="kw">use</span> <span class="ident">actix_rt::net</span>::{<span class="ident">ActixStream</span>, <span class="ident">TcpStream</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">Service</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::connect::DefaultConnector</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::SendRequestError</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::middleware</span>::{<span class="ident">NestTransform</span>, <span class="ident">Redirect</span>, <span class="ident">Transform</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect::DefaultConnector</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::SendRequestError</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::middleware</span>::{<span class="ident">NestTransform</span>, <span class="ident">Redirect</span>, <span class="ident">Transform</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Client</span>, <span class="ident">ClientConfig</span>, <span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>};
 
 <span class="doccomment">/// An HTTP Client builder</span>

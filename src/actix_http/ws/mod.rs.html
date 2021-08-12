@@ -373,10 +373,10 @@
 <span class="kw">mod</span> <span class="ident">mask</span>;
 <span class="kw">mod</span> <span class="ident">proto</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::codec</span>::{<span class="ident">Codec</span>, <span class="ident">Frame</span>, <span class="ident">Item</span>, <span class="ident">Message</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::dispatcher::Dispatcher</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::frame::Parser</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::proto</span>::{<span class="ident">hash_key</span>, <span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">OpCode</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::codec</span>::{<span class="ident">Codec</span>, <span class="ident">Frame</span>, <span class="ident">Item</span>, <span class="ident">Message</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::dispatcher::Dispatcher</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::frame::Parser</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::proto</span>::{<span class="ident">hash_key</span>, <span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">OpCode</span>};
 
 <span class="doccomment">/// WebSocket protocol errors.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">From</span>)]</span>

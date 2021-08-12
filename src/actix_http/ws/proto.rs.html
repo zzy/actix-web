@@ -398,7 +398,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">OpCode</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">u8</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">op</span>: <span class="ident">OpCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
-        <span class="kw">use</span> <span class="self">self</span><span class="ident">::OpCode</span>::<span class="kw-2">*</span>;
+        <span class="kw">use</span> <span class="ident"><span class="self">self</span>::OpCode</span>::<span class="kw-2">*</span>;
 
         <span class="kw">match</span> <span class="ident">op</span> {
             <span class="ident">Continue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">0</span>,
@@ -417,7 +417,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">OpCode</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">byte</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">OpCode</span> {
-        <span class="kw">use</span> <span class="self">self</span><span class="ident">::OpCode</span>::<span class="kw-2">*</span>;
+        <span class="kw">use</span> <span class="ident"><span class="self">self</span>::OpCode</span>::<span class="kw-2">*</span>;
 
         <span class="kw">match</span> <span class="ident">byte</span> {
             <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Continue</span>,
@@ -500,7 +500,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CloseCode</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">u16</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">code</span>: <span class="ident">CloseCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
-        <span class="kw">use</span> <span class="self">self</span><span class="ident">::CloseCode</span>::<span class="kw-2">*</span>;
+        <span class="kw">use</span> <span class="ident"><span class="self">self</span>::CloseCode</span>::<span class="kw-2">*</span>;
 
         <span class="kw">match</span> <span class="ident">code</span> {
             <span class="ident">Normal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1000</span>,
@@ -523,7 +523,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CloseCode</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">code</span>: <span class="ident">u16</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CloseCode</span> {
-        <span class="kw">use</span> <span class="self">self</span><span class="ident">::CloseCode</span>::<span class="kw-2">*</span>;
+        <span class="kw">use</span> <span class="ident"><span class="self">self</span>::CloseCode</span>::<span class="kw-2">*</span>;
 
         <span class="kw">match</span> <span class="ident">code</span> {
             <span class="number">1000</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Normal</span>,

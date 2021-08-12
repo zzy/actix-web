@@ -292,20 +292,20 @@
 <span class="kw">use</span> <span class="ident">actix_router::IntoPatterns</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Buf</span>, <span class="ident">BufMut</span>, <span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::BlockingError</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::extract::FromRequest</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::handler::Handler</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::resource::Resource</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::responder::Responder</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::route::Route</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::scope::Scope</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service::WebService</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::BlockingError</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::extract::FromRequest</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::handler::Handler</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::resource::Resource</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::responder::Responder</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::route::Route</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::scope::Scope</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service::WebService</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config::ServiceConfig</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::data::Data</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::request::HttpRequest</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::request_data::ReqData</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::types</span>::<span class="kw-2">*</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config::ServiceConfig</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::data::Data</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::request::HttpRequest</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::request_data::ReqData</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// Create resource for a specific path.</span>
 <span class="doccomment">///</span>
