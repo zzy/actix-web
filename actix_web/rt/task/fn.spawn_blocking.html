@@ -6,13 +6,14 @@ thread dedicated to blocking operations. See the <a href="../index.html#cpu-boun
 blocking code</a> section for more information.</p>
 <p>Tokio will spawn more blocking threads when they are requested through this
 function until the upper limit configured on the <a href="struct@crate::runtime::Builder"><code>Builder</code></a> is reached.
-This limit is very large by default, because <code>spawn_blocking</code> is often used
-for various kinds of IO operations that cannot be performed asynchronously.
-When you run CPU-bound code using <code>spawn_blocking</code>, you should keep this
-large upper limit in mind. When running many CPU-bound computations, a
-semaphore or some other synchronization primitive should be used to limit
-the number of computation executed in parallel. Specialized CPU-bound
-executors, such as <a href="https://docs.rs/rayon">rayon</a>, may also be a good fit.</p>
+After reaching the upper limit, the tasks are put in a queue.
+The thread limit is very large by default, because <code>spawn_blocking</code> is often
+used for various kinds of IO operations that cannot be performed
+asynchronously.  When you run CPU-bound code using <code>spawn_blocking</code>, you
+should keep this large upper limit in mind. When running many CPU-bound
+computations, a semaphore or some other synchronization primitive should be
+used to limit the number of computation executed in parallel. Specialized
+CPU-bound executors, such as <a href="https://docs.rs/rayon">rayon</a>, may also be a good fit.</p>
 <p>This function is intended for non-async operations that eventually finish on
 their own. If you want to spawn an ordinary thread, you should use
 <a href="https://doc.rust-lang.org/nightly/std/thread/fn.spawn.html"><code>thread::spawn</code></a> instead.</p>
