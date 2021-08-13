@@ -650,6 +650,13 @@
 <span id="650">650</span>
 <span id="651">651</span>
 <span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">std::io::Write</span>;
 <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
@@ -828,7 +835,7 @@
                 <span class="kw">unsafe</span> {
                     <span class="kw">if</span> <span class="ident">camel_case</span> {
                         <span class="comment">// use Camel-Case headers</span>
-                        <span class="ident">write_camel_case</span>(<span class="ident">k</span>, <span class="ident">from_raw_parts_mut</span>(<span class="ident">buf</span>, <span class="ident">k_len</span>));
+                        <span class="ident">write_camel_case</span>(<span class="ident">k</span>, <span class="ident">buf</span>, <span class="ident">k_len</span>);
                     } <span class="kw">else</span> {
                         <span class="ident">write_data</span>(<span class="ident">k</span>, <span class="ident">buf</span>, <span class="ident">k_len</span>);
                     }
@@ -1126,15 +1133,22 @@
 }
 
 <span class="doccomment">/// # Safety</span>
-<span class="doccomment">/// Callers must ensure that the given length matches given value length.</span>
+<span class="doccomment">/// Callers must ensure that the given `len` matches the given `value` length and that `buf` is</span>
+<span class="doccomment">/// valid for writes of at least `len` bytes.</span>
 <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">write_data</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">usize</span>) {
     <span class="macro">debug_assert_eq!</span>(<span class="ident">value</span>.<span class="ident">len</span>(), <span class="ident">len</span>);
     <span class="ident">copy_nonoverlapping</span>(<span class="ident">value</span>.<span class="ident">as_ptr</span>(), <span class="ident">buf</span>, <span class="ident">len</span>);
 }
 
-<span class="kw">fn</span> <span class="ident">write_camel_case</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) {
+<span class="doccomment">/// # Safety</span>
+<span class="doccomment">/// Callers must ensure that the given `len` matches the given `value` length and that `buf` is</span>
+<span class="doccomment">/// valid for writes of at least `len` bytes.</span>
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">write_camel_case</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">usize</span>) {
     <span class="comment">// first copy entire (potentially wrong) slice to output</span>
-    <span class="ident">buffer</span>[..<span class="ident">value</span>.<span class="ident">len</span>()].<span class="ident">copy_from_slice</span>(<span class="ident">value</span>);
+    <span class="ident">write_data</span>(<span class="ident">value</span>, <span class="ident">buf</span>, <span class="ident">len</span>);
+
+    <span class="comment">// SAFETY: We just initialized the buffer with `value`</span>
+    <span class="kw">let</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">from_raw_parts_mut</span>(<span class="ident">buf</span>, <span class="ident">len</span>);
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">iter</span>();
 
