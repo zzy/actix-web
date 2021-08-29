@@ -282,8 +282,7 @@
 <span id="282">282</span>
 <span id="283">283</span>
 <span id="284">284</span>
-</pre><pre class="rust">
-<span class="doccomment">//! Essentials helper functions and types for application registration.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Essentials helper functions and types for application registration.</span>
 
 <span class="kw">use</span> <span class="ident">std::future::Future</span>;
 
@@ -567,7 +566,7 @@
     <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">actix_rt::task::spawn_blocking</span>(<span class="ident">f</span>);
     <span class="kw">async</span> { <span class="ident">fut</span>.<span class="kw">await</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">BlockingError</span>) }
 }
-</pre></div>
+</code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
 </body></html>

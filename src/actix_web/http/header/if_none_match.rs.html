@@ -92,8 +92,7 @@
 <span id="92">92</span>
 <span id="93">93</span>
 <span id="94">94</span>
-</pre><pre class="rust">
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">EntityTag</span>, <span class="ident">IF_NONE_MATCH</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">EntityTag</span>, <span class="ident">IF_NONE_MATCH</span>};
 
 <span class="macro">crate::http::header::common_header!</span> {
     <span class="doccomment">/// `If-None-Match` header, defined in</span>
@@ -187,7 +186,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">if_none_match</span>.<span class="ident">ok</span>(), <span class="prelude-val">Some</span>(<span class="ident">IfNoneMatch::Items</span>(<span class="ident">entities</span>)));
     }
 }
-</pre></div>
+</code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-search-index-js="../../../../search-index.js" data-search-js="../../../../search.js"></div>
     <script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script>
 </body></html>

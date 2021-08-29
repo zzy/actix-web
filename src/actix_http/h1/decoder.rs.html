@@ -1031,8 +1031,14 @@
 <span id="1031">1031</span>
 <span id="1032">1032</span>
 <span id="1033">1033</span>
-</pre><pre class="rust">
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">io</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">task::Poll</span>};
+<span id="1034">1034</span>
+<span id="1035">1035</span>
+<span id="1036">1036</span>
+<span id="1037">1037</span>
+<span id="1038">1038</span>
+<span id="1039">1039</span>
+<span id="1040">1040</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">io</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">mem::MaybeUninit</span>, <span class="ident">task::Poll</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec::Decoder</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
@@ -1246,10 +1252,17 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">headers</span>: [<span class="ident">HeaderIndex</span>; <span class="ident">MAX_HEADERS</span>] <span class="op">=</span> <span class="ident">EMPTY_HEADER_INDEX_ARRAY</span>;
 
         <span class="kw">let</span> (<span class="ident">len</span>, <span class="ident">method</span>, <span class="ident">uri</span>, <span class="ident">ver</span>, <span class="ident">h_len</span>) <span class="op">=</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parsed</span>: [<span class="ident">httparse::Header</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>; <span class="ident">MAX_HEADERS</span>] <span class="op">=</span> <span class="ident">EMPTY_HEADER_ARRAY</span>;
+            <span class="comment">// SAFETY:</span>
+            <span class="comment">// Create an uninitialized array of `MaybeUninit`. The `assume_init` is</span>
+            <span class="comment">// safe because the type we are claiming to have initialized here is a</span>
+            <span class="comment">// bunch of `MaybeUninit`s, which do not require initialization.</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parsed</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+                <span class="ident">MaybeUninit</span>::<span class="op">&lt;</span>[<span class="ident">MaybeUninit</span><span class="op">&lt;</span><span class="ident">httparse::Header</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span>; <span class="ident">MAX_HEADERS</span>]<span class="op">&gt;</span><span class="ident">::uninit</span>()
+                    .<span class="ident">assume_init</span>()
+            };
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">httparse::Request::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">parsed</span>);
-            <span class="kw">match</span> <span class="ident">req</span>.<span class="ident">parse</span>(<span class="ident">src</span>)<span class="question-mark">?</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">httparse::Request::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> []);
+            <span class="kw">match</span> <span class="ident">req</span>.<span class="ident">parse_with_uninit_headers</span>(<span class="ident">src</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">parsed</span>)<span class="question-mark">?</span> {
                 <span class="ident">httparse::Status::Complete</span>(<span class="ident">len</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">method</span> <span class="op">=</span> <span class="ident">Method::from_bytes</span>(<span class="ident">req</span>.<span class="ident">method</span>.<span class="ident">unwrap</span>().<span class="ident">as_bytes</span>())
                         .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseError::Method</span>)<span class="question-mark">?</span>;
@@ -2065,7 +2078,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">chunk</span>, <span class="ident">PayloadItem::Chunk</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;0\r\n&quot;</span>)));
     }
 }
-</pre></div>
+</code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
     <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script>
 </body></html>
