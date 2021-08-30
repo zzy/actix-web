@@ -2489,7 +2489,7 @@
     <span class="kw">fn</span> <span class="ident">stabilize_date_header</span>(<span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">from</span> <span class="op">=</span> <span class="number">0</span>;
 
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pos</span>) <span class="op">=</span> <span class="ident">find_slice</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>, <span class="string">b&quot;date&quot;</span>, <span class="ident">from</span>) {
+        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pos</span>) <span class="op">=</span> <span class="ident">find_slice</span>(<span class="ident">payload</span>, <span class="string">b&quot;date&quot;</span>, <span class="ident">from</span>) {
             <span class="ident">payload</span>[(<span class="ident">from</span> <span class="op">+</span> <span class="ident">pos</span>)..(<span class="ident">from</span> <span class="op">+</span> <span class="ident">pos</span> <span class="op">+</span> <span class="number">35</span>)]
                 .<span class="ident">copy_from_slice</span>(<span class="string">b&quot;date: Thu, 01 Jan 1970 12:34:56 UTC&quot;</span>);
             <span class="ident">from</span> <span class="op">+</span><span class="op">=</span> <span class="number">35</span>;
