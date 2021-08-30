@@ -1818,6 +1818,9 @@
 <span id="1818">1818</span>
 <span id="1819">1819</span>
 <span id="1820">1820</span>
+<span id="1821">1821</span>
+<span id="1822">1822</span>
+<span id="1823">1823</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections::HashMap</span>,
@@ -2787,7 +2790,10 @@
                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
             })
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="macro">panic!</span>(<span class="string">r#&quot;path &quot;{}&quot; contains malformed dynamic segment&quot;#</span>, <span class="ident">pattern</span>)
+                <span class="macro">panic!</span>(
+                    <span class="string">r#&quot;pattern &quot;{}&quot; contains malformed dynamic segment&quot;#</span>,
+                    <span class="ident">pattern</span>
+                )
             });
 
         <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">param</span>, <span class="kw-2">mut</span> <span class="ident">unprocessed</span>) <span class="op">=</span> <span class="ident">pattern</span>.<span class="ident">split_at</span>(<span class="ident">close_idx</span> <span class="op">+</span> <span class="number">1</span>);

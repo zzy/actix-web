@@ -352,11 +352,14 @@
 <span id="352">352</span>
 <span id="353">353</span>
 <span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
 </pre><pre class="rust"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">proc_macro</span>;
 
 <span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
 <span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
 
+<span class="kw">use</span> <span class="ident">actix_router::ResourceDef</span>;
 <span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
 <span class="kw">use</span> <span class="ident">proc_macro2</span>::{<span class="ident">Span</span>, <span class="ident">TokenStream</span> <span class="kw">as</span> <span class="ident">TokenStream2</span>};
 <span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">format_ident</span>, <span class="ident">quote</span>, <span class="ident">ToTokens</span>, <span class="ident">TokenStreamExt</span>};
@@ -455,6 +458,7 @@
             <span class="kw">match</span> <span class="ident">arg</span> {
                 <span class="ident">NestedMeta::Lit</span>(<span class="ident">syn::Lit::Str</span>(<span class="ident">lit</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">path</span> {
                     <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="ident">lit</span>.<span class="ident">value</span>());
                         <span class="ident">path</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">lit</span>);
                     }
                     <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
