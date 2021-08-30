@@ -1801,6 +1801,23 @@
 <span id="1801">1801</span>
 <span id="1802">1802</span>
 <span id="1803">1803</span>
+<span id="1804">1804</span>
+<span id="1805">1805</span>
+<span id="1806">1806</span>
+<span id="1807">1807</span>
+<span id="1808">1808</span>
+<span id="1809">1809</span>
+<span id="1810">1810</span>
+<span id="1811">1811</span>
+<span id="1812">1812</span>
+<span id="1813">1813</span>
+<span id="1814">1814</span>
+<span id="1815">1815</span>
+<span id="1816">1816</span>
+<span id="1817">1817</span>
+<span id="1818">1818</span>
+<span id="1819">1819</span>
+<span id="1820">1820</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections::HashMap</span>,
@@ -1831,9 +1848,27 @@
 <span class="doccomment">/// regex engine.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// # Pattern Format and Matching Behavior</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Resource pattern is defined as a string of zero or more _segments_ where each segment is</span>
+<span class="doccomment">/// preceeded by a slash `/`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This means that pattern string __must__ either be empty or begin with a slash (`/`).</span>
+<span class="doccomment">/// This also implies that a trailing slash in pattern defines an empty segment.</span>
+<span class="doccomment">/// For example, the pattern `&quot;/user/&quot;` has two segments: `[&quot;user&quot;, &quot;&quot;]`</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A key point to undertand is that `ResourceDef` matches segments, not strings.</span>
+<span class="doccomment">/// It matches segments individually.</span>
+<span class="doccomment">/// For example, the pattern `/user/` is not considered a prefix for the path `/user/123/456`,</span>
+<span class="doccomment">/// because the second segment doesn&#39;t match: `[&quot;user&quot;, &quot;&quot;]` vs `[&quot;user&quot;, &quot;123&quot;, &quot;456&quot;]`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This definition is consistent with the definition of absolute URL path in</span>
+<span class="doccomment">/// [RFC 3986 (section 3.3)](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3)</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// # Static Resources</span>
-<span class="doccomment">/// A static resource is the most basic type of definition. Pass a regular string to</span>
-<span class="doccomment">/// [new][Self::new]. Conforming paths must match the string exactly.</span>
+<span class="doccomment">/// A static resource is the most basic type of definition. Pass a pattern to</span>
+<span class="doccomment">/// [new][Self::new]. Conforming paths must match the pattern exactly.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Examples</span>
 <span class="doccomment">/// ```</span>
@@ -1842,6 +1877,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// assert!(resource.is_match(&quot;/home&quot;));</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// assert!(!resource.is_match(&quot;/home/&quot;));</span>
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/home/new&quot;));</span>
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/homes&quot;));</span>
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/search&quot;));</span>
@@ -1888,12 +1924,13 @@
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Prefix Resources</span>
-<span class="doccomment">/// A prefix resource is defined as pattern that can match just the start of a path.</span>
+<span class="doccomment">/// A prefix resource is defined as pattern that can match just the start of a path, up to a</span>
+<span class="doccomment">/// segment boundary.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This library chooses to restrict that definition slightly. In particular, when matching, the</span>
-<span class="doccomment">/// prefix must be separated from the remaining part of the path by a `/` character, either at the</span>
-<span class="doccomment">/// end of the prefix pattern or at the start of the the remaining slice. In practice, this is not</span>
-<span class="doccomment">/// much of a limitation.</span>
+<span class="doccomment">/// Prefix patterns with a trailing slash may have an unexpected, though correct, behavior.</span>
+<span class="doccomment">/// They define and therefore require an empty segment in order to match. Examples are given below.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Empty pattern matches any path as a prefix.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Prefix resources can contain dynamic segments.</span>
 <span class="doccomment">///</span>
@@ -1905,9 +1942,12 @@
 <span class="doccomment">/// assert!(resource.is_match(&quot;/home/new&quot;));</span>
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/homes&quot;));</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// // prefix pattern with a trailing slash</span>
 <span class="doccomment">/// let resource = ResourceDef::prefix(&quot;/user/{id}/&quot;);</span>
 <span class="doccomment">/// assert!(resource.is_match(&quot;/user/123/&quot;));</span>
-<span class="doccomment">/// assert!(resource.is_match(&quot;/user/123/stars&quot;));</span>
+<span class="doccomment">/// assert!(resource.is_match(&quot;/user/123//stars&quot;));</span>
+<span class="doccomment">/// assert!(!resource.is_match(&quot;/user/123/stars&quot;));</span>
+<span class="doccomment">/// assert!(!resource.is_match(&quot;/user/123&quot;));</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
@@ -1919,6 +1959,10 @@
 <span class="doccomment">/// The regex used when capturing segment values can be specified explicitly using this syntax:</span>
 <span class="doccomment">/// `{name:regex}`. For example, `/user/{id:\d+}` will only match paths where the user ID</span>
 <span class="doccomment">/// is numeric.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The regex could potentially match multiple segments. If this is not wanted, then care must be</span>
+<span class="doccomment">/// taken to avoid matching a slash `/`. It is guaranteed, however, that the match ends at a</span>
+<span class="doccomment">/// segment boundary; the pattern `r&quot;(/|$)` is always appended to the regex.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// By default, dynamic segments use this regex: `[^/]+`. This shows why it is the case, as shown in</span>
 <span class="doccomment">/// the earlier section, that segments capture a slice of the path up to the next `/` character.</span>
@@ -2101,7 +2145,7 @@
         }
     }
 
-    <span class="doccomment">/// Constructs a new resource definition using a string pattern that performs prefix matching.</span>
+    <span class="doccomment">/// Constructs a new resource definition using a pattern that performs prefix matching.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// More specifically, the regular expressions generated for matching are different when using</span>
     <span class="doccomment">/// this method vs using `new`; they will not be appended with the `$` meta-character that</span>
@@ -2123,13 +2167,6 @@
     <span class="doccomment">/// assert!(!resource.is_match(&quot;user/123&quot;));</span>
     <span class="doccomment">/// assert!(!resource.is_match(&quot;user/123/stars&quot;));</span>
     <span class="doccomment">/// assert!(!resource.is_match(&quot;/foo&quot;));</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let resource = ResourceDef::prefix(&quot;user/{id}&quot;);</span>
-    <span class="doccomment">/// assert!(resource.is_match(&quot;user/123&quot;));</span>
-    <span class="doccomment">/// assert!(resource.is_match(&quot;user/123/stars&quot;));</span>
-    <span class="doccomment">/// assert!(!resource.is_match(&quot;/user/123&quot;));</span>
-    <span class="doccomment">/// assert!(!resource.is_match(&quot;/user/123/stars&quot;));</span>
-    <span class="doccomment">/// assert!(!resource.is_match(&quot;foo&quot;));</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prefix</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="macro">profile_method!</span>(<span class="ident">prefix</span>);
@@ -2394,24 +2431,7 @@
 
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">pat_type</span> {
             <span class="ident">PatternType::Static</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">path</span>,
-
-            <span class="ident">PatternType::Prefix</span>(<span class="kw-2">ref</span> <span class="ident">prefix</span>) <span class="kw">if</span> <span class="ident">prefix</span> <span class="op">=</span><span class="op">=</span> <span class="ident">path</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-            <span class="ident">PatternType::Prefix</span>(<span class="kw-2">ref</span> <span class="ident">prefix</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">is_strict_prefix</span>(<span class="ident">prefix</span>, <span class="ident">path</span>),
-
-            <span class="comment">// dynamic prefix</span>
-            <span class="ident">PatternType::Dynamic</span>(<span class="kw-2">ref</span> <span class="ident">re</span>, <span class="kw">_</span>) <span class="kw">if</span> <span class="op">!</span><span class="ident">re</span>.<span class="ident">as_str</span>().<span class="ident">ends_with</span>(<span class="string">&#39;$&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">match</span> <span class="ident">re</span>.<span class="ident">find</span>(<span class="ident">path</span>) {
-                    <span class="comment">// prefix matches exactly</span>
-                    <span class="prelude-val">Some</span>(<span class="ident">m</span>) <span class="kw">if</span> <span class="ident">m</span>.<span class="ident">end</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">path</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-
-                    <span class="comment">// prefix matches part</span>
-                    <span class="prelude-val">Some</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">is_strict_prefix</span>(<span class="ident">m</span>.<span class="ident">as_str</span>(), <span class="ident">path</span>),
-
-                    <span class="comment">// prefix does not match</span>
-                    <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
-                }
-            }
-
+            <span class="ident">PatternType::Prefix</span>(<span class="kw-2">ref</span> <span class="ident">prefix</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">is_prefix</span>(<span class="ident">prefix</span>, <span class="ident">path</span>),
             <span class="ident">PatternType::Dynamic</span>(<span class="kw-2">ref</span> <span class="ident">re</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">re</span>.<span class="ident">is_match</span>(<span class="ident">path</span>),
             <span class="ident">PatternType::DynamicSet</span>(<span class="kw-2">ref</span> <span class="ident">re</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">re</span>.<span class="ident">is_match</span>(<span class="ident">path</span>),
         }
@@ -2459,30 +2479,15 @@
             <span class="ident">PatternType::Static</span>(<span class="ident">segment</span>) <span class="kw">if</span> <span class="ident">path</span> <span class="op">=</span><span class="op">=</span> <span class="ident">segment</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">segment</span>.<span class="ident">len</span>()),
             <span class="ident">PatternType::Static</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
 
-            <span class="ident">PatternType::Prefix</span>(<span class="ident">prefix</span>) <span class="kw">if</span> <span class="ident">path</span> <span class="op">=</span><span class="op">=</span> <span class="ident">prefix</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">prefix</span>.<span class="ident">len</span>()),
-            <span class="ident">PatternType::Prefix</span>(<span class="ident">prefix</span>) <span class="kw">if</span> <span class="ident">is_strict_prefix</span>(<span class="ident">prefix</span>, <span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">prefix</span>.<span class="ident">len</span>()),
+            <span class="ident">PatternType::Prefix</span>(<span class="ident">prefix</span>) <span class="kw">if</span> <span class="ident">is_prefix</span>(<span class="ident">prefix</span>, <span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">prefix</span>.<span class="ident">len</span>()),
             <span class="ident">PatternType::Prefix</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
 
-            <span class="comment">// dynamic prefix</span>
-            <span class="ident">PatternType::Dynamic</span>(<span class="kw-2">ref</span> <span class="ident">re</span>, <span class="kw">_</span>) <span class="kw">if</span> <span class="op">!</span><span class="ident">re</span>.<span class="ident">as_str</span>().<span class="ident">ends_with</span>(<span class="string">&#39;$&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">match</span> <span class="ident">re</span>.<span class="ident">find</span>(<span class="ident">path</span>) {
-                    <span class="comment">// prefix matches exactly</span>
-                    <span class="prelude-val">Some</span>(<span class="ident">m</span>) <span class="kw">if</span> <span class="ident">m</span>.<span class="ident">end</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">path</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">m</span>.<span class="ident">end</span>()),
-
-                    <span class="comment">// prefix matches part</span>
-                    <span class="prelude-val">Some</span>(<span class="ident">m</span>) <span class="kw">if</span> <span class="ident">is_strict_prefix</span>(<span class="ident">m</span>.<span class="ident">as_str</span>(), <span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">m</span>.<span class="ident">end</span>()),
-
-                    <span class="comment">// prefix does not match</span>
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-                }
-            }
-
-            <span class="ident">PatternType::Dynamic</span>(<span class="ident">re</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">re</span>.<span class="ident">find</span>(<span class="ident">path</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">m</span><span class="op">|</span> <span class="ident">m</span>.<span class="ident">end</span>()),
+            <span class="ident">PatternType::Dynamic</span>(<span class="ident">re</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">re</span>.<span class="ident">captures</span>(<span class="ident">path</span>)<span class="question-mark">?</span>[<span class="number">1</span>].<span class="ident">len</span>()),
 
             <span class="ident">PatternType::DynamicSet</span>(<span class="ident">re</span>, <span class="ident">params</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="ident">re</span>.<span class="ident">matches</span>(<span class="ident">path</span>).<span class="ident">into_iter</span>().<span class="ident">next</span>()<span class="question-mark">?</span>;
                 <span class="kw">let</span> (<span class="kw-2">ref</span> <span class="ident">pattern</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">params</span>[<span class="ident">idx</span>];
-                <span class="ident">pattern</span>.<span class="ident">find</span>(<span class="ident">path</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">m</span><span class="op">|</span> <span class="ident">m</span>.<span class="ident">end</span>())
+                <span class="prelude-val">Some</span>(<span class="ident">pattern</span>.<span class="ident">captures</span>(<span class="ident">path</span>)<span class="question-mark">?</span>[<span class="number">1</span>].<span class="ident">len</span>())
             }
         }
     }
@@ -2605,7 +2610,7 @@
                     }
                 };
 
-                (<span class="ident">captures</span>[<span class="number">0</span>].<span class="ident">len</span>(), <span class="prelude-val">Some</span>(<span class="ident">names</span>))
+                (<span class="ident">captures</span>[<span class="number">1</span>].<span class="ident">len</span>(), <span class="prelude-val">Some</span>(<span class="ident">names</span>))
             }
 
             <span class="ident">PatternType::DynamicSet</span>(<span class="ident">re</span>, <span class="ident">params</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -2631,7 +2636,7 @@
                     }
                 }
 
-                (<span class="ident">captures</span>[<span class="number">0</span>].<span class="ident">len</span>(), <span class="prelude-val">Some</span>(<span class="ident">names</span>))
+                (<span class="ident">captures</span>[<span class="number">1</span>].<span class="ident">len</span>(), <span class="prelude-val">Some</span>(<span class="ident">names</span>))
             }
         };
 
@@ -2915,8 +2920,16 @@
             );
         }
 
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">is_prefix</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">has_tail_segment</span> {
-            <span class="ident">re</span>.<span class="ident">push</span>(<span class="string">&#39;$&#39;</span>);
+        <span class="comment">// Store the pattern in capture group #1 to have context info outside it</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">re</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;({})&quot;</span>, <span class="ident">re</span>);
+
+        <span class="comment">// Ensure the match ends at a segment boundary</span>
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">has_tail_segment</span> {
+            <span class="kw">if</span> <span class="ident">is_prefix</span> {
+                <span class="ident">re</span>.<span class="ident">push_str</span>(<span class="string">r&quot;(/|$)&quot;</span>);
+            } <span class="kw">else</span> {
+                <span class="ident">re</span>.<span class="ident">push</span>(<span class="string">&#39;$&#39;</span>);
+            }
         }
 
         <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">Regex::new</span>(<span class="kw-2">&amp;</span><span class="ident">re</span>) {
@@ -2988,10 +3001,12 @@
 }
 
 <span class="doccomment">/// Returns true if `prefix` acts as a proper prefix (i.e., separated by a slash) in `path`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The `strict` refers to the fact that this will return `false` if `prefix == path`.</span>
-<span class="kw">fn</span> <span class="ident">is_strict_prefix</span>(<span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    <span class="ident">path</span>.<span class="ident">starts_with</span>(<span class="ident">prefix</span>) <span class="op">&amp;&amp;</span> (<span class="ident">prefix</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">path</span>[<span class="ident">prefix</span>.<span class="ident">len</span>()..].<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>))
+<span class="kw">fn</span> <span class="ident">is_prefix</span>(<span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">match</span> <span class="ident">path</span>.<span class="ident">strip_prefix</span>(<span class="ident">prefix</span>) {
+        <span class="comment">// Ensure the match ends at segment boundary</span>
+        <span class="prelude-val">Some</span>(<span class="ident">rem</span>) <span class="kw">if</span> <span class="ident">rem</span>.<span class="ident">is_empty</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">rem</span>.<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -3304,52 +3319,68 @@
 
         <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/name/&quot;</span>);
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/&quot;</span>));
-        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/gs&quot;</span>));
+        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name//gs&quot;</span>));
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/gs&quot;</span>));
         <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name&quot;</span>));
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/name/gs&quot;</span>);
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/name//gs&quot;</span>);
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>(), <span class="string">&quot;gs&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>(), <span class="string">&quot;/gs&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef::root_prefix</span>(<span class="string">&quot;name/&quot;</span>);
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/&quot;</span>));
-        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/gs&quot;</span>));
+        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name//gs&quot;</span>));
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/gs&quot;</span>));
         <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name&quot;</span>));
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/name/gs&quot;</span>);
-        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>(), <span class="string">&quot;gs&quot;</span>);
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">prefix_dynamic</span>() {
-        <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/{name}/&quot;</span>);
+        <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/{name}&quot;</span>);
 
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_prefix</span>());
 
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/&quot;</span>));
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/gs&quot;</span>));
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name&quot;</span>));
+        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name&quot;</span>));
 
-        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/name/&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">6</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/name/gs&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">6</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/name&quot;</span>), <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/name/&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">5</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/name/gs&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">5</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/name&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">5</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;&quot;</span>), <span class="prelude-val">None</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/test2/&quot;</span>);
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
         <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>[<span class="string">&quot;name&quot;</span>], <span class="string">&quot;test2&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>[<span class="number">0</span>], <span class="string">&quot;test2&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>(), <span class="string">&quot;&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>(), <span class="string">&quot;/&quot;</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/test2/subpath1/subpath2/index.html&quot;</span>);
         <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
         <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>[<span class="string">&quot;name&quot;</span>], <span class="string">&quot;test2&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>[<span class="number">0</span>], <span class="string">&quot;test2&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>(), <span class="string">&quot;subpath1/subpath2/index.html&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>(), <span class="string">&quot;/subpath1/subpath2/index.html&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/user&quot;</span>);
         <span class="comment">// input string shorter than prefix</span>
         <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">find_match</span>(<span class="string">&quot;/foo&quot;</span>).<span class="ident">is_none</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">prefix_empty</span>() {
+        <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;&quot;</span>);
+
+        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_prefix</span>());
+
+        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;&quot;</span>));
+        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/&quot;</span>));
+        <span class="macro">assert!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/name/test/test&quot;</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -3470,14 +3501,17 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">consistent_match_length</span>() {
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="number">5</span>);
+    <span class="kw">fn</span> <span class="ident">prefix_trailing_slash</span>() {
+        <span class="comment">// The prefix &quot;/abc/&quot; matches two segments: [&quot;user&quot;, &quot;&quot;]</span>
 
+        <span class="comment">// These are not prefixes</span>
         <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/abc/&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/abc/def&quot;</span>), <span class="ident">result</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/abc/def&quot;</span>), <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/abc//def&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">5</span>));
 
         <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/{id}/&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/abc/def&quot;</span>), <span class="ident">result</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/abc/def&quot;</span>), <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">re</span>.<span class="ident">find_match</span>(<span class="string">&quot;/abc//def&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">5</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

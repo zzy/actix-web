@@ -491,7 +491,7 @@
         };
 
         <span class="ident">Files</span> {
-            <span class="ident">path</span>: <span class="ident">mount_path</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">path</span>: <span class="ident">mount_path</span>.<span class="ident">trim_end_matches</span>(<span class="string">&#39;/&#39;</span>).<span class="ident">to_owned</span>(),
             <span class="ident">directory</span>: <span class="ident">dir</span>,
             <span class="ident">index</span>: <span class="prelude-val">None</span>,
             <span class="ident">show_index</span>: <span class="bool-val">false</span>,
