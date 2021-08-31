@@ -469,6 +469,24 @@
 <span id="469">469</span>
 <span id="470">470</span>
 <span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`NormalizePath`].</span>
 
 <span class="kw">use</span> <span class="ident">actix_http::http</span>::{<span class="ident">PathAndQuery</span>, <span class="ident">Uri</span>};
@@ -530,7 +548,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # actix_web::rt::System::new().block_on(async {</span>
 <span class="doccomment">/// let app = App::new()</span>
-<span class="doccomment">///     .wrap(middleware::NormalizePath::default())</span>
+<span class="doccomment">///     .wrap(middleware::NormalizePath::trim())</span>
 <span class="doccomment">///     .route(&quot;/test&quot;, web::get().to(|| async { &quot;test&quot; }))</span>
 <span class="doccomment">///     .route(&quot;/unmatchable/&quot;, web::get().to(|| async { &quot;unmatchable&quot; }));</span>
 <span class="doccomment">///</span>
@@ -556,13 +574,31 @@
 <span class="doccomment">/// assert_eq!(res.status(), StatusCode::NOT_FOUND);</span>
 <span class="doccomment">/// # })</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NormalizePath</span>(<span class="ident">TrailingSlash</span>);
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">NormalizePath</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="macro">log::warn!</span>(
+            <span class="string">&quot;`NormalizePath::default()` is deprecated. The default trailing slash behavior changed \
+            in v4 from `Always` to `Trim`. Update your call to `NormalizePath::new(...)`.&quot;</span>
+        );
+
+        <span class="self">Self</span>(<span class="ident">TrailingSlash::Trim</span>)
+    }
+}
 
 <span class="kw">impl</span> <span class="ident">NormalizePath</span> {
     <span class="doccomment">/// Create new `NormalizePath` middleware with the specified trailing slash style.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">trailing_slash_style</span>: <span class="ident">TrailingSlash</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">NormalizePath</span>(<span class="ident">trailing_slash_style</span>)
+        <span class="self">Self</span>(<span class="ident">trailing_slash_style</span>)
+    }
+
+    <span class="doccomment">/// Constructs a new `NormalizePath` middleware with [trim](TrailingSlash::Trim) semantics.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Use this instead of `NormalizePath::default()` to avoid deprecation warning.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">trim</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">TrailingSlash::Trim</span>)
     }
 }
 
