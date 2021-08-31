@@ -844,7 +844,6 @@
 <span id="844">844</span>
 <span id="845">845</span>
 <span id="846">846</span>
-<span id="847">847</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`Logger`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -1188,7 +1187,6 @@
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">project</span>();
 
-        <span class="comment">// TODO: MSRV 1.51: poll_map_err</span>
         <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">this</span>.<span class="ident">body</span>.<span class="ident">poll_next</span>(<span class="ident">cx</span>)) {
             <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">chunk</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">size</span> <span class="op">+</span><span class="op">=</span> <span class="ident">chunk</span>.<span class="ident">len</span>();
