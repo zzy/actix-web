@@ -1263,9 +1263,9 @@
 <span class="doccomment">/// fn main() {</span>
 <span class="doccomment">///     let app = App::new().service(</span>
 <span class="doccomment">///         web::scope(&quot;/{project_id}/&quot;)</span>
-<span class="doccomment">///             .service(web::resource(&quot;/path1&quot;).to(|| async { HttpResponse::Ok() }))</span>
+<span class="doccomment">///             .service(web::resource(&quot;/path1&quot;).to(|| async { &quot;OK&quot; }))</span>
 <span class="doccomment">///             .service(web::resource(&quot;/path2&quot;).route(web::get().to(|| HttpResponse::Ok())))</span>
-<span class="doccomment">///             .service(web::resource(&quot;/path3&quot;).route(web::head().to(|| HttpResponse::MethodNotAllowed())))</span>
+<span class="doccomment">///             .service(web::resource(&quot;/path3&quot;).route(web::head().to(HttpResponse::MethodNotAllowed)))</span>
 <span class="doccomment">///     );</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>

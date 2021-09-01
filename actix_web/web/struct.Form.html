@@ -2,7 +2,7 @@
 <p><code>Form</code> has two uses: URL encoded responses, and extracting typed data from URL request payloads.</p>
 <h1 id="extractor" class="section-header"><a href="#extractor">Extractor</a></h1>
 <p>To extract typed data from a request body, the inner type <code>T</code> must implement the
-<a href="https://docs.rs/serde/1.0.130/serde/de/trait.Deserialize.html" title="serde::Deserialize"><code>serde::Deserialize</code></a> trait.</p>
+<a href="https://docs.rs/serde/1.0.130/serde/de/trait.DeserializeOwned.html" title="DeserializeOwned"><code>DeserializeOwned</code></a> trait.</p>
 <p>Use <a href="struct.FormConfig.html" title="FormConfig"><code>FormConfig</code></a> to configure extraction process.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">post</span>, <span class="ident">web</span>};

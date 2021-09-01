@@ -923,7 +923,7 @@
 <span class="doccomment">/// async fn test_init_service() {</span>
 <span class="doccomment">///     let app = test::init_service(</span>
 <span class="doccomment">///         App::new()</span>
-<span class="doccomment">///             .service(web::resource(&quot;/test&quot;).to(|| async { HttpResponse::Ok() }))</span>
+<span class="doccomment">///             .service(web::resource(&quot;/test&quot;).to(|| async { &quot;OK&quot; }))</span>
 <span class="doccomment">///     ).await;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///     // Create request object</span>
