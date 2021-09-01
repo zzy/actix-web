@@ -8,7 +8,7 @@
 <p>Will skip writing Content-Length header.</p>
 </div><div id="variant.Empty" class="variant small-section-header"><a href="#variant.Empty" class="anchor field"></a><code>Empty</code></div><div class="docblock"><p>Zero size body.</p>
 <p>Will write <code>Content-Length: 0</code> header.</p>
-</div><div id="variant.Sized" class="variant small-section-header"><a href="#variant.Sized" class="anchor field"></a><code>Sized</code></div><div class="docblock"><p>Known size body.</p>
+</div><div id="variant.Sized" class="variant small-section-header"><a href="#variant.Sized" class="anchor field"></a><code>Sized(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</code></div><div class="docblock"><p>Known size body.</p>
 <p>Will write <code>Content-Length: N</code> header. <code>Sized(0)</code> is treated the same as <code>Empty</code>.</p>
 </div><div class="sub-variant" id="variant.Sized.fields"><h3>Tuple Fields of <b>Sized</b></h3><div><span id="variant.Sized.field.0" class="variant small-section-header"><a href="#variant.Sized.field.0" class="anchor field"></a><code>0:&nbsp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a></code></span></div></div><div id="variant.Stream" class="variant small-section-header"><a href="#variant.Stream" class="anchor field"></a><code>Stream</code></div><div class="docblock"><p>Unknown size body.</p>
 <p>Will not write Content-Length header. Can be used with chunked Transfer-Encoding.</p>

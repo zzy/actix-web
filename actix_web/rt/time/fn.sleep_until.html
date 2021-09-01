@@ -2,9 +2,21 @@
 <p>No work is performed while awaiting on the sleep future to complete. <code>Sleep</code>
 operates at millisecond granularity and should not be used for tasks that
 require high-resolution timers.</p>
+<p>To run something regularly on a schedule, see <a href="fn.interval.html"><code>interval</code></a>.</p>
 <h1 id="cancellation" class="section-header"><a href="#cancellation">Cancellation</a></h1>
 <p>Canceling a sleep instance is done by dropping the returned future. No additional
 cleanup work is required.</p>
+<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<p>Wait 100ms and print “100 ms have elapsed”.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::time</span>::{<span class="ident">sleep_until</span>, <span class="ident">Instant</span>, <span class="ident">Duration</span>};
+
+<span class="attribute">#[<span class="ident">tokio::main</span>]</span>
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="ident">sleep_until</span>(<span class="ident">Instant::now</span>() <span class="op">+</span> <span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
+    <span class="macro">println!</span>(<span class="string">&quot;100 ms have elapsed&quot;</span>);
+}</code></pre></div>
+<p>See the documentation for the <a href="struct.Sleep.html"><code>Sleep</code></a> type for more examples.</p>
 </div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
     <script src="../../../main.js"></script>
 </body></html>

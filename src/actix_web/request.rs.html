@@ -811,7 +811,6 @@
 <span id="811">811</span>
 <span id="812">812</span>
 <span id="813">813</span>
-<span id="814">814</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>, <span class="ident">net</span>,
@@ -1325,7 +1324,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/user/{name}.{ext}&quot;</span>);
         <span class="ident">res</span>.<span class="ident">set_name</span>(<span class="string">&quot;index&quot;</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::new</span>(<span class="string">&quot;&quot;</span>));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;&quot;</span>));
         <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">res</span>, <span class="prelude-val">None</span>);
         <span class="macro">assert!</span>(<span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;/user/test.html&quot;</span>));
         <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;/test/unknown&quot;</span>));
@@ -1355,7 +1354,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/index.html&quot;</span>);
         <span class="ident">rdef</span>.<span class="ident">set_name</span>(<span class="string">&quot;index&quot;</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::new</span>(<span class="string">&quot;&quot;</span>));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;&quot;</span>));
         <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="prelude-val">None</span>);
 
         <span class="macro">assert!</span>(<span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;/index.html&quot;</span>));
@@ -1376,7 +1375,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/index.html&quot;</span>);
         <span class="ident">rdef</span>.<span class="ident">set_name</span>(<span class="string">&quot;index&quot;</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::new</span>(<span class="string">&quot;&quot;</span>));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;&quot;</span>));
         <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="prelude-val">None</span>);
 
         <span class="macro">assert!</span>(<span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;/index.html&quot;</span>));
@@ -1395,9 +1394,8 @@
 
         <span class="ident">rdef</span>.<span class="ident">set_name</span>(<span class="string">&quot;youtube&quot;</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::new</span>(<span class="string">&quot;&quot;</span>));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;&quot;</span>));
         <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="prelude-val">None</span>);
-        <span class="macro">assert!</span>(<span class="ident">rmap</span>.<span class="ident">has_resource</span>(<span class="string">&quot;https://youtube.com/watch/unknown&quot;</span>));
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">rmap</span>(<span class="ident">rmap</span>).<span class="ident">to_http_request</span>();
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">url_for</span>(<span class="string">&quot;youtube&quot;</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;oHg5SJYRHA0&quot;</span>]);
