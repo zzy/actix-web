@@ -124,7 +124,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::encoding::Decoder</span> <span class="kw">as</span> <span class="ident">Decompress</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>, <span class="ident">ResponseHead</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>, <span class="ident">Response</span>, <span class="ident">ResponseHead</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">ResourcePath</span>, <span class="ident">Url</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_server::Server</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_service</span>::{
@@ -132,7 +132,7 @@
 };
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header::ContentEncoding</span>;
-<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Response</span>, <span class="ident">ResponseBuilder</span>};
+<span class="kw">use</span> <span class="ident">actix_http::ResponseBuilder</span>;
 
 <span class="kw">use</span> <span class="ident">actix_router::Patterns</span>;
 
