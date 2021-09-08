@@ -260,10 +260,10 @@
 <span class="macro">macro_rules!</span> <span class="ident">method_route</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">paste::paste!</span> {
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Creates a new route with `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot;` method guard.&quot;</span>]</span>
+            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; Creates a new route with `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot;` method guard.&quot;</span>]</span>
             <span class="doccomment">///</span>
             <span class="doccomment">/// # Examples</span>
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;In this example, one `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot; /{project_id}` route is set up:&quot;</span>]</span>
+            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; In this example, one `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot; /{project_id}` route is set up:&quot;</span>]</span>
             <span class="doccomment">/// ```</span>
             <span class="doccomment">/// use actix_web::{web, App, HttpResponse};</span>
             <span class="doccomment">///</span>
