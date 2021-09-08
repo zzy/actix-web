@@ -865,9 +865,21 @@
 <span id="865">865</span>
 <span id="866">866</span>
 <span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">net::SocketAddr</span>, <span class="ident">rc::Rc</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">net::SocketAddr</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::test::TestBuffer</span>;
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
@@ -1337,19 +1349,31 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Set request path pattern parameter</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">param</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="doccomment">/// Set request path pattern parameter.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use actix_web::test::TestRequest;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let req = TestRequest::default().param(&quot;foo&quot;, &quot;bar&quot;);</span>
+    <span class="doccomment">/// let req = TestRequest::default().param(&quot;foo&quot;.to_owned(), &quot;bar&quot;.to_owned());</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">param</span>(
+        <span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">value</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">path</span>.<span class="ident">add_static</span>(<span class="ident">name</span>, <span class="ident">value</span>);
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Set peer addr</span>
+    <span class="doccomment">/// Set peer addr.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peer_addr</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">addr</span>: <span class="ident">SocketAddr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">peer_addr</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">addr</span>);
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Set request payload</span>
+    <span class="doccomment">/// Set request payload.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_payload</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">set_payload</span>(<span class="ident">data</span>);
         <span class="self">self</span>
