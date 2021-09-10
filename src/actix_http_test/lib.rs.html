@@ -278,7 +278,6 @@
 <span id="278">278</span>
 <span id="279">279</span>
 <span id="280">280</span>
-<span id="281">281</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
@@ -288,8 +287,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tls_openssl</span> <span class="kw">as</span> <span class="ident">openssl</span>;
 
-<span class="kw">use</span> <span class="ident">std::sync::mpsc</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">net</span>, <span class="ident">thread</span>, <span class="ident">time</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">net</span>, <span class="ident">sync::mpsc</span>, <span class="ident">thread</span>, <span class="ident">time::Duration</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Framed</span>};
 <span class="kw">use</span> <span class="ident">actix_rt</span>::{<span class="ident">net::TcpStream</span>, <span class="ident">System</span>};
@@ -376,15 +374,15 @@
                     .<span class="ident">set_alpn_protos</span>(<span class="string">b&quot;\x02h2\x08http/1.1&quot;</span>)
                     .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">log::error!</span>(<span class="string">&quot;Can not set alpn protocol: {:?}&quot;</span>, <span class="ident">e</span>));
                 <span class="ident">Connector::new</span>()
-                    .<span class="ident">conn_lifetime</span>(<span class="ident">time::Duration::from_secs</span>(<span class="number">0</span>))
-                    .<span class="ident">timeout</span>(<span class="ident">time::Duration::from_millis</span>(<span class="number">30000</span>))
+                    .<span class="ident">conn_lifetime</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>))
+                    .<span class="ident">timeout</span>(<span class="ident">Duration::from_millis</span>(<span class="number">30000</span>))
                     .<span class="ident">ssl</span>(<span class="ident">builder</span>.<span class="ident">build</span>())
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>))]</span>
             {
                 <span class="ident">Connector::new</span>()
-                    .<span class="ident">conn_lifetime</span>(<span class="ident">time::Duration::from_secs</span>(<span class="number">0</span>))
-                    .<span class="ident">timeout</span>(<span class="ident">time::Duration::from_millis</span>(<span class="number">30000</span>))
+                    .<span class="ident">conn_lifetime</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>))
+                    .<span class="ident">timeout</span>(<span class="ident">Duration::from_millis</span>(<span class="number">30000</span>))
             }
         };
 
