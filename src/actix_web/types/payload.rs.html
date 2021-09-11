@@ -534,9 +534,6 @@
 <span id="534">534</span>
 <span id="535">535</span>
 <span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Basic binary and string payload extractors.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -602,7 +599,6 @@
 
 <span class="doccomment">/// See [here](#usage) for example of usage as an extractor.</span>
 <span class="kw">impl</span> <span class="ident">FromRequest</span> <span class="kw">for</span> <span class="ident">Payload</span> {
-    <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> <span class="ident">PayloadConfig</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Payload</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
@@ -629,7 +625,6 @@
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">impl</span> <span class="ident">FromRequest</span> <span class="kw">for</span> <span class="ident">Bytes</span> {
-    <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> <span class="ident">PayloadConfig</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Either</span><span class="op">&lt;</span><span class="ident">BytesExtractFut</span>, <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
@@ -665,8 +660,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Text extractor automatically decode body according to the request&#39;s charset.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// [**PayloadConfig**](PayloadConfig) allows to configure</span>
-<span class="doccomment">/// extraction process.</span>
+<span class="doccomment">/// Use [`PayloadConfig`] to configure extraction process.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
@@ -678,7 +672,6 @@
 <span class="doccomment">///     format!(&quot;Body {}!&quot;, text)</span>
 <span class="doccomment">/// }</span>
 <span class="kw">impl</span> <span class="ident">FromRequest</span> <span class="kw">for</span> <span class="ident">String</span> {
-    <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> <span class="ident">PayloadConfig</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Either</span><span class="op">&lt;</span><span class="ident">StringExtractFut</span>, <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
@@ -737,14 +730,15 @@
 
 <span class="doccomment">/// Configuration for request payloads.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Applies to the built-in `Bytes` and `String` extractors. Note that the `Payload` extractor does</span>
-<span class="doccomment">/// not automatically check conformance with this configuration to allow more flexibility when</span>
-<span class="doccomment">/// building extractors on top of `Payload`.</span>
+<span class="doccomment">/// Applies to the built-in [`Bytes`] and [`String`] extractors.</span>
+<span class="doccomment">/// Note that the [`Payload`] extractor does not automatically check</span>
+<span class="doccomment">/// conformance with this configuration to allow more flexibility when</span>
+<span class="doccomment">/// building extractors on top of [`Payload`].</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// By default, the payload size limit is 256kB and there is no mime type condition.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// To use this, add an instance of it to your app or service through one of the</span>
-<span class="doccomment">/// `.app_data()` methods.</span>
+<span class="doccomment">/// To use this, add an instance of it to your [`app`](crate::App), [`scope`](crate::Scope)</span>
+<span class="doccomment">/// or [`resource`](crate::Resource) through the associated `.app_data()` method.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PayloadConfig</span> {
     <span class="ident">limit</span>: <span class="ident">usize</span>,
