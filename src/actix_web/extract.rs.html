@@ -485,6 +485,16 @@
 <span id="485">485</span>
 <span id="486">486</span>
 <span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Request extractors</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -500,28 +510,37 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">dev::Payload</span>, <span class="ident">Error</span>, <span class="ident">HttpRequest</span>};
 
-<span class="doccomment">/// A type that implements [`FromRequest`] is called an **extractor** and can extract data</span>
-<span class="doccomment">/// from the request. Examples of types that implement this trait are [`Json`], [`Form`], [`Path`].</span>
+<span class="doccomment">/// A type that implements [`FromRequest`] is called an **extractor** and can extract data from</span>
+<span class="doccomment">/// the request. Some types that implement this trait are: [`Json`], [`Header`], and [`Path`].</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// # Configuration</span>
 <span class="doccomment">/// An extractor can be customized by injecting the corresponding configuration with one of:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// - [`App::app_data()`](`crate::App::app_data`)</span>
-<span class="doccomment">/// - [`Scope::app_data()`](`crate::Scope::app_data`)</span>
-<span class="doccomment">/// - [`Resource::app_data()`](`crate::Resource::app_data`)</span>
+<span class="doccomment">/// - [`App::app_data()`][crate::App::app_data]</span>
+<span class="doccomment">/// - [`Scope::app_data()`][crate::Scope::app_data]</span>
+<span class="doccomment">/// - [`Resource::app_data()`][crate::Resource::app_data]</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Here are some built-in extractors and their corresponding configuration.</span>
 <span class="doccomment">/// Please refer to the respective documentation for details.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// | Extractor   | Configuration     |</span>
 <span class="doccomment">/// |-------------|-------------------|</span>
+<span class="doccomment">/// | [`Header`]  | _None_            |</span>
+<span class="doccomment">/// | [`Path`]    | [`PathConfig`]    |</span>
 <span class="doccomment">/// | [`Json`]    | [`JsonConfig`]    |</span>
 <span class="doccomment">/// | [`Form`]    | [`FormConfig`]    |</span>
-<span class="doccomment">/// | [`Path`]    | [`PathConfig`]    |</span>
 <span class="doccomment">/// | [`Query`]   | [`QueryConfig`]   |</span>
-<span class="doccomment">/// | [`Payload`] | [`PayloadConfig`] |</span>
-<span class="doccomment">/// | [`String`]  | [`PayloadConfig`] |</span>
 <span class="doccomment">/// | [`Bytes`]   | [`PayloadConfig`] |</span>
+<span class="doccomment">/// | [`String`]  | [`PayloadConfig`] |</span>
+<span class="doccomment">/// | [`Payload`] | [`PayloadConfig`] |</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// # Implementing An Extractor</span>
+<span class="doccomment">/// To reduce duplicate code in handlers where extracting certain parts of a request has a common</span>
+<span class="doccomment">/// structure, you can implement `FromRequest` for your own types.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Note that the request payload can only be consumed by one extractor.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`Header`]: crate::web::Header</span>
 <span class="doccomment">/// [`Json`]: crate::web::Json</span>
 <span class="doccomment">/// [`JsonConfig`]: crate::web::JsonConfig</span>
 <span class="doccomment">/// [`Form`]: crate::web::Form</span>
@@ -534,7 +553,8 @@
 <span class="doccomment">/// [`PayloadConfig`]: crate::web::PayloadConfig</span>
 <span class="doccomment">/// [`String`]: FromRequest#impl-FromRequest-for-String</span>
 <span class="doccomment">/// [`Bytes`]: crate::web::Bytes#impl-FromRequest</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;Extractor&quot;</span>))]</span>
+<span class="doccomment">/// [`Either`]: crate::web::Either</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;extract&quot;</span>, <span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;extractor&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">FromRequest</span>: <span class="ident">Sized</span> {
     <span class="doccomment">/// The associated error which can be returned.</span>
     <span class="kw">type</span> <span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>;

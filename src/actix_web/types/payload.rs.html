@@ -534,6 +534,7 @@
 <span id="534">534</span>
 <span id="535">535</span>
 <span id="536">536</span>
+<span id="537">537</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Basic binary and string payload extractors.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -579,10 +580,11 @@
 <span class="doccomment">///     Ok(format!(&quot;Request Body Bytes:\n{:?}&quot;, bytes))</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Payload</span>(<span class="kw">pub</span> <span class="ident"><span class="kw">crate</span>::dev::Payload</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Payload</span>(<span class="ident"><span class="kw">crate</span>::dev::Payload</span>);
 
 <span class="kw">impl</span> <span class="ident">Payload</span> {
     <span class="doccomment">/// Unwrap to inner Payload type.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::dev::Payload</span> {
         <span class="self">self</span>.<span class="number">0</span>
     }
