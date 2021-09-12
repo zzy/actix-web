@@ -15,7 +15,7 @@ the request. Some types that implement this trait are: <a href="web/struct.Json.
 </ul>
 <p>Here are some built-in extractors and their corresponding configuration.
 Please refer to the respective documentation for details.</p>
-<table><thead><tr><th>Extractor</th><th>Configuration</th></tr></thead><tbody>
+<div><table><thead><tr><th>Extractor</th><th>Configuration</th></tr></thead><tbody>
 <tr><td><a href="web/struct.Header.html"><code>Header</code></a></td><td><em>None</em></td></tr>
 <tr><td><a href="web/struct.Path.html"><code>Path</code></a></td><td><a href="web/struct.PathConfig.html"><code>PathConfig</code></a></td></tr>
 <tr><td><a href="web/struct.Json.html"><code>Json</code></a></td><td><a href="web/struct.JsonConfig.html"><code>JsonConfig</code></a></td></tr>
@@ -25,7 +25,7 @@ Please refer to the respective documentation for details.</p>
 <tr><td><a href="trait.FromRequest.html#impl-FromRequest-for-String"><code>String</code></a></td><td><a href="web/struct.PayloadConfig.html"><code>PayloadConfig</code></a></td></tr>
 <tr><td><a href="web/struct.Payload.html"><code>Payload</code></a></td><td><a href="web/struct.PayloadConfig.html"><code>PayloadConfig</code></a></td></tr>
 </tbody></table>
-<h1 id="implementing-an-extractor" class="section-header"><a href="#implementing-an-extractor">Implementing An Extractor</a></h1>
+</div><h1 id="implementing-an-extractor" class="section-header"><a href="#implementing-an-extractor">Implementing An Extractor</a></h1>
 <p>To reduce duplicate code in handlers where extracting certain parts of a request has a common
 structure, you can implement <code>FromRequest</code> for your own types.</p>
 <p>Note that the request payload can only be consumed by one extractor.</p>

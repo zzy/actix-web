@@ -15,7 +15,7 @@ Example Output:
 <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>()
     <span class="comment">// .wrap(Logger::default())</span>
     .<span class="ident">wrap</span>(<span class="ident">Logger::new</span>(<span class="string">&quot;%a %{User-Agent}i&quot;</span>));</code></pre></div>
-<h1 id="format" class="section-header"><a href="#format">Format</a></h1><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
+<h1 id="format" class="section-header"><a href="#format">Format</a></h1><div><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>%%</code></td><td>The percent sign</td></tr>
 <tr><td><code>%a</code></td><td>Peer IP address (or IP address of reverse proxy if used)</td></tr>
 <tr><td><code>%t</code></td><td>Time when the request started processing (in RFC 3339 format)</td></tr>
@@ -31,7 +31,7 @@ Example Output:
 <tr><td><code>%{FOO}e</code></td><td><code>env_var[&quot;FOO&quot;]</code></td></tr>
 <tr><td><code>%{FOO}xi</code></td><td><a href="struct.Logger.html#method.custom_request_replace">Custom request replacement</a> labelled “FOO”</td></tr>
 </tbody></table>
-<h1 id="security" class="section-header"><a href="#security">Security</a></h1>
+</div><h1 id="security" class="section-header"><a href="#security">Security</a></h1>
 <p><strong>*</strong> “Real IP” remote address is calculated using
 <a href="../dev/struct.ConnectionInfo.html#method.realip_remote_addr"><code>ConnectionInfo::realip_remote_addr()</code></a></p>
 <p>If you use this value, ensure that all requests come from trusted hosts. Otherwise, it is

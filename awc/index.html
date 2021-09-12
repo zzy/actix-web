@@ -35,12 +35,12 @@
 outgoing requests, allowing servers to select their <code>Content-Encoding</code> accordingly.</p>
 <p>Feature flags enable these codecs according to the table below. By default, all <code>compress-*</code>
 features are enabled.</p>
-<table><thead><tr><th>Feature</th><th>Codecs</th></tr></thead><tbody>
+<div><table><thead><tr><th>Feature</th><th>Codecs</th></tr></thead><tbody>
 <tr><td><code>compress-brotli</code></td><td>brotli</td></tr>
 <tr><td><code>compress-gzip</code></td><td>gzip, deflate</td></tr>
 <tr><td><code>compress-zstd</code></td><td>zstd</td></tr>
 </tbody></table>
-<h1 id="websocket-support" class="section-header"><a href="#websocket-support">WebSocket support</a></h1>
+</div><h1 id="websocket-support" class="section-header"><a href="#websocket-support">WebSocket support</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">futures_util</span>::{<span class="ident">sink::SinkExt</span>, <span class="ident">stream::StreamExt</span>};
 <span class="kw">let</span> (<span class="ident">_resp</span>, <span class="kw-2">mut</span> <span class="ident">connection</span>) <span class="op">=</span> <span class="ident">awc::Client::new</span>()
     .<span class="ident">ws</span>(<span class="string">&quot;ws://echo.websocket.org&quot;</span>)
