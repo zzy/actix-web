@@ -3,7 +3,7 @@
 suitable regular expressions from which to check matches with paths and capture portions of a
 matched path into variables. Common cases are on a fast path that avoids going through the
 regex engine.</p>
-<h1 id="pattern-format-and-matching-behavior" class="section-header"><a href="#pattern-format-and-matching-behavior">Pattern Format and Matching Behavior</a></h1>
+<h2 id="pattern-format-and-matching-behavior" class="section-header"><a href="#pattern-format-and-matching-behavior">Pattern Format and Matching Behavior</a></h2>
 <p>Resource pattern is defined as a string of zero or more <em>segments</em> where each segment is
 preceded by a slash <code>/</code>.</p>
 <p>This means that pattern string <strong>must</strong> either be empty or begin with a slash (<code>/</code>).
@@ -15,10 +15,10 @@ For example, the pattern <code>/user/</code> is not considered a prefix for the 
 because the second segment doesn’t match: <code>[&quot;user&quot;, &quot;&quot;]</code> vs <code>[&quot;user&quot;, &quot;123&quot;, &quot;456&quot;]</code>.</p>
 <p>This definition is consistent with the definition of absolute URL path in
 <a href="https://datatracker.ietf.org/doc/html/rfc3986#section-3.3">RFC 3986 (section 3.3)</a></p>
-<h1 id="static-resources" class="section-header"><a href="#static-resources">Static Resources</a></h1>
+<h2 id="static-resources" class="section-header"><a href="#static-resources">Static Resources</a></h2>
 <p>A static resource is the most basic type of definition. Pass a pattern to
 <a href="struct.ResourceDef.html#method.new" title="Self::new">new</a>. Conforming paths must match the pattern exactly.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h3 id="examples" class="section-header"><a href="#examples">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/home&quot;</span>);
 
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/home&quot;</span>));
@@ -27,7 +27,7 @@ because the second segment doesn’t match: <code>[&quot;user&quot;, &quot;&quot
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/home/new&quot;</span>));
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/homes&quot;</span>));
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/search&quot;</span>));</code></pre></div>
-<h1 id="dynamic-segments" class="section-header"><a href="#dynamic-segments">Dynamic Segments</a></h1>
+<h2 id="dynamic-segments" class="section-header"><a href="#dynamic-segments">Dynamic Segments</a></h2>
 <p>Also known as “path parameters”. Resources can define sections of a pattern that be extracted
 from a conforming path, if it conforms to (one of) the resource pattern(s).</p>
 <p>The marker for a dynamic segment is curly braces wrapping an identifier. For example,
@@ -44,7 +44,7 @@ path segment. For example, <code>/rust-is-{opinion}</code> can match the paths <
 see <a href="struct.ResourceDef.html#method.capture_match_info" title="Self::capture_match_info"><code>capture_match_info</code></a>
 and <a href="struct.ResourceDef.html#method.capture_match_info_fn" title="Self::capture_match_info_fn"><code>capture_match_info_fn</code></a>.</p>
 <p>A resource definition can contain at most 16 dynamic segments.</p>
-<h2 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h2>
+<h3 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>};
 
 <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/user/{id}&quot;</span>);
@@ -56,14 +56,14 @@ and <a href="struct.ResourceDef.html#method.capture_match_info_fn" title="Self::
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/user/123&quot;</span>);
 <span class="ident">resource</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;123&quot;</span>);</code></pre></div>
-<h1 id="prefix-resources" class="section-header"><a href="#prefix-resources">Prefix Resources</a></h1>
+<h2 id="prefix-resources" class="section-header"><a href="#prefix-resources">Prefix Resources</a></h2>
 <p>A prefix resource is defined as pattern that can match just the start of a path, up to a
 segment boundary.</p>
 <p>Prefix patterns with a trailing slash may have an unexpected, though correct, behavior.
 They define and therefore require an empty segment in order to match. Examples are given below.</p>
 <p>Empty pattern matches any path as a prefix.</p>
 <p>Prefix resources can contain dynamic segments.</p>
-<h2 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h2>
+<h3 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/home&quot;</span>);
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/home&quot;</span>));
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/home/new&quot;</span>));
@@ -75,7 +75,7 @@ They define and therefore require an empty segment in order to match. Examples a
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/user/123//stars&quot;</span>));
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/user/123/stars&quot;</span>));
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/user/123&quot;</span>));</code></pre></div>
-<h1 id="custom-regex-segments" class="section-header"><a href="#custom-regex-segments">Custom Regex Segments</a></h1>
+<h2 id="custom-regex-segments" class="section-header"><a href="#custom-regex-segments">Custom Regex Segments</a></h2>
 <p>Dynamic segments can be customised to only match a specific regular expression. It can be
 helpful to do this if resource definitions would otherwise conflict and cause one to
 be inaccessible.</p>
@@ -88,18 +88,18 @@ segment boundary; the pattern <code>r&quot;(/|$)</code> is always appended to th
 <p>By default, dynamic segments use this regex: <code>[^/]+</code>. This shows why it is the case, as shown in
 the earlier section, that segments capture a slice of the path up to the next <code>/</code> character.</p>
 <p>Custom regex segments can be used in static and prefix resource definition variants.</p>
-<h2 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h2>
+<h3 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">r&quot;/user/{id:\d+}&quot;</span>);
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/user/123&quot;</span>));
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/user/314159&quot;</span>));
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/user/abc&quot;</span>));</code></pre></div>
-<h1 id="tail-segments" class="section-header"><a href="#tail-segments">Tail Segments</a></h1>
+<h2 id="tail-segments" class="section-header"><a href="#tail-segments">Tail Segments</a></h2>
 <p>As a shortcut to defining a custom regex for matching <em>all</em> remaining characters (not just those
 up until a <code>/</code> character), there is a special pattern to match (and capture) the remaining
 path portion.</p>
 <p>To do this, use the segment pattern: <code>{name}*</code>. Since a tail segment also has a name, values are
 extracted in the same way as non-tail dynamic segments.</p>
-<h2 id="examples-4" class="section-header"><a href="#examples-4">Examples</a></h2>
+<h3 id="examples-4" class="section-header"><a href="#examples-4">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/blob/{tail}*&quot;</span>);
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/blob/HEAD/Cargo.toml&quot;</span>));
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/blob/HEAD/README.md&quot;</span>));
@@ -107,7 +107,7 @@ extracted in the same way as non-tail dynamic segments.</p>
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/blob/main/LICENSE&quot;</span>);
 <span class="ident">resource</span>.<span class="ident">capture_match_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;tail&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;main/LICENSE&quot;</span>);</code></pre></div>
-<h1 id="multi-pattern-resources" class="section-header"><a href="#multi-pattern-resources">Multi-Pattern Resources</a></h1>
+<h2 id="multi-pattern-resources" class="section-header"><a href="#multi-pattern-resources">Multi-Pattern Resources</a></h2>
 <p>For resources that can map to multiple distinct paths, it may be suitable to use
 multi-pattern resources by passing an array/vec to <a href="struct.ResourceDef.html#method.new" title="Self::new"><code>new</code></a>. They will be combined
 into a regex set which is usually quicker to check matches on than checking each
@@ -115,24 +115,24 @@ pattern individually.</p>
 <p>Multi-pattern resources can contain dynamic segments just like single pattern ones.
 However, take care to use consistent and semantically-equivalent segment names; it could affect
 expectations in the router using these definitions and cause runtime panics.</p>
-<h2 id="examples-5" class="section-header"><a href="#examples-5">Examples</a></h2>
+<h3 id="examples-5" class="section-header"><a href="#examples-5">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>([<span class="string">&quot;/home&quot;</span>, <span class="string">&quot;/index&quot;</span>]);
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/home&quot;</span>));
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/index&quot;</span>));</code></pre></div>
-<h1 id="trailing-slashes" class="section-header"><a href="#trailing-slashes">Trailing Slashes</a></h1>
+<h2 id="trailing-slashes" class="section-header"><a href="#trailing-slashes">Trailing Slashes</a></h2>
 <p>It should be noted that this library takes no steps to normalize intra-path or trailing slashes.
 As such, all resource definitions implicitly expect a pre-processing step to normalize paths if
 they you wish to accommodate “recoverable” path errors. Below are several examples of
 resource-path pairs that would not be compatible.</p>
-<h2 id="examples-6" class="section-header"><a href="#examples-6">Examples</a></h2>
+<h3 id="examples-6" class="section-header"><a href="#examples-6">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">assert!</span>(<span class="op">!</span><span class="ident">ResourceDef::new</span>(<span class="string">&quot;/root&quot;</span>).<span class="ident">is_match</span>(<span class="string">&quot;/root/&quot;</span>));
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">ResourceDef::new</span>(<span class="string">&quot;/root/&quot;</span>).<span class="ident">is_match</span>(<span class="string">&quot;/root&quot;</span>));
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/root/&quot;</span>).<span class="ident">is_match</span>(<span class="string">&quot;/root&quot;</span>));</code></pre></div>
 </div></details><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor"></a></h2><details class="rustdoc-toggle implementors-toggle" open><summary><div id="impl" class="impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#256-1125" title="goto source code">[src]</a></div><a href="#impl" class="anchor"></a><h3 class="code-header in-band">impl <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h3></div></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><div id="method.new" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#280-283" title="goto source code">[src]</a></div><a href="#method.new" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.new" class="fnname">new</a>&lt;T:&nbsp;<a class="trait" href="trait.IntoPatterns.html" title="trait actix_router::IntoPatterns">IntoPatterns</a>&gt;(paths: T) -&gt; Self</h4></div></summary><div class="docblock"><p>Constructs a new resource definition from patterns.</p>
 <p>Multi-pattern resources can be constructed by providing a slice (or vec) of patterns.</p>
-<h1 id="panics" class="section-header"><a href="#panics">Panics</a></h1>
+<h5 id="panics" class="section-header"><a href="#panics">Panics</a></h5>
 <p>Panics if path pattern is malformed.</p>
-<h1 id="examples-7" class="section-header"><a href="#examples-7">Examples</a></h1>
+<h5 id="examples-7" class="section-header"><a href="#examples-7">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router::ResourceDef</span>;
 
 <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/user/{id}&quot;</span>);
@@ -152,9 +152,9 @@ this method vs using <code>new</code>; they will not be appended with the <code>
 matches the end of an input.</p>
 <p>Although it will compile and run correctly, it is meaningless to construct a prefix
 resource definition with a tail segment; use <a href="struct.ResourceDef.html#method.new" title="Self::new"><code>new</code></a> in this case.</p>
-<h1 id="panics-1" class="section-header"><a href="#panics-1">Panics</a></h1>
+<h5 id="panics-1" class="section-header"><a href="#panics-1">Panics</a></h5>
 <p>Panics if path regex pattern is malformed.</p>
-<h1 id="examples-8" class="section-header"><a href="#examples-8">Examples</a></h1>
+<h5 id="examples-8" class="section-header"><a href="#examples-8">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router::ResourceDef</span>;
 
 <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/user/{id}&quot;</span>);
@@ -165,9 +165,9 @@ resource definition with a tail segment; use <a href="struct.ResourceDef.html#me
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;/foo&quot;</span>));</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.root_prefix" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#333-336" title="goto source code">[src]</a></div><a href="#method.root_prefix" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.root_prefix" class="fnname">root_prefix</a>(path: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; Self</h4></div></summary><div class="docblock"><p>Constructs a new resource definition using a string pattern that performs prefix matching,
 inserting a <code>/</code> to beginning of the pattern if absent and pattern is not empty.</p>
-<h1 id="panics-2" class="section-header"><a href="#panics-2">Panics</a></h1>
+<h5 id="panics-2" class="section-header"><a href="#panics-2">Panics</a></h5>
 <p>Panics if path regex pattern is malformed.</p>
-<h1 id="examples-9" class="section-header"><a href="#examples-9">Examples</a></h1>
+<h5 id="examples-9" class="section-header"><a href="#examples-9">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router::ResourceDef</span>;
 
 <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::root_prefix</span>(<span class="string">&quot;user/{id}&quot;</span>);
@@ -181,47 +181,47 @@ inserting a <code>/</code> to beginning of the pattern if absent and pattern is 
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">resource</span>.<span class="ident">is_match</span>(<span class="string">&quot;user/123&quot;</span>));</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.id" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#351-353" title="goto source code">[src]</a></div><a href="#method.id" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.id" class="fnname">id</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a></h4></div></summary><div class="docblock"><p>Returns a numeric resource ID.</p>
 <p>If not explicitly set using <a href="struct.ResourceDef.html#method.set_id" title="Self::set_id"><code>set_id</code></a>, this will return <code>0</code>.</p>
-<h1 id="examples-10" class="section-header"><a href="#examples-10">Examples</a></h1>
+<h5 id="examples-10" class="section-header"><a href="#examples-10">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/root&quot;</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">id</span>(), <span class="number">0</span>);
 
 <span class="ident">resource</span>.<span class="ident">set_id</span>(<span class="number">42</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">id</span>(), <span class="number">42</span>);</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.set_id" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#364-366" title="goto source code">[src]</a></div><a href="#method.set_id" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.set_id" class="fnname">set_id</a>(&amp;mut self, id: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>)</h4></div></summary><div class="docblock"><p>Set numeric resource ID.</p>
-<h1 id="examples-11" class="section-header"><a href="#examples-11">Examples</a></h1>
+<h5 id="examples-11" class="section-header"><a href="#examples-11">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/root&quot;</span>);
 <span class="ident">resource</span>.<span class="ident">set_id</span>(<span class="number">42</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">id</span>(), <span class="number">42</span>);</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.name" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#378-380" title="goto source code">[src]</a></div><a href="#method.name" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.name" class="fnname">name</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</h4></div></summary><div class="docblock"><p>Returns resource definition name, if set.</p>
-<h1 id="examples-12" class="section-header"><a href="#examples-12">Examples</a></h1>
+<h5 id="examples-12" class="section-header"><a href="#examples-12">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/root&quot;</span>);
 <span class="macro">assert!</span>(<span class="ident">resource</span>.<span class="ident">name</span>().<span class="ident">is_none</span>());
 
 <span class="ident">resource</span>.<span class="ident">set_name</span>(<span class="string">&quot;root&quot;</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">name</span>().<span class="ident">unwrap</span>(), <span class="string">&quot;root&quot;</span>);</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.set_name" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#394-402" title="goto source code">[src]</a></div><a href="#method.set_name" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.set_name" class="fnname">set_name</a>(&amp;mut self, name: impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;)</h4></div></summary><div class="docblock"><p>Assigns a new name to the resource.</p>
-<h1 id="panics-3" class="section-header"><a href="#panics-3">Panics</a></h1>
+<h5 id="panics-3" class="section-header"><a href="#panics-3">Panics</a></h5>
 <p>Panics if <code>name</code> is an empty string.</p>
-<h1 id="examples-13" class="section-header"><a href="#examples-13">Examples</a></h1>
+<h5 id="examples-13" class="section-header"><a href="#examples-13">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/root&quot;</span>);
 <span class="ident">resource</span>.<span class="ident">set_name</span>(<span class="string">&quot;root&quot;</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">name</span>().<span class="ident">unwrap</span>(), <span class="string">&quot;root&quot;</span>);</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.is_prefix" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#412-414" title="goto source code">[src]</a></div><a href="#method.is_prefix" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_prefix" class="fnname">is_prefix</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></div></summary><div class="docblock"><p>Returns <code>true</code> if pattern type is prefix.</p>
-<h1 id="examples-14" class="section-header"><a href="#examples-14">Examples</a></h1>
+<h5 id="examples-14" class="section-header"><a href="#examples-14">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">assert!</span>(<span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/user&quot;</span>).<span class="ident">is_prefix</span>());
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">ResourceDef::new</span>(<span class="string">&quot;/user&quot;</span>).<span class="ident">is_prefix</span>());</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pattern" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#430-435" title="goto source code">[src]</a></div><a href="#method.pattern" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.pattern" class="fnname">pattern</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</h4></div></summary><div class="docblock"><p>Returns the pattern string that generated the resource definition.</p>
 <p>If definition is constructed with multiple patterns, the first pattern is returned. To get
 all patterns, use <a href="struct.ResourceDef.html#method.pattern_iter" title="Self::pattern_iter"><code>patterns_iter</code></a>. If resource has 0 patterns,
 returns <code>None</code>.</p>
-<h1 id="examples-15" class="section-header"><a href="#examples-15">Examples</a></h1>
+<h5 id="examples-15" class="section-header"><a href="#examples-15">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/user/{id}&quot;</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">pattern</span>().<span class="ident">unwrap</span>(), <span class="string">&quot;/user/{id}&quot;</span>);
 
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>([<span class="string">&quot;/profile&quot;</span>, <span class="string">&quot;/user/{id}&quot;</span>]);
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">pattern</span>(), <span class="prelude-val">Some</span>(<span class="string">&quot;/profile&quot;</span>));</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pattern_iter" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#452-500" title="goto source code">[src]</a></div><a href="#method.pattern_iter" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.pattern_iter" class="fnname">pattern_iter</a>(&amp;self) -&gt; impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>&lt;Item = &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</h4></div></summary><div class="docblock"><p>Returns iterator of pattern strings that generated the resource definition.</p>
-<h1 id="examples-16" class="section-header"><a href="#examples-16">Examples</a></h1>
+<h5 id="examples-16" class="section-header"><a href="#examples-16">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/root&quot;</span>);
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">resource</span>.<span class="ident">pattern_iter</span>();
 <span class="macro">assert_eq!</span>(<span class="ident">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>(), <span class="string">&quot;/root&quot;</span>);
@@ -234,7 +234,7 @@ returns <code>None</code>.</p>
 <span class="macro">assert!</span>(<span class="ident">iter</span>.<span class="ident">next</span>().<span class="ident">is_none</span>());</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.join" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#512-523" title="goto source code">[src]</a></div><a href="#method.join" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.join" class="fnname">join</a>(&amp;self, other: &amp;<a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a>) -&gt; <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h4></div></summary><div class="docblock"><p>Joins two resources.</p>
 <p>Resulting resource is prefix if <code>other</code> is prefix.</p>
-<h1 id="examples-17" class="section-header"><a href="#examples-17">Examples</a></h1>
+<h5 id="examples-17" class="section-header"><a href="#examples-17">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">joined</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/root&quot;</span>).<span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/seg&quot;</span>));
 <span class="macro">assert_eq!</span>(<span class="ident">joined</span>, <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/root/seg&quot;</span>));</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.is_match" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#559-571" title="goto source code">[src]</a></div><a href="#method.is_match" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_match" class="fnname">is_match</a>(&amp;self, path: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></div></summary><div class="docblock"><p>Returns <code>true</code> if <code>path</code> matches this resource.</p>
@@ -243,7 +243,7 @@ static resources will not be able to match as many paths as dynamic and prefix r
 See <a href="struct.ResourceDef.html" title="ResourceDef"><code>ResourceDef</code></a> struct docs for details on resource definition types.</p>
 <p>This method will always agree with <a href="struct.ResourceDef.html#method.find_match" title="Self::find_match"><code>find_match</code></a> on whether the path
 matches or not.</p>
-<h1 id="examples-18" class="section-header"><a href="#examples-18">Examples</a></h1>
+<h5 id="examples-18" class="section-header"><a href="#examples-18">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router::ResourceDef</span>;
 
 <span class="comment">// static resource</span>
@@ -269,7 +269,7 @@ matches or not.</p>
 match ends.</p>
 <p>This method will always agree with <a href="struct.ResourceDef.html#method.is_match" title="Self::is_match"><code>is_match</code></a> on whether the path matches
 or not.</p>
-<h1 id="examples-19" class="section-header"><a href="#examples-19">Examples</a></h1>
+<h5 id="examples-19" class="section-header"><a href="#examples-19">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router::ResourceDef</span>;
 
 <span class="comment">// static resource</span>
@@ -298,7 +298,7 @@ or not.</p>
 <span class="macro">assert_eq!</span>(<span class="ident">resource</span>.<span class="ident">find_match</span>(<span class="string">&quot;/profile/1234&quot;</span>), <span class="prelude-val">Some</span>(<span class="number">13</span>));</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.capture_match_info" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#644-647" title="goto source code">[src]</a></div><a href="#method.capture_match_info" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.capture_match_info" class="fnname">capture_match_info</a>&lt;T:&nbsp;<a class="trait" href="trait.ResourcePath.html" title="trait actix_router::ResourcePath">ResourcePath</a>&gt;(&amp;self, path: &amp;mut <a class="struct" href="struct.Path.html" title="struct actix_router::Path">Path</a>&lt;T&gt;) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></div></summary><div class="docblock"><p>Collects dynamic segment values into <code>path</code>.</p>
 <p>Returns <code>true</code> if <code>path</code> matches this resource.</p>
-<h1 id="examples-20" class="section-header"><a href="#examples-20">Examples</a></h1>
+<h5 id="examples-20" class="section-header"><a href="#examples-20">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>};
 
 <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/user/{id}&quot;</span>);
@@ -319,10 +319,10 @@ This is useful if you want to conditionally match on some non-path related aspec
 resource type.</p>
 <p>Returns <code>true</code> if resource path matches this resource definition <em>and</em> satisfies the
 given check function.</p>
-<h1 id="examples-21" class="section-header"><a href="#examples-21">Examples</a></h1>
+<h5 id="examples-21" class="section-header"><a href="#examples-21">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>};
 
-<span class="kw">fn</span> <span class="ident">try_match</span>(<span class="ident">resource</span>: <span class="kw-2">&amp;</span><span class="ident">ResourceDef</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Path</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">try_match</span>(<span class="ident">resource</span>: <span class="kw-2">&amp;</span><span class="ident">ResourceDef</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Path</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
     <span class="kw">let</span> <span class="ident">admin_allowed</span> <span class="op">=</span> <span class="ident">std::env::var</span>(<span class="string">&quot;ADMIN_ALLOWED&quot;</span>).<span class="ident">ok</span>();
 
     <span class="ident">resource</span>.<span class="ident">capture_match_info_fn</span>(
@@ -349,7 +349,7 @@ given check function.</p>
 <p>Returns <code>true</code> on success.</p>
 <p>For multi-pattern resources, the first pattern is used under the assumption that it would be
 equivalent to any other choice.</p>
-<h1 id="examples-22" class="section-header"><a href="#examples-22">Examples</a></h1>
+<h5 id="examples-22" class="section-header"><a href="#examples-22">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::new</span>();
 <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/user/{id}/post/{title}&quot;</span>);
 
@@ -359,7 +359,7 @@ equivalent to any other choice.</p>
 <p>Returns <code>true</code> on success.</p>
 <p>For multi-pattern resources, the first pattern is used under the assumption that it would be
 equivalent to any other choice.</p>
-<h1 id="examples-23" class="section-header"><a href="#examples-23">Examples</a></h1>
+<h5 id="examples-23" class="section-header"><a href="#examples-23">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::new</span>();
 <span class="kw">let</span> <span class="ident">resource</span> <span class="op">=</span> <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/user/{id}/post/{title}&quot;</span>);
 
@@ -375,7 +375,7 @@ equivalent to any other choice.</p>
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><div id="impl-From%3C%26%27a%20str%3E" class="impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1141-1145" title="goto source code">[src]</a></div><a href="#impl-From%3C%26%27a%20str%3E" class="anchor"></a><h3 class="code-header in-band">impl&lt;'a&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a>&lt;&amp;'a <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt; for <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h3></div></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><div id="method.from" class="method trait-impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1142-1144" title="goto source code">[src]</a></div><a href="#method.from" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from" class="fnname">from</a>(path: &amp;'a <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h4></div></summary><div class='docblock'><p>Performs the conversion.</p>
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><div id="impl-From%3CString%3E" class="impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1147-1151" title="goto source code">[src]</a></div><a href="#impl-From%3CString%3E" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt; for <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h3></div></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><div id="method.from-1" class="method trait-impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1148-1150" title="goto source code">[src]</a></div><a href="#method.from-1" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from" class="fnname">from</a>(path: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>) -&gt; <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h4></div></summary><div class='docblock'><p>Performs the conversion.</p>
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><div id="impl-Hash" class="impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1135-1139" title="goto source code">[src]</a></div><a href="#impl-Hash" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> for <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h3></div></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><div id="method.hash" class="method trait-impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1136-1138" title="goto source code">[src]</a></div><a href="#method.hash" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash" class="fnname">hash</a>&lt;H:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="trait core::hash::Hasher">Hasher</a>&gt;(&amp;self, state: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>H)</h4></div></summary><div class='docblock'><p>Feeds this value into the given <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="Hasher"><code>Hasher</code></a>. <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash">Read more</a></p>
-</div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.hash_slice" class="method trait-impl has-srclink"><div class="rightside"><span class="since" title="Stable since Rust version 1.3.0">1.3.0</span><a class="srclink" href="https://doc.rust-lang.org/nightly/src/core/hash/mod.rs.html#212-214" title="goto source code">[src]</a></div><a href="#method.hash_slice" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice" class="fnname">hash_slice</a>&lt;H&gt;(data: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[Self]</a>, state: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>H) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;H: <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="trait core::hash::Hasher">Hasher</a>,&nbsp;</span></h4></div></summary><div class='docblock'><p>Feeds a slice of this type into the given <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="Hasher"><code>Hasher</code></a>. <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice">Read more</a></p>
+</div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.hash_slice" class="method trait-impl has-srclink"><div class="rightside"><span class="since" title="Stable since Rust version 1.3.0">1.3.0</span><a class="srclink" href="https://doc.rust-lang.org/nightly/src/core/hash/mod.rs.html#224-226" title="goto source code">[src]</a></div><a href="#method.hash_slice" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice" class="fnname">hash_slice</a>&lt;H&gt;(data: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[Self]</a>, state: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>H) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;H: <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="trait core::hash::Hasher">Hasher</a>,&nbsp;</span></h4></div></summary><div class='docblock'><p>Feeds a slice of this type into the given <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="Hasher"><code>Hasher</code></a>. <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice">Read more</a></p>
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><div id="impl-PartialEq%3CResourceDef%3E" class="impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1129-1133" title="goto source code">[src]</a></div><a href="#impl-PartialEq%3CResourceDef%3E" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a>&lt;<a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a>&gt; for <a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a></h3></div></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><div id="method.eq" class="method trait-impl has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_router/resource.rs.html#1130-1132" title="goto source code">[src]</a></div><a href="#method.eq" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq" class="fnname">eq</a>(&amp;self, other: &amp;<a class="struct" href="struct.ResourceDef.html" title="struct actix_router::ResourceDef">ResourceDef</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></div></summary><div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used
 by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.ne" class="method trait-impl has-srclink"><div class="rightside"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span><a class="srclink" href="https://doc.rust-lang.org/nightly/src/core/cmp.rs.html#218" title="goto source code">[src]</a></div><a href="#method.ne" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne" class="fnname">ne</a>(&amp;self, other: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Rhs) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></div></summary><div class='docblock'><p>This method tests for <code>!=</code>.</p>

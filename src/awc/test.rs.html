@@ -145,7 +145,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">TestResponse</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TestResponse</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="ident">TestResponse</span> {
         <span class="ident">TestResponse</span> {
             <span class="ident">head</span>: <span class="ident">ResponseHead::new</span>(<span class="ident">StatusCode::OK</span>),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
@@ -157,7 +157,7 @@
 
 <span class="kw">impl</span> <span class="ident">TestResponse</span> {
     <span class="doccomment">/// Create TestResponse and set header</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="ident">header</span>: <span class="ident">H</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="ident">header</span>: <span class="ident">H</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
     {
@@ -165,13 +165,13 @@
     }
 
     <span class="doccomment">/// Set HTTP version of this response</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">version</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ver</span>: <span class="ident">Version</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">version</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ver</span>: <span class="ident">Version</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">version</span> <span class="op">=</span> <span class="ident">ver</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Insert a header</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
     {
@@ -183,7 +183,7 @@
     }
 
     <span class="doccomment">/// Append a header</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">append_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">append_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
     {
@@ -196,13 +196,13 @@
 
     <span class="doccomment">/// Set cookie for this response</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookie</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookie</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">cookies</span>.<span class="ident">add</span>(<span class="ident">cookie</span>.<span class="ident">into_owned</span>());
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Set response&#39;s payload</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_payload</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_payload</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">B</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">h1::Payload::empty</span>();
         <span class="ident">payload</span>.<span class="ident">unread_data</span>(<span class="ident">data</span>.<span class="ident">into</span>());
         <span class="self">self</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">payload</span>.<span class="ident">into</span>());
@@ -210,7 +210,7 @@
     }
 
     <span class="doccomment">/// Complete response creation and generate `ClientResponse` instance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientResponse</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>) -&gt; <span class="ident">ClientResponse</span> {
         <span class="comment">// allow unused mut when cookies feature is disabled</span>
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_mut</span>)]</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>;

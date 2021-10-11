@@ -5,7 +5,7 @@ portable API for receiving this notification.</p>
 <p>Once the returned future is polled, a listener is registered. The future
 will complete on the first received <code>ctrl-c</code> <strong>after</strong> the initial call to
 either <code>Future::poll</code> or <code>.await</code>.</p>
-<h1 id="caveats" class="section-header"><a href="#caveats">Caveats</a></h1>
+<h2 id="caveats" class="section-header"><a href="#caveats">Caveats</a></h2>
 <p>On Unix platforms, the first time that a <code>Signal</code> instance is registered for a
 particular signal kind, an OS signal-handler is installed which replaces the
 default platform behavior when that signal is received, <strong>for the duration of
@@ -19,7 +19,7 @@ deliveries will end up captured by Tokio, and the default platform behavior
 will NOT be reset</strong>.</p>
 <p>Thus, applications should take care to ensure the expected signal behavior
 occurs as expected after listening for specific signals.</p>
-<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::signal</span>;
 
 <span class="attribute">#[<span class="ident">tokio::main</span>]</span>

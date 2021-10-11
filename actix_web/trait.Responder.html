@@ -12,7 +12,7 @@
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">http::StatusCode</span>, <span class="ident">HttpRequest</span>, <span class="ident">Responder</span>};
 
-<span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
+<span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) -&gt; <span class="kw">impl</span> <span class="ident">Responder</span> {
     <span class="string">&quot;Welcome!&quot;</span>.<span class="ident">with_status</span>(<span class="ident">StatusCode::OK</span>)
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle" open><summary><div id="method.with_header" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/actix_web/responder.rs.html#52-58" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#method.with_header" class="fnname">with_header</a>&lt;H&gt;(self, header: H) -&gt; CustomResponder&lt;Self&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;H: <a class="trait" href="http/header/trait.IntoHeaderPair.html" title="trait actix_web::http::header::IntoHeaderPair">IntoHeaderPair</a>,&nbsp;</span></h4></div></summary><div class="docblock"><p>Insert header to the final response.</p>
@@ -26,7 +26,7 @@
     <span class="ident">name</span>: <span class="ident">String</span>,
 }
 
-<span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Responder</span> {
+<span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) -&gt; <span class="kw">impl</span> <span class="ident">Responder</span> {
     <span class="ident">web::Json</span>(<span class="ident">MyObj</span> { <span class="ident">name</span>: <span class="string">&quot;Name&quot;</span>.<span class="ident">to_owned</span>() })
         .<span class="ident">with_header</span>((<span class="string">&quot;x-version&quot;</span>, <span class="string">&quot;1.2.3&quot;</span>))
 }</code></pre></div>
