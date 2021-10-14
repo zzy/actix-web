@@ -354,6 +354,19 @@
 <span id="354">354</span>
 <span id="355">355</span>
 <span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
 </pre><pre class="rust"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">proc_macro</span>;
 
 <span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
@@ -705,10 +718,23 @@
     <span class="ident">input</span>: <span class="ident">TokenStream</span>,
 ) -&gt; <span class="ident">TokenStream</span> {
     <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="macro">parse_macro_input!</span>(<span class="ident">args</span> <span class="kw">as</span> <span class="ident">syn::AttributeArgs</span>);
-    <span class="kw">match</span> <span class="ident">Route::new</span>(<span class="ident">args</span>, <span class="ident">input</span>, <span class="ident">method</span>) {
+    <span class="kw">match</span> <span class="ident">Route::new</span>(<span class="ident">args</span>, <span class="ident">input</span>.<span class="ident">clone</span>(), <span class="ident">method</span>) {
         <span class="prelude-val">Ok</span>(<span class="ident">route</span>) =&gt; <span class="ident">route</span>.<span class="ident">into_token_stream</span>().<span class="ident">into</span>(),
-        <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>.<span class="ident">to_compile_error</span>().<span class="ident">into</span>(),
+        <span class="comment">// on parse err, make IDEs happy; see fn docs</span>
+        <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="ident">input_and_compile_error</span>(<span class="ident">input</span>, <span class="ident">err</span>),
     }
+}
+
+<span class="doccomment">/// Converts the error to a token stream and appends it to the original input.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Returning the original input in addition to the error is good for IDEs which can gracefully</span>
+<span class="doccomment">/// recover and show more precise errors within the macro body.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See &lt;https://github.com/rust-analyzer/rust-analyzer/issues/10468&gt; for more info.</span>
+<span class="kw">fn</span> <span class="ident">input_and_compile_error</span>(<span class="kw-2">mut</span> <span class="ident">item</span>: <span class="ident">TokenStream</span>, <span class="ident">err</span>: <span class="ident">syn::Error</span>) -&gt; <span class="ident">TokenStream</span> {
+    <span class="kw">let</span> <span class="ident">compile_err</span> <span class="op">=</span> <span class="ident">TokenStream::from</span>(<span class="ident">err</span>.<span class="ident">to_compile_error</span>());
+    <span class="ident">item</span>.<span class="ident">extend</span>(<span class="ident">compile_err</span>);
+    <span class="kw">return</span> <span class="ident">item</span>;
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web_codegen" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
