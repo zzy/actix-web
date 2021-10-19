@@ -129,11 +129,6 @@
 <span id="129">129</span>
 <span id="130">130</span>
 <span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP primitives for the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Crate Features</span>
@@ -239,13 +234,8 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Implementation Details</span>
 <span class="doccomment">/// Uses Option to reduce necessary allocations when merging with request extensions.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">OnConnectData</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span>);
-
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">OnConnectData</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span>(<span class="prelude-val">None</span>)
-    }
-}
 
 <span class="kw">impl</span> <span class="ident">OnConnectData</span> {
     <span class="doccomment">/// Construct by calling the on-connect callback with the underlying transport I/O.</span>
