@@ -367,6 +367,10 @@
 <span id="367">367</span>
 <span id="368">368</span>
 <span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
 </pre><pre class="rust"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">proc_macro</span>;
 
 <span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
@@ -589,7 +593,7 @@
 <span class="kw">impl</span> <span class="ident">Route</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">args</span>: <span class="ident">AttributeArgs</span>,
-        <span class="ident">input</span>: <span class="ident">TokenStream</span>,
+        <span class="ident">ast</span>: <span class="ident">syn::ItemFn</span>,
         <span class="ident">method</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MethodType</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">is_empty</span>() {
@@ -603,14 +607,11 @@
                 ),
             ));
         }
-        <span class="kw">let</span> <span class="ident">ast</span>: <span class="ident">syn::ItemFn</span> <span class="op">=</span> <span class="ident">syn::parse</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
+
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">ast</span>.<span class="ident">sig</span>.<span class="ident">ident</span>.<span class="ident">clone</span>();
 
-        <span class="comment">// Try and pull out the doc comments so that we can reapply them to the</span>
-        <span class="comment">// generated struct.</span>
-        <span class="comment">//</span>
-        <span class="comment">// Note that multi line doc comments are converted to multiple doc</span>
-        <span class="comment">// attributes.</span>
+        <span class="comment">// Try and pull out the doc comments so that we can reapply them to the generated struct.</span>
+        <span class="comment">// Note that multi line doc comments are converted to multiple doc attributes.</span>
         <span class="kw">let</span> <span class="ident">doc_attributes</span> <span class="op">=</span> <span class="ident">ast</span>
             .<span class="ident">attrs</span>
             .<span class="ident">iter</span>()
@@ -718,9 +719,16 @@
     <span class="ident">input</span>: <span class="ident">TokenStream</span>,
 ) -&gt; <span class="ident">TokenStream</span> {
     <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="macro">parse_macro_input!</span>(<span class="ident">args</span> <span class="kw">as</span> <span class="ident">syn::AttributeArgs</span>);
-    <span class="kw">match</span> <span class="ident">Route::new</span>(<span class="ident">args</span>, <span class="ident">input</span>.<span class="ident">clone</span>(), <span class="ident">method</span>) {
+
+    <span class="kw">let</span> <span class="ident">ast</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">syn::parse</span>::<span class="op">&lt;</span><span class="ident">syn::ItemFn</span><span class="op">&gt;</span>(<span class="ident">input</span>.<span class="ident">clone</span>()) {
+        <span class="prelude-val">Ok</span>(<span class="ident">ast</span>) =&gt; <span class="ident">ast</span>,
+        <span class="comment">// on parse error, make IDEs happy; see fn docs</span>
+        <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="kw">return</span> <span class="ident">input_and_compile_error</span>(<span class="ident">input</span>, <span class="ident">err</span>),
+    };
+
+    <span class="kw">match</span> <span class="ident">Route::new</span>(<span class="ident">args</span>, <span class="ident">ast</span>, <span class="ident">method</span>) {
         <span class="prelude-val">Ok</span>(<span class="ident">route</span>) =&gt; <span class="ident">route</span>.<span class="ident">into_token_stream</span>().<span class="ident">into</span>(),
-        <span class="comment">// on parse err, make IDEs happy; see fn docs</span>
+        <span class="comment">// on macro related error, make IDEs happy; see fn docs</span>
         <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="ident">input_and_compile_error</span>(<span class="ident">input</span>, <span class="ident">err</span>),
     }
 }

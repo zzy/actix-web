@@ -931,7 +931,7 @@
 <span class="doccomment">/// use actix_service::Service;</span>
 <span class="doccomment">/// use actix_web::{test, web, App, HttpResponse, http::StatusCode};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[actix_rt::test]</span>
+<span class="doccomment">/// #[actix_web::test]</span>
 <span class="doccomment">/// async fn test_init_service() {</span>
 <span class="doccomment">///     let app = test::init_service(</span>
 <span class="doccomment">///         App::new()</span>
@@ -977,7 +977,7 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{test, web, App, HttpResponse, http::StatusCode};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[actix_rt::test]</span>
+<span class="doccomment">/// #[actix_web::test]</span>
 <span class="doccomment">/// async fn test_response() {</span>
 <span class="doccomment">///     let app = test::init_service(</span>
 <span class="doccomment">///         App::new()</span>
@@ -1008,7 +1008,7 @@
 <span class="doccomment">/// use actix_web::{test, web, App, HttpResponse, http::header};</span>
 <span class="doccomment">/// use bytes::Bytes;</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[actix_rt::test]</span>
+<span class="doccomment">/// #[actix_web::test]</span>
 <span class="doccomment">/// async fn test_index() {</span>
 <span class="doccomment">///     let app = test::init_service(</span>
 <span class="doccomment">///         App::new().service(</span>
@@ -1055,7 +1055,7 @@
 <span class="doccomment">/// use actix_web::{test, web, App, HttpResponse, http::header};</span>
 <span class="doccomment">/// use bytes::Bytes;</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[actix_rt::test]</span>
+<span class="doccomment">/// #[actix_web::test]</span>
 <span class="doccomment">/// async fn test_index() {</span>
 <span class="doccomment">///     let app = test::init_service(</span>
 <span class="doccomment">///         App::new().service(</span>
@@ -1103,7 +1103,7 @@
 <span class="doccomment">///     name: String,</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[actix_rt::test]</span>
+<span class="doccomment">/// #[actix_web::test]</span>
 <span class="doccomment">/// async fn test_post_person() {</span>
 <span class="doccomment">///     let app = test::init_service(</span>
 <span class="doccomment">///         App::new().service(</span>
@@ -1175,7 +1175,7 @@
 <span class="doccomment">///     name: String</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[actix_rt::test]</span>
+<span class="doccomment">/// #[actix_web::test]</span>
 <span class="doccomment">/// async fn test_add_person() {</span>
 <span class="doccomment">///     let app = test::init_service(</span>
 <span class="doccomment">///         App::new().service(</span>
@@ -1235,8 +1235,8 @@
 <span class="doccomment">///     }</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[test]</span>
-<span class="doccomment">/// fn test_index() {</span>
+<span class="doccomment">/// #[actix_web::test]</span>
+<span class="doccomment">/// async fn test_index() {</span>
 <span class="doccomment">///     let req = test::TestRequest::default().insert_header(&quot;content-type&quot;, &quot;text/plain&quot;)</span>
 <span class="doccomment">///         .to_http_request();</span>
 <span class="doccomment">///</span>

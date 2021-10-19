@@ -279,6 +279,7 @@
 <span id="279">279</span>
 <span id="280">280</span>
 <span id="281">281</span>
+<span id="282">282</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">firestorm::profile_method</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">IntoPatterns</span>, <span class="ident">Resource</span>, <span class="ident">ResourceDef</span>, <span class="ident">ResourcePath</span>};
@@ -287,8 +288,9 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ResourceId</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
 <span class="doccomment">/// Information about current resource</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ResourceInfo</span> {
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
     <span class="ident">resource</span>: <span class="ident">ResourceId</span>,
 }
 

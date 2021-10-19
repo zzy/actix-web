@@ -636,7 +636,6 @@
 <span id="636">636</span>
 <span id="637">637</span>
 <span id="638">638</span>
-<span id="639">639</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
     <span class="ident">fmt</span>,
@@ -902,7 +901,7 @@
 <span class="kw">mod</span> <span class="ident">rustls</span> {
     <span class="kw">use</span> <span class="ident">std::io</span>;
 
-    <span class="kw">use</span> <span class="ident">actix_tls::accept::rustls</span>::{<span class="ident">Acceptor</span>, <span class="ident">ServerConfig</span>, <span class="ident">Session</span>, <span class="ident">TlsStream</span>};
+    <span class="kw">use</span> <span class="ident">actix_tls::accept::rustls</span>::{<span class="ident">Acceptor</span>, <span class="ident">ServerConfig</span>, <span class="ident">TlsStream</span>};
     <span class="kw">use</span> <span class="ident">actix_tls::accept::TlsError</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
@@ -947,14 +946,13 @@
         <span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">protos</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="string">b&quot;h2&quot;</span>.<span class="ident">to_vec</span>(), <span class="string">b&quot;http/1.1&quot;</span>.<span class="ident">to_vec</span>()];
             <span class="ident">protos</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="ident">alpn_protocols</span>);
-            <span class="ident">config</span>.<span class="ident">set_protocols</span>(<span class="kw-2">&amp;</span><span class="ident">protos</span>);
+            <span class="ident">config</span>.<span class="ident">alpn_protocols</span> <span class="op">=</span> <span class="ident">protos</span>;
 
             <span class="ident">Acceptor::new</span>(<span class="ident">config</span>)
                 .<span class="ident">map_err</span>(<span class="ident">TlsError::Tls</span>)
                 .<span class="ident">map_init_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">panic!</span>())
                 .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">TlsStream</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">|</span> <span class="kw">async</span> {
-                    <span class="kw">let</span> <span class="ident">proto</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">protos</span>) <span class="op">=</span> <span class="ident">io</span>.<span class="ident">get_ref</span>().<span class="number">1</span>.<span class="ident">get_alpn_protocol</span>()
-                    {
+                    <span class="kw">let</span> <span class="ident">proto</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">protos</span>) <span class="op">=</span> <span class="ident">io</span>.<span class="ident">get_ref</span>().<span class="number">1</span>.<span class="ident">alpn_protocol</span>() {
                         <span class="kw">if</span> <span class="ident">protos</span>.<span class="ident">windows</span>(<span class="number">2</span>).<span class="ident">any</span>(<span class="op">|</span><span class="ident">window</span><span class="op">|</span> <span class="ident">window</span> <span class="op">==</span> <span class="string">b&quot;h2&quot;</span>) {
                             <span class="ident">Protocol::Http2</span>
                         } <span class="kw">else</span> {
