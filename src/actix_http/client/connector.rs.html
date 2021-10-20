@@ -759,6 +759,16 @@
 <span id="759">759</span>
 <span id="760">760</span>
 <span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>,
     <span class="ident">future::Future</span>,
@@ -789,18 +799,13 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Connect</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Protocol</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">actix_tls::connect::ssl::openssl::SslConnector</span> <span class="kw">as</span> <span class="ident">OpensslConnector</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">actix_tls::connect::ssl::rustls::ClientConfig</span>;
-
 <span class="kw">enum</span> <span class="ident">SslConnector</span> {
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
     <span class="prelude-val">None</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
-    <span class="ident">Openssl</span>(<span class="ident">OpensslConnector</span>),
+    <span class="ident">Openssl</span>(<span class="ident">actix_tls::connect::ssl::openssl::SslConnector</span>),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)]</span>
-    <span class="ident">Rustls</span>(<span class="ident">std::sync::Arc</span><span class="op">&lt;</span><span class="ident">ClientConfig</span><span class="op">&gt;</span>),
+    <span class="ident">Rustls</span>(<span class="ident">std::sync::Arc</span><span class="op">&lt;</span><span class="ident">actix_tls::connect::ssl::rustls::ClientConfig</span><span class="op">&gt;</span>),
 }
 
 <span class="doccomment">/// Manages HTTP client network connectivity.</span>
@@ -839,10 +844,35 @@
         }
     }
 
-    <span class="comment">// Build Ssl connector with openssl, based on supplied alpn protocols</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
+    <span class="doccomment">/// Provides an empty TLS connector when no TLS feature is enabled.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)))]</span>
+    <span class="kw">fn</span> <span class="ident">build_ssl</span>(<span class="kw">_</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">SslConnector</span> {
+        <span class="ident">SslConnector::None</span>
+    }
+
+    <span class="doccomment">/// Build TLS connector with rustls, based on supplied ALPN protocols</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that if both `openssl` and `rustls` features are enabled, rustls will be used.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)]</span>
     <span class="kw">fn</span> <span class="ident">build_ssl</span>(<span class="ident">protocols</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">SslConnector</span> {
-        <span class="kw">use</span> <span class="ident">actix_tls::connect::ssl::openssl::SslMethod</span>;
+        <span class="kw">use</span> <span class="ident">actix_tls::connect::tls::rustls</span>::{<span class="ident">webpki_roots_cert_store</span>, <span class="ident">ClientConfig</span>};
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">ClientConfig::builder</span>()
+            .<span class="ident">with_safe_defaults</span>()
+            .<span class="ident">with_root_certificates</span>(<span class="ident">webpki_roots_cert_store</span>())
+            .<span class="ident">with_no_client_auth</span>();
+
+        <span class="ident">config</span>.<span class="ident">alpn_protocols</span> <span class="op">=</span> <span class="ident">protocols</span>;
+
+        <span class="ident">SslConnector::Rustls</span>(<span class="ident">std::sync::Arc::new</span>(<span class="ident">config</span>))
+    }
+
+    <span class="doccomment">/// Build TLS connector with openssl, based on supplied ALPN protocols</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>, <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)))]</span>
+    <span class="kw">fn</span> <span class="ident">build_ssl</span>(<span class="ident">protocols</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">SslConnector</span> {
+        <span class="kw">use</span> <span class="ident">actix_tls::connect::tls::openssl</span>::{
+            <span class="ident">SslConnector</span> <span class="kw">as</span> <span class="ident">OpensslConnector</span>, <span class="ident">SslMethod</span>,
+        };
         <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">BufMut</span>, <span class="ident">BytesMut</span>};
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">alpn</span> <span class="op">=</span> <span class="ident">BytesMut::with_capacity</span>(<span class="number">20</span>);
@@ -852,27 +882,11 @@
         }
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ssl</span> <span class="op">=</span> <span class="ident">OpensslConnector::builder</span>(<span class="ident">SslMethod::tls</span>()).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">ssl</span>
-            .<span class="ident">set_alpn_protos</span>(<span class="kw-2">&amp;</span><span class="ident">alpn</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">error!</span>(<span class="string">&quot;Can not set alpn protocol: {:?}&quot;</span>, <span class="ident">e</span>));
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">ssl</span>.<span class="ident">set_alpn_protos</span>(<span class="kw-2">&amp;</span><span class="ident">alpn</span>) {
+            <span class="macro">error!</span>(<span class="string">&quot;Can not set ALPN protocol: {:?}&quot;</span>, <span class="ident">err</span>);
+        }
+
         <span class="ident">SslConnector::Openssl</span>(<span class="ident">ssl</span>.<span class="ident">build</span>())
-    }
-
-    <span class="comment">// Build Ssl connector with rustls, based on supplied alpn protocols</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>), <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">build_ssl</span>(<span class="ident">protocols</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">SslConnector</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>();
-        <span class="ident">config</span>.<span class="ident">set_protocols</span>(<span class="kw-2">&amp;</span><span class="ident">protocols</span>);
-        <span class="ident">config</span>.<span class="ident">root_store</span>.<span class="ident">add_server_trust_anchors</span>(
-            <span class="kw-2">&amp;</span><span class="ident">actix_tls::connect::ssl::rustls::TLS_SERVER_ROOTS</span>,
-        );
-        <span class="ident">SslConnector::Rustls</span>(<span class="ident">std::sync::Arc::new</span>(<span class="ident">config</span>))
-    }
-
-    <span class="comment">// ssl turned off, provides empty ssl connector</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)))]</span>
-    <span class="kw">fn</span> <span class="ident">build_ssl</span>(<span class="kw">_</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">SslConnector</span> {
-        <span class="ident">SslConnector::None</span>
     }
 }
 
@@ -928,14 +942,20 @@
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
     <span class="doccomment">/// Use custom `SslConnector` instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ssl</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">connector</span>: <span class="ident">OpensslConnector</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ssl</span>(
+        <span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">connector</span>: <span class="ident">actix_tls::connect::ssl::openssl::SslConnector</span>,
+    ) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">ssl</span> <span class="op">=</span> <span class="ident">SslConnector::Openssl</span>(<span class="ident">connector</span>);
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)]</span>
     <span class="doccomment">/// Use custom `SslConnector` instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rustls</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">connector</span>: <span class="ident">std::sync::Arc</span><span class="op">&lt;</span><span class="ident">ClientConfig</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rustls</span>(
+        <span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">connector</span>: <span class="ident">std::sync::Arc</span><span class="op">&lt;</span><span class="ident">actix_tls::connect::ssl::rustls::ClientConfig</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">ssl</span> <span class="op">=</span> <span class="ident">SslConnector::Rustls</span>(<span class="ident">connector</span>);
         <span class="self">self</span>
     }
