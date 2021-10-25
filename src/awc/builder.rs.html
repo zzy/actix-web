@@ -320,21 +320,17 @@
 <span id="320">320</span>
 <span id="321">321</span>
 <span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::net::IpAddr</span>;
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
 <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
 
-<span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">client</span>::{<span class="ident">Connector</span>, <span class="ident">ConnectorService</span>, <span class="ident">TcpConnect</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>},
-    <span class="ident">http</span>::{<span class="self">self</span>, <span class="ident">header</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">Uri</span>},
-};
+<span class="kw">use</span> <span class="ident">actix_http::http</span>::{<span class="self">self</span>, <span class="ident">header</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">Uri</span>};
 <span class="kw">use</span> <span class="ident">actix_rt::net</span>::{<span class="ident">ActixStream</span>, <span class="ident">TcpStream</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">Service</span>};
 
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::client</span>::{<span class="ident">Connector</span>, <span class="ident">ConnectorService</span>, <span class="ident">TcpConnect</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect::DefaultConnector</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::SendRequestError</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::middleware</span>::{<span class="ident">NestTransform</span>, <span class="ident">Redirect</span>, <span class="ident">Transform</span>};

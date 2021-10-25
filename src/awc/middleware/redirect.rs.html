@@ -594,7 +594,6 @@
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
     <span class="ident">body::Body</span>,
-    <span class="ident">client</span>::{<span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>},
     <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>},
     <span class="ident">RequestHead</span>, <span class="ident">RequestHeadType</span>,
 };
@@ -604,6 +603,7 @@
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Transform</span>;
 
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::client</span>::{<span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect</span>::{<span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ClientResponse</span>;
 

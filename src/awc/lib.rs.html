@@ -307,6 +307,8 @@
 <span id="307">307</span>
 <span id="308">308</span>
 <span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
 </pre><pre class="rust"><code><span class="doccomment">//! `awc` is a HTTP and WebSocket client library built on the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Making a GET request</span>
@@ -413,22 +415,8 @@
 <span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://actix.rs/img/logo.png&quot;</span>)]</span>
 <span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://actix.rs/favicon.ico&quot;</span>)]</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">cookie</span>;
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">client::Connector</span>, <span class="ident">http</span>};
-
-<span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">client</span>::{<span class="ident">TcpConnect</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>},
-    <span class="ident">http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>},
-    <span class="ident">RequestHead</span>,
-};
-<span class="kw">use</span> <span class="ident">actix_rt::net::TcpStream</span>;
-<span class="kw">use</span> <span class="ident">actix_service::Service</span>;
-
 <span class="kw">mod</span> <span class="ident">builder</span>;
+<span class="kw">mod</span> <span class="ident">client</span>;
 <span class="kw">mod</span> <span class="ident">connect</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">mod</span> <span class="ident">frozen</span>;
@@ -439,12 +427,28 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">test</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ws</span>;
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::http</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">cookie</span>;
+
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::builder::ClientBuilder</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::client::Connector</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::connect</span>::{<span class="ident">BoxConnectorService</span>, <span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::frozen</span>::{<span class="ident">FrozenClientRequest</span>, <span class="ident">FrozenSendBuilder</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::request::ClientRequest</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::response</span>::{<span class="ident">ClientResponse</span>, <span class="ident">JsonBody</span>, <span class="ident">MessageBody</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::sender::SendClientRequest</span>;
+
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
+
+<span class="kw">use</span> <span class="ident">actix_http</span>::{
+    <span class="ident">http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>},
+    <span class="ident">RequestHead</span>,
+};
+<span class="kw">use</span> <span class="ident">actix_rt::net::TcpStream</span>;
+<span class="kw">use</span> <span class="ident">actix_service::Service</span>;
+
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::client</span>::{<span class="ident">TcpConnect</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>};
 
 <span class="doccomment">/// An asynchronous HTTP and WebSocket client.</span>
 <span class="doccomment">///</span>
