@@ -526,7 +526,7 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Head</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
-    <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>);
+    <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>);
 
     <span class="kw">fn</span> <span class="ident">with_pool</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span>
     <span class="kw">where</span>
@@ -559,7 +559,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Head</span> <span class="kw">for</span> <span class="ident">RequestHead</span> {
-    <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">flags</span> <span class="op">=</span> <span class="ident">Flags::empty</span>();
         <span class="self">self</span>.<span class="ident">headers</span>.<span class="ident">clear</span>();
         <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">get_mut</span>().<span class="ident">clear</span>();
@@ -592,8 +592,8 @@
     }
 
     <span class="doccomment">/// Mutable reference to the message headers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">headers</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">HeaderMap</span> {
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">headers</span>
     }
 
     <span class="doccomment">/// Is to uppercase headers with Camel-Case.</span>
@@ -605,7 +605,7 @@
 
     <span class="doccomment">/// Set `true` to send headers which are formatted as Camel-Case.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_camel_case_headers</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">bool</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_camel_case_headers</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">bool</span>) {
         <span class="kw">if</span> <span class="ident">val</span> {
             <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::CAMEL_CASE</span>);
         } <span class="kw">else</span> {
@@ -615,7 +615,7 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Set connection type of the message</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_connection_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctype</span>: <span class="ident">ConnectionType</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_connection_type</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ctype</span>: <span class="ident">ConnectionType</span>) {
         <span class="kw">match</span> <span class="ident">ctype</span> {
             <span class="ident">ConnectionType::Close</span> =&gt; <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::CLOSE</span>),
             <span class="ident">ConnectionType::KeepAlive</span> =&gt; <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::KEEP_ALIVE</span>),
@@ -660,7 +660,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_chunking</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">bool</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_chunking</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">bool</span>) {
         <span class="kw">if</span> <span class="ident">val</span> {
             <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::NO_CHUNKING</span>);
         } <span class="kw">else</span> {
@@ -675,7 +675,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">set_expect</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">set_expect</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::EXPECT</span>);
     }
 }
@@ -754,13 +754,13 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Mutable reference to the message headers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">headers</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">HeaderMap</span> {
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">headers</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Set connection type of the message</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_connection_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctype</span>: <span class="ident">ConnectionType</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_connection_type</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ctype</span>: <span class="ident">ConnectionType</span>) {
         <span class="kw">match</span> <span class="ident">ctype</span> {
             <span class="ident">ConnectionType::Close</span> =&gt; <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::CLOSE</span>),
             <span class="ident">ConnectionType::KeepAlive</span> =&gt; <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::KEEP_ALIVE</span>),
@@ -826,7 +826,7 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Set no chunking for payload</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_chunking</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">bool</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_chunking</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">bool</span>) {
         <span class="kw">if</span> <span class="ident">val</span> {
             <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags::NO_CHUNKING</span>);
         } <span class="kw">else</span> {
@@ -857,13 +857,13 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">std::ops::DerefMut</span> <span class="kw">for</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>).<span class="ident">expect</span>(<span class="string">&quot;Multiple copies exist&quot;</span>)
+    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
+        <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">head</span>).<span class="ident">expect</span>(<span class="string">&quot;Multiple copies exist&quot;</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="ident">T::with_pool</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">release</span>(<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>()))
     }
 }
@@ -888,13 +888,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">std::ops::DerefMut</span> <span class="kw">for</span> <span class="ident">BoxedResponseHead</span> {
-    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
+    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">BoxedResponseHead</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">head</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">take</span>() {
             <span class="ident">RESPONSE_POOL</span>.<span class="ident">with</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">release</span>(<span class="ident">head</span>))
         }
@@ -924,7 +924,7 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">msg</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>().<span class="ident">pop</span>() {
             <span class="comment">// Message is put in pool only when it&#39;s the last copy.</span>
             <span class="comment">// which means it&#39;s guaranteed to be unique when popped out.</span>
-            <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">msg</span>)
+            <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="ident">msg</span>)
                 .<span class="ident">expect</span>(<span class="string">&quot;Multiple copies exist&quot;</span>)
                 .<span class="ident">clear</span>();
             <span class="ident">Message</span> { <span class="ident">head</span>: <span class="ident">msg</span> }
@@ -938,7 +938,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Release request instance</span>
     <span class="kw">fn</span> <span class="ident">release</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>();
         <span class="kw">if</span> <span class="ident">v</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">128</span> {
             <span class="ident">v</span>.<span class="ident">push</span>(<span class="ident">msg</span>);
         }
@@ -969,7 +969,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Release request instance</span>
     <span class="kw">fn</span> <span class="ident">release</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">msg</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ResponseHead</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>();
         <span class="kw">if</span> <span class="ident">v</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">128</span> {
             <span class="ident">msg</span>.<span class="ident">extensions</span>.<span class="ident">get_mut</span>().<span class="ident">clear</span>();
             <span class="ident">v</span>.<span class="ident">push</span>(<span class="ident">msg</span>);

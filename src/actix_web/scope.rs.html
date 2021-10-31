@@ -1414,10 +1414,10 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">configure</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cfg_fn</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ServiceConfig</span>),
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ServiceConfig</span>),
     {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig::new</span>();
-        <span class="ident">cfg_fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cfg</span>);
+        <span class="ident">cfg_fn</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cfg</span>);
 
         <span class="self">self</span>.<span class="ident">services</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">services</span>);
         <span class="self">self</span>.<span class="ident">external</span>.<span class="ident">extend</span>(<span class="ident">cfg</span>.<span class="ident">external</span>);
@@ -1630,7 +1630,7 @@
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">register</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">AppService</span>) {
+    <span class="kw">fn</span> <span class="ident">register</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;mut</span> <span class="ident">AppService</span>) {
         <span class="comment">// update default resource if needed</span>
         <span class="kw">let</span> <span class="ident">default</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">default</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">config</span>.<span class="ident">default_service</span>());
 
@@ -1638,13 +1638,13 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">clone_config</span>();
         <span class="self">self</span>.<span class="ident">services</span>
             .<span class="ident">into_iter</span>()
-            .<span class="ident">for_each</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">srv</span><span class="op">|</span> <span class="ident">srv</span>.<span class="ident">register</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cfg</span>));
+            .<span class="ident">for_each</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">srv</span><span class="op">|</span> <span class="ident">srv</span>.<span class="ident">register</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cfg</span>));
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rmap</span> <span class="op">=</span> <span class="ident">ResourceMap::new</span>(<span class="ident">ResourceDef::root_prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">rdef</span>));
 
         <span class="comment">// external resources</span>
-        <span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="kw">in</span> <span class="ident">mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">external</span>) {
-            <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="prelude-val">None</span>);
+        <span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="kw">in</span> <span class="ident">mem::take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">external</span>) {
+            <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rdef</span>, <span class="prelude-val">None</span>);
         }
 
         <span class="comment">// complete scope pipeline creation</span>
@@ -1655,7 +1655,7 @@
                 .<span class="number">1</span>
                 .<span class="ident">into_iter</span>()
                 .<span class="ident">map</span>(<span class="op">|</span>(<span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="ident">srv</span>, <span class="ident">guards</span>, <span class="ident">nested</span>)<span class="op">|</span> {
-                    <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rdef</span>, <span class="ident">nested</span>);
+                    <span class="ident">rmap</span>.<span class="ident">add</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rdef</span>, <span class="ident">nested</span>);
                     (<span class="ident">rdef</span>, <span class="ident">srv</span>, <span class="ident">RefCell::new</span>(<span class="ident">guards</span>))
                 })
                 .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
@@ -1752,7 +1752,7 @@
     <span class="macro">actix_service::always_ready!</span>();
 
     <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) -&gt; <span class="ident"><span class="self">Self</span>::Future</span> {
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">router</span>.<span class="ident">recognize_fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">req</span>, <span class="op">|</span><span class="ident">req</span>, <span class="ident">guards</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">router</span>.<span class="ident">recognize_fn</span>(<span class="kw-2">&amp;mut</span> <span class="ident">req</span>, <span class="op">|</span><span class="ident">req</span>, <span class="ident">guards</span><span class="op">|</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">guards</span>) <span class="op">=</span> <span class="ident">guards</span> {
                 <span class="kw">for</span> <span class="ident">f</span> <span class="kw">in</span> <span class="ident">guards</span> {
                     <span class="kw">if</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">check</span>(<span class="ident">req</span>.<span class="ident">head</span>()) {

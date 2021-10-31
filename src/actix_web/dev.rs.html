@@ -137,7 +137,7 @@
 <span class="kw">use</span> <span class="ident">actix_router::Patterns</span>;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">ensure_leading_slash</span>(<span class="kw-2">mut</span> <span class="ident">patterns</span>: <span class="ident">Patterns</span>) -&gt; <span class="ident">Patterns</span> {
-    <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">patterns</span> {
+    <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="ident">patterns</span> {
         <span class="ident">Patterns::Single</span>(<span class="ident">pat</span>) =&gt; {
             <span class="kw">if</span> <span class="op">!</span><span class="ident">pat</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">pat</span>.<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>) {
                 <span class="ident">pat</span>.<span class="ident">insert</span>(<span class="number">0</span>, <span class="string">&#39;/&#39;</span>);
@@ -164,7 +164,7 @@
     <span class="doccomment">/// Set content encoding</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Must be used with [`crate::middleware::Compress`] to take effect.</span>
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>;
+    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident">ResponseBuilder</span> {
@@ -172,7 +172,7 @@
         <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
         <span class="self">self</span>
     }
@@ -183,7 +183,7 @@
         <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
         <span class="self">self</span>
     }
@@ -194,7 +194,7 @@
         <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
         <span class="self">self</span>
     }
@@ -205,7 +205,7 @@
         <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
         <span class="self">self</span>
     }

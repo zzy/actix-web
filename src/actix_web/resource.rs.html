@@ -1156,11 +1156,11 @@
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">register</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">AppService</span>) {
+    <span class="kw">fn</span> <span class="ident">register</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;mut</span> <span class="ident">AppService</span>) {
         <span class="kw">let</span> <span class="ident">guards</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">guards</span>.<span class="ident">is_empty</span>() {
             <span class="prelude-val">None</span>
         } <span class="kw">else</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">std::mem::take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">guards</span>))
+            <span class="prelude-val">Some</span>(<span class="ident">std::mem::take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">guards</span>))
         };
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdef</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">is_root</span>() <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">rdef</span>.<span class="ident">is_empty</span>() {
@@ -1239,7 +1239,7 @@
 
     <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">ServiceRequest</span>) -&gt; <span class="ident"><span class="self">Self</span>::Future</span> {
         <span class="kw">for</span> <span class="ident">route</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">routes</span> {
-            <span class="kw">if</span> <span class="ident">route</span>.<span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">req</span>) {
+            <span class="kw">if</span> <span class="ident">route</span>.<span class="ident">check</span>(<span class="kw-2">&amp;mut</span> <span class="ident">req</span>) {
                 <span class="kw">return</span> <span class="ident">route</span>.<span class="ident">call</span>(<span class="ident">req</span>);
             }
         }

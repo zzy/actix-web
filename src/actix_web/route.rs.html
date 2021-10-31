@@ -418,8 +418,8 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take_guards</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="ident">std::mem::take</span>(<span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">guards</span>).<span class="ident">unwrap</span>())
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take_guards</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="ident">std::mem::take</span>(<span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">guards</span>).<span class="ident">unwrap</span>())
     }
 }
 
@@ -448,7 +448,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RouteService</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ServiceRequest</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ServiceRequest</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">for</span> <span class="ident">f</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">guards</span>.<span class="ident">iter</span>() {
             <span class="kw">if</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">check</span>(<span class="ident">req</span>.<span class="ident">head</span>()) {
                 <span class="kw">return</span> <span class="bool-val">false</span>;
@@ -485,7 +485,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">method</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">method</span>: <span class="ident">Method</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">guards</span>)
+        <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">guards</span>)
             .<span class="ident">unwrap</span>()
             .<span class="ident">push</span>(<span class="ident">Box::new</span>(<span class="ident">guard::Method</span>(<span class="ident">method</span>)));
         <span class="self">self</span>
@@ -505,7 +505,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guard</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Guard</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">guards</span>).<span class="ident">unwrap</span>().<span class="ident">push</span>(<span class="ident">Box::new</span>(<span class="ident">f</span>));
+        <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">guards</span>).<span class="ident">unwrap</span>().<span class="ident">push</span>(<span class="ident">Box::new</span>(<span class="ident">f</span>));
         <span class="self">self</span>
     }
 

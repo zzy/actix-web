@@ -743,7 +743,7 @@
     <span class="ident">backlog</span>: <span class="ident">u32</span>,
     <span class="ident">sockets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Socket</span><span class="op">&gt;</span>,
     <span class="ident">builder</span>: <span class="ident">ServerBuilder</span>,
-    <span class="ident">on_connect_fn</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Any</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect_fn</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Any</span>, <span class="kw-2">&amp;mut</span> <span class="ident">Extensions</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">S</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
 }
 
@@ -793,7 +793,7 @@
     <span class="doccomment">/// See `on_connect` example for additional details.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_connect</span><span class="op">&lt;</span><span class="ident">CB</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">f</span>: <span class="ident">CB</span>) -&gt; <span class="ident">HttpServer</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">I</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">CB</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Any</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">CB</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Any</span>, <span class="kw-2">&amp;mut</span> <span class="ident">Extensions</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="ident">HttpServer</span> {
             <span class="ident">factory</span>: <span class="self">self</span>.<span class="ident">factory</span>,

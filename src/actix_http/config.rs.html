@@ -575,7 +575,7 @@
     }
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_date</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dst</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">BytesMut</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_date</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dst</span>: <span class="kw-2">&amp;mut</span> <span class="ident">BytesMut</span>) {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span>: [<span class="ident">u8</span>; <span class="number">39</span>] <span class="op">=</span> [<span class="number">0</span>; <span class="number">39</span>];
         <span class="ident">buf</span>[..<span class="number">6</span>].<span class="ident">copy_from_slice</span>(<span class="string">b&quot;date: &quot;</span>);
         <span class="self">self</span>.<span class="number">0</span>
@@ -585,7 +585,7 @@
         <span class="ident">dst</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>);
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">set_date_header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dst</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">BytesMut</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">set_date_header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dst</span>: <span class="kw-2">&amp;mut</span> <span class="ident">BytesMut</span>) {
         <span class="self">self</span>.<span class="number">0</span>
             .<span class="ident">date_service</span>
             .<span class="ident">set_date</span>(<span class="op">|</span><span class="ident">date</span><span class="op">|</span> <span class="ident">dst</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">date</span>.<span class="ident">bytes</span>));
@@ -608,14 +608,14 @@
         <span class="ident">date</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="macro">write!</span>(<span class="self">self</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">httpdate::fmt_http_date</span>(<span class="ident">SystemTime::now</span>())).<span class="ident">unwrap</span>();
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Write</span> <span class="kw">for</span> <span class="ident">Date</span> {
-    <span class="kw">fn</span> <span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">write_str</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">len</span>();
         <span class="self">self</span>.<span class="ident">bytes</span>[<span class="self">self</span>.<span class="ident">pos</span>..<span class="self">self</span>.<span class="ident">pos</span> <span class="op">+</span> <span class="ident">len</span>].<span class="ident">copy_from_slice</span>(<span class="ident">s</span>.<span class="ident">as_bytes</span>());
         <span class="self">self</span>.<span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">len</span>;
@@ -630,7 +630,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">DateService</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="comment">// stop the timer update async task on drop.</span>
         <span class="self">self</span>.<span class="ident">handle</span>.<span class="ident">abort</span>();
     }
@@ -712,7 +712,7 @@
     }
 
     <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">NotifyOnDrop</span> {
-        <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
             <span class="ident">NOTIFY_DROPPED</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">bool</span><span class="op">|</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">b</span>) <span class="op">=</span> <span class="ident">bool</span>.<span class="ident">borrow_mut</span>().<span class="ident">as_mut</span>() {
                     <span class="kw-2">*</span><span class="ident">b</span> <span class="op">=</span> <span class="bool-val">true</span>;
@@ -735,7 +735,7 @@
         <span class="ident">yield_now</span>().<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf1</span> <span class="op">=</span> <span class="ident">BytesMut::with_capacity</span>(<span class="ident">DATE_VALUE_LENGTH</span> <span class="op">+</span> <span class="number">10</span>);
-        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf1</span>);
+        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf1</span>);
         <span class="kw">let</span> <span class="ident">now1</span> <span class="op">=</span> <span class="ident">settings</span>.<span class="ident">now</span>();
 
         <span class="ident">sleep_until</span>(<span class="ident">Instant::now</span>() <span class="op">+</span> <span class="ident">Duration::from_secs</span>(<span class="number">2</span>)).<span class="kw">await</span>;
@@ -743,7 +743,7 @@
 
         <span class="kw">let</span> <span class="ident">now2</span> <span class="op">=</span> <span class="ident">settings</span>.<span class="ident">now</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf2</span> <span class="op">=</span> <span class="ident">BytesMut::with_capacity</span>(<span class="ident">DATE_VALUE_LENGTH</span> <span class="op">+</span> <span class="number">10</span>);
-        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf2</span>);
+        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf2</span>);
 
         <span class="macro">assert_ne!</span>(<span class="ident">now1</span>, <span class="ident">now2</span>);
 
@@ -798,9 +798,9 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_date</span>() {
         <span class="kw">let</span> <span class="ident">settings</span> <span class="op">=</span> <span class="ident">ServiceConfig::new</span>(<span class="ident">KeepAlive::Os</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf1</span> <span class="op">=</span> <span class="ident">BytesMut::with_capacity</span>(<span class="ident">DATE_VALUE_LENGTH</span> <span class="op">+</span> <span class="number">10</span>);
-        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf1</span>);
+        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf1</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf2</span> <span class="op">=</span> <span class="ident">BytesMut::with_capacity</span>(<span class="ident">DATE_VALUE_LENGTH</span> <span class="op">+</span> <span class="number">10</span>);
-        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf2</span>);
+        <span class="ident">settings</span>.<span class="ident">set_date</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf2</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">buf1</span>, <span class="ident">buf2</span>);
     }
 }

@@ -179,7 +179,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">HttpResponse::new</span>(<span class="self">self</span>.<span class="ident">status_code</span>());
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">BytesMut::new</span>();
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">helpers::MutWriter</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>), <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>);
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">helpers::MutWriter</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf</span>), <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>);
 
         <span class="ident">res</span>.<span class="ident">headers_mut</span>().<span class="ident">insert</span>(
             <span class="ident">header::CONTENT_TYPE</span>,

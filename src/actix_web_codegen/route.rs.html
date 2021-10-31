@@ -388,7 +388,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">ResourceType</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TokenStream2</span>) {
+    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream2</span>) {
         <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;to&quot;</span>);
         <span class="ident">stream</span>.<span class="ident">append</span>(<span class="ident">ident</span>);
     }
@@ -435,7 +435,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">MethodType</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TokenStream2</span>) {
+    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream2</span>) {
         <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">Ident::new</span>(<span class="self">self</span>.<span class="ident">as_str</span>(), <span class="ident">Span::call_site</span>());
         <span class="ident">stream</span>.<span class="ident">append</span>(<span class="ident">ident</span>);
     }
@@ -652,7 +652,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">Route</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TokenStream2</span>) {
+    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream2</span>) {
         <span class="kw">let</span> <span class="self">Self</span> {
             <span class="ident">name</span>,
             <span class="ident">ast</span>,
@@ -695,7 +695,7 @@
             <span class="kw">pub</span> <span class="kw">struct</span> #<span class="ident">name</span>;
 
             <span class="kw">impl</span> <span class="ident">actix_web::dev::HttpServiceFactory</span> <span class="kw">for</span> #<span class="ident">name</span> {
-                <span class="kw">fn</span> <span class="ident">register</span>(<span class="self">self</span>, <span class="ident">__config</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">actix_web::dev::AppService</span>) {
+                <span class="kw">fn</span> <span class="ident">register</span>(<span class="self">self</span>, <span class="ident">__config</span>: <span class="kw-2">&amp;mut</span> <span class="ident">actix_web::dev::AppService</span>) {
                     #<span class="ident">ast</span>
                     <span class="kw">let</span> <span class="ident">__resource</span> <span class="op">=</span> <span class="ident">actix_web::Resource::new</span>(#<span class="ident">path</span>)
                         .<span class="ident">name</span>(#<span class="ident">resource_name</span>)

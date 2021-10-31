@@ -315,7 +315,7 @@
 
     <span class="ident">framed</span>.<span class="ident">send</span>((<span class="ident">head</span>, <span class="ident">body</span>.<span class="ident">size</span>()).<span class="ident">into</span>()).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pin_framed</span> <span class="op">=</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">framed</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pin_framed</span> <span class="op">=</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">framed</span>);
 
     <span class="comment">// special handle for EXPECT request.</span>
     <span class="kw">let</span> (<span class="ident">do_send</span>, <span class="kw-2">mut</span> <span class="ident">res_head</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">is_expect</span> {
@@ -370,7 +370,7 @@
     <span class="ident">framed</span>.<span class="ident">send</span>((<span class="ident">head</span>, <span class="ident">BodySize::None</span>).<span class="ident">into</span>()).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="comment">// read response head.</span>
-    <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">framed</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>))
+    <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">framed</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>))
         .<span class="kw">await</span>
         .<span class="ident">ok_or</span>(<span class="ident">ConnectError::Disconnected</span>)<span class="question-mark">?</span><span class="question-mark">?</span>;
 
@@ -380,7 +380,7 @@
 <span class="doccomment">/// send request body to the peer</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">Io</span>, <span class="ident">B</span><span class="op">&gt;</span>(
     <span class="ident">body</span>: <span class="ident">B</span>,
-    <span class="kw-2">mut</span> <span class="ident">framed</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">Io</span>, <span class="ident">h1::ClientCodec</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw-2">mut</span> <span class="ident">framed</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">Io</span>, <span class="ident">h1::ClientCodec</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SendRequestError</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Io</span>: <span class="ident">ConnectionIo</span>,
@@ -442,7 +442,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Io</span>: <span class="ident">ConnectionIo</span><span class="op">&gt;</span> <span class="ident">Stream</span> <span class="kw">for</span> <span class="ident">PlStream</span><span class="op">&lt;</span><span class="ident">Io</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">project</span>();
 
         <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">this</span>.<span class="ident">framed</span>.<span class="ident">as_mut</span>().<span class="ident">next_item</span>(<span class="ident">cx</span>)<span class="question-mark">?</span>) {
