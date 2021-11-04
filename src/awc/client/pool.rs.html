@@ -655,6 +655,7 @@
 <span id="655">655</span>
 <span id="656">656</span>
 <span id="657">657</span>
+<span id="658">658</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Client connection pooling keyed on the authority part of the connection URI.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -676,6 +677,7 @@
 <span class="kw">use</span> <span class="ident">actix_service::Service</span>;
 <span class="kw">use</span> <span class="ident">ahash::AHashMap</span>;
 <span class="kw">use</span> <span class="ident">futures_core::future::LocalBoxFuture</span>;
+<span class="kw">use</span> <span class="ident">futures_util::FutureExt</span>;
 <span class="kw">use</span> <span class="ident">http::uri::Authority</span>;
 <span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
 <span class="kw">use</span> <span class="ident">tokio::sync</span>::{<span class="ident">OwnedSemaphorePermit</span>, <span class="ident">Semaphore</span>};
@@ -858,7 +860,7 @@
                             <span class="comment">// check if the connection is still usable</span>
                             <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ConnectionInnerType::H1</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">io</span>) <span class="op">=</span> <span class="ident">c</span>.<span class="ident">conn</span> {
                                 <span class="kw">let</span> <span class="ident">check</span> <span class="op">=</span> <span class="ident">ConnectionCheckFuture</span> { <span class="ident">io</span> };
-                                <span class="kw">match</span> <span class="ident">check</span>.<span class="kw">await</span> {
+                                <span class="kw">match</span> <span class="ident">check</span>.<span class="ident">now_or_never</span>().<span class="ident">expect</span>(<span class="string">&quot;ConnectionCheckFuture must never yield with Poll::Pending.&quot;</span>) {
                                     <span class="ident">ConnectionState::Tainted</span> =&gt; {
                                         <span class="ident">inner</span>.<span class="ident">close</span>(<span class="ident">c</span>.<span class="ident">conn</span>);
                                         <span class="kw">continue</span>;
