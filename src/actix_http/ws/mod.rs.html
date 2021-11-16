@@ -350,7 +350,6 @@
 <span id="350">350</span>
 <span id="351">351</span>
 <span id="352">352</span>
-<span id="353">353</span>
 </pre><pre class="rust"><code><span class="doccomment">//! WebSocket protocol implementation.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! To setup a WebSocket, first perform the WebSocket handshake then on success convert `Payload` into a</span>
@@ -563,7 +562,6 @@
 
     <span class="ident">Response::build</span>(<span class="ident">StatusCode::SWITCHING_PROTOCOLS</span>)
         .<span class="ident">upgrade</span>(<span class="string">&quot;websocket&quot;</span>)
-        .<span class="ident">insert_header</span>((<span class="ident">header::TRANSFER_ENCODING</span>, <span class="string">&quot;chunked&quot;</span>))
         .<span class="ident">insert_header</span>((
             <span class="ident">header::SEC_WEBSOCKET_ACCEPT</span>,
             <span class="comment">// key is known to be header value safe ascii</span>
