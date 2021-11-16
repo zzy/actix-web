@@ -726,7 +726,7 @@
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
-        <span class="self">self</span>.<span class="ident">body</span>(<span class="ident">AnyBody::from_message</span>(<span class="ident">BodyStream::new</span>(<span class="ident">stream</span>)))
+        <span class="self">self</span>.<span class="ident">body</span>(<span class="ident">AnyBody::new_boxed</span>(<span class="ident">BodyStream::new</span>(<span class="ident">stream</span>)))
     }
 
     <span class="doccomment">/// Generate response with an empty body.</span>

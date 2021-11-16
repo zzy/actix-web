@@ -2506,7 +2506,7 @@
         <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">Request</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">path</span>().<span class="ident">as_bytes</span>();
             <span class="ident">ready</span>(<span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(
-                <span class="ident">Response::ok</span>().<span class="ident">set_body</span>(<span class="ident">AnyBody::from_slice</span>(<span class="ident">path</span>)),
+                <span class="ident">Response::ok</span>().<span class="ident">set_body</span>(<span class="ident">AnyBody::copy_from_slice</span>(<span class="ident">path</span>)),
             ))
         })
     }

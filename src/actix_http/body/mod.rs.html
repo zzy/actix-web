@@ -259,8 +259,6 @@
 <span id="259">259</span>
 <span id="260">260</span>
 <span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Traits and structures to aid consuming and writing HTTP payloads.</span>
 
 <span class="kw">use</span> <span class="ident">std::task::Poll</span>;
@@ -274,15 +272,13 @@
 <span class="kw">mod</span> <span class="ident">body</span>;
 <span class="kw">mod</span> <span class="ident">body_stream</span>;
 <span class="kw">mod</span> <span class="ident">message_body</span>;
-<span class="kw">mod</span> <span class="ident">response_body</span>;
 <span class="kw">mod</span> <span class="ident">size</span>;
 <span class="kw">mod</span> <span class="ident">sized_stream</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>, <span class="ident">BoxAnyBody</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>, <span class="ident">BoxBody</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::body_stream::BodyStream</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::message_body::MessageBody</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident"><span class="self">self</span>::message_body::MessageBodyMapErr</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::response_body::ResponseBody</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::size::BodySize</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::sized_stream::SizedStream</span>;
 
@@ -371,10 +367,10 @@
         <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
         <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Body::from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">size</span>(),
+            <span class="ident">Body::copy_from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">size</span>(),
             <span class="ident">BodySize::Sized</span>(<span class="number">4</span>)
         );
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Body::copy_from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
         <span class="kw">let</span> <span class="ident">sb</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="kw-2">&amp;</span><span class="string">b&quot;test&quot;</span>[..]);
         <span class="macro">pin!</span>(<span class="ident">sb</span>);
 

@@ -326,6 +326,9 @@
 <span id="326">326</span>
 <span id="327">327</span>
 <span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>,
@@ -554,6 +557,9 @@
             <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>,
         }
     }
+
+    <span class="comment">// TODO: into_body equivalent</span>
+    <span class="comment">// TODO: into_boxed_body</span>
 
     <span class="doccomment">/// Extract response body</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_body</span>(<span class="self">self</span>) -&gt; <span class="ident">B</span> {
