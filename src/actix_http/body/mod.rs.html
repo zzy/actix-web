@@ -296,7 +296,7 @@
 <span class="doccomment">/// use bytes::Bytes;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # async fn test_to_bytes() {</span>
-<span class="doccomment">/// let body = Body::Empty;</span>
+<span class="doccomment">/// let body = Body::None;</span>
 <span class="doccomment">/// let bytes = to_bytes(body).await.unwrap();</span>
 <span class="doccomment">/// assert!(bytes.is_empty());</span>
 <span class="doccomment">///</span>
@@ -307,8 +307,9 @@
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">to_bytes</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">MessageBody</span><span class="op">&gt;</span>(<span class="ident">body</span>: <span class="ident">B</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">B::Error</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">cap</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">body</span>.<span class="ident">size</span>() {
-        <span class="ident">BodySize::None</span> <span class="op">|</span> <span class="ident">BodySize::Empty</span> <span class="op">|</span> <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">Bytes::new</span>()),
+        <span class="ident">BodySize::None</span> <span class="op">|</span> <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">Bytes::new</span>()),
         <span class="ident">BodySize::Sized</span>(<span class="ident">size</span>) =&gt; <span class="ident">size</span> <span class="kw">as</span> <span class="ident">usize</span>,
+        <span class="comment">// good enough first guess for chunk size</span>
         <span class="ident">BodySize::Stream</span> =&gt; <span class="number">32_768</span>,
     };
 
@@ -447,7 +448,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_unit</span>() {
-        <span class="macro">assert_eq!</span>(().<span class="ident">size</span>(), <span class="ident">BodySize::Empty</span>);
+        <span class="macro">assert_eq!</span>(().<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">0</span>));
         <span class="macro">assert!</span>(<span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> ()).<span class="ident">poll_next</span>(<span class="ident">cx</span>))
             .<span class="kw">await</span>
             .<span class="ident">is_none</span>());
@@ -457,11 +458,11 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_box_and_pin</span>() {
         <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="ident">Box::new</span>(());
         <span class="macro">pin!</span>(<span class="ident">val</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">val</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Empty</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">val</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">0</span>));
         <span class="macro">assert!</span>(<span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">val</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="kw">await</span>.<span class="ident">is_none</span>());
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">val</span> <span class="op">=</span> <span class="ident">Box::pin</span>(());
-        <span class="macro">assert_eq!</span>(<span class="ident">val</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Empty</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">val</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">0</span>));
         <span class="macro">assert!</span>(<span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">val</span>.<span class="ident">as_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>)).<span class="kw">await</span>.<span class="ident">is_none</span>());
     }
 
@@ -477,7 +478,6 @@
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_body_debug</span>() {
         <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">Body::None</span>).<span class="ident">contains</span>(<span class="string">&quot;Body::None&quot;</span>));
-        <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">Body::Empty</span>).<span class="ident">contains</span>(<span class="string">&quot;Body::Empty&quot;</span>));
         <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">Body::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>))).<span class="ident">contains</span>(<span class="string">&#39;1&#39;</span>));
     }
 
@@ -515,7 +515,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_to_bytes</span>() {
-        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">Body::Empty</span>;
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">Body::empty</span>();
         <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">to_bytes</span>(<span class="ident">body</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert!</span>(<span class="ident">bytes</span>.<span class="ident">is_empty</span>());
 

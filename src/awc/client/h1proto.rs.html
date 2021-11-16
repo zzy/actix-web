@@ -299,7 +299,7 @@
     <span class="comment">// RFC: https://tools.ietf.org/html/rfc7231#section-5.1.1</span>
     <span class="kw">let</span> <span class="ident">is_expect</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">headers</span>.<span class="ident">contains_key</span>(<span class="ident">EXPECT</span>) {
         <span class="kw">match</span> <span class="ident">body</span>.<span class="ident">size</span>() {
-            <span class="ident">BodySize::None</span> <span class="op">|</span> <span class="ident">BodySize::Empty</span> <span class="op">|</span> <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; {
+            <span class="ident">BodySize::None</span> <span class="op">|</span> <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">keep_alive</span> <span class="op">=</span> <span class="ident">framed</span>.<span class="ident">codec_ref</span>().<span class="ident">keepalive</span>();
                 <span class="ident">framed</span>.<span class="ident">io_mut</span>().<span class="ident">on_release</span>(<span class="ident">keep_alive</span>);
 
@@ -333,7 +333,7 @@
     <span class="kw">if</span> <span class="ident">do_send</span> {
         <span class="comment">// send request body</span>
         <span class="kw">match</span> <span class="ident">body</span>.<span class="ident">size</span>() {
-            <span class="ident">BodySize::None</span> <span class="op">|</span> <span class="ident">BodySize::Empty</span> <span class="op">|</span> <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; {}
+            <span class="ident">BodySize::None</span> <span class="op">|</span> <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; {}
             <span class="kw">_</span> =&gt; <span class="ident">send_body</span>(<span class="ident">body</span>, <span class="ident">pin_framed</span>.<span class="ident">as_mut</span>()).<span class="kw">await</span><span class="question-mark">?</span>,
         };
 

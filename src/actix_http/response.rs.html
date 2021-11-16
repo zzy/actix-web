@@ -409,7 +409,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="ident">BoxedResponseHead::new</span>(<span class="ident">status</span>),
-            <span class="ident">body</span>: <span class="ident">AnyBody::Empty</span>,
+            <span class="ident">body</span>: <span class="ident">AnyBody::empty</span>(),
         }
     }
 
