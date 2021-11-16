@@ -313,7 +313,7 @@
 <span id="313">313</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">io::Write</span> <span class="kw">as</span> <span class="kw">_</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::Body</span>, <span class="ident">header</span>, <span class="ident">StatusCode</span>};
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::AnyBody</span>, <span class="ident">header</span>, <span class="ident">StatusCode</span>};
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">BufMut</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">BytesMut</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Error</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>, <span class="ident">ResponseError</span>};
@@ -401,7 +401,7 @@
                     <span class="ident">header::CONTENT_TYPE</span>,
                     <span class="ident">header::HeaderValue::from_static</span>(<span class="string">&quot;text/plain; charset=utf-8&quot;</span>),
                 );
-                <span class="ident">res</span>.<span class="ident">set_body</span>(<span class="ident">Body::from</span>(<span class="ident">buf</span>.<span class="ident">into_inner</span>()))
+                <span class="ident">res</span>.<span class="ident">set_body</span>(<span class="ident">AnyBody::from</span>(<span class="ident">buf</span>.<span class="ident">into_inner</span>()))
             }
 
             <span class="ident">InternalErrorType::Response</span>(<span class="kw-2">ref</span> <span class="ident">resp</span>) =&gt; {

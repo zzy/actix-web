@@ -678,7 +678,7 @@
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">body::Body</span>,
+    <span class="ident">body::AnyBody</span>,
     <span class="ident">http</span>::{
         <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">IntoHeaderPair</span>},
         <span class="ident">ConnectionType</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
@@ -1023,7 +1023,7 @@
     <span class="doccomment">/// Complete request construction and send body.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B</span>) -&gt; <span class="ident">SendClientRequest</span>
     <span class="kw">where</span>
-        <span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>,
+        <span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>,
     {
         <span class="kw">let</span> <span class="ident">slf</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">prep_for_sending</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">slf</span>) =&gt; <span class="ident">slf</span>,

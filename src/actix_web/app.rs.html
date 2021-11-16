@@ -717,7 +717,7 @@
 <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
 
-<span class="kw">use</span> <span class="ident">actix_http::body</span>::{<span class="ident">Body</span>, <span class="ident">MessageBody</span>};
+<span class="kw">use</span> <span class="ident">actix_http::body</span>::{<span class="ident">AnyBody</span>, <span class="ident">MessageBody</span>};
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Request</span>};
 <span class="kw">use</span> <span class="ident">actix_service::boxed</span>::{<span class="self">self</span>, <span class="ident">BoxServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{
@@ -752,7 +752,7 @@
     <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">App</span><span class="op">&lt;</span><span class="ident">AppEntry</span>, <span class="ident">Body</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">App</span><span class="op">&lt;</span><span class="ident">AppEntry</span>, <span class="ident">AnyBody</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create application builder. Application can be configured with a builder-like pattern.</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::new_without_default</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {

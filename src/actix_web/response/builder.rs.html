@@ -1009,7 +1009,7 @@
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::{
-        <span class="ident">dev::Body</span>,
+        <span class="ident">dev::AnyBody</span>,
         <span class="ident">http</span>::{
             <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>},
             <span class="ident">StatusCode</span>,
@@ -1048,7 +1048,7 @@
     <span class="kw">fn</span> <span class="ident">test_content_type</span>() {
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">HttpResponseBuilder::new</span>(<span class="ident">StatusCode::OK</span>)
             .<span class="ident">content_type</span>(<span class="string">&quot;text/plain&quot;</span>)
-            .<span class="ident">body</span>(<span class="ident">Body::empty</span>());
+            .<span class="ident">body</span>(<span class="ident">AnyBody::empty</span>());
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;text/plain&quot;</span>)
     }
 

@@ -104,6 +104,7 @@
 <span id="104">104</span>
 <span id="105">105</span>
 <span id="106">106</span>
+<span id="107">107</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Lower-level types and re-exports.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Most users will not have to interact with the types in this module, but it is useful for those</span>
@@ -120,6 +121,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::json::JsonBody</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::readlines::Readlines</span>;
 
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>, <span class="ident">BodySize</span>, <span class="ident">MessageBody</span>, <span class="ident">SizedStream</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>

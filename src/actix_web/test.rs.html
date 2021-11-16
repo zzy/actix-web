@@ -901,7 +901,7 @@
     <span class="ident">app_service::AppInitServiceState</span>,
     <span class="ident">config::AppConfig</span>,
     <span class="ident">data::Data</span>,
-    <span class="ident">dev</span>::{<span class="ident">Body</span>, <span class="ident">MessageBody</span>, <span class="ident">Payload</span>},
+    <span class="ident">dev</span>::{<span class="ident">AnyBody</span>, <span class="ident">MessageBody</span>, <span class="ident">Payload</span>},
     <span class="ident">http::header::ContentType</span>,
     <span class="ident">rmap::ResourceMap</span>,
     <span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
@@ -911,14 +911,14 @@
 
 <span class="doccomment">/// Create service that always responds with `HttpResponse::Ok()` and no body.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ok_service</span>(
-) -&gt; <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
+) -&gt; <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="ident">default_service</span>(<span class="ident">StatusCode::OK</span>)
 }
 
 <span class="doccomment">/// Create service that always responds with given status code and no body.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_service</span>(
     <span class="ident">status_code</span>: <span class="ident">StatusCode</span>,
-) -&gt; <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
+) -&gt; <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> {
     (<span class="kw">move</span> <span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> {
         <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponseBuilder::new</span>(<span class="ident">status_code</span>).<span class="ident">finish</span>()))
     })

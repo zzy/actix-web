@@ -593,7 +593,7 @@
 };
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">body::Body</span>,
+    <span class="ident">body::AnyBody</span>,
     <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>},
     <span class="ident">RequestHead</span>, <span class="ident">RequestHeadType</span>,
 };
@@ -680,7 +680,7 @@
                 };
 
                 <span class="kw">let</span> <span class="ident">body_opt</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">body</span> {
-                    <span class="ident">Body::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">clone</span>()),
+                    <span class="ident">AnyBody::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">clone</span>()),
                     <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
                 };
 
@@ -777,14 +777,14 @@
                         <span class="kw">let</span> <span class="ident">body_new</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">is_redirect</span> {
                             <span class="comment">// try to reuse body</span>
                             <span class="kw">match</span> <span class="ident">body</span> {
-                                <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">bytes</span>) =&gt; <span class="ident">Body::Bytes</span>(<span class="ident">bytes</span>.<span class="ident">clone</span>()),
-                                <span class="comment">// TODO: should this be Body::Empty or Body::None.</span>
-                                <span class="kw">_</span> =&gt; <span class="ident">Body::empty</span>(),
+                                <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">bytes</span>) =&gt; <span class="ident">AnyBody::Bytes</span>(<span class="ident">bytes</span>.<span class="ident">clone</span>()),
+                                <span class="comment">// TODO: should this be AnyBody::Empty or AnyBody::None.</span>
+                                <span class="kw">_</span> =&gt; <span class="ident">AnyBody::empty</span>(),
                             }
                         } <span class="kw">else</span> {
                             <span class="ident">body</span> <span class="op">=</span> <span class="prelude-val">None</span>;
                             <span class="comment">// remove body</span>
-                            <span class="ident">Body::None</span>
+                            <span class="ident">AnyBody::None</span>
                         };
 
                         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">headers</span> <span class="op">=</span> <span class="ident">headers</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();

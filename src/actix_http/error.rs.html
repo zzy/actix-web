@@ -503,11 +503,6 @@
 <span id="503">503</span>
 <span id="504">504</span>
 <span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Error and Result module</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>, <span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">str::Utf8Error</span>, <span class="ident">string::FromUtf8Error</span>};
@@ -515,10 +510,7 @@
 <span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">From</span>};
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">uri::InvalidUri</span>, <span class="ident">StatusCode</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>},
-    <span class="ident">ws</span>, <span class="ident">Response</span>,
-};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">body::AnyBody</span>, <span class="ident">ws</span>, <span class="ident">Response</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">http::Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>;
 
@@ -537,6 +529,11 @@
         <span class="self">Self</span> {
             <span class="ident">inner</span>: <span class="ident">Box::new</span>(<span class="ident">ErrorInner</span> { <span class="ident">kind</span>, <span class="ident">cause</span>: <span class="prelude-val">None</span> }),
         }
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_cause</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cause</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">cause</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">cause</span>.<span class="ident">into</span>());
+        <span class="self">self</span>
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_http</span>() -&gt; <span class="self">Self</span> {
@@ -559,25 +556,18 @@
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::SendResponse</span>)
     }
 
-    <span class="comment">// TODO: remove allow</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span> <span class="comment">// reserved for future use (TODO: remove allow when being used)</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_io</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Io</span>)
     }
 
-    <span class="comment">// used in encoder behind feature flag so ignore unused warning</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span> <span class="comment">// used in encoder behind feature flag so ignore unused warning</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_encoder</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Encoder</span>)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_ws</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Kind::Ws</span>)
-    }
-
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_cause</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cause</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">cause</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">cause</span>.<span class="ident">into</span>());
-        <span class="self">self</span>
     }
 }
 
@@ -588,12 +578,12 @@
             <span class="kw">_</span> =&gt; <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>,
         };
 
-        <span class="ident">Response::new</span>(<span class="ident">status_code</span>).<span class="ident">set_body</span>(<span class="ident">Body::from</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))
+        <span class="ident">Response::new</span>(<span class="ident">status_code</span>).<span class="ident">set_body</span>(<span class="ident">AnyBody::from</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))
     }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Display</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Kind</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">Kind</span> {
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;error processing HTTP&quot;</span>)]</span>
     <span class="ident">Http</span>,
 

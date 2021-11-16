@@ -1802,7 +1802,7 @@
     <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 
     <span class="kw">use</span> <span class="kw">crate</span>::{
-        <span class="ident">dev::Body</span>,
+        <span class="ident">dev::AnyBody</span>,
         <span class="ident">guard</span>,
         <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>},
         <span class="ident">middleware::DefaultHeaders</span>,
@@ -1974,7 +1974,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
 
         <span class="kw">match</span> <span class="ident">resp</span>.<span class="ident">response</span>().<span class="ident">body</span>() {
-            <span class="ident">Body::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; {
+            <span class="ident">AnyBody::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">b</span>.<span class="ident">clone</span>();
                 <span class="macro">assert_eq!</span>(<span class="ident">bytes</span>, <span class="ident">Bytes::from_static</span>(<span class="string">b&quot;project: project1&quot;</span>));
             }
@@ -2075,7 +2075,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::CREATED</span>);
 
         <span class="kw">match</span> <span class="ident">resp</span>.<span class="ident">response</span>().<span class="ident">body</span>() {
-            <span class="ident">Body::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; {
+            <span class="ident">AnyBody::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">b</span>.<span class="ident">clone</span>();
                 <span class="macro">assert_eq!</span>(<span class="ident">bytes</span>, <span class="ident">Bytes::from_static</span>(<span class="string">b&quot;project: project_1&quot;</span>));
             }
@@ -2103,7 +2103,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::CREATED</span>);
 
         <span class="kw">match</span> <span class="ident">resp</span>.<span class="ident">response</span>().<span class="ident">body</span>() {
-            <span class="ident">Body::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; {
+            <span class="ident">AnyBody::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">b</span>.<span class="ident">clone</span>();
                 <span class="macro">assert_eq!</span>(<span class="ident">bytes</span>, <span class="ident">Bytes::from_static</span>(<span class="string">b&quot;project: test - 1&quot;</span>));
             }

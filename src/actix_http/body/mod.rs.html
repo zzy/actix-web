@@ -259,6 +259,14 @@
 <span id="259">259</span>
 <span id="260">260</span>
 <span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Traits and structures to aid consuming and writing HTTP payloads.</span>
 
 <span class="kw">use</span> <span class="ident">std::task::Poll</span>;
@@ -275,6 +283,7 @@
 <span class="kw">mod</span> <span class="ident">size</span>;
 <span class="kw">mod</span> <span class="ident">sized_stream</span>;
 
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::body</span>::{<span class="ident">AnyBody</span>, <span class="ident">Body</span>, <span class="ident">BoxBody</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::body_stream::BodyStream</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::message_body::MessageBody</span>;
@@ -337,10 +346,10 @@
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
-    <span class="kw">impl</span> <span class="ident">Body</span> {
+    <span class="kw">impl</span> <span class="ident">AnyBody</span> {
         <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">get_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
             <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-                <span class="ident">Body::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">bin</span>) =&gt; <span class="ident">bin</span>,
+                <span class="ident">AnyBody::Bytes</span>(<span class="kw-2">ref</span> <span class="ident">bin</span>) =&gt; <span class="ident">bin</span>,
                 <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(),
             }
         }
@@ -348,9 +357,9 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_static_str</span>() {
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="string">&quot;&quot;</span>).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">0</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="string">&quot;&quot;</span>).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">0</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
 
         <span class="macro">assert_eq!</span>(<span class="string">&quot;test&quot;</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
         <span class="macro">assert_eq!</span>(
@@ -364,13 +373,16 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_static_bytes</span>() {
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Body::copy_from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">size</span>(),
+            <span class="ident">AnyBody::copy_from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">size</span>(),
             <span class="ident">BodySize::Sized</span>(<span class="number">4</span>)
         );
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::copy_from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">AnyBody::copy_from_slice</span>(<span class="string">b&quot;test&quot;</span>.<span class="ident">as_ref</span>()).<span class="ident">get_ref</span>(),
+            <span class="string">b&quot;test&quot;</span>
+        );
         <span class="kw">let</span> <span class="ident">sb</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="kw-2">&amp;</span><span class="string">b&quot;test&quot;</span>[..]);
         <span class="macro">pin!</span>(<span class="ident">sb</span>);
 
@@ -383,8 +395,8 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_vec</span>() {
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">Vec::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">Vec::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">Vec::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">Vec::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
         <span class="kw">let</span> <span class="ident">test_vec</span> <span class="op">=</span> <span class="ident">Vec::from</span>(<span class="string">&quot;test&quot;</span>);
         <span class="macro">pin!</span>(<span class="ident">test_vec</span>);
 
@@ -401,8 +413,8 @@
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_bytes</span>() {
         <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="string">&quot;test&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
         <span class="macro">pin!</span>(<span class="ident">b</span>);
 
         <span class="macro">assert_eq!</span>(<span class="ident">b</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
@@ -415,8 +427,8 @@
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_bytes_mut</span>() {
         <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">BytesMut::from</span>(<span class="string">&quot;test&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
         <span class="macro">pin!</span>(<span class="ident">b</span>);
 
         <span class="macro">assert_eq!</span>(<span class="ident">b</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
@@ -429,10 +441,10 @@
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_string</span>() {
         <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="string">&quot;test&quot;</span>.<span class="ident">to_owned</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">Body::from</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="ident">b</span>.<span class="ident">clone</span>()).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>).<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">AnyBody::from</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>).<span class="ident">get_ref</span>(), <span class="string">b&quot;test&quot;</span>);
         <span class="macro">pin!</span>(<span class="ident">b</span>);
 
         <span class="macro">assert_eq!</span>(<span class="ident">b</span>.<span class="ident">size</span>(), <span class="ident">BodySize::Sized</span>(<span class="number">4</span>));
@@ -465,29 +477,33 @@
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_body_eq</span>() {
         <span class="macro">assert!</span>(
-            <span class="ident">Body::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>))
-                <span class="op">==</span> <span class="ident">Body::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>))
+            <span class="ident">AnyBody::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>))
+                <span class="op">==</span> <span class="ident">AnyBody::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>))
         );
-        <span class="macro">assert!</span>(<span class="ident">Body::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>)) <span class="op">!</span><span class="op">=</span> <span class="ident">Body::None</span>);
+        <span class="macro">assert!</span>(<span class="ident">AnyBody::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>)) <span class="op">!</span><span class="op">=</span> <span class="ident">AnyBody::None</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_body_debug</span>() {
-        <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">Body::None</span>).<span class="ident">contains</span>(<span class="string">&quot;Body::None&quot;</span>));
-        <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">Body::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>))).<span class="ident">contains</span>(<span class="string">&#39;1&#39;</span>));
+        <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">AnyBody</span>::<span class="op">&lt;</span><span class="ident">BoxBody</span><span class="op">&gt;</span><span class="ident">::None</span>).<span class="ident">contains</span>(<span class="string">&quot;Body::None&quot;</span>));
+        <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">AnyBody::from</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;1&quot;</span>))).<span class="ident">contains</span>(<span class="string">&#39;1&#39;</span>));
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_serde_json</span>() {
         <span class="kw">use</span> <span class="ident">serde_json</span>::{<span class="ident">json</span>, <span class="ident">Value</span>};
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Body::from</span>(<span class="ident">serde_json::to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">Value::String</span>(<span class="string">&quot;test&quot;</span>.<span class="ident">to_owned</span>())).<span class="ident">unwrap</span>())
-                .<span class="ident">size</span>(),
+            <span class="ident">AnyBody::from</span>(
+                <span class="ident">serde_json::to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">Value::String</span>(<span class="string">&quot;test&quot;</span>.<span class="ident">to_owned</span>())).<span class="ident">unwrap</span>()
+            )
+            .<span class="ident">size</span>(),
             <span class="ident">BodySize::Sized</span>(<span class="number">6</span>)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Body::from</span>(<span class="ident">serde_json::to_vec</span>(<span class="kw-2">&amp;</span><span class="macro">json!</span>({<span class="string">&quot;test-key&quot;</span>:<span class="string">&quot;test-value&quot;</span>})).<span class="ident">unwrap</span>())
-                .<span class="ident">size</span>(),
+            <span class="ident">AnyBody::from</span>(
+                <span class="ident">serde_json::to_vec</span>(<span class="kw-2">&amp;</span><span class="macro">json!</span>({<span class="string">&quot;test-key&quot;</span>:<span class="string">&quot;test-value&quot;</span>})).<span class="ident">unwrap</span>()
+            )
+            .<span class="ident">size</span>(),
             <span class="ident">BodySize::Sized</span>(<span class="number">25</span>)
         );
     }
@@ -511,11 +527,11 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_to_bytes</span>() {
-        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">Body::empty</span>();
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">AnyBody::empty</span>();
         <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">to_bytes</span>(<span class="ident">body</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert!</span>(<span class="ident">bytes</span>.<span class="ident">is_empty</span>());
 
-        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">Body::Bytes</span>(<span class="ident">Bytes::from_static</span>(<span class="string">b&quot;123&quot;</span>));
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">AnyBody::copy_from_slice</span>(<span class="string">b&quot;123&quot;</span>);
         <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">to_bytes</span>(<span class="ident">body</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">bytes</span>, <span class="string">b&quot;123&quot;</span>[..]);
     }
