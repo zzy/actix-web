@@ -965,6 +965,20 @@
 <span id="965">965</span>
 <span id="966">966</span>
 <span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+<span id="980">980</span>
+<span id="981">981</span>
 </pre><pre class="rust"><code><span class="doccomment">//! # References</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! &quot;The Content-Disposition Header Field&quot; &lt;https://www.ietf.org/rfc/rfc2183.txt&gt;</span>
@@ -1001,15 +1015,18 @@
 <span class="doccomment">/// The implied disposition of the content of the HTTP body.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DispositionType</span> {
-    <span class="doccomment">/// Inline implies default processing</span>
+    <span class="doccomment">/// Inline implies default processing.</span>
     <span class="ident">Inline</span>,
+
     <span class="doccomment">/// Attachment implies that the recipient should prompt the user to save the response locally,</span>
     <span class="doccomment">/// rather than process it normally (as per its media type).</span>
     <span class="ident">Attachment</span>,
-    <span class="doccomment">/// Used in *multipart/form-data* as defined in</span>
-    <span class="doccomment">/// [RFC7578](https://tools.ietf.org/html/rfc7578) to carry the field name and the file name.</span>
+
+    <span class="doccomment">/// Used in *multipart/form-data* as defined in [RFC7578](https://tools.ietf.org/html/rfc7578)</span>
+    <span class="doccomment">/// to carry the field name and optional filename.</span>
     <span class="ident">FormData</span>,
-    <span class="doccomment">/// Extension type. Should be handled by recipients the same way as Attachment</span>
+
+    <span class="doccomment">/// Extension type. Should be handled by recipients the same way as Attachment.</span>
     <span class="ident">Ext</span>(<span class="ident">String</span>),
 }
 
@@ -1043,6 +1060,7 @@
     <span class="doccomment">/// For [`DispositionType::FormData`] (i.e. *multipart/form-data*), the name of an field from</span>
     <span class="doccomment">/// the form.</span>
     <span class="ident">Name</span>(<span class="ident">String</span>),
+
     <span class="doccomment">/// A plain file name.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It is [not supposed](https://tools.ietf.org/html/rfc6266#appendix-D) to contain any</span>
@@ -1050,14 +1068,17 @@
     <span class="doccomment">/// [`FilenameExt`](DispositionParam::FilenameExt) with charset UTF-8 may be used instead</span>
     <span class="doccomment">/// in case there are Unicode characters in file names.</span>
     <span class="ident">Filename</span>(<span class="ident">String</span>),
+
     <span class="doccomment">/// An extended file name. It must not exist for `ContentType::Formdata` according to</span>
     <span class="doccomment">/// [RFC7578 Section 4.2](https://tools.ietf.org/html/rfc7578#section-4.2).</span>
     <span class="ident">FilenameExt</span>(<span class="ident">ExtendedValue</span>),
+
     <span class="doccomment">/// An unrecognized regular parameter as defined in</span>
     <span class="doccomment">/// [RFC5987](https://tools.ietf.org/html/rfc5987) as *reg-parameter*, in</span>
     <span class="doccomment">/// [RFC6266](https://tools.ietf.org/html/rfc6266) as *token &quot;=&quot; value*. Recipients should</span>
     <span class="doccomment">/// ignore unrecognizable parameters.</span>
     <span class="ident">Unknown</span>(<span class="ident">String</span>, <span class="ident">String</span>),
+
     <span class="doccomment">/// An unrecognized extended parameter as defined in</span>
     <span class="doccomment">/// [RFC5987](https://tools.ietf.org/html/rfc5987) as *ext-parameter*, in</span>
     <span class="doccomment">/// [RFC6266](https://tools.ietf.org/html/rfc6266) as *ext-token &quot;=&quot; ext-value*. The single</span>
@@ -1172,7 +1193,6 @@
 <span class="doccomment">/// itself, *Content-Disposition* has no effect.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # ABNF</span>
-
 <span class="doccomment">/// ```text</span>
 <span class="doccomment">/// content-disposition = &quot;Content-Disposition&quot; &quot;:&quot;</span>
 <span class="doccomment">///                       disposition-type *( &quot;;&quot; disposition-parm )</span>
@@ -1256,10 +1276,12 @@
 <span class="doccomment">/// If &quot;filename&quot; parameter is supplied, do not use the file name blindly, check and possibly</span>
 <span class="doccomment">/// change to match local file system conventions if applicable, and do not use directory path</span>
 <span class="doccomment">/// information that may be present. See [RFC2183](https://tools.ietf.org/html/rfc2183#section-2.3).</span>
+<span class="comment">// TODO: private fields and use smallvec</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ContentDisposition</span> {
     <span class="doccomment">/// The disposition type</span>
     <span class="kw">pub</span> <span class="ident">disposition</span>: <span class="ident">DispositionType</span>,
+
     <span class="doccomment">/// Disposition parameters</span>
     <span class="kw">pub</span> <span class="ident">parameters</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">DispositionParam</span><span class="op">&gt;</span>,
 }
@@ -1476,22 +1498,28 @@
         <span class="comment">//</span>
         <span class="comment">//</span>
         <span class="comment">// See also comments in test_from_raw_unnecessary_percent_decode.</span>
+
         <span class="kw">static</span> <span class="ident">RE</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">Regex</span><span class="op">&gt;</span> <span class="op">=</span>
             <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Regex::new</span>(<span class="string">&quot;[\x00-\x08\x10-\x1F\x7F\&quot;\\\\]&quot;</span>).<span class="ident">unwrap</span>());
+
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">DispositionParam::Name</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;name={}&quot;</span>, <span class="ident">value</span>),
+
             <span class="ident">DispositionParam::Filename</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;filename=\&quot;{}\&quot;&quot;</span>, <span class="ident">RE</span>.<span class="ident">replace_all</span>(<span class="ident">value</span>, <span class="string">&quot;\\$0&quot;</span>).<span class="ident">as_ref</span>())
             }
+
             <span class="ident">DispositionParam::Unknown</span>(<span class="kw-2">ref</span> <span class="ident">name</span>, <span class="kw-2">ref</span> <span class="ident">value</span>) =&gt; <span class="macro">write!</span>(
                 <span class="ident">f</span>,
                 <span class="string">&quot;{}=\&quot;{}\&quot;&quot;</span>,
                 <span class="ident">name</span>,
                 <span class="kw-2">&amp;</span><span class="ident">RE</span>.<span class="ident">replace_all</span>(<span class="ident">value</span>, <span class="string">&quot;\\$0&quot;</span>).<span class="ident">as_ref</span>()
             ),
+
             <span class="ident">DispositionParam::FilenameExt</span>(<span class="kw-2">ref</span> <span class="ident">ext_value</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;filename*={}&quot;</span>, <span class="ident">ext_value</span>)
             }
+
             <span class="ident">DispositionParam::UnknownExt</span>(<span class="kw-2">ref</span> <span class="ident">name</span>, <span class="kw-2">ref</span> <span class="ident">ext_value</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}*={}&quot;</span>, <span class="ident">name</span>, <span class="ident">ext_value</span>)
             }
