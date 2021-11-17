@@ -394,7 +394,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">guard</span>::{<span class="self">self</span>, <span class="ident">Guard</span>},
-    <span class="ident">handler</span>::{<span class="ident">Handler</span>, <span class="ident">HandlerService</span>},
+    <span class="ident">handler</span>::{<span class="ident">handler_service</span>, <span class="ident">Handler</span>},
     <span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
     <span class="ident">Error</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>,
 };
@@ -413,7 +413,7 @@
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::new_without_default</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Route</span> {
         <span class="ident">Route</span> {
-            <span class="ident">service</span>: <span class="ident">boxed::factory</span>(<span class="ident">HandlerService::new</span>(<span class="ident">HttpResponse::NotFound</span>)),
+            <span class="ident">service</span>: <span class="ident">handler_service</span>(<span class="ident">HttpResponse::NotFound</span>),
             <span class="ident">guards</span>: <span class="ident">Rc::new</span>(<span class="ident">Vec::new</span>()),
         }
     }
@@ -565,7 +565,7 @@
         <span class="ident">R</span>: <span class="ident">Future</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">R::Output</span>: <span class="ident">Responder</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
-        <span class="self">self</span>.<span class="ident">service</span> <span class="op">=</span> <span class="ident">boxed::factory</span>(<span class="ident">HandlerService::new</span>(<span class="ident">handler</span>));
+        <span class="self">self</span>.<span class="ident">service</span> <span class="op">=</span> <span class="ident">handler_service</span>(<span class="ident">handler</span>);
         <span class="self">self</span>
     }
 
