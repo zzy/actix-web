@@ -345,7 +345,7 @@
         <span class="macro">debug_assert!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">payload</span>.<span class="ident">is_some</span>(), <span class="string">&quot;Payload decoder is set&quot;</span>);
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">req</span>, <span class="ident">payload</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">decoder</span>.<span class="ident">decode</span>(<span class="ident">src</span>)<span class="question-mark">?</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ctype</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">ctype</span>() {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ctype</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">conn_type</span>() {
                 <span class="comment">// do not use peer&#39;s keep-alive</span>
                 <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">ctype</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">ctype</span> <span class="op">==</span> <span class="ident">ConnectionType::KeepAlive</span> {
                     <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">ctype</span>

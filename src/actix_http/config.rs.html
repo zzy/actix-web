@@ -401,6 +401,8 @@
 <span id="401">401</span>
 <span id="402">402</span>
 <span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell::Cell</span>,
     <span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>},
@@ -423,8 +425,10 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">KeepAlive</span> {
     <span class="doccomment">/// Keep alive in seconds</span>
     <span class="ident">Timeout</span>(<span class="ident">usize</span>),
+
     <span class="doccomment">/// Rely on OS to shutdown tcp connection</span>
     <span class="ident">Os</span>,
+
     <span class="doccomment">/// Disabled</span>
     <span class="ident">Disabled</span>,
 }

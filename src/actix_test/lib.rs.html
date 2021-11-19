@@ -1070,12 +1070,12 @@
         <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">headers</span>()
     }
 
-    <span class="doccomment">/// Gracefully stop HTTP server.</span>
+    <span class="doccomment">/// Stop HTTP server.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Waits for spawned `Server` and `System` to shutdown gracefully.</span>
+    <span class="doccomment">/// Waits for spawned `Server` and `System` to shutdown (force) shutdown.</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="comment">// signal server to stop</span>
-        <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">stop</span>(<span class="bool-val">true</span>).<span class="kw">await</span>;
+        <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">stop</span>(<span class="bool-val">false</span>).<span class="kw">await</span>;
 
         <span class="comment">// also signal system to stop</span>
         <span class="comment">// though this is handled by `ServerBuilder::exit_system` too</span>

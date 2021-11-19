@@ -565,20 +565,30 @@
 <span id="565">565</span>
 <span id="566">566</span>
 <span id="567">567</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
-<span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ok</span>, <span class="ident">ready</span>, <span class="ident">Ready</span>};
-<span class="kw">use</span> <span class="ident">actix_web::dev</span>::{<span class="ident">AppService</span>, <span class="ident">HttpServiceFactory</span>, <span class="ident">ResourceDef</span>};
-<span class="kw">use</span> <span class="ident">std::fs</span>::{<span class="ident">File</span>, <span class="ident">Metadata</span>};
-<span class="kw">use</span> <span class="ident">std::io</span>;
-<span class="kw">use</span> <span class="ident">std::ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>};
-<span class="kw">use</span> <span class="ident">std::path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>};
-<span class="kw">use</span> <span class="ident">std::time</span>::{<span class="ident">SystemTime</span>, <span class="ident">UNIX_EPOCH</span>};
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">fs</span>::{<span class="ident">File</span>, <span class="ident">Metadata</span>},
+    <span class="ident">io</span>,
+    <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
+    <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
+    <span class="ident">time</span>::{<span class="ident">SystemTime</span>, <span class="ident">UNIX_EPOCH</span>},
+};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
 
+<span class="kw">use</span> <span class="ident">actix_http::body::AnyBody</span>;
+<span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
+<span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ok</span>, <span class="ident">ready</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">actix_web</span>::{
-    <span class="ident">dev</span>::{<span class="ident">BodyEncoding</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">SizedStream</span>},
+    <span class="ident">dev</span>::{
+        <span class="ident">AppService</span>, <span class="ident">BodyEncoding</span>, <span class="ident">HttpServiceFactory</span>, <span class="ident">ResourceDef</span>, <span class="ident">ServiceRequest</span>,
+        <span class="ident">ServiceResponse</span>, <span class="ident">SizedStream</span>,
+    },
     <span class="ident">http</span>::{
         <span class="ident">header</span>::{
             <span class="self">self</span>, <span class="ident">Charset</span>, <span class="ident">ContentDisposition</span>, <span class="ident">DispositionParam</span>, <span class="ident">DispositionType</span>, <span class="ident">ExtendedValue</span>,
@@ -1010,7 +1020,7 @@
         <span class="kw">if</span> <span class="ident">precondition_failed</span> {
             <span class="kw">return</span> <span class="ident">resp</span>.<span class="ident">status</span>(<span class="ident">StatusCode::PRECONDITION_FAILED</span>).<span class="ident">finish</span>();
         } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">not_modified</span> {
-            <span class="kw">return</span> <span class="ident">resp</span>.<span class="ident">status</span>(<span class="ident">StatusCode::NOT_MODIFIED</span>).<span class="ident">finish</span>();
+            <span class="kw">return</span> <span class="ident">resp</span>.<span class="ident">status</span>(<span class="ident">StatusCode::NOT_MODIFIED</span>).<span class="ident">body</span>(<span class="ident">AnyBody::None</span>);
         }
 
         <span class="kw">let</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">ChunkedReadFile::new</span>(<span class="ident">length</span>, <span class="ident">offset</span>, <span class="self">self</span>.<span class="ident">file</span>);
