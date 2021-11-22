@@ -383,6 +383,12 @@
 <span id="383">383</span>
 <span id="384">384</span>
 <span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell::RefCell</span>,
     <span class="ident">fmt</span>, <span class="ident">io</span>,
@@ -391,7 +397,6 @@
 };
 
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">ServiceFactory</span>, <span class="ident">ServiceFactoryExt</span>};
-<span class="kw">use</span> <span class="ident">actix_utils::future::ok</span>;
 <span class="kw">use</span> <span class="ident">actix_web</span>::{
     <span class="ident">dev</span>::{
         <span class="ident">AppService</span>, <span class="ident">HttpServiceFactory</span>, <span class="ident">RequestHead</span>, <span class="ident">ResourceDef</span>, <span class="ident">ServiceRequest</span>,
@@ -405,8 +410,9 @@
 <span class="kw">use</span> <span class="ident">futures_core::future::LocalBoxFuture</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">directory_listing</span>, <span class="ident">named</span>, <span class="ident">Directory</span>, <span class="ident">DirectoryRenderer</span>, <span class="ident">FilesService</span>, <span class="ident">HttpNewService</span>,
-    <span class="ident">MimeOverride</span>, <span class="ident">PathFilter</span>,
+    <span class="ident">directory_listing</span>, <span class="ident">named</span>,
+    <span class="ident">service</span>::{<span class="ident">FilesService</span>, <span class="ident">FilesServiceInner</span>},
+    <span class="ident">Directory</span>, <span class="ident">DirectoryRenderer</span>, <span class="ident">HttpNewService</span>, <span class="ident">MimeOverride</span>, <span class="ident">PathFilter</span>,
 };
 
 <span class="doccomment">/// Static files handling service.</span>
@@ -668,11 +674,17 @@
     <span class="doccomment">/// Setting a fallback static file handler:</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_files::{Files, NamedFile};</span>
+    <span class="doccomment">/// use actix_web::dev::{ServiceRequest, ServiceResponse, fn_service};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # fn run() -&gt; Result&lt;(), actix_web::Error&gt; {</span>
     <span class="doccomment">/// let files = Files::new(&quot;/&quot;, &quot;./static&quot;)</span>
     <span class="doccomment">///     .index_file(&quot;index.html&quot;)</span>
-    <span class="doccomment">///     .default_handler(NamedFile::open(&quot;./static/404.html&quot;)?);</span>
+    <span class="doccomment">///     .default_handler(fn_service(|req: ServiceRequest| async {</span>
+    <span class="doccomment">///         let (req, _) = req.into_parts();</span>
+    <span class="doccomment">///         let file = NamedFile::open_async(&quot;./static/404.html&quot;).await?;</span>
+    <span class="doccomment">///         let res = file.into_response(&amp;req);</span>
+    <span class="doccomment">///         Ok(ServiceResponse::new(req, res))</span>
+    <span class="doccomment">///     }));</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
@@ -738,7 +750,7 @@
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Service</span>, <span class="ident"><span class="self">Self</span>::InitError</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">new_service</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: ()) -&gt; <span class="ident"><span class="self">Self</span>::Future</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">FilesService</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">FilesServiceInner</span> {
             <span class="ident">directory</span>: <span class="self">self</span>.<span class="ident">directory</span>.<span class="ident">clone</span>(),
             <span class="ident">index</span>: <span class="self">self</span>.<span class="ident">index</span>.<span class="ident">clone</span>(),
             <span class="ident">show_index</span>: <span class="self">self</span>.<span class="ident">show_index</span>,
@@ -757,14 +769,14 @@
             <span class="ident">Box::pin</span>(<span class="kw">async</span> {
                 <span class="kw">match</span> <span class="ident">fut</span>.<span class="kw">await</span> {
                     <span class="prelude-val">Ok</span>(<span class="ident">default</span>) =&gt; {
-                        <span class="ident">srv</span>.<span class="ident">default</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">default</span>);
-                        <span class="prelude-val">Ok</span>(<span class="ident">srv</span>)
+                        <span class="ident">inner</span>.<span class="ident">default</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">default</span>);
+                        <span class="prelude-val">Ok</span>(<span class="ident">FilesService</span>(<span class="ident">Rc::new</span>(<span class="ident">inner</span>)))
                     }
                     <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(()),
                 }
             })
         } <span class="kw">else</span> {
-            <span class="ident">Box::pin</span>(<span class="ident">ok</span>(<span class="ident">srv</span>))
+            <span class="ident">Box::pin</span>(<span class="kw">async</span> <span class="kw">move</span> { <span class="prelude-val">Ok</span>(<span class="ident">FilesService</span>(<span class="ident">Rc::new</span>(<span class="ident">inner</span>))) })
         }
     }
 }
