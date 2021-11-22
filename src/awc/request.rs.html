@@ -788,10 +788,10 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>.<span class="ident">method</span>
     }
 
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="doccomment">/// Set HTTP version of this request.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default requests&#39;s HTTP version depends on network stream</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">version</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">version</span>: <span class="ident">Version</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">version</span> <span class="op">=</span> <span class="ident">version</span>;

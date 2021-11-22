@@ -308,8 +308,6 @@
 <span id="308">308</span>
 <span id="309">309</span>
 <span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
@@ -333,16 +331,15 @@
 <span class="kw">use</span> <span class="ident">socket2</span>::{<span class="ident">Domain</span>, <span class="ident">Protocol</span>, <span class="ident">Socket</span>, <span class="ident">Type</span>};
 <span class="kw">use</span> <span class="ident">tokio::sync::mpsc</span>;
 
-<span class="doccomment">/// Start test server</span>
+<span class="doccomment">/// Start test server.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// `TestServer` is very simple test server that simplify process of writing</span>
-<span class="doccomment">/// integration tests cases for actix web applications.</span>
+<span class="doccomment">/// `TestServer` is very simple test server that simplify process of writing integration tests cases</span>
+<span class="doccomment">/// for HTTP applications.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
+<span class="doccomment">/// ```no_run</span>
 <span class="doccomment">/// use actix_http::HttpService;</span>
-<span class="doccomment">/// use actix_http_test::TestServer;</span>
+<span class="doccomment">/// use actix_http_test::test_server;</span>
 <span class="doccomment">/// use actix_web::{web, App, HttpResponse, Error};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// async fn my_handler() -&gt; Result&lt;HttpResponse, Error&gt; {</span>
@@ -351,10 +348,9 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// #[actix_web::test]</span>
 <span class="doccomment">/// async fn test_example() {</span>
-<span class="doccomment">///     let mut srv = TestServer::start(</span>
-<span class="doccomment">///         || HttpService::new(</span>
-<span class="doccomment">///             App::new().service(</span>
-<span class="doccomment">///                 web::resource(&quot;/&quot;).to(my_handler))</span>
+<span class="doccomment">///     let mut srv = TestServer::start(||</span>
+<span class="doccomment">///         HttpService::new(</span>
+<span class="doccomment">///             App::new().service(web::resource(&quot;/&quot;).to(my_handler))</span>
 <span class="doccomment">///         )</span>
 <span class="doccomment">///     );</span>
 <span class="doccomment">///</span>
