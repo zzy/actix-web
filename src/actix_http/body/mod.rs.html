@@ -300,15 +300,15 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// use actix_http::body::{Body, to_bytes};</span>
+<span class="doccomment">/// use actix_http::body::{AnyBody, to_bytes};</span>
 <span class="doccomment">/// use bytes::Bytes;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # async fn test_to_bytes() {</span>
-<span class="doccomment">/// let body = Body::None;</span>
+<span class="doccomment">/// let body = AnyBody::None;</span>
 <span class="doccomment">/// let bytes = to_bytes(body).await.unwrap();</span>
 <span class="doccomment">/// assert!(bytes.is_empty());</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let body = Body::Bytes(Bytes::from_static(b&quot;123&quot;));</span>
+<span class="doccomment">/// let body = AnyBody::Bytes(Bytes::from_static(b&quot;123&quot;));</span>
 <span class="doccomment">/// let bytes = to_bytes(body).await.unwrap();</span>
 <span class="doccomment">/// assert_eq!(bytes, b&quot;123&quot;[..]);</span>
 <span class="doccomment">/// # }</span>
