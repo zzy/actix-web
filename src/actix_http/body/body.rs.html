@@ -328,6 +328,9 @@
 <span id="328">328</span>
 <span id="329">329</span>
 <span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
@@ -362,9 +365,12 @@
 }
 
 <span class="kw">impl</span> <span class="ident">AnyBody</span> {
-    <span class="comment">// TODO: a None body constructor</span>
+    <span class="doccomment">/// Constructs a &quot;body&quot; representing an empty response.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">none</span>() -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::None</span>
+    }
 
-    <span class="doccomment">/// Constructs a new, empty body.</span>
+    <span class="doccomment">/// Constructs a new, 0-length body.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="ident">Bytes::new</span>())
     }

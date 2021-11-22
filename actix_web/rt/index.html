@@ -29,6 +29,8 @@ blocking task thread-pool using <a href="task/fn.spawn_blocking.html" title="tas
 <h2 id="io-uring-support" class="section-header"><a href="#io-uring-support"><code>io-uring</code> Support</a></h2>
 <p>There is experimental support for using io-uring with this crate by enabling the
 <code>io-uring</code> feature. For now, it is semver exempt.</p>
+<p>Note that there are currently some unimplemented parts of using <code>actix-rt</code> with <code>io-uring</code>.
+In particular, when running a <code>System</code>, only <code>System::block_on</code> is supported.</p>
 </div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="net/index.html" title="actix_web::rt::net mod">net</a></div><div class="item-right docblock-short"><p>TCP/UDP/Unix bindings (mostly Tokio re-exports).</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="signal/index.html" title="actix_web::rt::signal mod">signal</a></div><div class="item-right docblock-short"><p>Asynchronous signal handling (Tokio re-exports).</p>
