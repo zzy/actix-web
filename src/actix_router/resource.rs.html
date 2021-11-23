@@ -1813,6 +1813,12 @@
 <span id="1812">1812</span>
 <span id="1813">1813</span>
 <span id="1814">1814</span>
+<span id="1815">1815</span>
+<span id="1816">1816</span>
+<span id="1817">1817</span>
+<span id="1818">1818</span>
+<span id="1819">1819</span>
+<span id="1820">1820</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections::HashMap</span>,
@@ -3583,6 +3589,12 @@
         <span class="macro">match_methods_agree!</span>(<span class="ident">prefix</span> <span class="string">&quot;/user&quot;</span> =&gt; <span class="string">&quot;user&quot;</span>, <span class="string">&quot;/user&quot;</span>, <span class="string">&quot;/users&quot;</span>, <span class="string">&quot;/user/123&quot;</span>, <span class="string">&quot;/foo&quot;</span>);
         <span class="macro">match_methods_agree!</span>(<span class="ident">prefix</span> <span class="string">r&quot;/id/{id:\d{3}}&quot;</span> =&gt; <span class="string">&quot;/id/123&quot;</span>, <span class="string">&quot;/id/1234&quot;</span>);
         <span class="macro">match_methods_agree!</span>([<span class="string">&quot;/v{v}&quot;</span>, <span class="string">&quot;/ver/{v}&quot;</span>] =&gt; <span class="string">&quot;&quot;</span>, <span class="string">&quot;s/v&quot;</span>, <span class="string">&quot;/v1&quot;</span>, <span class="string">&quot;/v1/xx&quot;</span>, <span class="string">&quot;/ver/i3/5&quot;</span>, <span class="string">&quot;/ver/1&quot;</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">should_panic</span>]</span>
+    <span class="kw">fn</span> <span class="ident">duplicate_segment_name</span>() {
+        <span class="ident">ResourceDef::new</span>(<span class="string">&quot;/user/{id}/post/{id}&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
