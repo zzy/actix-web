@@ -111,6 +111,9 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">str::FromStr</span>};
 
 <span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">Error</span>};
@@ -122,14 +125,17 @@
     <span class="ident">HttpMessage</span>,
 };
 
-<span class="doccomment">/// Error return when a content encoding is unknown.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Example: &#39;compress&#39;</span>
+<span class="doccomment">/// Error returned when a content encoding is unknown.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Error</span>)]</span>
 <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;unsupported content encoding&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ContentEncodingParseError</span>;
 
 <span class="doccomment">/// Represents a supported content encoding.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Includes a commonly-used subset of media types appropriate for use as HTTP content encodings.</span>
+<span class="doccomment">/// See [IANA HTTP Content Coding Registry].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [IANA HTTP Content Coding Registry]: https://www.iana.org/assignments/http-parameters/http-parameters.xhtml</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ContentEncoding</span> {
@@ -145,7 +151,7 @@
     <span class="doccomment">/// Gzip algorithm.</span>
     <span class="ident">Gzip</span>,
 
-    <span class="comment">// Zstd algorithm.</span>
+    <span class="doccomment">/// Zstd algorithm.</span>
     <span class="ident">Zstd</span>,
 
     <span class="doccomment">/// Indicates the identity function (i.e. no compression, nor modification).</span>

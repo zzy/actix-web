@@ -125,7 +125,7 @@
 <span class="kw">mod</span> <span class="ident">as_name</span>;
 <span class="kw">mod</span> <span class="ident">into_pair</span>;
 <span class="kw">mod</span> <span class="ident">into_value</span>;
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">map</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">map</span>;
 <span class="kw">mod</span> <span class="ident">shared</span>;
 <span class="kw">mod</span> <span class="ident">utils</span>;
 
@@ -135,12 +135,12 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::as_name::AsHeaderName</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::into_pair::IntoHeaderPair</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::into_value::IntoHeaderValue</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::map</span>::{<span class="ident">GetAll</span>, <span class="ident">HeaderMap</span>, <span class="ident">Removed</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::map::HeaderMap</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::utils</span>::{
     <span class="ident">fmt_comma_delimited</span>, <span class="ident">from_comma_delimited</span>, <span class="ident">from_one_raw_str</span>, <span class="ident">http_percent_encode</span>,
 };
 
-<span class="doccomment">/// A trait for any object that already represents a valid header field and value.</span>
+<span class="doccomment">/// An interface for types that already represent a valid header.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Header</span>: <span class="ident">IntoHeaderValue</span> {
     <span class="doccomment">/// Returns the name of the header field</span>
     <span class="kw">fn</span> <span class="ident">name</span>() -&gt; <span class="ident">HeaderName</span>;

@@ -116,7 +116,14 @@
 <span id="115">115</span>
 <span id="116">116</span>
 <span id="117">117</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+</pre><pre class="rust"><code><span class="doccomment">//! [`IntoHeaderPair`] trait and implementations.</span>
+
+<span class="kw">use</span> <span class="ident">std::convert::TryFrom</span> <span class="kw">as</span> <span class="kw">_</span>;
 
 <span class="kw">use</span> <span class="ident">http</span>::{
     <span class="ident">header</span>::{<span class="ident">HeaderName</span>, <span class="ident">InvalidHeaderName</span>, <span class="ident">InvalidHeaderValue</span>},
@@ -125,7 +132,10 @@
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Header</span>, <span class="ident">IntoHeaderValue</span>};
 
-<span class="doccomment">/// Transforms structures into header K/V pairs for inserting into `HeaderMap`s.</span>
+<span class="doccomment">/// An interface for types that can be converted into a [`HeaderName`]/[`HeaderValue`] pair for</span>
+<span class="doccomment">/// insertion into a [`HeaderMap`].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`HeaderMap`]: crate::http::HeaderMap</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IntoHeaderPair</span>: <span class="ident">Sized</span> {
     <span class="kw">type</span> <span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>;
 

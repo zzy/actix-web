@@ -130,13 +130,17 @@
 <span id="129">129</span>
 <span id="130">130</span>
 <span id="131">131</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
+<span id="132">132</span>
+<span id="133">133</span>
+</pre><pre class="rust"><code><span class="doccomment">//! [`IntoHeaderValue`] trait and implementations.</span>
+
+<span class="kw">use</span> <span class="ident">std::convert::TryFrom</span> <span class="kw">as</span> <span class="kw">_</span>;
 
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">header::InvalidHeaderValue</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderValue</span>};
 <span class="kw">use</span> <span class="ident">mime::Mime</span>;
 
-<span class="doccomment">/// A trait for any object that can be Converted to a `HeaderValue`</span>
+<span class="doccomment">/// An interface for types that can be converted into a [`HeaderValue`].</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IntoHeaderValue</span>: <span class="ident">Sized</span> {
     <span class="doccomment">/// The type returned in the event of a conversion error.</span>
     <span class="kw">type</span> <span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>;
