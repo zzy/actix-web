@@ -165,7 +165,7 @@
     <span class="ident">http::Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>,
 };
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">actix_tls::accept::openssl::SslError</span>;
+<span class="kw">use</span> <span class="ident">actix_tls::accept::openssl::reexports::Error</span> <span class="kw">as</span> <span class="ident">OpenSslError</span>;
 
 <span class="doccomment">/// A set of errors that can occur while connecting to an HTTP host</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">From</span>)]</span>
@@ -178,7 +178,7 @@
     <span class="doccomment">/// SSL error</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">SslError</span>(<span class="ident">SslError</span>),
+    <span class="ident">SslError</span>(<span class="ident">OpenSslError</span>),
 
     <span class="doccomment">/// Failed to resolve the hostname</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Failed resolving hostname: {}&quot;</span>, <span class="ident">_0</span>)]</span>

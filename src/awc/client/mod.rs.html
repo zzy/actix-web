@@ -37,7 +37,7 @@
 <span class="kw">mod</span> <span class="ident">pool</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_tls::connect</span>::{
-    <span class="ident">Connect</span> <span class="kw">as</span> <span class="ident">TcpConnect</span>, <span class="ident">ConnectError</span> <span class="kw">as</span> <span class="ident">TcpConnectError</span>, <span class="ident">Connection</span> <span class="kw">as</span> <span class="ident">TcpConnection</span>,
+    <span class="ident">ConnectError</span> <span class="kw">as</span> <span class="ident">TcpConnectError</span>, <span class="ident">ConnectInfo</span>, <span class="ident">Connection</span> <span class="kw">as</span> <span class="ident">TcpConnection</span>,
 };
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::connection</span>::{<span class="ident">Connection</span>, <span class="ident">ConnectionIo</span>};

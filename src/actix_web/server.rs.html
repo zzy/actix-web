@@ -694,9 +694,9 @@
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;openssl&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">actix_tls::accept::openssl</span>::{<span class="ident">AlpnError</span>, <span class="ident">SslAcceptor</span>, <span class="ident">SslAcceptorBuilder</span>};
+<span class="kw">use</span> <span class="ident">actix_tls::accept::openssl::reexports</span>::{<span class="ident">AlpnError</span>, <span class="ident">SslAcceptor</span>, <span class="ident">SslAcceptorBuilder</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rustls&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">actix_tls::accept::rustls::ServerConfig</span> <span class="kw">as</span> <span class="ident">RustlsServerConfig</span>;
+<span class="kw">use</span> <span class="ident">actix_tls::accept::rustls::reexports::ServerConfig</span> <span class="kw">as</span> <span class="ident">RustlsServerConfig</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">config::AppConfig</span>, <span class="ident">Error</span>};
 
@@ -787,11 +787,11 @@
     <span class="doccomment">/// [Extensions] container so that request-local data can be passed to middleware and handlers.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// For example:</span>
-    <span class="doccomment">/// - `actix_tls::openssl::SslStream&lt;actix_web::rt::net::TcpStream&gt;` when using openssl.</span>
-    <span class="doccomment">/// - `actix_tls::rustls::TlsStream&lt;actix_web::rt::net::TcpStream&gt;` when using rustls.</span>
+    <span class="doccomment">/// - `actix_tls::accept::openssl::TlsStream&lt;actix_web::rt::net::TcpStream&gt;` when using openssl.</span>
+    <span class="doccomment">/// - `actix_tls::accept::rustls::TlsStream&lt;actix_web::rt::net::TcpStream&gt;` when using rustls.</span>
     <span class="doccomment">/// - `actix_web::rt::net::TcpStream` when no encryption is used.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// See `on_connect` example for additional details.</span>
+    <span class="doccomment">/// See the `on_connect` example for additional details.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_connect</span><span class="op">&lt;</span><span class="ident">CB</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">f</span>: <span class="ident">CB</span>) -&gt; <span class="ident">HttpServer</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">I</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">CB</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Any</span>, <span class="kw-2">&amp;mut</span> <span class="ident">Extensions</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,

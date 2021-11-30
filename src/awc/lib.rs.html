@@ -449,7 +449,7 @@
 <span class="kw">use</span> <span class="ident">actix_rt::net::TcpStream</span>;
 <span class="kw">use</span> <span class="ident">actix_service::Service</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="self">self</span>::client</span>::{<span class="ident">TcpConnect</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>};
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::client</span>::{<span class="ident">ConnectInfo</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>};
 
 <span class="doccomment">/// An asynchronous HTTP and WebSocket client.</span>
 <span class="doccomment">///</span>
@@ -498,7 +498,7 @@
     <span class="doccomment">/// This function is equivalent of `ClientBuilder::new()`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">builder</span>() -&gt; <span class="ident">ClientBuilder</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span>
-                <span class="ident">TcpConnect</span><span class="op">&lt;</span><span class="ident">Uri</span><span class="op">&gt;</span>,
+                <span class="ident">ConnectInfo</span><span class="op">&lt;</span><span class="ident">Uri</span><span class="op">&gt;</span>,
                 <span class="ident">Response</span> <span class="op">=</span> <span class="ident">TcpConnection</span><span class="op">&lt;</span><span class="ident">Uri</span>, <span class="ident">TcpStream</span><span class="op">&gt;</span>,
                 <span class="ident">Error</span> <span class="op">=</span> <span class="ident">TcpConnectError</span>,
             <span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span>,

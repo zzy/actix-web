@@ -369,6 +369,9 @@
 <span id="368">368</span>
 <span id="369">369</span>
 <span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
     <span class="ident">future::Future</span>,
@@ -474,7 +477,10 @@
 <span class="kw">mod</span> <span class="ident">openssl</span> {
     <span class="kw">use</span> <span class="ident">actix_service::ServiceFactoryExt</span> <span class="kw">as</span> <span class="kw">_</span>;
     <span class="kw">use</span> <span class="ident">actix_tls::accept</span>::{
-        <span class="ident">openssl</span>::{<span class="ident">Acceptor</span>, <span class="ident">SslAcceptor</span>, <span class="ident">SslError</span>, <span class="ident">TlsStream</span>},
+        <span class="ident">openssl</span>::{
+            <span class="ident">reexports</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">SslError</span>, <span class="ident">SslAcceptor</span>},
+            <span class="ident">Acceptor</span>, <span class="ident">TlsStream</span>,
+        },
         <span class="ident">TlsError</span>,
     };
 
@@ -522,7 +528,7 @@
 
     <span class="kw">use</span> <span class="ident">actix_service::ServiceFactoryExt</span> <span class="kw">as</span> <span class="kw">_</span>;
     <span class="kw">use</span> <span class="ident">actix_tls::accept</span>::{
-        <span class="ident">rustls</span>::{<span class="ident">Acceptor</span>, <span class="ident">ServerConfig</span>, <span class="ident">TlsStream</span>},
+        <span class="ident">rustls</span>::{<span class="ident">reexports::ServerConfig</span>, <span class="ident">Acceptor</span>, <span class="ident">TlsStream</span>},
         <span class="ident">TlsError</span>,
     };
 
