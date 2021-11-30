@@ -234,6 +234,9 @@
 <span id="233">233</span>
 <span id="234">234</span>
 <span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`ErrorHandlers`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -246,6 +249,7 @@
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">Service</span>, <span class="ident">Transform</span>};
 <span class="kw">use</span> <span class="ident">ahash::AHashMap</span>;
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">future::LocalBoxFuture</span>, <span class="ident">ready</span>};
+<span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">dev</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
@@ -366,19 +370,21 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">pin_project::pin_project</span>(<span class="ident">project</span> <span class="op">=</span> <span class="ident">ErrorHandlersProj</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorHandlersFuture</span><span class="op">&lt;</span><span class="ident">Fut</span>, <span class="ident">B</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">Fut</span>: <span class="ident">Future</span>,
-{
-    <span class="ident">ServiceFuture</span> {
-        <span class="attribute">#[<span class="ident">pin</span>]</span>
-        <span class="ident">fut</span>: <span class="ident">Fut</span>,
-        <span class="ident">handlers</span>: <span class="ident">Handlers</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">HandlerFuture</span> {
-        <span class="ident">fut</span>: <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">Fut::Output</span><span class="op">&gt;</span>,
-    },
+<span class="macro">pin_project!</span> {
+    <span class="attribute">#[<span class="ident">project</span> <span class="op">=</span> <span class="ident">ErrorHandlersProj</span>]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorHandlersFuture</span><span class="op">&lt;</span><span class="ident">Fut</span>, <span class="ident">B</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">Fut</span>: <span class="ident">Future</span>,
+    {
+        <span class="ident">ServiceFuture</span> {
+            <span class="attribute">#[<span class="ident">pin</span>]</span>
+            <span class="ident">fut</span>: <span class="ident">Fut</span>,
+            <span class="ident">handlers</span>: <span class="ident">Handlers</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+        },
+        <span class="ident">HandlerFuture</span> {
+            <span class="ident">fut</span>: <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">Fut::Output</span><span class="op">&gt;</span>,
+        },
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Fut</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">ErrorHandlersFuture</span><span class="op">&lt;</span><span class="ident">Fut</span>, <span class="ident">B</span><span class="op">&gt;</span>
@@ -470,5 +476,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (db9d361a4 2021-11-28)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6db0a0e9a 2021-11-29)" ></div>
 </body></html>

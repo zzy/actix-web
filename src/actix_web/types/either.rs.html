@@ -381,6 +381,10 @@
 <span id="380">380</span>
 <span id="381">381</span>
 <span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For either helper, see [`Either`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -392,6 +396,7 @@
 
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core::ready</span>;
+<span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">dev</span>,
@@ -581,37 +586,40 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">pin_project::pin_project</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EitherExtractFut</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">R</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">L</span>: <span class="ident">FromRequest</span>,
-{
-    <span class="ident">req</span>: <span class="ident">HttpRequest</span>,
-    <span class="attribute">#[<span class="ident">pin</span>]</span>
-    <span class="ident">state</span>: <span class="ident">EitherExtractState</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span><span class="op">&gt;</span>,
+<span class="macro">pin_project!</span> {
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EitherExtractFut</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">R</span>: <span class="ident">FromRequest</span>,
+        <span class="ident">L</span>: <span class="ident">FromRequest</span>,
+    {
+        <span class="ident">req</span>: <span class="ident">HttpRequest</span>,
+        <span class="attribute">#[<span class="ident">pin</span>]</span>
+        <span class="ident">state</span>: <span class="ident">EitherExtractState</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span><span class="op">&gt;</span>,
+    }
 }
 
-<span class="attribute">#[<span class="ident">pin_project::pin_project</span>(<span class="ident">project</span> <span class="op">=</span> <span class="ident">EitherExtractProj</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EitherExtractState</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">L</span>: <span class="ident">FromRequest</span>,
-    <span class="ident">R</span>: <span class="ident">FromRequest</span>,
-{
-    <span class="ident">Bytes</span> {
-        <span class="attribute">#[<span class="ident">pin</span>]</span>
-        <span class="ident">bytes</span>: <span class="op">&lt;</span><span class="ident">Bytes</span> <span class="kw">as</span> <span class="ident">FromRequest</span><span class="op">&gt;</span><span class="ident">::Future</span>,
-    },
-    <span class="ident">Left</span> {
-        <span class="attribute">#[<span class="ident">pin</span>]</span>
-        <span class="ident">left</span>: <span class="ident">L::Future</span>,
-        <span class="ident">fallback</span>: <span class="ident">Bytes</span>,
-    },
-    <span class="ident">Right</span> {
-        <span class="attribute">#[<span class="ident">pin</span>]</span>
-        <span class="ident">right</span>: <span class="ident">R::Future</span>,
-        <span class="ident">left_err</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">L::Error</span><span class="op">&gt;</span>,
-    },
+<span class="macro">pin_project!</span> {
+    <span class="attribute">#[<span class="ident">project</span> <span class="op">=</span> <span class="ident">EitherExtractProj</span>]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EitherExtractState</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">L</span>: <span class="ident">FromRequest</span>,
+        <span class="ident">R</span>: <span class="ident">FromRequest</span>,
+    {
+        <span class="ident">Bytes</span> {
+            <span class="attribute">#[<span class="ident">pin</span>]</span>
+            <span class="ident">bytes</span>: <span class="op">&lt;</span><span class="ident">Bytes</span> <span class="kw">as</span> <span class="ident">FromRequest</span><span class="op">&gt;</span><span class="ident">::Future</span>,
+        },
+        <span class="ident">Left</span> {
+            <span class="attribute">#[<span class="ident">pin</span>]</span>
+            <span class="ident">left</span>: <span class="ident">L::Future</span>,
+            <span class="ident">fallback</span>: <span class="ident">Bytes</span>,
+        },
+        <span class="ident">Right</span> {
+            <span class="attribute">#[<span class="ident">pin</span>]</span>
+            <span class="ident">right</span>: <span class="ident">R::Future</span>,
+            <span class="ident">left_err</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">L::Error</span><span class="op">&gt;</span>,
+        },
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">RF</span>, <span class="ident">RE</span>, <span class="ident">L</span>, <span class="ident">LF</span>, <span class="ident">LE</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">EitherExtractFut</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span><span class="op">&gt;</span>
@@ -764,5 +772,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (db9d361a4 2021-11-28)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6db0a0e9a 2021-11-29)" ></div>
 </body></html>
