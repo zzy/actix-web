@@ -140,11 +140,11 @@
 <span id="139">139</span>
 <span id="140">140</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">future</span>::{<span class="ident">ready</span>, <span class="ident">Ready</span>},
     <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
     <span class="ident">str::FromStr</span>,
 };
 
+<span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ready</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">dev::Payload</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpRequest</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::UriSegmentError</span>;

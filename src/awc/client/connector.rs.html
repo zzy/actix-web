@@ -854,8 +854,6 @@
 <span id="853">853</span>
 <span id="854">854</span>
 <span id="855">855</span>
-<span id="856">856</span>
-<span id="857">857</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>,
     <span class="ident">future::Future</span>,
@@ -1144,12 +1142,10 @@
                 }
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dangerous-h2c&quot;</span>)]</span>
                 {
-                    <span class="kw">use</span> <span class="ident">std</span>::{
-                        <span class="ident">future</span>::{<span class="ident">ready</span>, <span class="ident">Ready</span>},
-                        <span class="ident">io</span>,
-                    };
+                    <span class="kw">use</span> <span class="ident">std::io</span>;
 
                     <span class="kw">use</span> <span class="ident">actix_tls::connect::Connection</span>;
+                    <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ready</span>, <span class="ident">Ready</span>};
 
                     <span class="kw">impl</span> <span class="ident">IntoConnectionIo</span> <span class="kw">for</span> <span class="ident">TcpConnection</span><span class="op">&lt;</span><span class="ident">Uri</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ConnectionIo</span><span class="op">&gt;</span><span class="op">&gt;</span> {
                         <span class="kw">fn</span> <span class="ident">into_connection_io</span>(<span class="self">self</span>) -&gt; (<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ConnectionIo</span><span class="op">&gt;</span>, <span class="ident">Protocol</span>) {
