@@ -279,7 +279,8 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
 
 <span class="macro">crate::http::header::common_header!</span> {
-    <span class="doccomment">/// `Accept` header, defined in [RFC7231](http://tools.ietf.org/html/rfc7231#section-5.3.2)</span>
+    <span class="doccomment">/// `Accept` header, defined</span>
+    <span class="doccomment">/// in [RFC 7231 §5.3.2](https://datatracker.ietf.org/doc/html/rfc7231#section-5.3.2)</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `Accept` header field can be used by user agents to specify</span>
     <span class="doccomment">/// response media types that are acceptable. Accept header fields can</span>
@@ -288,7 +289,6 @@
     <span class="doccomment">/// in-line image</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```text</span>
     <span class="doccomment">/// Accept = #( media-range [ accept-params ] )</span>
     <span class="doccomment">///</span>
@@ -300,7 +300,7 @@
     <span class="doccomment">/// accept-ext = OWS &quot;;&quot; OWS token [ &quot;=&quot; ( token / quoted-string ) ]</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example values</span>
+    <span class="doccomment">/// # Example Values</span>
     <span class="doccomment">/// * `audio/*; q=0.2, audio/basic`</span>
     <span class="doccomment">/// * `text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c`</span>
     <span class="doccomment">///</span>
@@ -352,7 +352,7 @@
     <span class="doccomment">/// ```</span>
     (<span class="ident">Accept</span>, <span class="ident">header::ACCEPT</span>) =&gt; (<span class="ident">QualityItem</span><span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span>)<span class="op">+</span>
 
-    <span class="ident">test_accept</span> {
+    <span class="ident">test_parse_and_format</span> {
         <span class="comment">// Tests from the RFC</span>
          <span class="macro">crate::http::header::common_header_test!</span>(
             <span class="ident">test1</span>,
@@ -544,5 +544,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6db0a0e9a 2021-11-29)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
 </body></html>

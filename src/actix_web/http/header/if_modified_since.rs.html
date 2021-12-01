@@ -39,12 +39,11 @@
 <span id="38">38</span>
 <span id="39">39</span>
 <span id="40">40</span>
-<span id="41">41</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">HttpDate</span>, <span class="ident">IF_MODIFIED_SINCE</span>};
 
 <span class="macro">crate::http::header::common_header!</span> {
-    <span class="doccomment">/// `If-Modified-Since` header, defined in</span>
-    <span class="doccomment">/// [RFC7232](http://tools.ietf.org/html/rfc7232#section-3.3)</span>
+    <span class="doccomment">/// `If-Modified-Since` header, defined</span>
+    <span class="doccomment">/// in [RFC 7232 §3.3](https://datatracker.ietf.org/doc/html/rfc7232#section-3.3)</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `If-Modified-Since` header field makes a GET or HEAD request</span>
     <span class="doccomment">/// method conditional on the selected representation&#39;s modification date</span>
@@ -53,12 +52,11 @@
     <span class="doccomment">/// data has not changed.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```text</span>
     <span class="doccomment">/// If-Unmodified-Since = HTTP-date</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example values</span>
+    <span class="doccomment">/// # Example Values</span>
     <span class="doccomment">/// * `Sat, 29 Oct 1994 19:43:31 GMT`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Example</span>
@@ -76,11 +74,11 @@
     <span class="doccomment">/// ```</span>
     (<span class="ident">IfModifiedSince</span>, <span class="ident">IF_MODIFIED_SINCE</span>) =&gt; [<span class="ident">HttpDate</span>]
 
-    <span class="ident">test_if_modified_since</span> {
+    <span class="ident">test_parse_and_format</span> {
         <span class="comment">// Test case from RFC</span>
         <span class="macro">crate::http::header::common_header_test!</span>(<span class="ident">test1</span>, <span class="macro">vec!</span>[<span class="string">b&quot;Sat, 29 Oct 1994 19:43:31 GMT&quot;</span>]);
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6db0a0e9a 2021-11-29)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
 </body></html>

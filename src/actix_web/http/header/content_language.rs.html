@@ -52,15 +52,12 @@
 <span id="51">51</span>
 <span id="52">52</span>
 <span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">QualityItem</span>, <span class="ident">CONTENT_LANGUAGE</span>};
 <span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
 
 <span class="macro">crate::http::header::common_header!</span> {
-    <span class="doccomment">/// `Content-Language` header, defined in</span>
-    <span class="doccomment">/// [RFC7231](https://tools.ietf.org/html/rfc7231#section-3.1.3.2)</span>
+    <span class="doccomment">/// `Content-Language` header, defined</span>
+    <span class="doccomment">/// in [RFC 7231 §3.1.3.2](https://datatracker.ietf.org/doc/html/rfc7231#section-3.1.3.2)</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `Content-Language` header field describes the natural language(s)</span>
     <span class="doccomment">/// of the intended audience for the representation.  Note that this</span>
@@ -68,18 +65,15 @@
     <span class="doccomment">/// representation.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```text</span>
     <span class="doccomment">/// Content-Language = 1#language-tag</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example values</span>
-    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example Values</span>
     <span class="doccomment">/// * `da`</span>
     <span class="doccomment">/// * `mi, en`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
     <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, LanguageTag, qitem};</span>
@@ -106,11 +100,11 @@
     <span class="doccomment">/// ```</span>
     (<span class="ident">ContentLanguage</span>, <span class="ident">CONTENT_LANGUAGE</span>) =&gt; (<span class="ident">QualityItem</span><span class="op">&lt;</span><span class="ident">LanguageTag</span><span class="op">&gt;</span>)<span class="op">+</span>
 
-    <span class="ident">test_content_language</span> {
+    <span class="ident">test_parse_and_format</span> {
         <span class="macro">crate::http::header::common_header_test!</span>(<span class="ident">test1</span>, <span class="macro">vec!</span>[<span class="string">b&quot;da&quot;</span>]);
         <span class="macro">crate::http::header::common_header_test!</span>(<span class="ident">test2</span>, <span class="macro">vec!</span>[<span class="string">b&quot;mi, en&quot;</span>]);
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6db0a0e9a 2021-11-29)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
 </body></html>

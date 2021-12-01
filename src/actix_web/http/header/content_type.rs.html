@@ -113,15 +113,12 @@
 <span id="112">112</span>
 <span id="113">113</span>
 <span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::CONTENT_TYPE</span>;
 <span class="kw">use</span> <span class="ident">mime::Mime</span>;
 
 <span class="macro">crate::http::header::common_header!</span> {
-    <span class="doccomment">/// `Content-Type` header, defined in</span>
-    <span class="doccomment">/// [RFC7231](http://tools.ietf.org/html/rfc7231#section-3.1.1.5)</span>
+    <span class="doccomment">/// `Content-Type` header, defined</span>
+    <span class="doccomment">/// in [RFC 7231 §3.1.1.5](https://datatracker.ietf.org/doc/html/rfc7231#section-3.1.1.5)</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `Content-Type` header field indicates the media type of the</span>
     <span class="doccomment">/// associated representation: either the representation enclosed in the</span>
@@ -136,18 +133,15 @@
     <span class="doccomment">/// this is an issue, it&#39;s possible to implement `Header` on a custom struct.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```text</span>
     <span class="doccomment">/// Content-Type = media-type</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example values</span>
-    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example Values</span>
     <span class="doccomment">/// * `text/html; charset=utf-8`</span>
     <span class="doccomment">/// * `application/json`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
     <span class="doccomment">/// use actix_web::http::header::ContentType;</span>
@@ -169,7 +163,7 @@
     <span class="doccomment">/// ```</span>
     (<span class="ident">ContentType</span>, <span class="ident">CONTENT_TYPE</span>) =&gt; [<span class="ident">Mime</span>]
 
-    <span class="ident">test_content_type</span> {
+    <span class="ident">test_parse_and_format</span> {
         <span class="macro">crate::http::header::common_header_test!</span>(
             <span class="ident">test1</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;text/html&quot;</span>],
@@ -234,5 +228,5 @@
 
 <span class="kw">impl</span> <span class="ident">Eq</span> <span class="kw">for</span> <span class="ident">ContentType</span> {}
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6db0a0e9a 2021-11-29)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
 </body></html>

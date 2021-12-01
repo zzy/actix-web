@@ -74,30 +74,30 @@
 <span id="73">73</span>
 <span id="74">74</span>
 <span id="75">75</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
-<span class="kw">use</span> <span class="ident">actix_http::http::Method</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actix_http::http::Method</span>;
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
 
 <span class="macro">crate::http::header::common_header!</span> {
-    <span class="doccomment">/// `Allow` header, defined in [RFC7231](http://tools.ietf.org/html/rfc7231#section-7.4.1)</span>
+    <span class="doccomment">/// `Allow` header, defined</span>
+    <span class="doccomment">/// in [RFC 7231 §7.4.1](https://datatracker.ietf.org/doc/html/rfc7231#section-7.4.1)</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `Allow` header field lists the set of methods advertised as</span>
-    <span class="doccomment">/// supported by the target resource.  The purpose of this field is</span>
+    <span class="doccomment">/// supported by the target resource. The purpose of this field is</span>
     <span class="doccomment">/// strictly to inform the recipient of valid request methods associated</span>
     <span class="doccomment">/// with the resource.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```text</span>
     <span class="doccomment">/// Allow = #method</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example values</span>
+    <span class="doccomment">/// # Example Values</span>
     <span class="doccomment">/// * `GET, HEAD, PUT`</span>
     <span class="doccomment">/// * `OPTIONS, GET, PUT, POST, DELETE, HEAD, TRACE, CONNECT, PATCH, fOObAr`</span>
     <span class="doccomment">/// * ``</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
     <span class="doccomment">/// use actix_web::http::{header::Allow, Method};</span>
@@ -123,7 +123,7 @@
     <span class="doccomment">/// ```</span>
     (<span class="ident">Allow</span>, <span class="ident">header::ALLOW</span>) =&gt; (<span class="ident">Method</span>)<span class="op">*</span>
 
-    <span class="ident">test_allow</span> {
+    <span class="ident">test_parse_and_format</span> {
         <span class="comment">// From the RFC</span>
         <span class="macro">crate::http::header::common_header_test!</span>(
             <span class="ident">test1</span>,
@@ -150,5 +150,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6db0a0e9a 2021-11-29)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
 </body></html>
