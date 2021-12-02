@@ -260,6 +260,8 @@
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
 
+<span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>};
+
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">fmt_comma_delimited</span>, <span class="ident">from_comma_delimited</span>, <span class="ident">Header</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">Writer</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
@@ -273,7 +275,7 @@
 <span class="doccomment">/// not imply that the same directive is to be given in the response.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # ABNF</span>
-<span class="doccomment">/// ```text</span>
+<span class="doccomment">/// ```plain</span>
 <span class="doccomment">/// Cache-Control   = 1#cache-directive</span>
 <span class="doccomment">/// cache-directive = token [ &quot;=&quot; ( token / quoted-string ) ]</span>
 <span class="doccomment">/// ```</span>
@@ -305,10 +307,8 @@
 <span class="doccomment">///     CacheDirective::Extension(&quot;foo&quot;.to_owned(), Some(&quot;bar&quot;.to_owned())),</span>
 <span class="doccomment">/// ]));</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deref</span>, <span class="ident">DerefMut</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CacheControl</span>(<span class="kw">pub</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CacheDirective</span><span class="op">&gt;</span>);
-
-<span class="macro">crate::http::header::common_header_deref!</span>(<span class="ident">CacheControl</span> =&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CacheDirective</span><span class="op">&gt;</span>);
 
 <span class="comment">// TODO: this could just be the crate::http::header::common_header! macro</span>
 <span class="kw">impl</span> <span class="ident">Header</span> <span class="kw">for</span> <span class="ident">CacheControl</span> {
@@ -347,7 +347,7 @@
 }
 
 <span class="doccomment">/// `CacheControl` contains a list of these directives.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CacheDirective</span> {
     <span class="doccomment">/// &quot;no-cache&quot;</span>
     <span class="ident">NoCache</span>,

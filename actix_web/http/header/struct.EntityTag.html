@@ -8,7 +8,7 @@ in <a href="https://datatracker.ietf.org/doc/html/rfc7232#section-2.3">RFC 7232 
 Preceding the first double quote is an optional weakness indicator,
 which always looks like <code>W/</code>. Examples for valid tags are <code>&quot;xyzzy&quot;</code> and
 <code>W/&quot;xyzzy&quot;</code>.</p>
-<h2 id="abnf" class="section-header"><a href="#abnf">ABNF</a></h2><div class="example-wrap"><pre class="language-text"><code>entity-tag = [ weak ] opaque-tag
+<h2 id="abnf" class="section-header"><a href="#abnf">ABNF</a></h2><div class="example-wrap"><pre class="language-plain"><code>entity-tag = [ weak ] opaque-tag
 weak       = %x57.2F ; &quot;W/&quot;, case-sensitive
 opaque-tag = DQUOTE *etagc DQUOTE
 etagc      = %x21 / %x23-7E / obs-text

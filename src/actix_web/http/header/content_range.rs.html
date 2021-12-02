@@ -283,7 +283,7 @@
 <span class="doccomment">/// in [RFC 7233 §4.2](https://datatracker.ietf.org/doc/html/rfc7233#section-4.2)</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # ABNF</span>
-<span class="doccomment">/// ```text</span>
+<span class="doccomment">/// ```plain</span>
 <span class="doccomment">/// Content-Range       = byte-content-range</span>
 <span class="doccomment">///                     / other-content-range</span>
 <span class="doccomment">///</span>
@@ -299,7 +299,7 @@
 <span class="doccomment">/// other-content-range = other-range-unit SP other-range-resp</span>
 <span class="doccomment">/// other-range-resp    = *CHAR</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ContentRangeSpec</span> {
     <span class="doccomment">/// Byte range</span>
     <span class="ident">Bytes</span> {

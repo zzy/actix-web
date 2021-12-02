@@ -111,8 +111,6 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::CONTENT_TYPE</span>;
 <span class="kw">use</span> <span class="ident">mime::Mime</span>;
 
@@ -133,7 +131,7 @@
     <span class="doccomment">/// this is an issue, it&#39;s possible to implement `Header` on a custom struct.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">/// ```text</span>
+    <span class="doccomment">/// ```plain</span>
     <span class="doccomment">/// Content-Type = media-type</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
@@ -225,8 +223,6 @@
         <span class="ident">ContentType</span>(<span class="ident">mime::APPLICATION_OCTET_STREAM</span>)
     }
 }
-
-<span class="kw">impl</span> <span class="ident">Eq</span> <span class="kw">for</span> <span class="ident">ContentType</span> {}
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (48a5999fc 2021-12-01)" ></div>
 </body></html>

@@ -240,7 +240,7 @@
     <span class="doccomment">/// ranges defined in [RFC 4647 §2.1](https://datatracker.ietf.org/doc/html/rfc4647#section-2.1).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">/// ```text</span>
+    <span class="doccomment">/// ```plain</span>
     <span class="doccomment">/// Accept-Language = 1#( language-range [ weight ] )</span>
     <span class="doccomment">/// language-range  = (1*8ALPHA *(&quot;-&quot; 1*8alphanum)) / &quot;*&quot;</span>
     <span class="doccomment">/// alphanum        = ALPHA / DIGIT</span>
@@ -282,7 +282,7 @@
     <span class="doccomment">/// ```</span>
     (<span class="ident">AcceptLanguage</span>, <span class="ident">header::ACCEPT_LANGUAGE</span>) =&gt; (<span class="ident">QualityItem</span><span class="op">&lt;</span><span class="ident">Preference</span><span class="op">&lt;</span><span class="ident">LanguageTag</span><span class="op">&gt;</span><span class="op">&gt;</span>)<span class="op">*</span>
 
-    <span class="ident">parse_and_fmt_tests</span> {
+    <span class="ident">test_parse_and_format</span> {
         <span class="macro">common_header_test!</span>(<span class="ident">no_headers</span>, <span class="macro">vec!</span>[<span class="string">b&quot;&quot;</span>; <span class="number">0</span>], <span class="prelude-val">Some</span>(<span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[])));
 
         <span class="macro">common_header_test!</span>(<span class="ident">empty_header</span>, <span class="macro">vec!</span>[<span class="string">b&quot;&quot;</span>; <span class="number">1</span>], <span class="prelude-val">Some</span>(<span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[])));

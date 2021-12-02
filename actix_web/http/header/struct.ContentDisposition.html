@@ -16,7 +16,7 @@ locally.</p>
 can be used on the subpart of a multipart body to give information about the field it applies to.
 The subpart is delimited by the boundary defined in the <em>Content-Type</em> header. Used on the body
 itself, <em>Content-Disposition</em> has no effect.</p>
-<h2 id="abnf" class="section-header"><a href="#abnf">ABNF</a></h2><div class="example-wrap"><pre class="language-text"><code>content-disposition = &quot;Content-Disposition&quot; &quot;:&quot;
+<h2 id="abnf" class="section-header"><a href="#abnf">ABNF</a></h2><div class="example-wrap"><pre class="language-plain"><code>content-disposition = &quot;Content-Disposition&quot; &quot;:&quot;
                       disposition-type *( &quot;;&quot; disposition-parm )
 
 disposition-type    = &quot;inline&quot; | &quot;attachment&quot; | disp-ext-type

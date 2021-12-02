@@ -66,9 +66,9 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">EntityTag</span>, <span class="ident">IF_MATCH</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">common_header</span>, <span class="ident">EntityTag</span>, <span class="ident">IF_MATCH</span>};
 
-<span class="macro">crate::http::header::common_header!</span> {
+<span class="macro">common_header!</span> {
     <span class="doccomment">/// `If-Match` header, defined</span>
     <span class="doccomment">/// in [RFC 7232 §3.1](https://datatracker.ietf.org/doc/html/rfc7232#section-3.1)</span>
     <span class="doccomment">///</span>
@@ -85,7 +85,7 @@
     <span class="doccomment">/// there have been any changes to the representation data.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # ABNF</span>
-    <span class="doccomment">/// ```text</span>
+    <span class="doccomment">/// ```plain</span>
     <span class="doccomment">/// If-Match = &quot;*&quot; / 1#entity-tag</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
