@@ -118,9 +118,9 @@
 <span class="comment">// - header parsing utils</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::http::header</span>::<span class="kw-2">*</span>;
 
-<span class="kw">mod</span> <span class="ident">accept_charset</span>;
-<span class="comment">// mod accept_encoding;</span>
 <span class="kw">mod</span> <span class="ident">accept</span>;
+<span class="kw">mod</span> <span class="ident">accept_charset</span>;
+<span class="kw">mod</span> <span class="ident">accept_encoding</span>;
 <span class="kw">mod</span> <span class="ident">accept_language</span>;
 <span class="kw">mod</span> <span class="ident">allow</span>;
 <span class="kw">mod</span> <span class="ident">cache_control</span>;
@@ -147,9 +147,9 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">macros::common_header_test</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">macros</span>::{<span class="ident">common_header</span>, <span class="ident">common_header_test_module</span>};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::accept_charset::AcceptCharset</span>;
-<span class="comment">//pub use self::accept_encoding::AcceptEncoding;</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::accept::Accept</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::accept_charset::AcceptCharset</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::accept_encoding::AcceptEncoding</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::accept_language::AcceptLanguage</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::allow::Allow</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::cache_control</span>::{<span class="ident">CacheControl</span>, <span class="ident">CacheDirective</span>};
