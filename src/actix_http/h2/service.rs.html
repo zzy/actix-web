@@ -371,7 +371,6 @@
 <span id="370">370</span>
 <span id="371">371</span>
 <span id="372">372</span>
-<span id="373">373</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
     <span class="ident">future::Future</span>,
@@ -389,9 +388,7 @@
     <span class="ident">ServiceFactoryExt</span> <span class="kw">as</span> <span class="kw">_</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_utils::future::ready</span>;
-<span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">future::LocalBoxFuture</span>, <span class="ident">ready</span>};
-<span class="kw">use</span> <span class="ident">h2::server</span>::{<span class="ident">handshake</span> <span class="kw">as</span> <span class="ident">h2_handshake</span>, <span class="ident">Handshake</span> <span class="kw">as</span> <span class="ident">H2Handshake</span>};
 <span class="kw">use</span> <span class="ident">log::error</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -402,7 +399,7 @@
     <span class="ident">ConnectCallback</span>, <span class="ident">OnConnectData</span>, <span class="ident">Request</span>, <span class="ident">Response</span>,
 };
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::dispatcher::Dispatcher</span>;
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">dispatcher::Dispatcher</span>, <span class="ident">handshake_with_timeout</span>, <span class="ident">HandshakeWithTimeout</span>};
 
 <span class="doccomment">/// `ServiceFactory` implementation for HTTP/2 transport</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">H2Service</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span> {
@@ -671,7 +668,7 @@
                 <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>()),
                 <span class="ident">addr</span>,
                 <span class="ident">on_connect_data</span>,
-                <span class="ident">h2_handshake</span>(<span class="ident">io</span>),
+                <span class="ident">handshake_with_timeout</span>(<span class="ident">io</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cfg</span>),
             ),
         }
     }
@@ -688,7 +685,7 @@
         <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServiceConfig</span><span class="op">&gt;</span>,
         <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net::SocketAddr</span><span class="op">&gt;</span>,
         <span class="ident">OnConnectData</span>,
-        <span class="ident">H2Handshake</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Bytes</span><span class="op">&gt;</span>,
+        <span class="ident">HandshakeWithTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
     ),
 }
 
@@ -726,7 +723,7 @@
                 <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">on_connect_data</span>,
                 <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">handshake</span>,
             ) =&gt; <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">Pin::new</span>(<span class="ident">handshake</span>).<span class="ident">poll</span>(<span class="ident">cx</span>)) {
-                <span class="prelude-val">Ok</span>(<span class="ident">conn</span>) =&gt; {
+                <span class="prelude-val">Ok</span>((<span class="ident">conn</span>, <span class="ident">timer</span>)) =&gt; {
                     <span class="kw">let</span> <span class="ident">on_connect_data</span> <span class="op">=</span> <span class="ident">std::mem::take</span>(<span class="ident">on_connect_data</span>);
                     <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State::Incoming</span>(<span class="ident">Dispatcher::new</span>(
                         <span class="ident">srv</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
@@ -734,12 +731,13 @@
                         <span class="ident">on_connect_data</span>,
                         <span class="ident">config</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
                         <span class="kw-2">*</span><span class="ident">peer_addr</span>,
+                        <span class="ident">timer</span>,
                     ));
                     <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
                 }
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
                     <span class="macro">trace!</span>(<span class="string">&quot;H2 handshake error: {}&quot;</span>, <span class="ident">err</span>);
-                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>.<span class="ident">into</span>()))
+                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))
                 }
             },
         }

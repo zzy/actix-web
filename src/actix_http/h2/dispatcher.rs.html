@@ -329,6 +329,13 @@
 <span id="328">328</span>
 <span id="329">329</span>
 <span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp</span>,
     <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
@@ -341,7 +348,7 @@
 };
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
-<span class="kw">use</span> <span class="ident">actix_rt::time::Sleep</span>;
+<span class="kw">use</span> <span class="ident">actix_rt::time</span>::{<span class="ident">sleep</span>, <span class="ident">Sleep</span>};
 <span class="kw">use</span> <span class="ident">actix_service::Service</span>;
 <span class="kw">use</span> <span class="ident">actix_utils::future::poll_fn</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
@@ -386,9 +393,16 @@
         <span class="ident">on_connect_data</span>: <span class="ident">OnConnectData</span>,
         <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net::SocketAddr</span><span class="op">&gt;</span>,
+        <span class="ident">timer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Pin</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">ping_pong</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">keep_alive_timer</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">timer</span><span class="op">|</span> <span class="ident">H2PingPong</span> {
-            <span class="ident">timer</span>: <span class="ident">Box::pin</span>(<span class="ident">timer</span>),
+        <span class="kw">let</span> <span class="ident">ping_pong</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">keep_alive</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">dur</span><span class="op">|</span> <span class="ident">H2PingPong</span> {
+            <span class="ident">timer</span>: <span class="ident">timer</span>
+                .<span class="ident">map</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">timer</span><span class="op">|</span> {
+                    <span class="comment">// reset timer if it&#39;s received from new function.</span>
+                    <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">config</span>.<span class="ident">now</span>() <span class="op">+</span> <span class="ident">dur</span>);
+                    <span class="ident">timer</span>
+                })
+                .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Box::pin</span>(<span class="ident">sleep</span>(<span class="ident">dur</span>))),
             <span class="ident">on_flight</span>: <span class="bool-val">false</span>,
             <span class="ident">ping_pong</span>: <span class="ident">connection</span>.<span class="ident">ping_pong</span>().<span class="ident">unwrap</span>(),
         });
