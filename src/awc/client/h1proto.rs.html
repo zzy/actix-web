@@ -227,7 +227,6 @@
 <span id="226">226</span>
 <span id="227">227</span>
 <span id="228">228</span>
-<span id="229">229</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">io::Write</span>,
     <span class="ident">pin::Pin</span>,
@@ -296,8 +295,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">framed</span> <span class="op">=</span> <span class="ident">Framed::new</span>(<span class="ident">io</span>, <span class="ident">h1::ClientCodec::default</span>());
 
     <span class="comment">// Check EXPECT header and enable expect handle flag accordingly.</span>
-    <span class="comment">//</span>
-    <span class="comment">// RFC: https://tools.ietf.org/html/rfc7231#section-5.1.1</span>
+    <span class="comment">// See https://datatracker.ietf.org/doc/html/rfc7231#section-5.1.1</span>
     <span class="kw">let</span> <span class="ident">is_expect</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">headers</span>.<span class="ident">contains_key</span>(<span class="ident">EXPECT</span>) {
         <span class="kw">match</span> <span class="ident">body</span>.<span class="ident">size</span>() {
             <span class="ident">BodySize::None</span> <span class="op">|</span> <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; {
@@ -458,5 +456,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (48a5999fc 2021-12-01)" ></div>
 </body></html>

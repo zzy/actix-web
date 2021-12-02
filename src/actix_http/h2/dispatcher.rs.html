@@ -635,7 +635,7 @@
     <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">value</span>) <span class="kw">in</span> <span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">iter</span>() {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="ident">key</span> {
             <span class="comment">// TODO: consider skipping other headers according to:</span>
-            <span class="comment">//       https://tools.ietf.org/html/rfc7540#section-8.1.2.2</span>
+            <span class="comment">//       https://datatracker.ietf.org/doc/html/rfc7540#section-8.1.2.2</span>
             <span class="comment">// omit HTTP/1.x only headers</span>
             <span class="ident">CONNECTION</span> <span class="op">|</span> <span class="ident">TRANSFER_ENCODING</span> =&gt; <span class="kw">continue</span>,
             <span class="ident">CONTENT_LENGTH</span> <span class="kw">if</span> <span class="ident">skip_len</span> =&gt; <span class="kw">continue</span>,
@@ -660,5 +660,5 @@
     <span class="ident">res</span>
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (48a5999fc 2021-12-01)" ></div>
 </body></html>

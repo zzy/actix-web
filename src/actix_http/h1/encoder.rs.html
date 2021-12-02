@@ -667,6 +667,7 @@
 <span id="666">666</span>
 <span id="667">667</span>
 <span id="668">668</span>
+<span id="669">669</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::io::Write</span>;
 <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
 <span class="kw">use</span> <span class="ident">std::ptr::copy_nonoverlapping</span>;
@@ -740,15 +741,16 @@
                 <span class="op">|</span> <span class="ident">StatusCode::PROCESSING</span>
                 <span class="op">|</span> <span class="ident">StatusCode::NO_CONTENT</span> =&gt; {
                     <span class="comment">// skip content-length and transfer-encoding headers</span>
-                    <span class="comment">// see https://tools.ietf.org/html/rfc7230#section-3.3.1</span>
-                    <span class="comment">// and https://tools.ietf.org/html/rfc7230#section-3.3.2</span>
+                    <span class="comment">// see https://datatracker.ietf.org/doc/html/rfc7230#section-3.3.1</span>
+                    <span class="comment">// and https://datatracker.ietf.org/doc/html/rfc7230#section-3.3.2</span>
                     <span class="ident">skip_len</span> <span class="op">=</span> <span class="bool-val">true</span>;
                     <span class="ident">length</span> <span class="op">=</span> <span class="ident">BodySize::None</span>
                 }
 
                 <span class="ident">StatusCode::NOT_MODIFIED</span> =&gt; {
                     <span class="comment">// 304 responses should never have a body but should retain a manually set</span>
-                    <span class="comment">// content-length header see https://tools.ietf.org/html/rfc7232#section-4.1</span>
+                    <span class="comment">// content-length header</span>
+                    <span class="comment">// see https://datatracker.ietf.org/doc/html/rfc7232#section-4.1</span>
                     <span class="ident">skip_len</span> <span class="op">=</span> <span class="bool-val">false</span>;
                     <span class="ident">length</span> <span class="op">=</span> <span class="ident">BodySize::None</span>;
                 }
@@ -1336,5 +1338,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (48a5999fc 2021-12-01)" ></div>
 </body></html>

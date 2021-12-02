@@ -426,7 +426,7 @@
     <span class="doccomment">/// Returns a sorted list of mime types from highest to lowest preference, accounting for</span>
     <span class="doccomment">/// [q-factor weighting] and specificity.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// [q-factor weighting]: https://tools.ietf.org/html/rfc7231#section-5.3.2</span>
+    <span class="doccomment">/// [q-factor weighting]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.3.2</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mime_precedence</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">types</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>();
 
@@ -476,7 +476,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `None` if contained list is empty.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// [q-factor weighting]: https://tools.ietf.org/html/rfc7231#section-5.3.2</span>
+    <span class="doccomment">/// [q-factor weighting]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.3.2</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mime_preference</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">types</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">mime_precedence</span>();
         <span class="ident">types</span>.<span class="ident">first</span>().<span class="ident">cloned</span>()
@@ -544,5 +544,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (48a5999fc 2021-12-01)" ></div>
 </body></html>

@@ -987,6 +987,7 @@
 <span id="986">986</span>
 <span id="987">987</span>
 <span id="988">988</span>
+<span id="989">989</span>
 </pre><pre class="rust"><code><span class="doccomment">//! The `Content-Disposition` header and associated types.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # References</span>
@@ -1193,9 +1194,9 @@
 
 <span class="doccomment">/// A *Content-Disposition* header. It is compatible to be used either as</span>
 <span class="doccomment">/// [a response header for the main body](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#as_a_response_header_for_the_main_body)</span>
-<span class="doccomment">/// as (re)defined in [RFC 6266](https://tools.ietf.org/html/rfc6266), or as</span>
+<span class="doccomment">/// as (re)defined in [RFC 6266](https://datatracker.ietf.org/doc/html/rfc6266), or as</span>
 <span class="doccomment">/// [a header for a multipart body](https://mdn.io/Content-Disposition#As_a_header_for_a_multipart_body)</span>
-<span class="doccomment">/// as (re)defined in [RFC 7587](https://tools.ietf.org/html/rfc7578).</span>
+<span class="doccomment">/// as (re)defined in [RFC 7587](https://datatracker.ietf.org/doc/html/rfc7578).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// In a regular HTTP response, the *Content-Disposition* response header is a header indicating if</span>
 <span class="doccomment">/// the content is expected to be displayed *inline* in the browser, that is, as a Web page or as</span>
@@ -1288,8 +1289,9 @@
 <span class="doccomment">/// # Security Note</span>
 <span class="doccomment">/// If &quot;filename&quot; parameter is supplied, do not use the file name blindly, check and possibly</span>
 <span class="doccomment">/// change to match local file system conventions if applicable, and do not use directory path</span>
-<span class="doccomment">/// information that may be present. See [RFC 2183](https://tools.ietf.org/html/rfc2183#section-2.3).</span>
-<span class="comment">// TODO: private fields and use smallvec</span>
+<span class="doccomment">/// information that may be present.</span>
+<span class="doccomment">/// See [RFC 2183 §2.3](https://datatracker.ietf.org/doc/html/rfc2183#section-2.3).</span>
+<span class="comment">// TODO: think about using private fields and smallvec</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ContentDisposition</span> {
     <span class="doccomment">/// The disposition type</span>
@@ -1976,5 +1978,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (207c80f10 2021-11-30)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (48a5999fc 2021-12-01)" ></div>
 </body></html>
