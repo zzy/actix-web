@@ -257,9 +257,21 @@
 <span id="256">256</span>
 <span id="257">257</span>
 <span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Error and Result module</span>
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::error</span>::<span class="kw-2">*</span>;
+<span class="doccomment">/// This is meant to be a glob import of the whole error module, but rustdoc can&#39;t handle</span>
+<span class="doccomment">/// shadowing `Error` type, so it is expanded manually.</span>
+<span class="doccomment">/// See https://github.com/rust-lang/rust/issues/83375</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::error</span>::{
+    <span class="ident">BlockingError</span>, <span class="ident">ContentTypeError</span>, <span class="ident">DispatchError</span>, <span class="ident">HttpError</span>, <span class="ident">ParseError</span>, <span class="ident">PayloadError</span>,
+};
+
 <span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">From</span>};
 <span class="kw">use</span> <span class="ident">serde_json::error::Error</span> <span class="kw">as</span> <span class="ident">JsonError</span>;
 <span class="kw">use</span> <span class="ident">serde_urlencoded::de::Error</span> <span class="kw">as</span> <span class="ident">FormDeError</span>;
