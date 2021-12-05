@@ -288,15 +288,15 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">From</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UrlGenerationError</span> {
-    <span class="doccomment">/// Resource not found</span>
+    <span class="doccomment">/// Resource not found.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Resource not found&quot;</span>)]</span>
     <span class="ident">ResourceNotFound</span>,
 
-    <span class="doccomment">/// Not all path pattern covered</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Not all path pattern covered&quot;</span>)]</span>
+    <span class="doccomment">/// Not all URL parameters covered.</span>
+    <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;Not all URL parameters covered&quot;</span>)]</span>
     <span class="ident">NotEnoughElements</span>,
 
-    <span class="doccomment">/// URL parse error</span>
+    <span class="doccomment">/// URL parse error.</span>
     <span class="attribute">#[<span class="ident">display</span>(<span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">ParseError</span>(<span class="ident">UrlParseError</span>),
 }

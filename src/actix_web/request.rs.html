@@ -811,6 +811,16 @@
 <span id="810">810</span>
 <span id="811">811</span>
 <span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>, <span class="ident">net</span>,
@@ -913,7 +923,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>().<span class="ident">headers</span>
     }
 
-    <span class="doccomment">/// The target path of this Request.</span>
+    <span class="doccomment">/// The target path of this request.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">head</span>().<span class="ident">uri</span>.<span class="ident">path</span>()
@@ -921,18 +931,22 @@
 
     <span class="doccomment">/// The query string in the URL.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// E.g., id=10</span>
+    <span class="doccomment">/// Example: `id=10`</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">uri</span>().<span class="ident">query</span>().<span class="ident">unwrap_or_default</span>()
     }
 
-    <span class="doccomment">/// Get a reference to the Path parameters.</span>
+    <span class="doccomment">/// Returns a reference to the URL parameters container.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Params is a container for url parameters.</span>
-    <span class="doccomment">/// A variable segment is specified in the form `{identifier}`,</span>
-    <span class="doccomment">/// where the identifier can be used later in a request handler to</span>
-    <span class="doccomment">/// access the matched value for that segment.</span>
+    <span class="doccomment">/// A url parameter is specified in the form `{identifier}`, where the identifier can be used</span>
+    <span class="doccomment">/// later in a request handler to access the matched value for that parameter.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Percent Encoding and URL Parameters</span>
+    <span class="doccomment">/// Because each URL parameter is able to capture multiple path segments, both `[&quot;%2F&quot;, &quot;%25&quot;]`</span>
+    <span class="doccomment">/// found in the request URI are not decoded into `[&quot;/&quot;, &quot;%&quot;]` in order to preserve path</span>
+    <span class="doccomment">/// segment boundaries. If a url parameter is expected to contain these characters, then it is</span>
+    <span class="doccomment">/// on the user to decode them.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">path</span>
@@ -974,23 +988,29 @@
         <span class="self">self</span>.<span class="ident">head</span>().<span class="ident">extensions_mut</span>()
     }
 
-    <span class="doccomment">/// Generate url for named resource</span>
+    <span class="doccomment">/// Generates URL for a named resource.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// This substitutes in sequence all URL parameters that appear in the resource itself and in</span>
+    <span class="doccomment">/// parent [scopes](crate::web::scope), if any.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// It is worth noting that the characters `[&#39;/&#39;, &#39;%&#39;]` are not escaped and therefore a single</span>
+    <span class="doccomment">/// URL parameter may expand into multiple path segments and `elements` can be percent-encoded</span>
+    <span class="doccomment">/// beforehand without worrying about double encoding. Any other character that is not valid in</span>
+    <span class="doccomment">/// a URL path context is escaped using percent-encoding.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use actix_web::{web, App, HttpRequest, HttpResponse};</span>
-    <span class="doccomment">/// #</span>
     <span class="doccomment">/// fn index(req: HttpRequest) -&gt; HttpResponse {</span>
-    <span class="doccomment">///     let url = req.url_for(&quot;foo&quot;, &amp;[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]); // &lt;- generate url for &quot;foo&quot; resource</span>
+    <span class="doccomment">///     let url = req.url_for(&quot;foo&quot;, &amp;[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]); // &lt;- generate URL for &quot;foo&quot; resource</span>
     <span class="doccomment">///     HttpResponse::Ok().into()</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// fn main() {</span>
-    <span class="doccomment">///     let app = App::new()</span>
-    <span class="doccomment">///         .service(web::resource(&quot;/test/{one}/{two}/{three}&quot;)</span>
-    <span class="doccomment">///              .name(&quot;foo&quot;)  // &lt;- set resource name, then it could be used in `url_for`</span>
-    <span class="doccomment">///              .route(web::get().to(|| HttpResponse::Ok()))</span>
-    <span class="doccomment">///         );</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// let app = App::new()</span>
+    <span class="doccomment">///     .service(web::resource(&quot;/test/{one}/{two}/{three}&quot;)</span>
+    <span class="doccomment">///          .name(&quot;foo&quot;)  // &lt;- set resource name so it can be used in `url_for`</span>
+    <span class="doccomment">///          .route(web::get().to(|| HttpResponse::Ok()))</span>
+    <span class="doccomment">///     );</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">url_for</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">elements</span>: <span class="ident">U</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">url::Url</span>, <span class="ident">UrlGenerationError</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -1009,8 +1029,8 @@
         <span class="self">self</span>.<span class="ident">url_for</span>(<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">NO_PARAMS</span>)
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Get a reference to a `ResourceMap` of current application.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resource_map</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">ResourceMap</span> {
         <span class="self">self</span>.<span class="ident">app_state</span>().<span class="ident">rmap</span>()
     }
