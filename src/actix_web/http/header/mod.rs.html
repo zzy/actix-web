@@ -99,6 +99,8 @@
 <span id="98"> 98</span>
 <span id="99"> 99</span>
 <span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
 </pre><pre class="rust"><code><span class="doccomment">//! A Collection of Header implementations for common HTTP Headers.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Mime Types</span>
@@ -141,7 +143,7 @@
 <span class="kw">mod</span> <span class="ident">last_modified</span>;
 <span class="kw">mod</span> <span class="ident">macros</span>;
 <span class="kw">mod</span> <span class="ident">preference</span>;
-<span class="comment">// mod range;</span>
+<span class="kw">mod</span> <span class="ident">range</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">macros::common_header_test</span>;
@@ -169,7 +171,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::if_unmodified_since::IfUnmodifiedSince</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::last_modified::LastModified</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::preference::Preference</span>;
-<span class="comment">//pub use self::range::{Range, ByteRangeSpec};</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::range</span>::{<span class="ident">ByteRangeSpec</span>, <span class="ident">Range</span>};
 
 <span class="doccomment">/// Format writer ([`fmt::Write`]) for a [`BytesMut`].</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
@@ -178,10 +180,12 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Writer</span> {
+    <span class="doccomment">/// Constructs new bytes writer.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Writer</span> {
         <span class="ident">Writer::default</span>()
     }
 
+    <span class="doccomment">/// Splits bytes out of writer, leaving writer buffer empty.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Bytes</span> {
         <span class="self">self</span>.<span class="ident">buf</span>.<span class="ident">split</span>().<span class="ident">freeze</span>()
     }
