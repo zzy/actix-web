@@ -78,6 +78,10 @@
 <span id="77">77</span>
 <span id="78">78</span>
 <span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actix_http::header::QualityItem</span>;
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">common_header</span>, <span class="ident">Encoding</span>};
@@ -109,36 +113,38 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptEncoding, Encoding, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptEncoding, Encoding, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
-    <span class="doccomment">///     AcceptEncoding(vec![qitem(Encoding::Chunked)])</span>
+    <span class="doccomment">///     AcceptEncoding(vec![QualityItem::max(Encoding::Chunked)])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptEncoding, Encoding, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptEncoding, Encoding, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptEncoding(vec![</span>
-    <span class="doccomment">///         qitem(Encoding::Chunked),</span>
-    <span class="doccomment">///         qitem(Encoding::Gzip),</span>
-    <span class="doccomment">///         qitem(Encoding::Deflate),</span>
+    <span class="doccomment">///         QualityItem::max(Encoding::Chunked),</span>
+    <span class="doccomment">///         QualityItem::max(Encoding::Gzip),</span>
+    <span class="doccomment">///         QualityItem::max(Encoding::Deflate),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptEncoding, Encoding, QualityItem, q, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptEncoding, Encoding, QualityItem, q};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptEncoding(vec![</span>
-    <span class="doccomment">///         qitem(Encoding::Chunked),</span>
-    <span class="doccomment">///         QualityItem::new(Encoding::Gzip, q(600)),</span>
-    <span class="doccomment">///         QualityItem::new(Encoding::EncodingExt(&quot;*&quot;.to_owned()), q(0)),</span>
+    <span class="doccomment">///         QualityItem::max(Encoding::Chunked),</span>
+    <span class="doccomment">///         QualityItem::new(Encoding::Gzip, q(0.60)),</span>
+    <span class="doccomment">///         QualityItem::min(Encoding::EncodingExt(&quot;*&quot;.to_owned())),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
@@ -157,6 +163,8 @@
         <span class="macro">common_header_test!</span>(<span class="ident">test5</span>, <span class="macro">vec!</span>[<span class="string">b&quot;gzip, identity; q=0.5, *;q=0&quot;</span>]);
     }
 }
+
+<span class="comment">// TODO: shortcut for EncodingExt(*) = Any</span>
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (532d2b14c 2021-12-03)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (efec54529 2021-12-04)" ></div>
 </body></html>

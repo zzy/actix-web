@@ -222,11 +222,9 @@
 <span id="221">221</span>
 <span id="222">222</span>
 <span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">common_header</span>, <span class="ident">Preference</span>, <span class="ident">QualityItem</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">common_header</span>, <span class="ident">Preference</span>, <span class="ident">Quality</span>, <span class="ident">QualityItem</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
 
 <span class="macro">common_header!</span> {
@@ -258,26 +256,26 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptLanguage, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptLanguage, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptLanguage(vec![</span>
-    <span class="doccomment">///         qitem(&quot;en-US&quot;.parse().unwrap())</span>
+    <span class="doccomment">///         QualityItem::max(&quot;en-US&quot;.parse().unwrap())</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptLanguage, QualityItem, q, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptLanguage, QualityItem, q};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptLanguage(vec![</span>
-    <span class="doccomment">///         qitem(&quot;da&quot;.parse().unwrap()),</span>
-    <span class="doccomment">///         QualityItem::new(&quot;en-GB&quot;.parse().unwrap(), q(800)),</span>
-    <span class="doccomment">///         QualityItem::new(&quot;en&quot;.parse().unwrap(), q(700)),</span>
+    <span class="doccomment">///         QualityItem::max(&quot;da&quot;.parse().unwrap()),</span>
+    <span class="doccomment">///         QualityItem::new(&quot;en-GB&quot;.parse().unwrap(), q(0.8)),</span>
+    <span class="doccomment">///         QualityItem::new(&quot;en&quot;.parse().unwrap(), q(0.7)),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
@@ -298,9 +296,9 @@
             <span class="ident">not_ordered_by_weight</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;en-US, en; q=0.5, fr&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[
-                <span class="ident">qitem</span>(<span class="string">&quot;en-US&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-                <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">500</span>)),
-                <span class="ident">qitem</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+                <span class="ident">QualityItem::max</span>(<span class="string">&quot;en-US&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+                <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.5</span>)),
+                <span class="ident">QualityItem::max</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
             ]))
         );
 
@@ -308,11 +306,11 @@
             <span class="ident">has_wildcard</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;fr-CH, fr; q=0.9, en; q=0.8, de; q=0.7, *; q=0.5&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[
-                <span class="ident">qitem</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-                <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">900</span>)),
-                <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">800</span>)),
-                <span class="ident">QualityItem::new</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">700</span>)),
-                <span class="ident">QualityItem::new</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">500</span>)),
+                <span class="ident">QualityItem::max</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+                <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.9</span>)),
+                <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.8</span>)),
+                <span class="ident">QualityItem::new</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.7</span>)),
+                <span class="ident">QualityItem::new</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.5</span>)),
             ]))
         );
     }
@@ -348,10 +346,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [q-factor weighting]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.3.2</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">preference</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Preference</span><span class="op">&lt;</span><span class="ident">LanguageTag</span><span class="op">&gt;</span> {
-        <span class="kw">use</span> <span class="ident">actix_http::header::q</span>;
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_item</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_pref</span> <span class="op">=</span> <span class="ident">q</span>(<span class="number">0</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_pref</span> <span class="op">=</span> <span class="ident">Quality::MIN</span>;
 
         <span class="comment">// uses manual max lookup loop since we want the first occurrence in the case of same</span>
         <span class="comment">// preference but `Iterator::max_by_key` would give us the last occurrence</span>
@@ -379,15 +375,15 @@
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[]);
         <span class="macro">assert!</span>(<span class="ident">test</span>.<span class="ident">ranked</span>().<span class="ident">is_empty</span>());
 
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>())]);
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[<span class="ident">QualityItem::max</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>())]);
         <span class="macro">assert_eq!</span>(<span class="ident">test</span>.<span class="ident">ranked</span>(), <span class="macro">vec!</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()));
 
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">900</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">1000</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">800</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">500</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">700</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.900</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">1.0</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.800</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.500</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.700</span>)),
         ]);
         <span class="macro">assert_eq!</span>(
             <span class="ident">test</span>.<span class="ident">ranked</span>(),
@@ -401,11 +397,11 @@
         );
 
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[
-            <span class="ident">qitem</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
         ]);
         <span class="macro">assert_eq!</span>(
             <span class="ident">test</span>.<span class="ident">ranked</span>(),
@@ -422,11 +418,11 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">preference_selection</span>() {
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">900</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">1000</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">800</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">500</span>)),
-            <span class="ident">QualityItem::new</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">700</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.900</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">1.0</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.800</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.500</span>)),
+            <span class="ident">QualityItem::new</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.700</span>)),
         ]);
         <span class="macro">assert_eq!</span>(
             <span class="ident">test</span>.<span class="ident">preference</span>(),
@@ -434,11 +430,11 @@
         );
 
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">AcceptLanguage</span>(<span class="macro">vec!</span>[
-            <span class="ident">qitem</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
-            <span class="ident">qitem</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;fr&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;fr-CH&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;en&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">QualityItem::max</span>(<span class="string">&quot;de&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
         ]);
         <span class="macro">assert_eq!</span>(
             <span class="ident">test</span>.<span class="ident">preference</span>(),
@@ -450,5 +446,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (532d2b14c 2021-12-03)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (efec54529 2021-12-04)" ></div>
 </body></html>

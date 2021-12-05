@@ -289,17 +289,11 @@
 <span id="288">288</span>
 <span id="289">289</span>
 <span id="290">290</span>
-<span id="291">291</span>
-<span id="292">292</span>
-<span id="293">293</span>
-<span id="294">294</span>
-<span id="295">295</span>
-<span id="296">296</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::cmp::Ordering</span>;
 
 <span class="kw">use</span> <span class="ident">mime::Mime</span>;
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">qitem</span>, <span class="ident">QualityItem</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::QualityItem</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
 
 <span class="macro">crate::http::header::common_header!</span> {
@@ -331,46 +325,40 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{Accept, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{Accept, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     Accept(vec![</span>
-    <span class="doccomment">///         qitem(mime::TEXT_HTML),</span>
+    <span class="doccomment">///         QualityItem::max(mime::TEXT_HTML),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{Accept, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{Accept, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     Accept(vec![</span>
-    <span class="doccomment">///         qitem(mime::APPLICATION_JSON),</span>
+    <span class="doccomment">///         QualityItem::max(mime::APPLICATION_JSON),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{Accept, QualityItem, q, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{Accept, QualityItem, q};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     Accept(vec![</span>
-    <span class="doccomment">///         qitem(mime::TEXT_HTML),</span>
-    <span class="doccomment">///         qitem(&quot;application/xhtml+xml&quot;.parse().unwrap()),</span>
-    <span class="doccomment">///         QualityItem::new(</span>
-    <span class="doccomment">///             mime::TEXT_XML,</span>
-    <span class="doccomment">///             q(900)</span>
-    <span class="doccomment">///         ),</span>
-    <span class="doccomment">///         qitem(&quot;image/webp&quot;.parse().unwrap()),</span>
-    <span class="doccomment">///         QualityItem::new(</span>
-    <span class="doccomment">///             mime::STAR_STAR,</span>
-    <span class="doccomment">///             q(800)</span>
-    <span class="doccomment">///         ),</span>
+    <span class="doccomment">///         QualityItem::max(mime::TEXT_HTML),</span>
+    <span class="doccomment">///         QualityItem::max(&quot;application/xhtml+xml&quot;.parse().unwrap()),</span>
+    <span class="doccomment">///         QualityItem::new(mime::TEXT_XML, q(0.9)),</span>
+    <span class="doccomment">///         QualityItem::max(&quot;image/webp&quot;.parse().unwrap()),</span>
+    <span class="doccomment">///         QualityItem::new(mime::STAR_STAR, q(0.8)),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
@@ -382,20 +370,20 @@
             <span class="ident">test1</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;audio/*; q=0.2, audio/basic&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
-                <span class="ident">QualityItem::new</span>(<span class="string">&quot;audio/*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">200</span>)),
-                <span class="ident">qitem</span>(<span class="string">&quot;audio/basic&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+                <span class="ident">QualityItem::new</span>(<span class="string">&quot;audio/*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.2</span>)),
+                <span class="ident">QualityItem::max</span>(<span class="string">&quot;audio/basic&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
                 ])));
 
         <span class="macro">crate::http::header::common_header_test!</span>(
             <span class="ident">test2</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
-                <span class="ident">QualityItem::new</span>(<span class="ident">mime::TEXT_PLAIN</span>, <span class="ident">q</span>(<span class="number">500</span>)),
-                <span class="ident">qitem</span>(<span class="ident">mime::TEXT_HTML</span>),
+                <span class="ident">QualityItem::new</span>(<span class="ident">mime::TEXT_PLAIN</span>, <span class="ident">q</span>(<span class="number">0.5</span>)),
+                <span class="ident">QualityItem::max</span>(<span class="ident">mime::TEXT_HTML</span>),
                 <span class="ident">QualityItem::new</span>(
                     <span class="string">&quot;text/x-dvi&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-                    <span class="ident">q</span>(<span class="number">800</span>)),
-                <span class="ident">qitem</span>(<span class="string">&quot;text/x-c&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
+                    <span class="ident">q</span>(<span class="number">0.8</span>)),
+                <span class="ident">QualityItem::max</span>(<span class="string">&quot;text/x-c&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()),
                 ])));
 
         <span class="comment">// Custom tests</span>
@@ -403,14 +391,14 @@
             <span class="ident">test3</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;text/plain; charset=utf-8&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
-                <span class="ident">qitem</span>(<span class="ident">mime::TEXT_PLAIN_UTF_8</span>),
+                <span class="ident">QualityItem::max</span>(<span class="ident">mime::TEXT_PLAIN_UTF_8</span>),
                 ])));
         <span class="macro">crate::http::header::common_header_test!</span>(
             <span class="ident">test4</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;text/plain; charset=utf-8; q=0.5&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">Accept</span>(<span class="macro">vec!</span>[
                 <span class="ident">QualityItem::new</span>(<span class="ident">mime::TEXT_PLAIN_UTF_8</span>,
-                    <span class="ident">q</span>(<span class="number">500</span>)),
+                    <span class="ident">q</span>(<span class="number">0.5</span>)),
             ])));
 
         <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -427,27 +415,27 @@
 <span class="kw">impl</span> <span class="ident">Accept</span> {
     <span class="doccomment">/// Construct `Accept: */*`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">star</span>() -&gt; <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime::STAR_STAR</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">QualityItem::max</span>(<span class="ident">mime::STAR_STAR</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: application/json`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span>() -&gt; <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime::APPLICATION_JSON</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">QualityItem::max</span>(<span class="ident">mime::APPLICATION_JSON</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: text/*`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">text</span>() -&gt; <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime::TEXT_STAR</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">QualityItem::max</span>(<span class="ident">mime::TEXT_STAR</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: image/*`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">image</span>() -&gt; <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime::IMAGE_STAR</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">QualityItem::max</span>(<span class="ident">mime::IMAGE_STAR</span>)])
     }
 
     <span class="doccomment">/// Construct `Accept: text/html`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">html</span>() -&gt; <span class="ident">Accept</span> {
-        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime::TEXT_HTML</span>)])
+        <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">QualityItem::max</span>(<span class="ident">mime::TEXT_HTML</span>)])
     }
 
     <span class="doccomment">/// Returns a sorted list of mime types from highest to lowest preference, accounting for</span>
@@ -510,10 +498,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [q-factor weighting]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.3.2</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">preference</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Mime</span> {
-        <span class="kw">use</span> <span class="ident">actix_http::header::q</span>;
+        <span class="kw">use</span> <span class="ident">actix_http::header::Quality</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_item</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_pref</span> <span class="op">=</span> <span class="ident">q</span>(<span class="number">0</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_pref</span> <span class="op">=</span> <span class="ident">Quality::MIN</span>;
 
         <span class="comment">// uses manual max lookup loop since we want the first occurrence in the case of same</span>
         <span class="comment">// preference but `Iterator::max_by_key` would give us the last occurrence</span>
@@ -541,11 +529,11 @@
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[]);
         <span class="macro">assert!</span>(<span class="ident">test</span>.<span class="ident">ranked</span>().<span class="ident">is_empty</span>());
 
-        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">qitem</span>(<span class="ident">mime::APPLICATION_JSON</span>)]);
+        <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[<span class="ident">QualityItem::max</span>(<span class="ident">mime::APPLICATION_JSON</span>)]);
         <span class="macro">assert_eq!</span>(<span class="ident">test</span>.<span class="ident">ranked</span>(), <span class="macro">vec!</span>(<span class="ident">mime::APPLICATION_JSON</span>));
 
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
-            <span class="ident">qitem</span>(<span class="ident">mime::TEXT_HTML</span>),
+            <span class="ident">QualityItem::max</span>(<span class="ident">mime::TEXT_HTML</span>),
             <span class="string">&quot;application/xhtml+xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
             <span class="ident">QualityItem::new</span>(<span class="string">&quot;application/xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.9</span>)),
             <span class="ident">QualityItem::new</span>(<span class="ident">mime::STAR_STAR</span>, <span class="ident">q</span>(<span class="number">0.8</span>)),
@@ -561,9 +549,9 @@
         );
 
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
-            <span class="ident">qitem</span>(<span class="ident">mime::STAR_STAR</span>),
-            <span class="ident">qitem</span>(<span class="ident">mime::IMAGE_STAR</span>),
-            <span class="ident">qitem</span>(<span class="ident">mime::IMAGE_PNG</span>),
+            <span class="ident">QualityItem::max</span>(<span class="ident">mime::STAR_STAR</span>),
+            <span class="ident">QualityItem::max</span>(<span class="ident">mime::IMAGE_STAR</span>),
+            <span class="ident">QualityItem::max</span>(<span class="ident">mime::IMAGE_PNG</span>),
         ]);
         <span class="macro">assert_eq!</span>(
             <span class="ident">test</span>.<span class="ident">ranked</span>(),
@@ -574,7 +562,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">preference_selection</span>() {
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
-            <span class="ident">qitem</span>(<span class="ident">mime::TEXT_HTML</span>),
+            <span class="ident">QualityItem::max</span>(<span class="ident">mime::TEXT_HTML</span>),
             <span class="string">&quot;application/xhtml+xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
             <span class="ident">QualityItem::new</span>(<span class="string">&quot;application/xml&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.9</span>)),
             <span class="ident">QualityItem::new</span>(<span class="ident">mime::STAR_STAR</span>, <span class="ident">q</span>(<span class="number">0.8</span>)),
@@ -583,14 +571,14 @@
 
         <span class="kw">let</span> <span class="ident">test</span> <span class="op">=</span> <span class="ident">Accept</span>(<span class="macro">vec!</span>[
             <span class="ident">QualityItem::new</span>(<span class="string">&quot;video/*&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(), <span class="ident">q</span>(<span class="number">0.8</span>)),
-            <span class="ident">qitem</span>(<span class="ident">mime::IMAGE_PNG</span>),
+            <span class="ident">QualityItem::max</span>(<span class="ident">mime::IMAGE_PNG</span>),
             <span class="ident">QualityItem::new</span>(<span class="ident">mime::STAR_STAR</span>, <span class="ident">q</span>(<span class="number">0.5</span>)),
-            <span class="ident">qitem</span>(<span class="ident">mime::IMAGE_SVG</span>),
+            <span class="ident">QualityItem::max</span>(<span class="ident">mime::IMAGE_SVG</span>),
             <span class="ident">QualityItem::new</span>(<span class="ident">mime::IMAGE_STAR</span>, <span class="ident">q</span>(<span class="number">0.8</span>)),
         ]);
         <span class="macro">assert_eq!</span>(<span class="ident">test</span>.<span class="ident">preference</span>(), <span class="ident">mime::IMAGE_PNG</span>);
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (532d2b14c 2021-12-03)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (efec54529 2021-12-04)" ></div>
 </body></html>

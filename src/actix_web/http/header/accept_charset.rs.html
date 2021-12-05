@@ -84,11 +84,11 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptCharset, Charset, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptCharset, Charset, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
-    <span class="doccomment">///     AcceptCharset(vec![qitem(Charset::Us_Ascii)])</span>
+    <span class="doccomment">///     AcceptCharset(vec![QualityItem::max(Charset::Us_Ascii)])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
@@ -99,19 +99,19 @@
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     AcceptCharset(vec![</span>
-    <span class="doccomment">///         QualityItem::new(Charset::Us_Ascii, q(900)),</span>
-    <span class="doccomment">///         QualityItem::new(Charset::Iso_8859_10, q(200)),</span>
+    <span class="doccomment">///         QualityItem::new(Charset::Us_Ascii, q(0.9)),</span>
+    <span class="doccomment">///         QualityItem::new(Charset::Iso_8859_10, q(0.2)),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{AcceptCharset, Charset, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{AcceptCharset, Charset, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
-    <span class="doccomment">///     AcceptCharset(vec![qitem(Charset::Ext(&quot;utf-8&quot;.to_owned()))])</span>
+    <span class="doccomment">///     AcceptCharset(vec![QualityItem::max(Charset::Ext(&quot;utf-8&quot;.to_owned()))])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     (<span class="ident">AcceptCharset</span>, <span class="ident">ACCEPT_CHARSET</span>) =&gt; (<span class="ident">QualityItem</span><span class="op">&lt;</span><span class="ident">Charset</span><span class="op">&gt;</span>)<span class="op">+</span>
@@ -122,5 +122,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (532d2b14c 2021-12-03)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (efec54529 2021-12-04)" ></div>
 </body></html>

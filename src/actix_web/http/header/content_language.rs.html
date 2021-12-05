@@ -78,25 +78,25 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, LanguageTag, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, LanguageTag, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     ContentLanguage(vec![</span>
-    <span class="doccomment">///         qitem(LanguageTag::parse(&quot;en&quot;).unwrap()),</span>
+    <span class="doccomment">///         QualityItem::max(LanguageTag::parse(&quot;en&quot;).unwrap()),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::HttpResponse;</span>
-    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, LanguageTag, qitem};</span>
+    <span class="doccomment">/// use actix_web::http::header::{ContentLanguage, LanguageTag, QualityItem};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut builder = HttpResponse::Ok();</span>
     <span class="doccomment">/// builder.insert_header(</span>
     <span class="doccomment">///     ContentLanguage(vec![</span>
-    <span class="doccomment">///         qitem(LanguageTag::parse(&quot;da&quot;).unwrap()),</span>
-    <span class="doccomment">///         qitem(LanguageTag::parse(&quot;en-GB&quot;).unwrap()),</span>
+    <span class="doccomment">///         QualityItem::max(LanguageTag::parse(&quot;da&quot;).unwrap()),</span>
+    <span class="doccomment">///         QualityItem::max(LanguageTag::parse(&quot;en-GB&quot;).unwrap()),</span>
     <span class="doccomment">///     ])</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
@@ -108,5 +108,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (532d2b14c 2021-12-03)" ></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (efec54529 2021-12-04)" ></div>
 </body></html>
