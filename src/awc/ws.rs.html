@@ -531,6 +531,9 @@
 <span id="530">530</span>
 <span id="531">531</span>
 <span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Websockets client</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Type definitions required to use [`awc::Client`](super::Client) as a WebSocket client.</span>
@@ -559,9 +562,7 @@
 <span class="doccomment">//! }</span>
 <span class="doccomment">//! ```</span>
 
-<span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
-<span class="kw">use</span> <span class="ident">std::net::SocketAddr</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">str</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">fmt</span>, <span class="ident">net::SocketAddr</span>, <span class="ident">str</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec::Framed</span>;
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">ws</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>};
@@ -570,14 +571,19 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::ws</span>::{<span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">Codec</span>, <span class="ident">Frame</span>, <span class="ident">Message</span>};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connect</span>::{<span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">connect</span>::{<span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>},
+    <span class="ident">error</span>::{<span class="ident">HttpError</span>, <span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>, <span class="ident">WsClientError</span>},
+    <span class="ident">http</span>::{
+        <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">AUTHORIZATION</span>},
+        <span class="ident">ConnectionType</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
+    },
+    <span class="ident">response::ClientResponse</span>,
+    <span class="ident">ClientConfig</span>,
+};
+
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cookie</span>::{<span class="ident">Cookie</span>, <span class="ident">CookieJar</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error</span>::{<span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>, <span class="ident">WsClientError</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">AUTHORIZATION</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{<span class="ident">ConnectionType</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::response::ClientResponse</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ClientConfig</span>;
 
 <span class="doccomment">/// WebSocket connection.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WebsocketsRequest</span> {

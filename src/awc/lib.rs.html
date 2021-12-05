@@ -311,8 +311,6 @@
 <span id="310">310</span>
 <span id="311">311</span>
 <span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
 </pre><pre class="rust"><code><span class="doccomment">//! `awc` is a HTTP and WebSocket client library built on the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Making a GET request</span>
@@ -432,7 +430,8 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">test</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ws</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::http</span>;
+<span class="comment">// TODO: hmmmmmm</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span> <span class="kw">as</span> <span class="ident">http</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">cookie</span>;
 
@@ -446,10 +445,7 @@
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>},
-    <span class="ident">RequestHead</span>,
-};
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">error::HttpError</span>, <span class="ident">header::HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">RequestHead</span>, <span class="ident">Uri</span>};
 <span class="kw">use</span> <span class="ident">actix_rt::net::TcpStream</span>;
 <span class="kw">use</span> <span class="ident">actix_service::Service</span>;
 

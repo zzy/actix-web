@@ -893,16 +893,14 @@
 <span id="892">892</span>
 <span id="893">893</span>
 <span id="894">894</span>
-<span id="895">895</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">net::SocketAddr</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::test::TestBuffer</span>;
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">http</span>::{<span class="ident">header::IntoHeaderPair</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>},
-    <span class="ident">test::TestRequest</span> <span class="kw">as</span> <span class="ident">HttpTestRequest</span>,
-    <span class="ident">Extensions</span>, <span class="ident">Request</span>,
+    <span class="ident">header::IntoHeaderPair</span>, <span class="ident">test::TestRequest</span> <span class="kw">as</span> <span class="ident">HttpTestRequest</span>, <span class="ident">Extensions</span>, <span class="ident">Method</span>, <span class="ident">Request</span>,
+    <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">Url</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">IntoService</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
@@ -1443,7 +1441,7 @@
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
         {
-            <span class="kw">use</span> <span class="ident">actix_http::http::header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">COOKIE</span>};
+            <span class="kw">use</span> <span class="ident">actix_http::header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">COOKIE</span>};
 
             <span class="kw">let</span> <span class="ident">cookie</span>: <span class="ident">String</span> <span class="op">=</span> <span class="self">self</span>
                 .<span class="ident">cookies</span>

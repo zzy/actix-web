@@ -309,6 +309,7 @@
 <span id="308">308</span>
 <span id="309">309</span>
 <span id="310">310</span>
+<span id="311">311</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
@@ -324,7 +325,8 @@
 <span class="kw">use</span> <span class="ident">actix_rt</span>::{<span class="ident">net::TcpStream</span>, <span class="ident">System</span>};
 <span class="kw">use</span> <span class="ident">actix_server</span>::{<span class="ident">Server</span>, <span class="ident">ServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">awc</span>::{
-    <span class="ident">error::PayloadError</span>, <span class="ident">http::HeaderMap</span>, <span class="ident">ws</span>, <span class="ident">Client</span>, <span class="ident">ClientRequest</span>, <span class="ident">ClientResponse</span>, <span class="ident">Connector</span>,
+    <span class="ident">error::PayloadError</span>, <span class="ident">http::header::HeaderMap</span>, <span class="ident">ws</span>, <span class="ident">Client</span>, <span class="ident">ClientRequest</span>, <span class="ident">ClientResponse</span>,
+    <span class="ident">Connector</span>,
 };
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core::stream::Stream</span>;

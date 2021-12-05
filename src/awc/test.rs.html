@@ -126,11 +126,9 @@
 <span id="125">125</span>
 <span id="126">126</span>
 <span id="127">127</span>
-<span id="128">128</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Test helpers for actix http client to use during testing.</span>
-<span class="kw">use</span> <span class="ident">actix_http::http::header::IntoHeaderPair</span>;
-<span class="kw">use</span> <span class="ident">actix_http::http</span>::{<span class="ident">StatusCode</span>, <span class="ident">Version</span>};
-<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">h1</span>, <span class="ident">Payload</span>, <span class="ident">ResponseHead</span>};
+
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">h1</span>, <span class="ident">header::IntoHeaderPair</span>, <span class="ident">Payload</span>, <span class="ident">ResponseHead</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>};
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
@@ -218,7 +216,7 @@
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
         <span class="kw">for</span> <span class="ident">cookie</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">cookies</span>.<span class="ident">delta</span>() {
-            <span class="kw">use</span> <span class="ident">actix_http::http::header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>};
+            <span class="kw">use</span> <span class="ident">actix_http::header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>};
 
             <span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(
                 <span class="ident">header::SET_COOKIE</span>,
@@ -238,7 +236,7 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">std::time::SystemTime</span>;
 
-    <span class="kw">use</span> <span class="ident">actix_http::http::header::HttpDate</span>;
+    <span class="kw">use</span> <span class="ident">actix_http::header::HttpDate</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">cookie</span>, <span class="ident">http::header</span>};

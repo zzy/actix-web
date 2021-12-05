@@ -319,9 +319,17 @@
 <span id="318">318</span>
 <span id="319">319</span>
 <span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">fmt</span>, <span class="ident">net::IpAddr</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http::http</span>::{<span class="self">self</span>, <span class="ident">header</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">Uri</span>};
+<span class="kw">use</span> <span class="ident">actix_http</span>::{
+    <span class="ident">error::HttpError</span>,
+    <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>},
+    <span class="ident">Uri</span>,
+};
 <span class="kw">use</span> <span class="ident">actix_rt::net</span>::{<span class="ident">ActixStream</span>, <span class="ident">TcpStream</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">Service</span>};
 

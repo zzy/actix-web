@@ -708,6 +708,9 @@
 <span id="707">707</span>
 <span id="708">708</span>
 <span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
@@ -1063,7 +1066,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_service::Service;</span>
     <span class="doccomment">/// use actix_web::{middleware, web, App};</span>
-    <span class="doccomment">/// use actix_web::http::{header::CONTENT_TYPE, HeaderValue};</span>
+    <span class="doccomment">/// use actix_web::http::header::{CONTENT_TYPE, HeaderValue};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// async fn index() -&gt; &amp;&#39;static str {</span>
     <span class="doccomment">///     &quot;Welcome!&quot;</span>
@@ -1120,7 +1123,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_service::Service;</span>
     <span class="doccomment">/// use actix_web::{web, App};</span>
-    <span class="doccomment">/// use actix_web::http::{header::CONTENT_TYPE, HeaderValue};</span>
+    <span class="doccomment">/// use actix_web::http::header::{CONTENT_TYPE, HeaderValue};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// async fn index() -&gt; &amp;&#39;static str {</span>
     <span class="doccomment">///     &quot;Welcome!&quot;</span>
@@ -1204,7 +1207,10 @@
     <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{<span class="ident">header</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{
+        <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>},
+        <span class="ident">Method</span>, <span class="ident">StatusCode</span>,
+    };
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::middleware::DefaultHeaders</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service::ServiceRequest</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test</span>::{<span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">read_body</span>, <span class="ident">try_init_service</span>, <span class="ident">TestRequest</span>};

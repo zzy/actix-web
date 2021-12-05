@@ -1205,6 +1205,9 @@
 <span id="1204">1204</span>
 <span id="1205">1205</span>
 <span id="1206">1206</span>
+<span id="1207">1207</span>
+<span id="1208">1208</span>
+<span id="1209">1209</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
@@ -1554,7 +1557,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_service::Service;</span>
     <span class="doccomment">/// use actix_web::{web, App};</span>
-    <span class="doccomment">/// use actix_web::http::{header::CONTENT_TYPE, HeaderValue};</span>
+    <span class="doccomment">/// use actix_web::http::header::{CONTENT_TYPE, HeaderValue};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// async fn index() -&gt; &amp;&#39;static str {</span>
     <span class="doccomment">///     &quot;Welcome!&quot;</span>
@@ -1794,7 +1797,10 @@
 
     <span class="kw">use</span> <span class="kw">crate</span>::{
         <span class="ident">guard</span>,
-        <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">HeaderValue</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>},
+        <span class="ident">http</span>::{
+            <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>},
+            <span class="ident">Method</span>, <span class="ident">StatusCode</span>,
+        },
         <span class="ident">middleware::DefaultHeaders</span>,
         <span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
         <span class="ident">test</span>::{<span class="ident">assert_body_eq</span>, <span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">read_body</span>, <span class="ident">TestRequest</span>},

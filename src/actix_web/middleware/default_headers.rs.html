@@ -243,8 +243,6 @@
 <span id="242">242</span>
 <span id="243">243</span>
 <span id="244">244</span>
-<span id="245">245</span>
-<span id="246">246</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`DefaultHeaders`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -256,16 +254,14 @@
     <span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>},
 };
 
+<span class="kw">use</span> <span class="ident">actix_http::error::HttpError</span>;
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ready</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">futures_core::ready</span>;
 <span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">dev</span>::{<span class="ident">Service</span>, <span class="ident">Transform</span>},
-    <span class="ident">http</span>::{
-        <span class="ident">header</span>::{<span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>},
-        <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">HeaderMap</span>,
-    },
+    <span class="ident">http::header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>},
     <span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
     <span class="ident">Error</span>,
 };

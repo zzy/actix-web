@@ -444,10 +444,6 @@
 <span id="443">443</span>
 <span id="444">444</span>
 <span id="445">445</span>
-<span id="446">446</span>
-<span id="447">447</span>
-<span id="448">448</span>
-<span id="449">449</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP response builder.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -470,7 +466,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// use actix_http::{Response, ResponseBuilder, body, http::StatusCode, http::header};</span>
+<span class="doccomment">/// use actix_http::{Response, ResponseBuilder, StatusCode, body, header};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # actix_rt::System::new().block_on(async {</span>
 <span class="doccomment">/// let mut res: Response&lt;_&gt; = Response::build(StatusCode::OK)</span>
@@ -497,9 +493,7 @@
     <span class="doccomment">/// Create response builder</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use actix_http::{Response, ResponseBuilder, http::StatusCode};</span>
-    <span class="doccomment">///</span>
+    <span class="comment">//    /// use actix_http::{Response, ResponseBuilder, StatusCode};, / ``</span>
     <span class="doccomment">/// let res: Response&lt;_&gt; = ResponseBuilder::default().finish();</span>
     <span class="doccomment">/// assert_eq!(res.status(), StatusCode::OK);</span>
     <span class="doccomment">/// ```</span>
@@ -514,9 +508,7 @@
     <span class="doccomment">/// Set HTTP status code of this response.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use actix_http::{ResponseBuilder, http::StatusCode};</span>
-    <span class="doccomment">///</span>
+    <span class="comment">//    /// use actix_http::{ResponseBuilder, StatusCode};, / ``</span>
     <span class="doccomment">/// let res = ResponseBuilder::default().status(StatusCode::NOT_FOUND).finish();</span>
     <span class="doccomment">/// assert_eq!(res.status(), StatusCode::NOT_FOUND);</span>
     <span class="doccomment">/// ```</span>
@@ -532,7 +524,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use actix_http::{ResponseBuilder, http::header};</span>
+    <span class="doccomment">/// use actix_http::{ResponseBuilder, header};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let res = ResponseBuilder::default()</span>
     <span class="doccomment">///     .insert_header((header::CONTENT_TYPE, mime::APPLICATION_JSON))</span>
@@ -562,7 +554,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use actix_http::{ResponseBuilder, http::header};</span>
+    <span class="doccomment">/// use actix_http::{ResponseBuilder, header};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let res = ResponseBuilder::default()</span>
     <span class="doccomment">///     .append_header((header::CONTENT_TYPE, mime::APPLICATION_JSON))</span>
@@ -785,7 +777,7 @@
     <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>::{<span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::header</span>::{<span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_basic_builder</span>() {

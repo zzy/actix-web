@@ -789,6 +789,7 @@
 <span id="788">788</span>
 <span id="789">789</span>
 <span id="790">790</span>
+<span id="791">791</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>, <span class="ident">net</span>,
@@ -797,8 +798,9 @@
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
     <span class="ident">body</span>::{<span class="ident">BoxBody</span>, <span class="ident">EitherBody</span>, <span class="ident">MessageBody</span>},
-    <span class="ident">http</span>::{<span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>},
-    <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>, <span class="ident">Response</span>, <span class="ident">ResponseHead</span>,
+    <span class="ident">header::HeaderMap</span>,
+    <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Method</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>, <span class="ident">Response</span>,
+    <span class="ident">ResponseHead</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">IntoPatterns</span>, <span class="ident">Path</span>, <span class="ident">Patterns</span>, <span class="ident">Resource</span>, <span class="ident">ResourceDef</span>, <span class="ident">Url</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{

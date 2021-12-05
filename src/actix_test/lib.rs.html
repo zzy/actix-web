@@ -572,9 +572,6 @@
 <span id="571">571</span>
 <span id="572">572</span>
 <span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
-<span id="576">576</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Integration testing tools for Actix Web applications.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The main integration testing tool is [`TestServer`]. It spawns a real HTTP server on an</span>
@@ -612,10 +609,7 @@
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Framed</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::test::TestBuffer</span>;
-<span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">http</span>::{<span class="ident">HeaderMap</span>, <span class="ident">Method</span>},
-    <span class="ident">ws</span>, <span class="ident">HttpService</span>, <span class="ident">Request</span>, <span class="ident">Response</span>,
-};
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">header::HeaderMap</span>, <span class="ident">ws</span>, <span class="ident">HttpService</span>, <span class="ident">Method</span>, <span class="ident">Request</span>, <span class="ident">Response</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">map_config</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">ServiceFactory</span>, <span class="ident">ServiceFactoryExt</span> <span class="kw">as</span> <span class="kw">_</span>};
 <span class="kw">use</span> <span class="ident">actix_web</span>::{
     <span class="ident">body::MessageBody</span>,

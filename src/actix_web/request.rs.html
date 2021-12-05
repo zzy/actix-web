@@ -829,8 +829,8 @@
 };
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">http</span>::{<span class="ident">HeaderMap</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>},
-    <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Message</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>,
+    <span class="ident">header::HeaderMap</span>, <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Message</span>, <span class="ident">Method</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>, <span class="ident">Uri</span>,
+    <span class="ident">Version</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">Url</span>};
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">ok</span>, <span class="ident">Ready</span>};
@@ -1089,7 +1089,7 @@
     <span class="doccomment">/// Load request cookies.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookies</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">CookieParseError</span><span class="op">&gt;</span> {
-        <span class="kw">use</span> <span class="ident">actix_http::http::header::COOKIE</span>;
+        <span class="kw">use</span> <span class="ident">actix_http::header::COOKIE</span>;
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Cookies</span><span class="op">&gt;</span>().<span class="ident">is_none</span>() {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cookies</span> <span class="op">=</span> <span class="ident">Vec::new</span>();

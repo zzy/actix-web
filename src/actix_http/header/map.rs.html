@@ -1100,7 +1100,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+<span class="doccomment">/// use actix_http::header::{self, HeaderMap, HeaderValue};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let mut map = HeaderMap::new();</span>
 <span class="doccomment">///</span>
@@ -1161,7 +1161,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::HeaderMap;</span>
+    <span class="doccomment">/// # use actix_http::header::HeaderMap;</span>
     <span class="doccomment">/// let map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(map.is_empty());</span>
@@ -1178,7 +1178,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::HeaderMap;</span>
+    <span class="doccomment">/// # use actix_http::header::HeaderMap;</span>
     <span class="doccomment">/// let map = HeaderMap::with_capacity(16);</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(map.is_empty());</span>
@@ -1225,7 +1225,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">/// assert_eq!(map.len(), 0);</span>
     <span class="doccomment">///</span>
@@ -1248,7 +1248,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">/// assert_eq!(map.len_keys(), 0);</span>
     <span class="doccomment">///</span>
@@ -1267,7 +1267,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">/// assert!(map.is_empty());</span>
     <span class="doccomment">///</span>
@@ -1284,7 +1284,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// map.insert(header::ACCEPT, HeaderValue::from_static(&quot;text/plain&quot;));</span>
@@ -1317,7 +1317,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// map.insert(header::SET_COOKIE, HeaderValue::from_static(&quot;one=1&quot;));</span>
@@ -1350,7 +1350,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// map.insert(header::SET_COOKIE, HeaderValue::from_static(&quot;one=1&quot;));</span>
@@ -1379,7 +1379,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut none_iter = map.get_all(header::ORIGIN);</span>
@@ -1405,7 +1405,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">/// assert!(!map.contains_key(header::ACCEPT));</span>
     <span class="doccomment">///</span>
@@ -1428,7 +1428,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// map.insert(header::ACCEPT, HeaderValue::from_static(&quot;text/plain&quot;));</span>
@@ -1445,7 +1445,7 @@
     <span class="doccomment">/// A convenience method is provided on the returned iterator to check if the insertion replaced</span>
     <span class="doccomment">/// any values.</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let removed = map.insert(header::ACCEPT, HeaderValue::from_static(&quot;text/plain&quot;));</span>
@@ -1467,7 +1467,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// map.append(header::HOST, HeaderValue::from_static(&quot;example.com&quot;));</span>
@@ -1497,7 +1497,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// map.append(header::SET_COOKIE, HeaderValue::from_static(&quot;one=1&quot;));</span>
@@ -1516,7 +1516,7 @@
     <span class="doccomment">/// A convenience method is provided on the returned iterator to check if the `remove` call</span>
     <span class="doccomment">/// actually removed any values.</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let removed = map.remove(&quot;accept&quot;);</span>
@@ -1545,7 +1545,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::HeaderMap;</span>
+    <span class="doccomment">/// # use actix_http::header::HeaderMap;</span>
     <span class="doccomment">/// let map = HeaderMap::with_capacity(16);</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(map.is_empty());</span>
@@ -1565,7 +1565,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::HeaderMap;</span>
+    <span class="doccomment">/// # use actix_http::header::HeaderMap;</span>
     <span class="doccomment">/// let mut map = HeaderMap::with_capacity(2);</span>
     <span class="doccomment">/// assert!(map.capacity() &gt;= 2);</span>
     <span class="doccomment">///</span>
@@ -1585,7 +1585,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut iter = map.iter();</span>
@@ -1617,7 +1617,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut iter = map.keys();</span>
@@ -1645,7 +1645,7 @@
     <span class="doccomment">/// Keeps the allocated memory for reuse.</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use actix_http::http::{header, HeaderMap, HeaderValue};</span>
+    <span class="doccomment">/// # use actix_http::header::{self, HeaderMap, HeaderValue};</span>
     <span class="doccomment">/// let mut map = HeaderMap::new();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut iter = map.drain();</span>

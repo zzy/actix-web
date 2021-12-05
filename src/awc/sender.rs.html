@@ -330,8 +330,6 @@
 <span id="329">329</span>
 <span id="330">330</span>
 <span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">future::Future</span>,
     <span class="ident">net</span>,
@@ -343,10 +341,8 @@
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
     <span class="ident">body::BodyStream</span>,
-    <span class="ident">http</span>::{
-        <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">IntoHeaderValue</span>},
-        <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>,
-    },
+    <span class="ident">error::HttpError</span>,
+    <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">IntoHeaderValue</span>},
     <span class="ident">RequestHead</span>, <span class="ident">RequestHeadType</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_rt::time</span>::{<span class="ident">sleep</span>, <span class="ident">Sleep</span>};
@@ -356,7 +352,7 @@
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">encoding::Decoder</span>, <span class="ident">http::header::ContentEncoding</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>};
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">encoding::Decoder</span>, <span class="ident">header::ContentEncoding</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">any_body::AnyBody</span>,

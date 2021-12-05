@@ -668,6 +668,8 @@
 <span id="667">667</span>
 <span id="668">668</span>
 <span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::io::Write</span>;
 <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
 <span class="kw">use</span> <span class="ident">std::ptr::copy_nonoverlapping</span>;
@@ -1201,8 +1203,10 @@
     <span class="kw">use</span> <span class="ident">http::header::AUTHORIZATION</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>};
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::RequestHead</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::{
+        <span class="ident">header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>},
+        <span class="ident">RequestHead</span>,
+    };
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_chunked_te</span>() {
