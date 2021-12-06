@@ -53,6 +53,7 @@ crate::http::header::common_header! {
             test1,
             vec![b"GET, HEAD, PUT"],
             Some(HeaderField(vec![Method::GET, Method::HEAD, Method::PUT])));
+
         // Own tests
         crate::http::header::common_header_test!(
             test2,
@@ -67,6 +68,7 @@ crate::http::header::common_header! {
                 Method::TRACE,
                 Method::CONNECT,
                 Method::PATCH])));
+
         crate::http::header::common_header_test!(
             test3,
             vec![b""],
