@@ -748,6 +748,9 @@
 <span id="747">747</span>
 <span id="748">748</span>
 <span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For JSON helper documentation, see [`Json`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -766,17 +769,16 @@
 
 <span class="kw">use</span> <span class="ident">actix_http::Payload</span>;
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dev::Decompress</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">body::EitherBody</span>,
     <span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">JsonPayloadError</span>},
     <span class="ident">extract::FromRequest</span>,
-    <span class="ident">http::header</span>::{<span class="ident">ContentLength</span>, <span class="ident">Header</span> <span class="kw">as</span> <span class="kw">_</span>},
+    <span class="ident">http::header::CONTENT_LENGTH</span>,
     <span class="ident">request::HttpRequest</span>,
     <span class="ident">web</span>, <span class="ident">HttpMessage</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>,
 };
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dev::Decompress</span>;
 
 <span class="doccomment">/// JSON extractor and responder.</span>
 <span class="doccomment">///</span>
@@ -1095,7 +1097,11 @@
             <span class="kw">return</span> <span class="ident">JsonBody::Error</span>(<span class="prelude-val">Some</span>(<span class="ident">JsonPayloadError::ContentType</span>));
         }
 
-        <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> <span class="ident">ContentLength::parse</span>(<span class="ident">req</span>).<span class="ident">ok</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="number">0</span>);
+        <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> <span class="ident">req</span>
+            .<span class="ident">headers</span>()
+            .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">CONTENT_LENGTH</span>)
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">to_str</span>().<span class="ident">ok</span>())
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>().<span class="ident">ok</span>());
 
         <span class="comment">// Notice the content-length is not checked against limit of json config here.</span>
         <span class="comment">// As the internal usage always call JsonBody::limit after JsonBody::new.</span>
