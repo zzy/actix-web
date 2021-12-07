@@ -776,9 +776,9 @@
 
     <span class="doccomment">/// Sets function that will be called once before each connection is handled.</span>
     <span class="doccomment">/// It will receive a `&amp;std::any::Any`, which contains underlying connection type and an</span>
-    <span class="doccomment">/// [Extensions] container so that request-local data can be passed to middleware and handlers.</span>
+    <span class="doccomment">/// [Extensions] container so that connection data can be accessed in middleware and handlers.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// For example:</span>
+    <span class="doccomment">/// # Connection Types</span>
     <span class="doccomment">/// - `actix_tls::accept::openssl::TlsStream&lt;actix_web::rt::net::TcpStream&gt;` when using openssl.</span>
     <span class="doccomment">/// - `actix_tls::accept::rustls::TlsStream&lt;actix_web::rt::net::TcpStream&gt;` when using rustls.</span>
     <span class="doccomment">/// - `actix_web::rt::net::TcpStream` when no encryption is used.</span>

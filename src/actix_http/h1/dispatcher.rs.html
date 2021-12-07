@@ -1420,6 +1420,8 @@
 <span id="1419">1419</span>
 <span id="1420">1420</span>
 <span id="1421">1421</span>
+<span id="1422">1422</span>
+<span id="1423">1423</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::VecDeque</span>,
     <span class="ident">fmt</span>,
@@ -1444,7 +1446,7 @@
     <span class="ident">config::ServiceConfig</span>,
     <span class="ident">error</span>::{<span class="ident">DispatchError</span>, <span class="ident">ParseError</span>, <span class="ident">PayloadError</span>},
     <span class="ident">service::HttpFlow</span>,
-    <span class="ident">OnConnectData</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">StatusCode</span>,
+    <span class="ident">Extensions</span>, <span class="ident">OnConnectData</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">StatusCode</span>,
 };
 
 <span class="kw">use</span> <span class="kw">super</span>::{
@@ -1522,9 +1524,9 @@
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
 {
     <span class="ident">flow</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">on_connect_data</span>: <span class="ident">OnConnectData</span>,
     <span class="ident">flags</span>: <span class="ident">Flags</span>,
     <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net::SocketAddr</span><span class="op">&gt;</span>,
+    <span class="ident">conn_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DispatchError</span><span class="op">&gt;</span>,
 
     <span class="attribute">#[<span class="ident">pin</span>]</span>
@@ -1601,10 +1603,10 @@
     <span class="doccomment">/// Create HTTP/1 dispatcher.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">io</span>: <span class="ident">T</span>,
-        <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">flow</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect_data</span>: <span class="ident">OnConnectData</span>,
+        <span class="ident">config</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net::SocketAddr</span><span class="op">&gt;</span>,
+        <span class="ident">conn_data</span>: <span class="ident">OnConnectData</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">keep_alive_enabled</span>() {
             <span class="ident">Flags::KEEPALIVE</span>
@@ -1620,20 +1622,23 @@
 
         <span class="ident">Dispatcher</span> {
             <span class="ident">inner</span>: <span class="ident">DispatcherState::Normal</span>(<span class="ident">InnerDispatcher</span> {
-                <span class="ident">read_buf</span>: <span class="ident">BytesMut::with_capacity</span>(<span class="ident">HW_BUFFER_SIZE</span>),
-                <span class="ident">write_buf</span>: <span class="ident">BytesMut::with_capacity</span>(<span class="ident">HW_BUFFER_SIZE</span>),
-                <span class="ident">payload</span>: <span class="prelude-val">None</span>,
-                <span class="ident">state</span>: <span class="ident">State::None</span>,
-                <span class="ident">error</span>: <span class="prelude-val">None</span>,
-                <span class="ident">messages</span>: <span class="ident">VecDeque::new</span>(),
-                <span class="ident">io</span>: <span class="prelude-val">Some</span>(<span class="ident">io</span>),
-                <span class="ident">codec</span>: <span class="ident">Codec::new</span>(<span class="ident">config</span>),
                 <span class="ident">flow</span>,
-                <span class="ident">on_connect_data</span>,
                 <span class="ident">flags</span>,
                 <span class="ident">peer_addr</span>,
+                <span class="ident">conn_data</span>: <span class="ident">conn_data</span>.<span class="number">0</span>.<span class="ident">map</span>(<span class="ident">Rc::new</span>),
+                <span class="ident">error</span>: <span class="prelude-val">None</span>,
+
+                <span class="ident">state</span>: <span class="ident">State::None</span>,
+                <span class="ident">payload</span>: <span class="prelude-val">None</span>,
+                <span class="ident">messages</span>: <span class="ident">VecDeque::new</span>(),
+
                 <span class="ident">ka_expire</span>,
                 <span class="ident">ka_timer</span>,
+
+                <span class="ident">io</span>: <span class="prelude-val">Some</span>(<span class="ident">io</span>),
+                <span class="ident">read_buf</span>: <span class="ident">BytesMut::with_capacity</span>(<span class="ident">HW_BUFFER_SIZE</span>),
+                <span class="ident">write_buf</span>: <span class="ident">BytesMut::with_capacity</span>(<span class="ident">HW_BUFFER_SIZE</span>),
+                <span class="ident">codec</span>: <span class="ident">Codec::new</span>(<span class="ident">config</span>),
             }),
 
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -2015,8 +2020,7 @@
                         <span class="ident">Message::Item</span>(<span class="kw-2">mut</span> <span class="ident">req</span>) =&gt; {
                             <span class="ident">req</span>.<span class="ident">head_mut</span>().<span class="ident">peer_addr</span> <span class="op">=</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">peer_addr</span>;
 
-                            <span class="comment">// merge on_connect_ext data into request extensions</span>
-                            <span class="ident">this</span>.<span class="ident">on_connect_data</span>.<span class="ident">merge_into</span>(<span class="kw-2">&amp;mut</span> <span class="ident">req</span>);
+                            <span class="ident">req</span>.<span class="ident">conn_data</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">conn_data</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">Rc::clone</span>);
 
                             <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">codec</span>.<span class="ident">message_type</span>() {
                                 <span class="comment">// Request is upgradable. add upgrade message and break.</span>
@@ -2522,10 +2526,10 @@
 
             <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span><span class="ident">::new</span>(
                 <span class="ident">buf</span>,
-                <span class="ident">ServiceConfig::default</span>(),
                 <span class="ident">services</span>,
-                <span class="ident">OnConnectData::default</span>(),
+                <span class="ident">ServiceConfig::default</span>(),
                 <span class="prelude-val">None</span>,
+                <span class="ident">OnConnectData::default</span>(),
             );
 
             <span class="macro">actix_rt::pin!</span>(<span class="ident">h1</span>);
@@ -2562,10 +2566,10 @@
 
             <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span><span class="ident">::new</span>(
                 <span class="ident">buf</span>,
-                <span class="ident">cfg</span>,
                 <span class="ident">services</span>,
-                <span class="ident">OnConnectData::default</span>(),
+                <span class="ident">cfg</span>,
                 <span class="prelude-val">None</span>,
+                <span class="ident">OnConnectData::default</span>(),
             );
 
             <span class="macro">actix_rt::pin!</span>(<span class="ident">h1</span>);
@@ -2616,10 +2620,10 @@
 
             <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span><span class="ident">::new</span>(
                 <span class="ident">buf</span>,
-                <span class="ident">cfg</span>,
                 <span class="ident">services</span>,
-                <span class="ident">OnConnectData::default</span>(),
+                <span class="ident">cfg</span>,
                 <span class="prelude-val">None</span>,
+                <span class="ident">OnConnectData::default</span>(),
             );
 
             <span class="macro">actix_rt::pin!</span>(<span class="ident">h1</span>);
@@ -2666,10 +2670,10 @@
 
             <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span><span class="ident">::new</span>(
                 <span class="ident">buf</span>.<span class="ident">clone</span>(),
-                <span class="ident">cfg</span>,
                 <span class="ident">services</span>,
-                <span class="ident">OnConnectData::default</span>(),
+                <span class="ident">cfg</span>,
                 <span class="prelude-val">None</span>,
+                <span class="ident">OnConnectData::default</span>(),
             );
 
             <span class="ident">buf</span>.<span class="ident">extend_read_buf</span>(
@@ -2738,10 +2742,10 @@
 
             <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">UpgradeHandler</span><span class="op">&gt;</span><span class="ident">::new</span>(
                 <span class="ident">buf</span>.<span class="ident">clone</span>(),
-                <span class="ident">cfg</span>,
                 <span class="ident">services</span>,
-                <span class="ident">OnConnectData::default</span>(),
+                <span class="ident">cfg</span>,
                 <span class="prelude-val">None</span>,
+                <span class="ident">OnConnectData::default</span>(),
             );
 
             <span class="ident">buf</span>.<span class="ident">extend_read_buf</span>(
@@ -2815,10 +2819,10 @@
 
             <span class="kw">let</span> <span class="ident">h1</span> <span class="op">=</span> <span class="ident">Dispatcher</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">TestUpgrade</span><span class="op">&gt;</span><span class="ident">::new</span>(
                 <span class="ident">buf</span>.<span class="ident">clone</span>(),
-                <span class="ident">cfg</span>,
                 <span class="ident">services</span>,
-                <span class="ident">OnConnectData::default</span>(),
+                <span class="ident">cfg</span>,
                 <span class="prelude-val">None</span>,
+                <span class="ident">OnConnectData::default</span>(),
             );
 
             <span class="ident">buf</span>.<span class="ident">extend_read_buf</span>(
