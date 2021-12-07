@@ -1208,9 +1208,10 @@
 <span id="1207">1207</span>
 <span id="1208">1208</span>
 <span id="1209">1209</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
+<span id="1210">1210</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::BoxBody</span>, <span class="ident">Extensions</span>};
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">ResourceDef</span>, <span class="ident">Router</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{
     <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>, <span class="ident">boxed</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>,
@@ -1262,7 +1263,7 @@
 <span class="doccomment">///  * /{project_id}/path1 - responds to all http method</span>
 <span class="doccomment">///  * /{project_id}/path2 - `GET` requests</span>
 <span class="doccomment">///  * /{project_id}/path3 - `HEAD` requests</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Scope</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> <span class="ident">ScopeEndpoint</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Scope</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> <span class="ident">ScopeEndpoint</span>, <span class="ident">B</span> <span class="op">=</span> <span class="ident">BoxBody</span><span class="op">&gt;</span> {
     <span class="ident">endpoint</span>: <span class="ident">T</span>,
     <span class="ident">rdef</span>: <span class="ident">String</span>,
     <span class="ident">app_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span>,
@@ -1271,6 +1272,7 @@
     <span class="ident">default</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">BoxedHttpServiceFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">external</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ResourceDef</span><span class="op">&gt;</span>,
     <span class="ident">factory_ref</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ScopeFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Scope</span> {
@@ -1287,19 +1289,21 @@
             <span class="ident">default</span>: <span class="prelude-val">None</span>,
             <span class="ident">external</span>: <span class="ident">Vec::new</span>(),
             <span class="ident">factory_ref</span>,
+            <span class="ident">_phantom</span>: <span class="ident">Default::default</span>(),
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Scope</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Scope</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
         <span class="ident">ServiceRequest</span>,
         <span class="ident">Config</span> <span class="op">=</span> (),
-        <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+        <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
         <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
         <span class="ident">InitError</span> <span class="op">=</span> (),
     <span class="op">&gt;</span>,
+    <span class="ident">B</span>: <span class="lifetime">&#39;static</span>,
 {
     <span class="doccomment">/// Add match guard to a scope.</span>
     <span class="doccomment">///</span>
@@ -1505,32 +1509,29 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Registers middleware, in the form of a middleware component (type),</span>
-    <span class="doccomment">/// that runs during inbound processing in the request</span>
-    <span class="doccomment">/// life-cycle (request -&gt; response), modifying request as</span>
-    <span class="doccomment">/// necessary, across all requests managed by the *Scope*.  Scope-level</span>
-    <span class="doccomment">/// middleware is more limited in what it can modify, relative to Route or</span>
-    <span class="doccomment">/// Application level middleware, in that Scope-level middleware can not modify</span>
-    <span class="doccomment">/// ServiceResponse.</span>
+    <span class="doccomment">/// Registers middleware, in the form of a middleware component (type), that runs during inbound</span>
+    <span class="doccomment">/// processing in the request life-cycle (request -&gt; response), modifying request as necessary,</span>
+    <span class="doccomment">/// across all requests managed by the *Scope*.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Use middleware when you need to read or modify *every* request in some way.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap</span><span class="op">&lt;</span><span class="ident">M</span>, <span class="ident">B1</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">mw</span>: <span class="ident">M</span>,
     ) -&gt; <span class="ident">Scope</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span>,
+        <span class="ident">B1</span>,
     <span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">M</span>: <span class="ident">Transform</span><span class="op">&lt;</span>
             <span class="ident">T::Service</span>,
             <span class="ident">ServiceRequest</span>,
-            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span>,
@@ -1544,16 +1545,15 @@
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>,
             <span class="ident">external</span>: <span class="self">self</span>.<span class="ident">external</span>,
             <span class="ident">factory_ref</span>: <span class="self">self</span>.<span class="ident">factory_ref</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 
-    <span class="doccomment">/// Registers middleware, in the form of a closure, that runs during inbound</span>
-    <span class="doccomment">/// processing in the request life-cycle (request -&gt; response), modifying</span>
-    <span class="doccomment">/// request as necessary, across all requests managed by the *Scope*.</span>
-    <span class="doccomment">/// Scope-level middleware is more limited in what it can modify, relative</span>
-    <span class="doccomment">/// to Route or Application level middleware, in that Scope-level middleware</span>
-    <span class="doccomment">/// can not modify ServiceResponse.</span>
+    <span class="doccomment">/// Registers middleware, in the form of a closure, that runs during inbound processing in the</span>
+    <span class="doccomment">/// request life-cycle (request -&gt; response), modifying request as necessary, across all</span>
+    <span class="doccomment">/// requests managed by the *Scope*.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_service::Service;</span>
     <span class="doccomment">/// use actix_web::{web, App};</span>
@@ -1579,21 +1579,22 @@
     <span class="doccomment">///             .route(&quot;/index.html&quot;, web::get().to(index)));</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap_fn</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap_fn</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span>, <span class="ident">B1</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">mw</span>: <span class="ident">F</span>,
     ) -&gt; <span class="ident">Scope</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span>,
+        <span class="ident">B1</span>,
     <span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">ServiceRequest</span>, <span class="kw-2">&amp;</span><span class="ident">T::Service</span>) -&gt; <span class="ident">R</span> <span class="op">+</span> <span class="ident">Clone</span>,
-        <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServiceResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     {
         <span class="ident">Scope</span> {
             <span class="ident">endpoint</span>: <span class="ident">apply_fn_factory</span>(<span class="self">self</span>.<span class="ident">endpoint</span>, <span class="ident">mw</span>),
@@ -1604,6 +1605,7 @@
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>,
             <span class="ident">external</span>: <span class="self">self</span>.<span class="ident">external</span>,
             <span class="ident">factory_ref</span>: <span class="self">self</span>.<span class="ident">factory_ref</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 }

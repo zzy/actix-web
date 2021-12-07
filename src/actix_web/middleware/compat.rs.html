@@ -364,7 +364,7 @@
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App::new</span>().<span class="ident">service</span>(
                 <span class="ident">web::scope</span>(<span class="string">&quot;app&quot;</span>)
-                    .<span class="ident">wrap</span>(<span class="ident">Compat::new</span>(<span class="ident">logger</span>))
+                    .<span class="ident">wrap</span>(<span class="ident">logger</span>)
                     .<span class="ident">wrap</span>(<span class="ident">Compat::new</span>(<span class="ident">compress</span>))
                     .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>))),
             ),
