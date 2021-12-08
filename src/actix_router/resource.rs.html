@@ -1989,7 +1989,7 @@
 <span class="doccomment">/// extracted in the same way as non-tail dynamic segments.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Examples</span>
-<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// ```</span>
 <span class="doccomment">/// # use actix_router::{Path, ResourceDef};</span>
 <span class="doccomment">/// let resource = ResourceDef::new(&quot;/blob/{tail}*&quot;);</span>
 <span class="doccomment">/// assert!(resource.is_match(&quot;/blob/HEAD/Cargo.toml&quot;));</span>
@@ -2012,7 +2012,7 @@
 <span class="doccomment">/// expectations in the router using these definitions and cause runtime panics.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Examples</span>
-<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// ```</span>
 <span class="doccomment">/// # use actix_router::ResourceDef;</span>
 <span class="doccomment">/// let resource = ResourceDef::new([&quot;/home&quot;, &quot;/index&quot;]);</span>
 <span class="doccomment">/// assert!(resource.is_match(&quot;/home&quot;));</span>
@@ -2027,7 +2027,7 @@
 <span class="doccomment">/// resource-path pairs that would not be compatible.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Examples</span>
-<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// ```</span>
 <span class="doccomment">/// # use actix_router::ResourceDef;</span>
 <span class="doccomment">/// assert!(!ResourceDef::new(&quot;/root&quot;).is_match(&quot;/root/&quot;));</span>
 <span class="doccomment">/// assert!(!ResourceDef::new(&quot;/root/&quot;).is_match(&quot;/root&quot;));</span>

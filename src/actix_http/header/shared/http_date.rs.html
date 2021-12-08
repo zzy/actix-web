@@ -80,15 +80,13 @@
 <span id="79">79</span>
 <span id="80">80</span>
 <span id="81">81</span>
-<span id="82">82</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io::Write</span>, <span class="ident">str::FromStr</span>, <span class="ident">time::SystemTime</span>};
 
 <span class="kw">use</span> <span class="ident">bytes::BytesMut</span>;
 <span class="kw">use</span> <span class="ident">http::header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">InvalidHeaderValue</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">config::DATE_VALUE_LENGTH</span>, <span class="ident">error::ParseError</span>, <span class="ident">header::IntoHeaderValue</span>,
-    <span class="ident">helpers::MutWriter</span>,
+    <span class="ident">config::DATE_VALUE_LENGTH</span>, <span class="ident">error::ParseError</span>, <span class="ident">header::IntoHeaderValue</span>, <span class="ident">helpers::MutWriter</span>,
 };
 
 <span class="doccomment">/// A timestamp with HTTP-style formatting and parsing.</span>

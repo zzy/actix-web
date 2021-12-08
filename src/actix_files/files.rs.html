@@ -654,9 +654,9 @@
         <span class="self">self</span>
     }
 
+    <span class="doccomment">/// See [`Files::method_guard`].</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;0.6.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Renamed to `method_guard`.&quot;</span>)]</span>
-    <span class="doccomment">/// See [`Files::method_guard`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">use_guards</span><span class="op">&lt;</span><span class="ident">G</span>: <span class="ident">Guard</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">guard</span>: <span class="ident">G</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">method_guard</span>(<span class="ident">guard</span>)
     }

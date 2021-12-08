@@ -263,11 +263,13 @@
 <span id="262">262</span>
 <span id="263">263</span>
 <span id="264">264</span>
+<span id="265">265</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Error and Result module</span>
-
-<span class="doccomment">/// This is meant to be a glob import of the whole error module, but rustdoc can&#39;t handle</span>
-<span class="doccomment">/// shadowing `Error` type, so it is expanded manually.</span>
-<span class="doccomment">/// See &lt;https://github.com/rust-lang/rust/issues/83375&gt;</span>
+<span class="comment">// This is meant to be a glob import of the whole error module except for `Error`. Rustdoc can&#39;t yet</span>
+<span class="comment">// correctly resolve the conflicting `Error` type defined in this module, so these re-exports are</span>
+<span class="comment">// expanded manually.</span>
+<span class="comment">//</span>
+<span class="comment">// See &lt;https://github.com/rust-lang/rust/issues/83375&gt;</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::error</span>::{
     <span class="ident">BlockingError</span>, <span class="ident">ContentTypeError</span>, <span class="ident">DispatchError</span>, <span class="ident">HttpError</span>, <span class="ident">ParseError</span>, <span class="ident">PayloadError</span>,
 };

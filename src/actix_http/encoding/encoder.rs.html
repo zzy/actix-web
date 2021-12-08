@@ -381,10 +381,6 @@
 <span id="380">380</span>
 <span id="381">381</span>
 <span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Stream encoders.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -440,11 +436,7 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">response</span>(
-        <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>,
-        <span class="ident">head</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ResponseHead</span>,
-        <span class="ident">body</span>: <span class="ident">B</span>,
-    ) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">response</span>(<span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>, <span class="ident">head</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ResponseHead</span>, <span class="ident">body</span>: <span class="ident">B</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">can_encode</span> <span class="op">=</span> <span class="op">!</span>(<span class="ident">head</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="ident">CONTENT_ENCODING</span>)
             <span class="op">|</span><span class="op">|</span> <span class="ident">head</span>.<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode::SWITCHING_PROTOCOLS</span>
             <span class="op">|</span><span class="op">|</span> <span class="ident">head</span>.<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode::NO_CONTENT</span>

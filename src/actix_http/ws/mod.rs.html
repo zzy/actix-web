@@ -350,8 +350,6 @@
 <span id="349">349</span>
 <span id="350">350</span>
 <span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
 </pre><pre class="rust"><code><span class="doccomment">//! WebSocket protocol implementation.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! To setup a WebSocket, first perform the WebSocket handshake then on success convert `Payload` into a</span>
@@ -363,9 +361,7 @@
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::body::BoxBody</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">header::HeaderValue</span>, <span class="ident">message::RequestHead</span>, <span class="ident">response::Response</span>, <span class="ident">ResponseBuilder</span>,
-};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">header::HeaderValue</span>, <span class="ident">message::RequestHead</span>, <span class="ident">response::Response</span>, <span class="ident">ResponseBuilder</span>};
 
 <span class="kw">mod</span> <span class="ident">codec</span>;
 <span class="kw">mod</span> <span class="ident">dispatcher</span>;

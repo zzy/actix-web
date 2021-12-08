@@ -297,7 +297,6 @@
 <span id="296">296</span>
 <span id="297">297</span>
 <span id="298">298</span>
-<span id="299">299</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>, <span class="ident">convert::TryFrom</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">fmt</span>, <span class="ident">str</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::ParseError</span>;
@@ -420,8 +419,7 @@
                 }
 
                 <span class="kw">let</span> <span class="ident">q_value</span> <span class="op">=</span> <span class="ident">q_val</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">f32</span><span class="op">&gt;</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseError::Header</span>)<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">q_value</span> <span class="op">=</span>
-                    <span class="ident">Quality::try_from</span>(<span class="ident">q_value</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseError::Header</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">q_value</span> <span class="op">=</span> <span class="ident">Quality::try_from</span>(<span class="ident">q_value</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseError::Header</span>)<span class="question-mark">?</span>;
 
                 <span class="ident">quality</span> <span class="op">=</span> <span class="ident">q_value</span>;
                 <span class="ident">raw_item</span> <span class="op">=</span> <span class="ident">val</span>;

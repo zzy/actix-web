@@ -1036,9 +1036,6 @@
 <span id="1035">1035</span>
 <span id="1036">1036</span>
 <span id="1037">1037</span>
-<span id="1038">1038</span>
-<span id="1039">1039</span>
-<span id="1040">1040</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">io</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">mem::MaybeUninit</span>, <span class="ident">task::Poll</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec::Decoder</span>;
@@ -1115,8 +1112,7 @@
             <span class="kw">let</span> <span class="ident">headers</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">headers_mut</span>();
 
             <span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="ident">raw_headers</span>.<span class="ident">iter</span>() {
-                <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span>
-                    <span class="ident">HeaderName::from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">slice</span>[<span class="ident">idx</span>.<span class="ident">name</span>.<span class="number">0</span>..<span class="ident">idx</span>.<span class="ident">name</span>.<span class="number">1</span>]).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">HeaderName::from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">slice</span>[<span class="ident">idx</span>.<span class="ident">name</span>.<span class="number">0</span>..<span class="ident">idx</span>.<span class="ident">name</span>.<span class="number">1</span>]).<span class="ident">unwrap</span>();
 
                 <span class="comment">// SAFETY: httparse already checks header value is only visible ASCII bytes</span>
                 <span class="comment">// from_maybe_shared_unchecked contains debug assertions so they are omitted here</span>
@@ -1646,8 +1642,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_body</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span>
-            <span class="ident">BytesMut::from</span>(<span class="string">&quot;GET /test HTTP/1.1\r\nContent-Length: 4\r\n\r\nbody&quot;</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">BytesMut::from</span>(<span class="string">&quot;GET /test HTTP/1.1\r\nContent-Length: 4\r\n\r\nbody&quot;</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">MessageDecoder</span>::<span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="ident">::default</span>();
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">decode</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf</span>).<span class="ident">unwrap</span>().<span class="ident">unwrap</span>();
@@ -1663,8 +1658,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_body_crlf</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span>
-            <span class="ident">BytesMut::from</span>(<span class="string">&quot;\r\nGET /test HTTP/1.1\r\nContent-Length: 4\r\n\r\nbody&quot;</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">BytesMut::from</span>(<span class="string">&quot;\r\nGET /test HTTP/1.1\r\nContent-Length: 4\r\n\r\nbody&quot;</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">MessageDecoder</span>::<span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="ident">::default</span>();
         <span class="kw">let</span> (<span class="ident">req</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">decode</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf</span>).<span class="ident">unwrap</span>().<span class="ident">unwrap</span>();

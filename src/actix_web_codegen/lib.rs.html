@@ -197,6 +197,8 @@
 <span id="196">196</span>
 <span id="197">197</span>
 <span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Routing and runtime macros for Actix Web.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Actix Web Re-exports</span>
@@ -256,6 +258,8 @@
 <span class="doccomment">//! [DELETE]: macro@delete</span>
 
 <span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;512&quot;</span>]</span>
+<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>, <span class="ident">nonstandard_style</span>)]</span>
+<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">future_incompatible</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
 <span class="kw">use</span> <span class="ident">quote::quote</span>;

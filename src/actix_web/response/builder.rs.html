@@ -567,6 +567,8 @@
 <span id="566">566</span>
 <span id="567">567</span>
 <span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
     <span class="ident">convert::TryInto</span>,
@@ -678,6 +680,7 @@
     }
 
     <span class="doccomment">/// Replaced with [`Self::insert_header()`].</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="attribute">#[<span class="ident">deprecated</span>(
         <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>,
         <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Replaced with `insert_header((key, value))`. Will be removed in v5.&quot;</span>
@@ -702,6 +705,7 @@
     }
 
     <span class="doccomment">/// Replaced with [`Self::append_header()`].</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="attribute">#[<span class="ident">deprecated</span>(
         <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>,
         <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Replaced with `append_header((key, value))`. Will be removed in v5.&quot;</span>

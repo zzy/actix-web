@@ -328,11 +328,6 @@
 <span id="327">327</span>
 <span id="328">328</span>
 <span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp</span>,
     <span class="ident">error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>,
@@ -495,16 +490,11 @@
                                 <span class="ident">Poll::Ready</span>(<span class="kw">_</span>) =&gt; {
                                     <span class="ident">ping_pong</span>.<span class="ident">on_flight</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
-                                    <span class="kw">let</span> <span class="ident">dead_line</span> <span class="op">=</span>
-                                        <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">keep_alive_expire</span>().<span class="ident">unwrap</span>();
+                                    <span class="kw">let</span> <span class="ident">dead_line</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">keep_alive_expire</span>().<span class="ident">unwrap</span>();
                                     <span class="ident">ping_pong</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">dead_line</span>);
                                 }
                                 <span class="ident">Poll::Pending</span> =&gt; {
-                                    <span class="kw">return</span> <span class="ident">ping_pong</span>
-                                        .<span class="ident">timer</span>
-                                        .<span class="ident">as_mut</span>()
-                                        .<span class="ident">poll</span>(<span class="ident">cx</span>)
-                                        .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()))
+                                    <span class="kw">return</span> <span class="ident">ping_pong</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()))
                                 }
                             }
                         } <span class="kw">else</span> {

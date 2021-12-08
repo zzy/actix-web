@@ -641,11 +641,6 @@
 <span id="640">640</span>
 <span id="641">641</span>
 <span id="642">642</span>
-<span id="643">643</span>
-<span id="644">644</span>
-<span id="645">645</span>
-<span id="646">646</span>
-<span id="647">647</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>,
     <span class="ident">future::Future</span>,
@@ -809,11 +804,7 @@
     <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">BoxBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">X::InitError</span>: <span class="ident">fmt::Debug</span>,
 
-    <span class="ident">U</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
-        (<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">TcpStream</span>, <span class="ident">h1::Codec</span><span class="op">&gt;</span>),
-        <span class="ident">Config</span> <span class="op">=</span> (),
-        <span class="ident">Response</span> <span class="op">=</span> (),
-    <span class="op">&gt;</span>,
+    <span class="ident">U</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">TcpStream</span>, <span class="ident">h1::Codec</span><span class="op">&gt;</span>), <span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
     <span class="ident">U::Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span> <span class="op">+</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">BoxBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">U::InitError</span>: <span class="ident">fmt::Debug</span>,
@@ -1029,9 +1020,9 @@
 
             <span class="kw">let</span> <span class="ident">upgrade</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">upgrade</span> {
                 <span class="prelude-val">Some</span>(<span class="ident">upgrade</span>) =&gt; {
-                    <span class="kw">let</span> <span class="ident">upgrade</span> <span class="op">=</span> <span class="ident">upgrade</span>.<span class="kw">await</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                        <span class="macro">log::error!</span>(<span class="string">&quot;Init http upgrade service error: {:?}&quot;</span>, <span class="ident">e</span>)
-                    })<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="ident">upgrade</span> <span class="op">=</span> <span class="ident">upgrade</span>
+                        .<span class="kw">await</span>
+                        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">log::error!</span>(<span class="string">&quot;Init http upgrade service error: {:?}&quot;</span>, <span class="ident">e</span>))<span class="question-mark">?</span>;
                     <span class="prelude-val">Some</span>(<span class="ident">upgrade</span>)
                 }
                 <span class="prelude-val">None</span> =&gt; <span class="prelude-val">None</span>,
@@ -1274,8 +1265,7 @@
             <span class="ident">StateProj::H2Handshake</span> { <span class="ident">handshake</span>: <span class="ident">data</span> } =&gt; {
                 <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">data</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>().<span class="number">0</span>).<span class="ident">poll</span>(<span class="ident">cx</span>)) {
                     <span class="prelude-val">Ok</span>((<span class="ident">conn</span>, <span class="ident">timer</span>)) =&gt; {
-                        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">config</span>, <span class="ident">flow</span>, <span class="ident">conn_data</span>, <span class="ident">peer_addr</span>) <span class="op">=</span>
-                            <span class="ident">data</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
+                        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">config</span>, <span class="ident">flow</span>, <span class="ident">conn_data</span>, <span class="ident">peer_addr</span>) <span class="op">=</span> <span class="ident">data</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
 
                         <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>().<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">State::H2</span> {
                             <span class="ident">dispatcher</span>: <span class="ident">h2::Dispatcher::new</span>(

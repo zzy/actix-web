@@ -437,11 +437,6 @@
 <span id="436">436</span>
 <span id="437">437</span>
 <span id="438">438</span>
-<span id="439">439</span>
-<span id="440">440</span>
-<span id="441">441</span>
-<span id="442">442</span>
-<span id="443">443</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::future::Future</span>;
 <span class="kw">use</span> <span class="ident">std::pin::Pin</span>;
 <span class="kw">use</span> <span class="ident">std::task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
@@ -748,8 +743,7 @@
                         <span class="kw">let</span> <span class="ident">item</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">framed</span>.<span class="ident">next_item</span>(<span class="ident">cx</span>) {
                             <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">el</span>))) =&gt; <span class="ident">el</span>,
                             <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))) =&gt; {
-                                <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">state</span> <span class="op">=</span>
-                                    <span class="ident">State::FramedError</span>(<span class="ident">DispatcherError::Decoder</span>(<span class="ident">err</span>));
+                                <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State::FramedError</span>(<span class="ident">DispatcherError::Decoder</span>(<span class="ident">err</span>));
                                 <span class="kw">return</span> <span class="bool-val">true</span>;
                             }
                             <span class="ident">Poll::Pending</span> =&gt; <span class="kw">return</span> <span class="bool-val">false</span>,
@@ -792,8 +786,7 @@
                     <span class="kw">match</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">this</span>.<span class="ident">rx</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>) {
                         <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Message::Item</span>(<span class="ident">msg</span>)))) =&gt; {
                             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">framed</span>.<span class="ident">as_mut</span>().<span class="ident">write</span>(<span class="ident">msg</span>) {
-                                <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">state</span> <span class="op">=</span>
-                                    <span class="ident">State::FramedError</span>(<span class="ident">DispatcherError::Encoder</span>(<span class="ident">err</span>));
+                                <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State::FramedError</span>(<span class="ident">DispatcherError::Encoder</span>(<span class="ident">err</span>));
                                 <span class="kw">return</span> <span class="bool-val">true</span>;
                             }
                         }
@@ -815,8 +808,7 @@
                         <span class="ident">Poll::Ready</span>(<span class="prelude-val">Ok</span>(<span class="kw">_</span>)) =&gt; {}
                         <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) =&gt; {
                             <span class="macro">debug!</span>(<span class="string">&quot;Error sending data: {:?}&quot;</span>, <span class="ident">err</span>);
-                            <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">state</span> <span class="op">=</span>
-                                <span class="ident">State::FramedError</span>(<span class="ident">DispatcherError::Encoder</span>(<span class="ident">err</span>));
+                            <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State::FramedError</span>(<span class="ident">DispatcherError::Encoder</span>(<span class="ident">err</span>));
                             <span class="kw">return</span> <span class="bool-val">true</span>;
                         }
                     }
@@ -876,9 +868,7 @@
                             <span class="ident">Poll::Ready</span>(<span class="prelude-val">Ok</span>(()))
                         }
                     }
-                    <span class="ident">State::FramedError</span>(<span class="kw">_</span>) =&gt; {
-                        <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">take_framed_error</span>()))
-                    }
+                    <span class="ident">State::FramedError</span>(<span class="kw">_</span>) =&gt; <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">this</span>.<span class="ident">state</span>.<span class="ident">take_framed_error</span>())),
                     <span class="ident">State::Stopping</span> =&gt; <span class="ident">Poll::Ready</span>(<span class="prelude-val">Ok</span>(())),
                 };
             }

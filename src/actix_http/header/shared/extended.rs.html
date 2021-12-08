@@ -193,9 +193,6 @@
 <span id="192">192</span>
 <span id="193">193</span>
 <span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Originally taken from `hyper::header::parsing`.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">str::FromStr</span>};
@@ -261,9 +258,7 @@
 <span class="doccomment">/// [RFC 2231 §7]: https://datatracker.ietf.org/doc/html/rfc2231#section-7</span>
 <span class="doccomment">/// [RFC 2978 §2.3]: https://datatracker.ietf.org/doc/html/rfc2978#section-2.3</span>
 <span class="doccomment">/// [RFC 3986 §2.1]: https://datatracker.ietf.org/doc/html/rfc5646#section-2.1</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_extended_value</span>(
-    <span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ExtendedValue</span>, <span class="ident"><span class="kw">crate</span>::error::ParseError</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_extended_value</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ExtendedValue</span>, <span class="ident"><span class="kw">crate</span>::error::ParseError</span><span class="op">&gt;</span> {
     <span class="comment">// Break into three pieces separated by the single-quote character</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">splitn</span>(<span class="number">3</span>, <span class="string">&#39;\&#39;&#39;</span>);
 
@@ -298,8 +293,7 @@
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ExtendedValue</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">let</span> <span class="ident">encoded_value</span> <span class="op">=</span>
-            <span class="ident">percent_encoding::percent_encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>[..], <span class="ident">HTTP_VALUE</span>);
+        <span class="kw">let</span> <span class="ident">encoded_value</span> <span class="op">=</span> <span class="ident">percent_encoding::percent_encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>[..], <span class="ident">HTTP_VALUE</span>);
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">lang</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">language_tag</span> {
             <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&#39;{}&#39;{}&quot;</span>, <span class="self">self</span>.<span class="ident">charset</span>, <span class="ident">lang</span>, <span class="ident">encoded_value</span>)
         } <span class="kw">else</span> {
@@ -341,8 +335,8 @@
         <span class="macro">assert!</span>(<span class="ident">extended_value</span>.<span class="ident">language_tag</span>.<span class="ident">is_none</span>());
         <span class="macro">assert_eq!</span>(
             <span class="macro">vec!</span>[
-                <span class="number">194</span>, <span class="number">163</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;a&#39;</span>, <span class="string">b&#39;n&#39;</span>, <span class="string">b&#39;d&#39;</span>, <span class="string">b&#39; &#39;</span>, <span class="number">226</span>, <span class="number">130</span>, <span class="number">172</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;r&#39;</span>, <span class="string">b&#39;a&#39;</span>,
-                <span class="string">b&#39;t&#39;</span>, <span class="string">b&#39;e&#39;</span>, <span class="string">b&#39;s&#39;</span>,
+                <span class="number">194</span>, <span class="number">163</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;a&#39;</span>, <span class="string">b&#39;n&#39;</span>, <span class="string">b&#39;d&#39;</span>, <span class="string">b&#39; &#39;</span>, <span class="number">226</span>, <span class="number">130</span>, <span class="number">172</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;r&#39;</span>, <span class="string">b&#39;a&#39;</span>, <span class="string">b&#39;t&#39;</span>,
+                <span class="string">b&#39;e&#39;</span>, <span class="string">b&#39;s&#39;</span>,
             ],
             <span class="ident">extended_value</span>.<span class="ident">value</span>
         );
@@ -383,8 +377,8 @@
             <span class="ident">charset</span>: <span class="ident">Charset::Ext</span>(<span class="string">&quot;UTF-8&quot;</span>.<span class="ident">to_string</span>()),
             <span class="ident">language_tag</span>: <span class="prelude-val">None</span>,
             <span class="ident">value</span>: <span class="macro">vec!</span>[
-                <span class="number">194</span>, <span class="number">163</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;a&#39;</span>, <span class="string">b&#39;n&#39;</span>, <span class="string">b&#39;d&#39;</span>, <span class="string">b&#39; &#39;</span>, <span class="number">226</span>, <span class="number">130</span>, <span class="number">172</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;r&#39;</span>, <span class="string">b&#39;a&#39;</span>,
-                <span class="string">b&#39;t&#39;</span>, <span class="string">b&#39;e&#39;</span>, <span class="string">b&#39;s&#39;</span>,
+                <span class="number">194</span>, <span class="number">163</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;a&#39;</span>, <span class="string">b&#39;n&#39;</span>, <span class="string">b&#39;d&#39;</span>, <span class="string">b&#39; &#39;</span>, <span class="number">226</span>, <span class="number">130</span>, <span class="number">172</span>, <span class="string">b&#39; &#39;</span>, <span class="string">b&#39;r&#39;</span>, <span class="string">b&#39;a&#39;</span>, <span class="string">b&#39;t&#39;</span>,
+                <span class="string">b&#39;e&#39;</span>, <span class="string">b&#39;s&#39;</span>,
             ],
         };
         <span class="macro">assert_eq!</span>(
