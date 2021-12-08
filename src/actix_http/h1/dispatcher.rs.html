@@ -1415,13 +1415,6 @@
 <span id="1414">1414</span>
 <span id="1415">1415</span>
 <span id="1416">1416</span>
-<span id="1417">1417</span>
-<span id="1418">1418</span>
-<span id="1419">1419</span>
-<span id="1420">1420</span>
-<span id="1421">1421</span>
-<span id="1422">1422</span>
-<span id="1423">1423</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::VecDeque</span>,
     <span class="ident">fmt</span>,
@@ -1451,6 +1444,7 @@
 
 <span class="kw">use</span> <span class="kw">super</span>::{
     <span class="ident">codec::Codec</span>,
+    <span class="ident">decoder::MAX_BUFFER_SIZE</span>,
     <span class="ident">payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadSender</span>, <span class="ident">PayloadStatus</span>},
     <span class="ident">Message</span>, <span class="ident">MessageType</span>,
 };
@@ -2217,7 +2211,6 @@
     <span class="doccomment">/// Returns true when io stream can be disconnected after write to it.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It covers these conditions:</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// - `std::io::ErrorKind::ConnectionReset` after partial read.</span>
     <span class="doccomment">/// - all data read done.</span>
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
@@ -2237,46 +2230,39 @@
 
         <span class="kw">loop</span> {
             <span class="comment">// Return early when read buf exceed decoder&#39;s max buffer size.</span>
-            <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">read_buf</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident"><span class="kw">super</span>::decoder::MAX_BUFFER_SIZE</span> {
-                <span class="comment">/*
-                 At this point it&#39;s not known IO stream is still scheduled
-                 to be waked up. so force wake up dispatcher just in case.
+            <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">read_buf</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MAX_BUFFER_SIZE</span> {
+                <span class="comment">// At this point it&#39;s not known IO stream is still scheduled to be waked up so</span>
+                <span class="comment">// force wake up dispatcher just in case.</span>
+                <span class="comment">//</span>
+                <span class="comment">// Reason:</span>
+                <span class="comment">// AsyncRead mostly would only have guarantee wake up when the poll_read</span>
+                <span class="comment">// return Poll::Pending.</span>
+                <span class="comment">//</span>
+                <span class="comment">// Case:</span>
+                <span class="comment">// When read_buf is beyond max buffer size the early return could be successfully</span>
+                <span class="comment">// be parsed as a new Request. This case would not generate ParseError::TooLarge and</span>
+                <span class="comment">// at this point IO stream is not fully read to Pending and would result in</span>
+                <span class="comment">// dispatcher stuck until timeout (KA)</span>
+                <span class="comment">//</span>
+                <span class="comment">// Note:</span>
+                <span class="comment">// This is a perf choice to reduce branch on &lt;Request as MessageType&gt;::decode.</span>
+                <span class="comment">//</span>
+                <span class="comment">// A Request head too large to parse is only checked on</span>
+                <span class="comment">// `httparse::Status::Partial` condition.</span>
 
-                 Reason:
-                 AsyncRead mostly would only have guarantee wake up
-                 when the poll_read return Poll::Pending.
-
-                 Case:
-                 When read_buf is beyond max buffer size the early return
-                 could be successfully be parsed as a new Request.
-                 This case would not generate ParseError::TooLarge
-                 and at this point IO stream is not fully read to Pending
-                 and would result in dispatcher stuck until timeout (KA)
-
-                 Note:
-                 This is a perf choice to reduce branch on
-                 &lt;Request as MessageType&gt;::decode.
-
-                 A Request head too large to parse is only checked on
-                 httparse::Status::Partial condition.
-                */</span>
                 <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">payload</span>.<span class="ident">is_none</span>() {
-                    <span class="comment">/*
-                    When dispatcher has a payload the responsibility of
-                    wake up it would be shift to h1::payload::Payload.
-
-                    Reason:
-                    Self wake up when there is payload would waste poll
-                    and/or result in over read.
-
-                    Case:
-                    When payload is (partial) dropped by user there is
-                    no need to do read anymore.
-                    At this case read_buf could always remain beyond
-                    MAX_BUFFER_SIZE and self wake up would be busy poll
-                    dispatcher and waste resource.
-
-                    */</span>
+                    <span class="comment">// When dispatcher has a payload the responsibility of wake up it would be shift</span>
+                    <span class="comment">// to h1::payload::Payload.</span>
+                    <span class="comment">//</span>
+                    <span class="comment">// Reason:</span>
+                    <span class="comment">// Self wake up when there is payload would waste poll and/or result in</span>
+                    <span class="comment">// over read.</span>
+                    <span class="comment">//</span>
+                    <span class="comment">// Case:</span>
+                    <span class="comment">// When payload is (partial) dropped by user there is no need to do</span>
+                    <span class="comment">// read anymore. At this case read_buf could always remain beyond</span>
+                    <span class="comment">// MAX_BUFFER_SIZE and self wake up would be busy poll dispatcher and</span>
+                    <span class="comment">// waste resources.</span>
                     <span class="ident">cx</span>.<span class="ident">waker</span>().<span class="ident">wake_by_ref</span>();
                 }
 
@@ -2846,5 +2832,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (0fb1c371d 2021-12-06)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (0b6f079e4 2021-12-07)" ></div>
 </body></html>
