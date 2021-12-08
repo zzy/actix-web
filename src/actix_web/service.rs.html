@@ -992,7 +992,7 @@
     <span class="doccomment">/// Get *ConnectionInfo* for the current request.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connection_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">ConnectionInfo</span><span class="op">&gt;</span> {
-        <span class="ident">ConnectionInfo::get</span>(<span class="self">self</span>.<span class="ident">head</span>(), <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="ident">app_config</span>())
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">connection_info</span>()
     }
 
     <span class="doccomment">/// Get a reference to the Path parameters.</span>

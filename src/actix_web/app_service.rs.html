@@ -379,6 +379,9 @@
 <span id="378">378</span>
 <span id="379">379</span>
 <span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Request</span>};
@@ -579,6 +582,7 @@
     <span class="macro">actix_service::forward_ready!</span>(<span class="ident">service</span>);
 
     <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">req</span>: <span class="ident">Request</span>) -&gt; <span class="ident"><span class="self">Self</span>::Future</span> {
+        <span class="kw">let</span> <span class="ident">req_data</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">req</span>.<span class="ident">take_req_data</span>()));
         <span class="kw">let</span> <span class="ident">conn_data</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">take_conn_data</span>();
         <span class="kw">let</span> (<span class="ident">head</span>, <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
 
@@ -588,6 +592,7 @@
             <span class="ident">inner</span>.<span class="ident">path</span>.<span class="ident">reset</span>();
             <span class="ident">inner</span>.<span class="ident">head</span> <span class="op">=</span> <span class="ident">head</span>;
             <span class="ident">inner</span>.<span class="ident">conn_data</span> <span class="op">=</span> <span class="ident">conn_data</span>;
+            <span class="ident">inner</span>.<span class="ident">req_data</span> <span class="op">=</span> <span class="ident">req_data</span>;
             <span class="ident">req</span>
         } <span class="kw">else</span> {
             <span class="ident">HttpRequest::new</span>(
@@ -596,6 +601,7 @@
                 <span class="self">self</span>.<span class="ident">app_state</span>.<span class="ident">clone</span>(),
                 <span class="self">self</span>.<span class="ident">app_data</span>.<span class="ident">clone</span>(),
                 <span class="ident">conn_data</span>,
+                <span class="ident">req_data</span>,
             )
         };
         <span class="self">self</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">ServiceRequest::new</span>(<span class="ident">req</span>, <span class="ident">payload</span>))

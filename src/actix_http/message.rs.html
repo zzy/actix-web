@@ -474,21 +474,6 @@
 <span id="473">473</span>
 <span id="474">474</span>
 <span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
-<span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
-<span id="487">487</span>
-<span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
     <span class="ident">net</span>,
@@ -535,13 +520,12 @@
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">MessagePool</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) -&gt; <span class="ident">R</span>;
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RequestHead</span> {
     <span class="kw">pub</span> <span class="ident">method</span>: <span class="ident">Method</span>,
     <span class="kw">pub</span> <span class="ident">uri</span>: <span class="ident">Uri</span>,
     <span class="kw">pub</span> <span class="ident">version</span>: <span class="ident">Version</span>,
     <span class="kw">pub</span> <span class="ident">headers</span>: <span class="ident">HeaderMap</span>,
-    <span class="kw">pub</span> <span class="ident">extensions</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">peer_addr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net::SocketAddr</span><span class="op">&gt;</span>,
     <span class="ident">flags</span>: <span class="ident">Flags</span>,
 }
@@ -553,7 +537,6 @@
             <span class="ident">uri</span>: <span class="ident">Uri::default</span>(),
             <span class="ident">version</span>: <span class="ident">Version::HTTP_11</span>,
             <span class="ident">headers</span>: <span class="ident">HeaderMap::with_capacity</span>(<span class="number">16</span>),
-            <span class="ident">extensions</span>: <span class="ident">RefCell::new</span>(<span class="ident">Extensions::new</span>()),
             <span class="ident">peer_addr</span>: <span class="prelude-val">None</span>,
             <span class="ident">flags</span>: <span class="ident">Flags::empty</span>(),
         }
@@ -564,7 +547,6 @@
     <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">flags</span> <span class="op">=</span> <span class="ident">Flags::empty</span>();
         <span class="self">self</span>.<span class="ident">headers</span>.<span class="ident">clear</span>();
-        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">get_mut</span>().<span class="ident">clear</span>();
     }
 
     <span class="kw">fn</span> <span class="ident">with_pool</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span>
@@ -576,18 +558,6 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RequestHead</span> {
-    <span class="doccomment">/// Message extensions</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">borrow</span>()
-    }
-
-    <span class="doccomment">/// Mutable reference to a the message&#39;s extensions</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>()
-    }
-
     <span class="doccomment">/// Read the message headers.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">headers</span>
