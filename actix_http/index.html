@@ -8,8 +8,8 @@
 <tr><td><code>compress-zstd</code></td><td>Payload compression support: Zstd.</td></tr>
 <tr><td><code>trust-dns</code></td><td>Use <a href="https://crates.io/crates/trust-dns">trust-dns</a> as the client DNS resolver.</td></tr>
 </tbody></table>
-</div></div></details><h2 id="reexports" class="section-header"><a href="#reexports">Re-exports</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left import-item"><code>pub use self::error::<a class="struct" href="error/struct.Error.html" title="struct actix_http::error::Error">Error</a>;</code></div><div class="item-right docblock-short"></div></div></div><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+</div></div></details><h2 id="reexports" class="small-section-header"><a href="#reexports">Re-exports</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left import-item"><code>pub use self::error::<a class="struct" href="error/struct.Error.html" title="struct actix_http::error::Error">Error</a>;</code></div><div class="item-right docblock-short"></div></div></div><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="body/index.html" title="actix_http::body mod">body</a></div><div class="item-right docblock-short"><p>Traits and structures to aid consuming and writing HTTP payloads.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="encoding/index.html" title="actix_http::encoding mod">encoding</a></div><div class="item-right docblock-short"><p>Content-Encoding support.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="error/index.html" title="actix_http::error mod">error</a></div><div class="item-right docblock-short"><p>Error and Result module</p>
@@ -19,7 +19,7 @@
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="test/index.html" title="actix_http::test mod">test</a></div><div class="item-right docblock-short"><p>Various testing helpers for use in internal and app tests.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="uri/index.html" title="actix_http::uri mod">uri</a></div><div class="item-right docblock-short"><p>URI component of request and response lines</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="ws/index.html" title="actix_http::ws mod">ws</a></div><div class="item-right docblock-short"><p>WebSocket protocol implementation.</p>
-</div></div></div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+</div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Extensions.html" title="actix_http::Extensions struct">Extensions</a></div><div class="item-right docblock-short"><p>A type map for request extensions.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HttpService.html" title="actix_http::HttpService struct">HttpService</a></div><div class="item-right docblock-short"><p>A <code>ServiceFactory</code> for HTTP/1.1 or HTTP/2 protocol.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HttpServiceBuilder.html" title="actix_http::HttpServiceBuilder struct">HttpServiceBuilder</a></div><div class="item-right docblock-short"><p>A HTTP service builder</p>
@@ -31,15 +31,15 @@
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.StatusCode.html" title="actix_http::StatusCode struct">StatusCode</a></div><div class="item-right docblock-short"><p>An HTTP status code (<code>status-code</code> in RFC 7230 et al.).</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Uri.html" title="actix_http::Uri struct">Uri</a></div><div class="item-right docblock-short"><p>The URI component of a request.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Version.html" title="actix_http::Version struct">Version</a></div><div class="item-right docblock-short"><p>Represents a version of the HTTP spec.</p>
-</div></div></div><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+</div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.ConnectionType.html" title="actix_http::ConnectionType enum">ConnectionType</a></div><div class="item-right docblock-short"><p>Represents various types of connection</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.ContentEncoding.html" title="actix_http::ContentEncoding enum">ContentEncoding</a></div><div class="item-right docblock-short"><p>Represents a supported content encoding.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.KeepAlive.html" title="actix_http::KeepAlive enum">KeepAlive</a></div><div class="item-right docblock-short"><p>Server keep-alive setting</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Payload.html" title="actix_http::Payload enum">Payload</a></div><div class="item-right docblock-short"><p>Type represent streaming payload</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Protocol.html" title="actix_http::Protocol enum">Protocol</a></div><div class="item-right docblock-short"><p>A major HTTP protocol version.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.RequestHeadType.html" title="actix_http::RequestHeadType enum">RequestHeadType</a></div><div class="item-right docblock-short"></div></div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.RequestHeadType.html" title="actix_http::RequestHeadType enum">RequestHeadType</a></div><div class="item-right docblock-short"></div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.HttpMessage.html" title="actix_http::HttpMessage trait">HttpMessage</a></div><div class="item-right docblock-short"><p>Trait that implements general purpose operations on HTTP messages.</p>
-</div></div></div><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
+</div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.PayloadStream.html" title="actix_http::PayloadStream type">PayloadStream</a></div><div class="item-right docblock-short"><p>Type represent boxed payload</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e6b883c74 2021-12-08)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (0b42deacc 2021-12-09)" ></div>
 </body></html>
