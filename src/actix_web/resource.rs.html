@@ -773,7 +773,6 @@
 <span id="772">772</span>
 <span id="773">773</span>
 <span id="774">774</span>
-<span id="775">775</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
@@ -791,13 +790,12 @@
     <span class="ident">dev</span>::{<span class="ident">ensure_leading_slash</span>, <span class="ident">AppService</span>, <span class="ident">ResourceDef</span>},
     <span class="ident">guard::Guard</span>,
     <span class="ident">handler::Handler</span>,
-    <span class="ident">responder::Responder</span>,
     <span class="ident">route</span>::{<span class="ident">Route</span>, <span class="ident">RouteService</span>},
     <span class="ident">service</span>::{
         <span class="ident">BoxedHttpService</span>, <span class="ident">BoxedHttpServiceFactory</span>, <span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceRequest</span>,
         <span class="ident">ServiceResponse</span>,
     },
-    <span class="ident">BoxError</span>, <span class="ident">Error</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpResponse</span>,
+    <span class="ident">BoxError</span>, <span class="ident">Error</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>,
 };
 
 <span class="doccomment">/// *Resource* is an entry in resources table which corresponds to requested URL.</span>
@@ -1302,7 +1300,7 @@
                     .<span class="ident">name</span>(<span class="string">&quot;test&quot;</span>)
                     .<span class="ident">wrap</span>(
                         <span class="ident">DefaultHeaders::new</span>()
-                            .<span class="ident">header</span>(<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;0001&quot;</span>)),
+                            .<span class="ident">add</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;0001&quot;</span>))),
                     )
                     .<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>)),
             ),

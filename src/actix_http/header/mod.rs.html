@@ -127,8 +127,8 @@
 <span class="kw">mod</span> <span class="ident">utils</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::as_name::AsHeaderName</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::into_pair::IntoHeaderPair</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::into_value::IntoHeaderValue</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::into_pair::TryIntoHeaderPair</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::into_value::TryIntoHeaderValue</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::map::HeaderMap</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::shared</span>::{
     <span class="ident">parse_extended_value</span>, <span class="ident">q</span>, <span class="ident">Charset</span>, <span class="ident">ContentEncoding</span>, <span class="ident">ExtendedValue</span>, <span class="ident">HttpDate</span>, <span class="ident">LanguageTag</span>,
@@ -139,7 +139,7 @@
 };
 
 <span class="doccomment">/// An interface for types that already represent a valid header.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Header</span>: <span class="ident">IntoHeaderValue</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Header</span>: <span class="ident">TryIntoHeaderValue</span> {
     <span class="doccomment">/// Returns the name of the header field</span>
     <span class="kw">fn</span> <span class="ident">name</span>() -&gt; <span class="ident">HeaderName</span>;
 

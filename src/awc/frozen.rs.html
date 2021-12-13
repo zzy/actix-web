@@ -246,7 +246,7 @@
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
     <span class="ident">error::HttpError</span>,
-    <span class="ident">header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">IntoHeaderValue</span>},
+    <span class="ident">header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">TryIntoHeaderValue</span>},
     <span class="ident">Method</span>, <span class="ident">RequestHead</span>, <span class="ident">Uri</span>,
 };
 
@@ -354,7 +354,7 @@
     <span class="kw">where</span>
         <span class="ident">HeaderName</span>: <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
         <span class="op">&lt;</span><span class="ident">HeaderName</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
-        <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
+        <span class="ident">V</span>: <span class="ident">TryIntoHeaderValue</span>,
     {
         <span class="self">self</span>.<span class="ident">extra_headers</span>(<span class="ident">HeaderMap::new</span>())
             .<span class="ident">extra_header</span>(<span class="ident">key</span>, <span class="ident">value</span>)
@@ -382,7 +382,7 @@
     <span class="kw">where</span>
         <span class="ident">HeaderName</span>: <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
         <span class="op">&lt;</span><span class="ident">HeaderName</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
-        <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
+        <span class="ident">V</span>: <span class="ident">TryIntoHeaderValue</span>,
     {
         <span class="kw">match</span> <span class="ident">HeaderName::try_from</span>(<span class="ident">key</span>) {
             <span class="prelude-val">Ok</span>(<span class="ident">key</span>) =&gt; <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_into_value</span>() {

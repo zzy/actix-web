@@ -211,7 +211,7 @@
     <span class="ident">str::FromStr</span>,
 };
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">InvalidHeaderValue</span>, <span class="ident">Writer</span>, <span class="ident">CONTENT_RANGE</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">HeaderValue</span>, <span class="ident">InvalidHeaderValue</span>, <span class="ident">TryIntoHeaderValue</span>, <span class="ident">Writer</span>, <span class="ident">CONTENT_RANGE</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::ParseError</span>;
 
 <span class="macro">crate::http::header::common_header!</span> {
@@ -404,7 +404,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentRangeSpec</span> {
+<span class="kw">impl</span> <span class="ident">TryIntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentRangeSpec</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidHeaderValue</span>;
 
     <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HeaderValue</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {

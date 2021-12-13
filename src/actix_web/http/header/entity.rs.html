@@ -272,7 +272,7 @@
     <span class="ident">str::FromStr</span>,
 };
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">InvalidHeaderValue</span>, <span class="ident">Writer</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">HeaderValue</span>, <span class="ident">InvalidHeaderValue</span>, <span class="ident">TryIntoHeaderValue</span>, <span class="ident">Writer</span>};
 
 <span class="doccomment">/// check that each char in the slice is either:</span>
 <span class="doccomment">/// 1. `%x21`, or</span>
@@ -428,7 +428,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoHeaderValue</span> <span class="kw">for</span> <span class="ident">EntityTag</span> {
+<span class="kw">impl</span> <span class="ident">TryIntoHeaderValue</span> <span class="kw">for</span> <span class="ident">EntityTag</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidHeaderValue</span>;
 
     <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HeaderValue</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {

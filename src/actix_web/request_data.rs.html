@@ -190,7 +190,7 @@
 <span class="doccomment">/// # Mutating Request Data</span>
 <span class="doccomment">/// Note that since extractors must output owned data, only types that `impl Clone` can use this</span>
 <span class="doccomment">/// extractor. A clone is taken of the required request data and can, therefore, not be directly</span>
-<span class="doccomment">/// mutated in-place. To mutate request data, continue to use [`HttpRequest::extensions_mut`] or</span>
+<span class="doccomment">/// mutated in-place. To mutate request data, continue to use [`HttpRequest::req_data_mut`] or</span>
 <span class="doccomment">/// re-insert the cloned data back into the extensions map. A `DerefMut` impl is intentionally not</span>
 <span class="doccomment">/// provided to make this potential foot-gun more obvious.</span>
 <span class="doccomment">///</span>

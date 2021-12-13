@@ -121,8 +121,8 @@
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>, <span class="ident">Write</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{
-    <span class="ident">from_one_raw_str</span>, <span class="ident">EntityTag</span>, <span class="ident">Header</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">HttpDate</span>, <span class="ident">IntoHeaderValue</span>,
-    <span class="ident">InvalidHeaderValue</span>, <span class="ident">Writer</span>,
+    <span class="ident">from_one_raw_str</span>, <span class="ident">EntityTag</span>, <span class="ident">Header</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">HttpDate</span>, <span class="ident">InvalidHeaderValue</span>,
+    <span class="ident">TryIntoHeaderValue</span>, <span class="ident">Writer</span>,
 };
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::ParseError</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
@@ -216,7 +216,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoHeaderValue</span> <span class="kw">for</span> <span class="ident">IfRange</span> {
+<span class="kw">impl</span> <span class="ident">TryIntoHeaderValue</span> <span class="kw">for</span> <span class="ident">IfRange</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidHeaderValue</span>;
 
     <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HeaderValue</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {

@@ -908,20 +908,14 @@
 <span id="907">907</span>
 <span id="908">908</span>
 <span id="909">909</span>
-<span id="910">910</span>
-<span id="911">911</span>
-<span id="912">912</span>
-<span id="913">913</span>
-<span id="914">914</span>
-<span id="915">915</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Various helpers for Actix applications to use during testing.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">net::SocketAddr</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::test::TestBuffer</span>;
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">header::IntoHeaderPair</span>, <span class="ident">test::TestRequest</span> <span class="kw">as</span> <span class="ident">HttpTestRequest</span>, <span class="ident">Extensions</span>, <span class="ident">Method</span>, <span class="ident">Request</span>,
-    <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
+    <span class="ident">header::TryIntoHeaderPair</span>, <span class="ident">test::TestRequest</span> <span class="kw">as</span> <span class="ident">HttpTestRequest</span>, <span class="ident">Extensions</span>, <span class="ident">Method</span>,
+    <span class="ident">Request</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">Url</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">IntoService</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>};
@@ -1361,19 +1355,13 @@
     }
 
     <span class="doccomment">/// Insert a header, replacing any that were set with an equivalent field name.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
-    {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_header</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="kw">impl</span> <span class="ident">TryIntoHeaderPair</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">insert_header</span>(<span class="ident">header</span>);
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Append a header, keeping any that were set with an equivalent field name.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">append_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
-    {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">append_header</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="kw">impl</span> <span class="ident">TryIntoHeaderPair</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">append_header</span>(<span class="ident">header</span>);
         <span class="self">self</span>
     }

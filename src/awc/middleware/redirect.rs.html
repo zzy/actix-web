@@ -584,6 +584,8 @@
 <span id="583">583</span>
 <span id="584">584</span>
 <span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">convert::TryFrom</span>,
     <span class="ident">future::Future</span>,
@@ -1028,13 +1030,15 @@
         });
 
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>()
-            .<span class="ident">header</span>(<span class="string">&quot;custom&quot;</span>, <span class="string">&quot;value&quot;</span>)
+            .<span class="ident">add_default_header</span>((<span class="string">&quot;custom&quot;</span>, <span class="string">&quot;value&quot;</span>))
             .<span class="ident">disable_redirects</span>()
             .<span class="ident">finish</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">get</span>(<span class="ident">srv</span>.<span class="ident">url</span>(<span class="string">&quot;/&quot;</span>)).<span class="ident">send</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">as_u16</span>(), <span class="number">302</span>);
 
-        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>().<span class="ident">header</span>(<span class="string">&quot;custom&quot;</span>, <span class="string">&quot;value&quot;</span>).<span class="ident">finish</span>();
+        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>()
+            .<span class="ident">add_default_header</span>((<span class="string">&quot;custom&quot;</span>, <span class="string">&quot;value&quot;</span>))
+            .<span class="ident">finish</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">get</span>(<span class="ident">srv</span>.<span class="ident">url</span>(<span class="string">&quot;/&quot;</span>)).<span class="ident">send</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">as_u16</span>(), <span class="number">200</span>);
 
@@ -1106,7 +1110,7 @@
 
         <span class="comment">// send a request to different origins, http://srv1/ then http://srv2/. So it should remove the header</span>
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>()
-            .<span class="ident">header</span>(<span class="ident">header::AUTHORIZATION</span>, <span class="string">&quot;auth_key_value&quot;</span>)
+            .<span class="ident">add_default_header</span>((<span class="ident">header::AUTHORIZATION</span>, <span class="string">&quot;auth_key_value&quot;</span>))
             .<span class="ident">finish</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">get</span>(<span class="ident">srv1</span>.<span class="ident">url</span>(<span class="string">&quot;/&quot;</span>)).<span class="ident">send</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">as_u16</span>(), <span class="number">200</span>);

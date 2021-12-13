@@ -243,6 +243,25 @@
 <span id="242">242</span>
 <span id="243">243</span>
 <span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`DefaultHeaders`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -261,7 +280,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">dev</span>::{<span class="ident">Service</span>, <span class="ident">Transform</span>},
-    <span class="ident">http::header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>},
+    <span class="ident">http::header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">TryIntoHeaderPair</span>, <span class="ident">CONTENT_TYPE</span>},
     <span class="ident">service</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
     <span class="ident">Error</span>,
 };
@@ -274,79 +293,81 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{web, http, middleware, App, HttpResponse};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     let app = App::new()</span>
-<span class="doccomment">///         .wrap(middleware::DefaultHeaders::new().header(&quot;X-Version&quot;, &quot;0.2&quot;))</span>
-<span class="doccomment">///         .service(</span>
-<span class="doccomment">///             web::resource(&quot;/test&quot;)</span>
-<span class="doccomment">///                 .route(web::get().to(|| HttpResponse::Ok()))</span>
-<span class="doccomment">///                 .route(web::method(http::Method::HEAD).to(|| HttpResponse::MethodNotAllowed()))</span>
-<span class="doccomment">///         );</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// let app = App::new()</span>
+<span class="doccomment">///     .wrap(middleware::DefaultHeaders::new().add((&quot;X-Version&quot;, &quot;0.2&quot;)))</span>
+<span class="doccomment">///     .service(</span>
+<span class="doccomment">///         web::resource(&quot;/test&quot;)</span>
+<span class="doccomment">///             .route(web::get().to(|| HttpResponse::Ok()))</span>
+<span class="doccomment">///             .route(web::method(http::Method::HEAD).to(|| HttpResponse::MethodNotAllowed()))</span>
+<span class="doccomment">///     );</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DefaultHeaders</span> {
     <span class="ident">inner</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Inner</span><span class="op">&gt;</span>,
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">struct</span> <span class="ident">Inner</span> {
     <span class="ident">headers</span>: <span class="ident">HeaderMap</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">DefaultHeaders</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident">DefaultHeaders</span> {
-            <span class="ident">inner</span>: <span class="ident">Rc::new</span>(<span class="ident">Inner</span> {
-                <span class="ident">headers</span>: <span class="ident">HeaderMap::new</span>(),
-            }),
-        }
-    }
-}
-
 <span class="kw">impl</span> <span class="ident">DefaultHeaders</span> {
     <span class="doccomment">/// Constructs an empty `DefaultHeaders` middleware.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">DefaultHeaders</span> {
         <span class="ident">DefaultHeaders::default</span>()
     }
 
     <span class="doccomment">/// Adds a header to the default set.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">header</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="self">Self</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Panics</span>
+    <span class="doccomment">/// Panics when resolved header name or value is invalid.</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::should_implement_trait</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="kw">impl</span> <span class="ident">TryIntoHeaderPair</span>) -&gt; <span class="self">Self</span> {
+        <span class="comment">// standard header terminology `insert` or `append` for this method would make the behavior</span>
+        <span class="comment">// of this middleware less obvious since it only adds the headers if they are not present</span>
+
+        <span class="kw">match</span> <span class="ident">header</span>.<span class="ident">try_into_pair</span>() {
+            <span class="prelude-val">Ok</span>((<span class="ident">key</span>, <span class="ident">value</span>)) =&gt; <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">inner</span>)
+                .<span class="ident">expect</span>(<span class="string">&quot;All default headers must be added before cloning.&quot;</span>)
+                .<span class="ident">headers</span>
+                .<span class="ident">append</span>(<span class="ident">key</span>, <span class="ident">value</span>),
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Invalid header: {}&quot;</span>, <span class="ident">err</span>.<span class="ident">into</span>()),
+        }
+
+        <span class="self">self</span>
+    }
+
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="attribute">#[<span class="ident">deprecated</span>(
+        <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>,
+        <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Prefer `.add((key, value))`. Will be removed in v5.&quot;</span>
+    )]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">header</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">HeaderName</span>: <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
         <span class="op">&lt;</span><span class="ident">HeaderName</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
         <span class="ident">HeaderValue</span>: <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>,
         <span class="op">&lt;</span><span class="ident">HeaderValue</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
     {
-        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::match_wild_err_arm</span>)]</span>
-        <span class="kw">match</span> <span class="ident">HeaderName::try_from</span>(<span class="ident">key</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">key</span>) =&gt; <span class="kw">match</span> <span class="ident">HeaderValue::try_from</span>(<span class="ident">value</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">value</span>) =&gt; {
-                    <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">inner</span>)
-                        .<span class="ident">expect</span>(<span class="string">&quot;Multiple copies exist&quot;</span>)
-                        .<span class="ident">headers</span>
-                        .<span class="ident">append</span>(<span class="ident">key</span>, <span class="ident">value</span>);
-                }
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Can not create header value&quot;</span>),
-            },
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Can not create header name&quot;</span>),
-        }
-        <span class="self">self</span>
+        <span class="self">self</span>.<span class="ident">add</span>((
+            <span class="ident">HeaderName::try_from</span>(<span class="ident">key</span>)
+                .<span class="ident">map_err</span>(<span class="ident">Into::into</span>)
+                .<span class="ident">expect</span>(<span class="string">&quot;Invalid header name&quot;</span>),
+            <span class="ident">HeaderValue::try_from</span>(<span class="ident">value</span>)
+                .<span class="ident">map_err</span>(<span class="ident">Into::into</span>)
+                .<span class="ident">expect</span>(<span class="string">&quot;Invalid header value&quot;</span>),
+        ))
     }
 
     <span class="doccomment">/// Adds a default *Content-Type* header if response does not contain one.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Default is `application/octet-stream`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_content_type</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">inner</span>)
-            .<span class="ident">expect</span>(<span class="string">&quot;Multiple `Inner` copies exist.&quot;</span>)
-            .<span class="ident">headers</span>
-            .<span class="ident">insert</span>(
-                <span class="ident">CONTENT_TYPE</span>,
-                <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;application/octet-stream&quot;</span>),
-            );
-
-        <span class="self">self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_content_type</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">add</span>((
+            <span class="ident">CONTENT_TYPE</span>,
+            <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;application/octet-stream&quot;</span>),
+        ))
     }
 }
 
@@ -364,7 +385,7 @@
     <span class="kw">fn</span> <span class="ident">new_transform</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">service</span>: <span class="ident">S</span>) -&gt; <span class="ident"><span class="self">Self</span>::Future</span> {
         <span class="ident">ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">DefaultHeadersMiddleware</span> {
             <span class="ident">service</span>,
-            <span class="ident">inner</span>: <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">clone</span>(),
+            <span class="ident">inner</span>: <span class="ident">Rc::clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>),
         }))
     }
 }
@@ -442,17 +463,22 @@
     };
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_default_headers</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">adding_default_headers</span>() {
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders::new</span>()
-            .<span class="ident">header</span>(<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;0001&quot;</span>)
+            .<span class="ident">add</span>((<span class="string">&quot;X-TEST&quot;</span>, <span class="string">&quot;0001&quot;</span>))
+            .<span class="ident">add</span>((<span class="string">&quot;X-TEST-TWO&quot;</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;123&quot;</span>)))
             .<span class="ident">new_transform</span>(<span class="ident">ok_service</span>())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_srv_request</span>();
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">mw</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;0001&quot;</span>);
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">mw</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="string">&quot;x-test&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;0001&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="string">&quot;x-test-two&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;123&quot;</span>);
+    }
 
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">no_override_existing</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_srv_request</span>();
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> {
             <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(
@@ -462,7 +488,7 @@
             ))
         };
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders::new</span>()
-            .<span class="ident">header</span>(<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;0001&quot;</span>)
+            .<span class="ident">add</span>((<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;0001&quot;</span>))
             .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
@@ -471,7 +497,7 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_content_type</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">adding_content_type</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse::Ok</span>().<span class="ident">finish</span>()));
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">DefaultHeaders::new</span>()
             .<span class="ident">add_content_type</span>()
@@ -485,6 +511,18 @@
             <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>(),
             <span class="string">&quot;application/octet-stream&quot;</span>
         );
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">should_panic</span>]</span>
+    <span class="kw">fn</span> <span class="ident">invalid_header_name</span>() {
+        <span class="ident">DefaultHeaders::new</span>().<span class="ident">add</span>((<span class="string">&quot;:&quot;</span>, <span class="string">&quot;hello&quot;</span>));
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">should_panic</span>]</span>
+    <span class="kw">fn</span> <span class="ident">invalid_header_value</span>() {
+        <span class="ident">DefaultHeaders::new</span>().<span class="ident">add</span>((<span class="string">&quot;x-test&quot;</span>, <span class="string">&quot;\n&quot;</span>));
     }
 }
 </code></pre></div>

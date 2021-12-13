@@ -95,7 +95,7 @@
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">App::new</span>()
             .<span class="ident">wrap</span>(<span class="ident">Compat::new</span>(<span class="ident">Logger::default</span>()))
             .<span class="ident">wrap</span>(<span class="ident">Condition::new</span>(<span class="bool-val">true</span>, <span class="ident">DefaultHeaders::new</span>()))
-            .<span class="ident">wrap</span>(<span class="ident">DefaultHeaders::new</span>().<span class="ident">header</span>(<span class="string">&quot;X-Test2&quot;</span>, <span class="string">&quot;X-Value2&quot;</span>))
+            .<span class="ident">wrap</span>(<span class="ident">DefaultHeaders::new</span>().<span class="ident">add</span>((<span class="string">&quot;X-Test2&quot;</span>, <span class="string">&quot;X-Value2&quot;</span>)))
             .<span class="ident">wrap</span>(<span class="ident">ErrorHandlers::new</span>().<span class="ident">handler</span>(<span class="ident">StatusCode::FORBIDDEN</span>, <span class="op">|</span><span class="ident">res</span><span class="op">|</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">ErrorHandlerResponse::Response</span>(<span class="ident">res</span>))
             }))
@@ -108,7 +108,7 @@
             .<span class="ident">wrap</span>(<span class="ident">ErrorHandlers::new</span>().<span class="ident">handler</span>(<span class="ident">StatusCode::FORBIDDEN</span>, <span class="op">|</span><span class="ident">res</span><span class="op">|</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">ErrorHandlerResponse::Response</span>(<span class="ident">res</span>))
             }))
-            .<span class="ident">wrap</span>(<span class="ident">DefaultHeaders::new</span>().<span class="ident">header</span>(<span class="string">&quot;X-Test2&quot;</span>, <span class="string">&quot;X-Value2&quot;</span>))
+            .<span class="ident">wrap</span>(<span class="ident">DefaultHeaders::new</span>().<span class="ident">add</span>((<span class="string">&quot;X-Test2&quot;</span>, <span class="string">&quot;X-Value2&quot;</span>)))
             .<span class="ident">wrap</span>(<span class="ident">Condition::new</span>(<span class="bool-val">true</span>, <span class="ident">DefaultHeaders::new</span>()))
             .<span class="ident">wrap</span>(<span class="ident">Compat::new</span>(<span class="ident">Logger::default</span>()));
 

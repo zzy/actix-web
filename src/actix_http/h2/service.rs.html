@@ -364,6 +364,7 @@
 <span id="363">363</span>
 <span id="364">364</span>
 <span id="365">365</span>
+<span id="366">366</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">future::Future</span>,
     <span class="ident">marker::PhantomData</span>,
@@ -636,10 +637,10 @@
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">H2ServiceHandlerResponse</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">flow</span>.<span class="ident">service</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">into</span>();
-            <span class="macro">error!</span>(<span class="string">&quot;Service readiness error: {:?}&quot;</span>, <span class="ident">e</span>);
-            <span class="ident">DispatchError::Service</span>(<span class="ident">e</span>)
+        <span class="self">self</span>.<span class="ident">flow</span>.<span class="ident">service</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into</span>();
+            <span class="macro">error!</span>(<span class="string">&quot;Service readiness error: {:?}&quot;</span>, <span class="ident">err</span>);
+            <span class="ident">DispatchError::Service</span>(<span class="ident">err</span>)
         })
     }
 
@@ -663,7 +664,6 @@
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">S::Future</span>: <span class="lifetime">&#39;static</span>,
 {
-    <span class="ident">Incoming</span>(<span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, (), ()<span class="op">&gt;</span>),
     <span class="ident">Handshake</span>(
         <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, (), ()<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServiceConfig</span><span class="op">&gt;</span>,
@@ -671,6 +671,7 @@
         <span class="ident">OnConnectData</span>,
         <span class="ident">HandshakeWithTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
     ),
+    <span class="ident">Established</span>(<span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, (), ()<span class="op">&gt;</span>),
 }
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">H2ServiceHandlerResponse</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span><span class="op">&gt;</span>
@@ -698,7 +699,6 @@
 
     <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
-            <span class="ident">State::Incoming</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">disp</span>) =&gt; <span class="ident">Pin::new</span>(<span class="ident">disp</span>).<span class="ident">poll</span>(<span class="ident">cx</span>),
             <span class="ident">State::Handshake</span>(
                 <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">srv</span>,
                 <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">config</span>,
@@ -709,7 +709,7 @@
                 <span class="prelude-val">Ok</span>((<span class="ident">conn</span>, <span class="ident">timer</span>)) =&gt; {
                     <span class="kw">let</span> <span class="ident">on_connect_data</span> <span class="op">=</span> <span class="ident">mem::take</span>(<span class="ident">conn_data</span>);
 
-                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State::Incoming</span>(<span class="ident">Dispatcher::new</span>(
+                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State::Established</span>(<span class="ident">Dispatcher::new</span>(
                         <span class="ident">conn</span>,
                         <span class="ident">srv</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
                         <span class="ident">config</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
@@ -726,6 +726,8 @@
                     <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))
                 }
             },
+
+            <span class="ident">State::Established</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">disp</span>) =&gt; <span class="ident">Pin::new</span>(<span class="ident">disp</span>).<span class="ident">poll</span>(<span class="ident">cx</span>),
         }
     }
 }

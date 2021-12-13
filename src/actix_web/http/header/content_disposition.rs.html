@@ -1004,7 +1004,7 @@
 <span class="kw">use</span> <span class="ident">regex::Regex</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ExtendedValue</span>, <span class="ident">Header</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">Writer</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ExtendedValue</span>, <span class="ident">Header</span>, <span class="ident">TryIntoHeaderValue</span>, <span class="ident">Writer</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
 
 <span class="doccomment">/// Split at the index of the first `needle` if it exists or at the end.</span>
@@ -1444,7 +1444,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentDisposition</span> {
+<span class="kw">impl</span> <span class="ident">TryIntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentDisposition</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">header::InvalidHeaderValue</span>;
 
     <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">header::HeaderValue</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {

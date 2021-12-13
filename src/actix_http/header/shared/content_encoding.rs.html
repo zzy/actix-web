@@ -121,7 +121,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">error::ParseError</span>,
-    <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">from_one_raw_str</span>, <span class="ident">Header</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>},
+    <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">from_one_raw_str</span>, <span class="ident">Header</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">TryIntoHeaderValue</span>},
     <span class="ident">HttpMessage</span>,
 };
 
@@ -212,7 +212,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentEncoding</span> {
+<span class="kw">impl</span> <span class="ident">TryIntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentEncoding</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidHeaderValue</span>;
 
     <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">http::HeaderValue</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {

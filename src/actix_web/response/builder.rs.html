@@ -563,12 +563,6 @@
 <span id="562">562</span>
 <span id="563">563</span>
 <span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
-<span id="568">568</span>
-<span id="569">569</span>
-<span id="570">570</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
     <span class="ident">convert::TryInto</span>,
@@ -580,7 +574,7 @@
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
     <span class="ident">body</span>::{<span class="ident">BodyStream</span>, <span class="ident">BoxBody</span>, <span class="ident">MessageBody</span>},
     <span class="ident">error::HttpError</span>,
-    <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">IntoHeaderPair</span>, <span class="ident">IntoHeaderValue</span>},
+    <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">TryIntoHeaderPair</span>, <span class="ident">TryIntoHeaderValue</span>},
     <span class="ident">ConnectionType</span>, <span class="ident">Extensions</span>, <span class="ident">Response</span>, <span class="ident">ResponseHead</span>, <span class="ident">StatusCode</span>,
 };
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
@@ -638,12 +632,9 @@
     <span class="doccomment">///     .insert_header((&quot;X-TEST&quot;, &quot;value&quot;))</span>
     <span class="doccomment">///     .finish();</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
-    {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_header</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="kw">impl</span> <span class="ident">TryIntoHeaderPair</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>() {
-            <span class="kw">match</span> <span class="ident">header</span>.<span class="ident">try_into_header_pair</span>() {
+            <span class="kw">match</span> <span class="ident">header</span>.<span class="ident">try_into_pair</span>() {
                 <span class="prelude-val">Ok</span>((<span class="ident">key</span>, <span class="ident">value</span>)) =&gt; {
                     <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
                 }
@@ -665,12 +656,9 @@
     <span class="doccomment">///     .append_header((&quot;X-TEST&quot;, &quot;value2&quot;))</span>
     <span class="doccomment">///     .finish();</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">append_header</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">H</span>: <span class="ident">IntoHeaderPair</span>,
-    {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">append_header</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="kw">impl</span> <span class="ident">TryIntoHeaderPair</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>() {
-            <span class="kw">match</span> <span class="ident">header</span>.<span class="ident">try_into_header_pair</span>() {
+            <span class="kw">match</span> <span class="ident">header</span>.<span class="ident">try_into_pair</span>() {
                 <span class="prelude-val">Ok</span>((<span class="ident">key</span>, <span class="ident">value</span>)) =&gt; <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">append</span>(<span class="ident">key</span>, <span class="ident">value</span>),
                 <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
             };
@@ -689,7 +677,7 @@
     <span class="kw">where</span>
         <span class="ident">K</span>: <span class="ident">TryInto</span><span class="op">&lt;</span><span class="ident">HeaderName</span><span class="op">&gt;</span>,
         <span class="ident">K::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
-        <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
+        <span class="ident">V</span>: <span class="ident">TryIntoHeaderValue</span>,
     {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">err</span>.<span class="ident">is_some</span>() {
             <span class="kw">return</span> <span class="self">self</span>;
@@ -714,7 +702,7 @@
     <span class="kw">where</span>
         <span class="ident">K</span>: <span class="ident">TryInto</span><span class="op">&lt;</span><span class="ident">HeaderName</span><span class="op">&gt;</span>,
         <span class="ident">K::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
-        <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
+        <span class="ident">V</span>: <span class="ident">TryIntoHeaderValue</span>,
     {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">err</span>.<span class="ident">is_some</span>() {
             <span class="kw">return</span> <span class="self">self</span>;
@@ -751,7 +739,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
+        <span class="ident">V</span>: <span class="ident">TryIntoHeaderValue</span>,
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>() {
             <span class="ident">parts</span>.<span class="ident">set_connection_type</span>(<span class="ident">ConnectionType::Upgrade</span>);
@@ -789,7 +777,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_type</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
+        <span class="ident">V</span>: <span class="ident">TryIntoHeaderValue</span>,
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>() {
             <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_into_value</span>() {

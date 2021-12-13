@@ -1333,7 +1333,7 @@
             <span class="ident">App::new</span>()
                 .<span class="ident">wrap</span>(
                     <span class="ident">DefaultHeaders::new</span>()
-                        .<span class="ident">header</span>(<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;0001&quot;</span>)),
+                        .<span class="ident">add</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;0001&quot;</span>))),
                 )
                 .<span class="ident">route</span>(<span class="string">&quot;/test&quot;</span>, <span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>)),
         )
@@ -1354,7 +1354,7 @@
                 .<span class="ident">route</span>(<span class="string">&quot;/test&quot;</span>, <span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>))
                 .<span class="ident">wrap</span>(
                     <span class="ident">DefaultHeaders::new</span>()
-                        .<span class="ident">header</span>(<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;0001&quot;</span>)),
+                        .<span class="ident">add</span>((<span class="ident">header::CONTENT_TYPE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;0001&quot;</span>))),
                 ),
         )
         .<span class="kw">await</span>;

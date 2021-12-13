@@ -434,7 +434,7 @@
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">error::ParseError</span>, <span class="ident">header</span>, <span class="ident">HttpMessage</span>};
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Header</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">InvalidHeaderValue</span>, <span class="ident">Writer</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Header</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">InvalidHeaderValue</span>, <span class="ident">TryIntoHeaderValue</span>, <span class="ident">Writer</span>};
 
 <span class="doccomment">/// `Range` header, defined</span>
 <span class="doccomment">/// in [RFC 7233 §3.1](https://datatracker.ietf.org/doc/html/rfc7233#section-3.1)</span>
@@ -702,7 +702,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoHeaderValue</span> <span class="kw">for</span> <span class="ident">Range</span> {
+<span class="kw">impl</span> <span class="ident">TryIntoHeaderValue</span> <span class="kw">for</span> <span class="ident">Range</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidHeaderValue</span>;
 
     <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HeaderValue</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
