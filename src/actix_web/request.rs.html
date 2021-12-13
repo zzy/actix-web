@@ -1191,7 +1191,7 @@
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="comment">// if possible, contribute to current worker&#39;s HttpRequest allocation pool</span>
 
-        <span class="comment">// This relies on no Weak&lt;HttpRequestInner&gt; exists anywhere. (There is none.)</span>
+        <span class="comment">// This relies on no weak references to inner existing anywhere within the codebase.</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">inner</span>) <span class="op">=</span> <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">inner</span>) {
             <span class="kw">if</span> <span class="ident">inner</span>.<span class="ident">app_state</span>.<span class="ident">pool</span>().<span class="ident">is_available</span>() {
                 <span class="comment">// clear additional app_data and keep the root one for reuse.</span>
@@ -1202,7 +1202,7 @@
                 <span class="ident">Rc::get_mut</span>(<span class="kw-2">&amp;mut</span> <span class="ident">inner</span>.<span class="ident">req_data</span>).<span class="ident">unwrap</span>().<span class="ident">get_mut</span>().<span class="ident">clear</span>();
 
                 <span class="comment">// a re-borrow of pool is necessary here.</span>
-                <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">clone</span>();
+                <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Rc::clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>);
                 <span class="self">self</span>.<span class="ident">app_state</span>().<span class="ident">pool</span>().<span class="ident">push</span>(<span class="ident">req</span>);
             }
         }
@@ -1682,5 +1682,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (0b42deacc 2021-12-09)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6bda5b331 2021-12-12)" ></div>
 </body></html>
