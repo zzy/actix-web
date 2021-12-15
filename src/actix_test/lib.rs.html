@@ -574,7 +574,6 @@
 <span id="573">573</span>
 <span id="574">574</span>
 <span id="575">575</span>
-<span id="576">576</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Integration testing tools for Actix Web applications.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The main integration testing tool is [`TestServer`]. It spawns a real HTTP server on an</span>
@@ -614,9 +613,14 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">net</span>, <span class="ident">thread</span>, <span class="ident">time::Duration</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Framed</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::test::TestBuffer</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::to_bytes</span>, <span class="ident">test::TestBuffer</span>};
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">header::HeaderMap</span>, <span class="ident">ws</span>, <span class="ident">HttpService</span>, <span class="ident">Method</span>, <span class="ident">Request</span>, <span class="ident">Response</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http_test::unused_addr</span>;
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">map_config</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">ServiceFactory</span>, <span class="ident">ServiceFactoryExt</span> <span class="kw">as</span> <span class="kw">_</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_web::test</span>::{
+    <span class="ident">call_and_read_body</span>, <span class="ident">call_and_read_body_json</span>, <span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">ok_service</span>,
+    <span class="ident">read_body</span>, <span class="ident">read_body_json</span>, <span class="ident">simple_service</span>, <span class="ident">TestRequest</span>,
+};
 <span class="kw">use</span> <span class="ident">actix_web</span>::{
     <span class="ident">body::MessageBody</span>,
     <span class="ident">dev</span>::{<span class="ident">AppConfig</span>, <span class="ident">Server</span>, <span class="ident">ServerHandle</span>, <span class="ident">Service</span>},
@@ -625,12 +629,6 @@
 };
 <span class="kw">use</span> <span class="ident">awc</span>::{<span class="ident">error::PayloadError</span>, <span class="ident">Client</span>, <span class="ident">ClientRequest</span>, <span class="ident">ClientResponse</span>, <span class="ident">Connector</span>};
 <span class="kw">use</span> <span class="ident">futures_core::Stream</span>;
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http_test::unused_addr</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_web::test</span>::{
-    <span class="ident">call_service</span>, <span class="ident">default_service</span>, <span class="ident">init_service</span>, <span class="ident">load_stream</span>, <span class="ident">ok_service</span>, <span class="ident">read_body</span>,
-    <span class="ident">read_body_json</span>, <span class="ident">read_response</span>, <span class="ident">read_response_json</span>, <span class="ident">TestRequest</span>,
-};
 <span class="kw">use</span> <span class="ident">tokio::sync::mpsc</span>;
 
 <span class="doccomment">/// Start default [`TestServer`].</span>
@@ -1152,5 +1150,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_test" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f117a77d 2021-12-13)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_test" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (404c8471a 2021-12-14)" ></div>
 </body></html>

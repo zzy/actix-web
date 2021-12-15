@@ -490,7 +490,7 @@
             <span class="prelude-val">Ok</span>(<span class="ident">ErrorHandlerResponse::Response</span>(<span class="ident">res</span>.<span class="ident">map_into_left_body</span>()))
         }
 
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::default_service</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::simple_service</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
 
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">ErrorHandlers::new</span>()
             .<span class="ident">handler</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>, <span class="ident">error_handler</span>)
@@ -517,7 +517,7 @@
             ))
         }
 
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::default_service</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::simple_service</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
 
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">ErrorHandlers::new</span>()
             .<span class="ident">handler</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>, <span class="ident">error_handler</span>)
@@ -545,7 +545,7 @@
             <span class="prelude-val">Ok</span>(<span class="ident">ErrorHandlerResponse::Response</span>(<span class="ident">res</span>))
         }
 
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::default_service</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::simple_service</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
 
         <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">ErrorHandlers::new</span>()
             .<span class="ident">handler</span>(<span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>, <span class="ident">error_handler</span>)
@@ -560,5 +560,5 @@
     <span class="comment">// TODO: test where error is thrown</span>
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f117a77d 2021-12-13)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (404c8471a 2021-12-14)" ></div>
 </body></html>
