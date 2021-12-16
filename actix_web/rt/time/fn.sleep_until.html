@@ -18,5 +18,16 @@ cleanup work is required.</p>
     <span class="macro">println!</span>(<span class="string">&quot;100 ms have elapsed&quot;</span>);
 }</code></pre></div>
 <p>See the documentation for the <a href="struct.Sleep.html"><code>Sleep</code></a> type for more examples.</p>
-</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (404c8471a 2021-12-14)" ></div>
+<h2 id="panics" class="section-header"><a href="#panics">Panics</a></h2>
+<p>This function panics if there is no current timer set.</p>
+<p>It can be triggered when <a href="crate::runtime::Builder::enable_time"><code>Builder::enable_time</code></a> or
+<a href="crate::runtime::Builder::enable_all"><code>Builder::enable_all</code></a> are not included in the builder.</p>
+<p>It can also panic whenever a timer is created outside of a
+Tokio runtime. That is why <code>rt.block_on(sleep(...))</code> will panic,
+since the function is executed outside of the runtime.
+Whereas <code>rt.block_on(async {sleep(...).await})</code> doesn’t panic.
+And this is because wrapping the function on an async makes it lazy,
+and so gets executed inside the runtime successfully without
+panicking.</p>
+</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c5ecc1570 2021-12-15)" ></div>
 </body></html>
