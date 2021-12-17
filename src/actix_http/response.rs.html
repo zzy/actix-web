@@ -577,7 +577,7 @@
     <span class="doccomment">/// Returns split head and body.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Implementation Notes</span>
-    <span class="doccomment">/// Due to internal performance optimisations, the first element of the returned tuple is a</span>
+    <span class="doccomment">/// Due to internal performance optimizations, the first element of the returned tuple is a</span>
     <span class="doccomment">/// `Response` as well but only contains the head of the response this was called on.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_parts</span>(<span class="self">self</span>) -&gt; (<span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span>, <span class="ident">B</span>) {
         <span class="self">self</span>.<span class="ident">replace_body</span>(())
