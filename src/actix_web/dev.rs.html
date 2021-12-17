@@ -142,6 +142,14 @@
 <span id="140">140</span>
 <span id="141">141</span>
 <span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Lower-level types and re-exports.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Most users will not have to interact with the types in this module, but it is useful for those</span>
@@ -281,6 +289,14 @@
                 <span class="ident">std::task::Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">bytes</span>)))
             }
             <span class="ident">AnyBody::Boxed</span> { <span class="ident">body</span> } =&gt; <span class="ident">body</span>.<span class="ident">as_pin_mut</span>().<span class="ident">poll_next</span>(<span class="ident">cx</span>),
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">try_into_bytes</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="kw">crate</span>::web::Bytes</span>, <span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">AnyBody::None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="kw">crate</span>::web::Bytes::new</span>()),
+            <span class="ident">AnyBody::Full</span> { <span class="ident">body</span> } =&gt; <span class="prelude-val">Ok</span>(<span class="ident">body</span>),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="self">self</span>),
         }
     }
 }
