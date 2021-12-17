@@ -418,6 +418,10 @@
 <span id="416">416</span>
 <span id="417">417</span>
 <span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Stream encoders.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -445,7 +449,7 @@
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Writer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">body</span>::{<span class="ident">BodySize</span>, <span class="ident">MessageBody</span>},
+    <span class="ident">body</span>::{<span class="self">self</span>, <span class="ident">BodySize</span>, <span class="ident">MessageBody</span>},
     <span class="ident">error::BlockingError</span>,
     <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">ContentEncoding</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_ENCODING</span>},
     <span class="ident">ResponseHead</span>, <span class="ident">StatusCode</span>,
@@ -466,7 +470,9 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">MessageBody</span><span class="op">&gt;</span> <span class="ident">Encoder</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">none</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">Encoder</span> {
-            <span class="ident">body</span>: <span class="ident">EncoderBody::None</span>,
+            <span class="ident">body</span>: <span class="ident">EncoderBody::None</span> {
+                <span class="ident">body</span>: <span class="ident">body::None::new</span>(),
+            },
             <span class="ident">encoder</span>: <span class="prelude-val">None</span>,
             <span class="ident">fut</span>: <span class="prelude-val">None</span>,
             <span class="ident">eof</span>: <span class="bool-val">true</span>,
@@ -516,7 +522,7 @@
 <span class="macro">pin_project!</span> {
     <span class="attribute">#[<span class="ident">project</span> <span class="op">=</span> <span class="ident">EncoderBodyProj</span>]</span>
     <span class="kw">enum</span> <span class="ident">EncoderBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="prelude-val">None</span>,
+        <span class="prelude-val">None</span> { <span class="ident">body</span>: <span class="ident">body::None</span> },
         <span class="ident">Full</span> { <span class="ident">body</span>: <span class="ident">Bytes</span> },
         <span class="ident">Stream</span> { <span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">body</span>: <span class="ident">B</span> },
     }
@@ -531,7 +537,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">BodySize</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">EncoderBody::None</span> =&gt; <span class="ident">BodySize::None</span>,
+            <span class="ident">EncoderBody::None</span> { <span class="ident">body</span> } =&gt; <span class="ident">body</span>.<span class="ident">size</span>(),
             <span class="ident">EncoderBody::Full</span> { <span class="ident">body</span> } =&gt; <span class="ident">body</span>.<span class="ident">size</span>(),
             <span class="ident">EncoderBody::Stream</span> { <span class="ident">body</span> } =&gt; <span class="ident">body</span>.<span class="ident">size</span>(),
         }
@@ -542,7 +548,9 @@
         <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">project</span>() {
-            <span class="ident">EncoderBodyProj::None</span> =&gt; <span class="ident">Poll::Ready</span>(<span class="prelude-val">None</span>),
+            <span class="ident">EncoderBodyProj::None</span> { <span class="ident">body</span> } =&gt; {
+                <span class="ident">Pin::new</span>(<span class="ident">body</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">err</span> {})
+            }
             <span class="ident">EncoderBodyProj::Full</span> { <span class="ident">body</span> } =&gt; {
                 <span class="ident">Pin::new</span>(<span class="ident">body</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">err</span> {})
             }
@@ -558,8 +566,8 @@
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">EncoderBody::None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bytes::new</span>()),
-            <span class="ident">EncoderBody::Full</span> { <span class="ident">body</span> } =&gt; <span class="prelude-val">Ok</span>(<span class="ident">body</span>),
+            <span class="ident">EncoderBody::None</span> { <span class="ident">body</span> } =&gt; <span class="prelude-val">Ok</span>(<span class="ident">body</span>.<span class="ident">try_into_bytes</span>().<span class="ident">unwrap</span>()),
+            <span class="ident">EncoderBody::Full</span> { <span class="ident">body</span> } =&gt; <span class="prelude-val">Ok</span>(<span class="ident">body</span>.<span class="ident">try_into_bytes</span>().<span class="ident">unwrap</span>()),
             <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="self">self</span>),
         }
     }
