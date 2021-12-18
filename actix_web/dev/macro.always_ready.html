@@ -5,7 +5,7 @@
 }</code></pre></div>
 </div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>An implementation of <a href=""><code>poll_ready</code></a> that always signals readiness.</p>
 <p>This should only be used for basic leaf services that have no concept of un-readiness.
-For wrapper or other serivice types, use [<code>forward_ready!</code>] for simple cases or write a bespoke
+For wrapper or other service types, use [<code>forward_ready!</code>] for simple cases or write a bespoke
 <code>poll_ready</code> implementation.</p>
 <h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_service::Service</span>;
