@@ -660,22 +660,22 @@
 <span id="658">658</span>
 <span id="659">659</span>
 <span id="660">660</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::io::Write</span>;
-<span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
-<span class="kw">use</span> <span class="ident">std::ptr::copy_nonoverlapping</span>;
-<span class="kw">use</span> <span class="ident">std::slice::from_raw_parts_mut</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>, <span class="ident">io</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">cmp</span>,
+    <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span>},
+    <span class="ident">marker::PhantomData</span>,
+    <span class="ident">ptr::copy_nonoverlapping</span>,
+    <span class="ident">slice::from_raw_parts_mut</span>,
+};
 
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">BufMut</span>, <span class="ident">BytesMut</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">body::BodySize</span>,
-    <span class="ident">config::ServiceConfig</span>,
-    <span class="ident">header</span>::{<span class="ident">map::Value</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>},
-    <span class="ident">header</span>::{<span class="ident">CONNECTION</span>, <span class="ident">CONTENT_LENGTH</span>, <span class="ident">DATE</span>, <span class="ident">TRANSFER_ENCODING</span>},
-    <span class="ident">helpers</span>,
-    <span class="ident">message</span>::{<span class="ident">ConnectionType</span>, <span class="ident">RequestHeadType</span>},
-    <span class="ident">Response</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>,
+    <span class="ident">header</span>::{
+        <span class="ident">map::Value</span>, <span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">CONNECTION</span>, <span class="ident">CONTENT_LENGTH</span>, <span class="ident">DATE</span>, <span class="ident">TRANSFER_ENCODING</span>,
+    },
+    <span class="ident">helpers</span>, <span class="ident">ConnectionType</span>, <span class="ident">RequestHeadType</span>, <span class="ident">Response</span>, <span class="ident">ServiceConfig</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>,
 };
 
 <span class="kw">const</span> <span class="ident">AVERAGE_HEADER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">30</span>;

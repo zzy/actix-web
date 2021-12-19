@@ -225,6 +225,8 @@
 <span id="223">223</span>
 <span id="224">224</span>
 <span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::io</span>;
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
@@ -232,13 +234,15 @@
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">Method</span>, <span class="ident">Version</span>};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::decoder</span>::{<span class="ident">PayloadDecoder</span>, <span class="ident">PayloadItem</span>, <span class="ident">PayloadType</span>};
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">decoder</span>, <span class="ident">encoder</span>, <span class="ident">reserve_readbuf</span>};
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Message</span>, <span class="ident">MessageType</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::body::BodySize</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config::ServiceConfig</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error</span>::{<span class="ident">ParseError</span>, <span class="ident">PayloadError</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::message</span>::{<span class="ident">ConnectionType</span>, <span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{
+    <span class="ident">decoder</span>::{<span class="self">self</span>, <span class="ident">PayloadDecoder</span>, <span class="ident">PayloadItem</span>, <span class="ident">PayloadType</span>},
+    <span class="ident">encoder</span>, <span class="ident">reserve_readbuf</span>, <span class="ident">Message</span>, <span class="ident">MessageType</span>,
+};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">body::BodySize</span>,
+    <span class="ident">error</span>::{<span class="ident">ParseError</span>, <span class="ident">PayloadError</span>},
+    <span class="ident">ConnectionType</span>, <span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>, <span class="ident">ServiceConfig</span>,
+};
 
 <span class="macro">bitflags!</span> {
     <span class="kw">struct</span> <span class="ident">Flags</span>: <span class="ident">u8</span> {

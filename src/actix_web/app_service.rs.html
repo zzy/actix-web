@@ -384,6 +384,7 @@
 <span id="382">382</span>
 <span id="383">383</span>
 <span id="384">384</span>
+<span id="385">385</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Request</span>};
@@ -607,6 +608,7 @@
                 <span class="ident">req_data</span>,
             )
         };
+
         <span class="self">self</span>.<span class="ident">service</span>.<span class="ident">call</span>(<span class="ident">ServiceRequest::new</span>(<span class="ident">req</span>, <span class="ident">payload</span>))
     }
 }
