@@ -208,6 +208,12 @@
 <span id="206">206</span>
 <span id="207">207</span>
 <span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">convert</span>::{<span class="ident">TryFrom</span>, <span class="ident">TryInto</span>},
     <span class="ident">fmt</span>,
@@ -297,7 +303,7 @@
 
                     <span class="comment">// 0 is already handled so it&#39;s not possible to have a trailing 0 in this range</span>
                     <span class="comment">// we can just write the integer</span>
-                    <span class="ident">itoa::fmt</span>(<span class="ident">f</span>, <span class="ident">x</span>)
+                    <span class="ident">itoa_fmt</span>(<span class="ident">f</span>, <span class="ident">x</span>)
                 } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">100</span> {
                     <span class="comment">// x in is range 10–99</span>
 
@@ -305,26 +311,32 @@
 
                     <span class="kw">if</span> <span class="ident">x</span> <span class="op">%</span> <span class="number">10</span> <span class="op">==</span> <span class="number">0</span> {
                         <span class="comment">// trailing 0, divide by 10 and write</span>
-                        <span class="ident">itoa::fmt</span>(<span class="ident">f</span>, <span class="ident">x</span> <span class="op">/</span> <span class="number">10</span>)
+                        <span class="ident">itoa_fmt</span>(<span class="ident">f</span>, <span class="ident">x</span> <span class="op">/</span> <span class="number">10</span>)
                     } <span class="kw">else</span> {
-                        <span class="ident">itoa::fmt</span>(<span class="ident">f</span>, <span class="ident">x</span>)
+                        <span class="ident">itoa_fmt</span>(<span class="ident">f</span>, <span class="ident">x</span>)
                     }
                 } <span class="kw">else</span> {
                     <span class="comment">// x is in range 100–999</span>
 
                     <span class="kw">if</span> <span class="ident">x</span> <span class="op">%</span> <span class="number">100</span> <span class="op">==</span> <span class="number">0</span> {
                         <span class="comment">// two trailing 0s, divide by 100 and write</span>
-                        <span class="ident">itoa::fmt</span>(<span class="ident">f</span>, <span class="ident">x</span> <span class="op">/</span> <span class="number">100</span>)
+                        <span class="ident">itoa_fmt</span>(<span class="ident">f</span>, <span class="ident">x</span> <span class="op">/</span> <span class="number">100</span>)
                     } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">%</span> <span class="number">10</span> <span class="op">==</span> <span class="number">0</span> {
                         <span class="comment">// one trailing 0, divide by 10 and write</span>
-                        <span class="ident">itoa::fmt</span>(<span class="ident">f</span>, <span class="ident">x</span> <span class="op">/</span> <span class="number">10</span>)
+                        <span class="ident">itoa_fmt</span>(<span class="ident">f</span>, <span class="ident">x</span> <span class="op">/</span> <span class="number">10</span>)
                     } <span class="kw">else</span> {
-                        <span class="ident">itoa::fmt</span>(<span class="ident">f</span>, <span class="ident">x</span>)
+                        <span class="ident">itoa_fmt</span>(<span class="ident">f</span>, <span class="ident">x</span>)
                     }
                 }
             }
         }
     }
+}
+
+<span class="doccomment">/// Write integer to a `fmt::Write`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">itoa_fmt</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">fmt::Write</span>, <span class="ident">V</span>: <span class="ident">itoa::Integer</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">wr</span>: <span class="ident">W</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="ident">fmt::Result</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">itoa::Buffer::new</span>();
+    <span class="ident">wr</span>.<span class="ident">write_str</span>(<span class="ident">buf</span>.<span class="ident">format</span>(<span class="ident">value</span>))
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Display</span>, <span class="ident">Error</span>)]</span>
