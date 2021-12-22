@@ -804,9 +804,43 @@
 <span id="802">802</span>
 <span id="803">803</span>
 <span id="804">804</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">rc::Rc</span>};
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">rc::Rc</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
+<span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::BoxBody</span>, <span class="ident">Extensions</span>};
 <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">IntoPatterns</span>, <span class="ident">Patterns</span>};
 <span class="kw">use</span> <span class="ident">actix_service</span>::{
     <span class="ident">apply</span>, <span class="ident">apply_fn_factory</span>, <span class="ident">boxed</span>, <span class="ident">fn_service</span>, <span class="ident">IntoServiceFactory</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>,
@@ -851,7 +885,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// If no matching route could be found, *405* response code get returned.</span>
 <span class="doccomment">/// Default behavior could be overridden with `default_resource()` method.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Resource</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> <span class="ident">ResourceEndpoint</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Resource</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> <span class="ident">ResourceEndpoint</span>, <span class="ident">B</span> <span class="op">=</span> <span class="ident">BoxBody</span><span class="op">&gt;</span> {
     <span class="ident">endpoint</span>: <span class="ident">T</span>,
     <span class="ident">rdef</span>: <span class="ident">Patterns</span>,
     <span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -860,6 +894,7 @@
     <span class="ident">guards</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">default</span>: <span class="ident">BoxedHttpServiceFactory</span>,
     <span class="ident">factory_ref</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ResourceFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Resource</span> {
@@ -877,19 +912,21 @@
             <span class="ident">default</span>: <span class="ident">boxed::factory</span>(<span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> <span class="kw">async</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse::MethodNotAllowed</span>()))
             })),
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Resource</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Resource</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
         <span class="ident">ServiceRequest</span>,
         <span class="ident">Config</span> <span class="op">=</span> (),
-        <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+        <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
         <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
         <span class="ident">InitError</span> <span class="op">=</span> (),
     <span class="op">&gt;</span>,
+    <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
     <span class="doccomment">/// Set resource name.</span>
     <span class="doccomment">///</span>
@@ -1058,26 +1095,28 @@
     <span class="doccomment">/// type (i.e modify response&#39;s body).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **Note**: middlewares get called in opposite order of middlewares registration.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap</span><span class="op">&lt;</span><span class="ident">M</span>, <span class="ident">B1</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">mw</span>: <span class="ident">M</span>,
     ) -&gt; <span class="ident">Resource</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span>,
+        <span class="ident">B1</span>,
     <span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">M</span>: <span class="ident">Transform</span><span class="op">&lt;</span>
             <span class="ident">T::Service</span>,
             <span class="ident">ServiceRequest</span>,
-            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span>,
+        <span class="ident">B1</span>: <span class="ident">MessageBody</span>,
     {
         <span class="ident">Resource</span> {
             <span class="ident">endpoint</span>: <span class="ident">apply</span>(<span class="ident">mw</span>, <span class="self">self</span>.<span class="ident">endpoint</span>),
@@ -1088,6 +1127,7 @@
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>,
             <span class="ident">app_data</span>: <span class="self">self</span>.<span class="ident">app_data</span>,
             <span class="ident">factory_ref</span>: <span class="self">self</span>.<span class="ident">factory_ref</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 
@@ -1125,21 +1165,23 @@
     <span class="doccomment">///             .route(web::get().to(index)));</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap_fn</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap_fn</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span>, <span class="ident">B1</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">mw</span>: <span class="ident">F</span>,
     ) -&gt; <span class="ident">Resource</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span>,
+        <span class="ident">B1</span>,
     <span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">ServiceRequest</span>, <span class="kw-2">&amp;</span><span class="ident">T::Service</span>) -&gt; <span class="ident">R</span> <span class="op">+</span> <span class="ident">Clone</span>,
-        <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServiceResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B1</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">B1</span>: <span class="ident">MessageBody</span>,
     {
         <span class="ident">Resource</span> {
             <span class="ident">endpoint</span>: <span class="ident">apply_fn_factory</span>(<span class="self">self</span>.<span class="ident">endpoint</span>, <span class="ident">mw</span>),
@@ -1150,6 +1192,7 @@
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>,
             <span class="ident">app_data</span>: <span class="self">self</span>.<span class="ident">app_data</span>,
             <span class="ident">factory_ref</span>: <span class="self">self</span>.<span class="ident">factory_ref</span>,
+            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
         }
     }
 
@@ -1177,15 +1220,16 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">HttpServiceFactory</span> <span class="kw">for</span> <span class="ident">Resource</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">HttpServiceFactory</span> <span class="kw">for</span> <span class="ident">Resource</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">ServiceRequest</span>,
             <span class="ident">Config</span> <span class="op">=</span> (),
-            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span>,
+            <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
             <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>,
             <span class="ident">InitError</span> <span class="op">=</span> (),
         <span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="kw">fn</span> <span class="ident">register</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;mut</span> <span class="ident">AppService</span>) {
         <span class="kw">let</span> <span class="ident">guards</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">guards</span>.<span class="ident">is_empty</span>() {
@@ -1217,7 +1261,9 @@
                 <span class="ident">req</span>.<span class="ident">add_data_container</span>(<span class="ident">Rc::clone</span>(<span class="ident">data</span>));
             }
 
-            <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>)
+            <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>);
+
+            <span class="kw">async</span> { <span class="prelude-val">Ok</span>(<span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">map_into_boxed_body</span>()) }
         });
 
         <span class="ident">config</span>.<span class="ident">register_service</span>(<span class="ident">rdef</span>, <span class="ident">guards</span>, <span class="ident">endpoint</span>, <span class="prelude-val">None</span>)
@@ -1340,11 +1386,11 @@
             <span class="op">&gt;</span>,
         <span class="op">&gt;</span> {
             <span class="ident">web::resource</span>(<span class="string">&quot;/test-compat&quot;</span>)
-                <span class="comment">// .wrap_fn(|req, srv| {</span>
-                <span class="comment">//     let fut = srv.call(req);</span>
-                <span class="comment">//     async { Ok(fut.await?.map_into_right_body::&lt;()&gt;()) }</span>
-                <span class="comment">// })</span>
-                .<span class="ident">wrap</span>(<span class="ident">Compat::new</span>(<span class="ident">DefaultHeaders::new</span>()))
+                .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">srv</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>);
+                    <span class="kw">async</span> { <span class="prelude-val">Ok</span>(<span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">map_into_right_body</span>::<span class="op">&lt;</span>()<span class="op">&gt;</span>()) }
+                })
+                .<span class="ident">wrap</span>(<span class="ident">Compat::noop</span>())
                 .<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="string">&quot;hello&quot;</span> }))
         }
 
@@ -1606,6 +1652,28 @@
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::post</span>().<span class="ident">uri</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">srv</span>, <span class="ident">req</span>).<span class="kw">await</span>;
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::BAD_REQUEST</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_middleware_body_type</span>() {
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
+            <span class="ident">App::new</span>().<span class="ident">service</span>(
+                <span class="ident">web::resource</span>(<span class="string">&quot;/test&quot;</span>)
+                    .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">srv</span><span class="op">|</span> {
+                        <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>);
+                        <span class="kw">async</span> { <span class="prelude-val">Ok</span>(<span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">map_into_right_body</span>::<span class="op">&lt;</span>()<span class="op">&gt;</span>()) }
+                    })
+                    .<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="string">&quot;hello&quot;</span> })),
+            ),
+        )
+        .<span class="kw">await</span>;
+
+        <span class="comment">// test if `try_into_bytes()` is preserved across scope layer</span>
+        <span class="kw">use</span> <span class="ident">actix_http::body::MessageBody</span> <span class="kw">as</span> <span class="kw">_</span>;
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::with_uri</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">to_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">srv</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">into_body</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">body</span>.<span class="ident">try_into_bytes</span>().<span class="ident">unwrap</span>(), <span class="string">b&quot;hello&quot;</span>.<span class="ident">as_ref</span>());
     }
 }
 </code></pre></div>

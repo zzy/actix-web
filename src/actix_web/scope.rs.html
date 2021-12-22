@@ -1857,11 +1857,11 @@
             <span class="op">&gt;</span>,
         <span class="op">&gt;</span> {
             <span class="ident">web::scope</span>(<span class="string">&quot;/test-compat&quot;</span>)
-                <span class="comment">// .wrap_fn(|req, srv| {</span>
-                <span class="comment">//     let fut = srv.call(req);</span>
-                <span class="comment">//     async { Ok(fut.await?.map_into_right_body::&lt;()&gt;()) }</span>
-                <span class="comment">// })</span>
-                .<span class="ident">wrap</span>(<span class="ident">Compat::new</span>(<span class="ident">DefaultHeaders::new</span>()))
+                .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">srv</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>);
+                    <span class="kw">async</span> { <span class="prelude-val">Ok</span>(<span class="ident">fut</span>.<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">map_into_right_body</span>::<span class="op">&lt;</span>()<span class="op">&gt;</span>()) }
+                })
+                .<span class="ident">wrap</span>(<span class="ident">Compat::noop</span>())
                 .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;&quot;</span>).<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="string">&quot;hello&quot;</span> })))
         }
 

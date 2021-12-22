@@ -61,6 +61,10 @@
 <span id="59">59</span>
 <span id="60">60</span>
 <span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Commonly used middleware.</span>
 
 <span class="kw">mod</span> <span class="ident">compat</span>;
@@ -68,6 +72,8 @@
 <span class="kw">mod</span> <span class="ident">default_headers</span>;
 <span class="kw">mod</span> <span class="ident">err_handlers</span>;
 <span class="kw">mod</span> <span class="ident">logger</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">noop</span>;
 <span class="kw">mod</span> <span class="ident">normalize</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::compat::Compat</span>;
@@ -75,6 +81,8 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::default_headers::DefaultHeaders</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::err_handlers</span>::{<span class="ident">ErrorHandlerResponse</span>, <span class="ident">ErrorHandlers</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::logger::Logger</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident"><span class="self">self</span>::noop::Noop</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::normalize</span>::{<span class="ident">NormalizePath</span>, <span class="ident">TrailingSlash</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
