@@ -95,7 +95,6 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
-<span id="96">96</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP primitives for the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Crate Features</span>
@@ -117,7 +116,6 @@
 <span class="attribute">#![<span class="ident">allow</span>(
     <span class="ident">clippy::type_complexity</span>,
     <span class="ident">clippy::too_many_arguments</span>,
-    <span class="ident">clippy::new_without_default</span>,
     <span class="ident">clippy::borrow_interior_mutable_const</span>
 )]</span>
 <span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://actix.rs/img/logo.png&quot;</span>)]</span>
@@ -125,6 +123,9 @@
 
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">uri</span>, <span class="ident">uri::Uri</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>};
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">body</span>;
 <span class="kw">mod</span> <span class="ident">builder</span>;
@@ -159,9 +160,6 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::responses</span>::{<span class="ident">Response</span>, <span class="ident">ResponseBuilder</span>, <span class="ident">ResponseHead</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::service::HttpService</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">uri</span>, <span class="ident">uri::Uri</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>};
-
 <span class="doccomment">/// A major HTTP protocol version.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
@@ -193,5 +191,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (91a0600a5 2021-12-18)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
 </body></html>

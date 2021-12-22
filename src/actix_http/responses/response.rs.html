@@ -404,7 +404,6 @@
 <span id="402">402</span>
 <span id="403">403</span>
 <span id="404">404</span>
-<span id="405">405</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP response.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -417,10 +416,9 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">body</span>::{<span class="ident">BoxBody</span>, <span class="ident">MessageBody</span>},
-    <span class="ident">extensions::Extensions</span>,
     <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderMap</span>, <span class="ident">TryIntoHeaderValue</span>},
-    <span class="ident">responses</span>::{<span class="ident">BoxedResponseHead</span>, <span class="ident">ResponseBuilder</span>, <span class="ident">ResponseHead</span>},
-    <span class="ident">Error</span>, <span class="ident">StatusCode</span>,
+    <span class="ident">responses::BoxedResponseHead</span>,
+    <span class="ident">Error</span>, <span class="ident">Extensions</span>, <span class="ident">ResponseBuilder</span>, <span class="ident">ResponseHead</span>, <span class="ident">StatusCode</span>,
 };
 
 <span class="doccomment">/// An HTTP response.</span>
@@ -811,5 +809,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (91a0600a5 2021-12-18)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
 </body></html>

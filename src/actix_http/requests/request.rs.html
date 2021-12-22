@@ -255,6 +255,7 @@
 <span id="253">253</span>
 <span id="254">254</span>
 <span id="255">255</span>
+<span id="256">256</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP requests.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -316,6 +317,7 @@
 
 <span class="kw">impl</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">PayloadStream</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create new Request instance</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::new_without_default</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">PayloadStream</span><span class="op">&gt;</span> {
         <span class="ident">Request</span> {
             <span class="ident">head</span>: <span class="ident">Message::new</span>(),
@@ -511,5 +513,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (91a0600a5 2021-12-18)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
 </body></html>
