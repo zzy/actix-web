@@ -227,6 +227,12 @@
 <span id="225">225</span>
 <span id="226">226</span>
 <span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">io::Write</span>,
     <span class="ident">pin::Pin</span>,
@@ -242,16 +248,17 @@
     <span class="ident">Payload</span>, <span class="ident">RequestHeadType</span>, <span class="ident">ResponseHead</span>, <span class="ident">StatusCode</span>,
 };
 <span class="kw">use</span> <span class="ident">actix_utils::future::poll_fn</span>;
-<span class="kw">use</span> <span class="ident">bytes::buf::BufMut</span>;
-<span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
+<span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">buf::BufMut</span>, <span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">ready</span>, <span class="ident">Stream</span>};
 <span class="kw">use</span> <span class="ident">futures_util::SinkExt</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::BoxError</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::connection</span>::{<span class="ident">ConnectionIo</span>, <span class="ident">H1Connection</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::error</span>::{<span class="ident">ConnectError</span>, <span class="ident">SendRequestError</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{
+    <span class="ident">connection</span>::{<span class="ident">ConnectionIo</span>, <span class="ident">H1Connection</span>},
+    <span class="ident">error</span>::{<span class="ident">ConnectError</span>, <span class="ident">SendRequestError</span>},
+};
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span><span class="op">&lt;</span><span class="ident">Io</span>, <span class="ident">B</span><span class="op">&gt;</span>(
     <span class="ident">io</span>: <span class="ident">H1Connection</span><span class="op">&lt;</span><span class="ident">Io</span><span class="op">&gt;</span>,
@@ -352,7 +359,12 @@
 
             <span class="prelude-val">Ok</span>((<span class="ident">head</span>, <span class="ident">Payload::None</span>))
         }
-        <span class="kw">_</span> =&gt; <span class="prelude-val">Ok</span>((<span class="ident">head</span>, <span class="ident">Payload::Stream</span>(<span class="ident">Box::pin</span>(<span class="ident">PlStream::new</span>(<span class="ident">framed</span>))))),
+        <span class="kw">_</span> =&gt; <span class="prelude-val">Ok</span>((
+            <span class="ident">head</span>,
+            <span class="ident">Payload::Stream</span> {
+                <span class="ident">payload</span>: <span class="ident">Box::pin</span>(<span class="ident">PlStream::new</span>(<span class="ident">framed</span>)),
+            },
+        )),
     }
 }
 
@@ -455,5 +467,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
 </body></html>

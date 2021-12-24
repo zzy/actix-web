@@ -442,8 +442,8 @@
             <span class="kw">match</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">this</span>.<span class="ident">connection</span>).<span class="ident">poll_accept</span>(<span class="ident">cx</span>)<span class="question-mark">?</span> {
                 <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>((<span class="ident">req</span>, <span class="ident">tx</span>))) =&gt; {
                     <span class="kw">let</span> (<span class="ident">parts</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
-                    <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::h2::Payload::new</span>(<span class="ident">body</span>);
-                    <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">Payload::H2</span>(<span class="ident">pl</span>);
+                    <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::h2::Payload::new</span>(<span class="ident">body</span>);
+                    <span class="kw">let</span> <span class="ident">pl</span> <span class="op">=</span> <span class="ident">Payload::H2</span> { <span class="ident">payload</span> };
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Request::with_payload</span>(<span class="ident">pl</span>);
 
                     <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">head_mut</span>();
@@ -665,5 +665,5 @@
     <span class="ident">res</span>
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
 </body></html>

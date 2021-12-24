@@ -452,6 +452,8 @@
 <span id="450">450</span>
 <span id="451">451</span>
 <span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">io</span>,
     <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
@@ -721,7 +723,9 @@
                 <span class="ident">Connection::Tls</span>(<span class="ident">ConnectionType::H2</span>(<span class="ident">conn</span>)) =&gt; {
                     <span class="ident">h2proto::send_request</span>(<span class="ident">conn</span>, <span class="ident">head</span>.<span class="ident">into</span>(), <span class="ident">body</span>).<span class="kw">await</span>
                 }
-                <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Plain Tcp connection can be used only in Http1 protocol&quot;</span>),
+                <span class="kw">_</span> =&gt; {
+                    <span class="macro">unreachable!</span>(<span class="string">&quot;Plain TCP connection can be used only with HTTP/1.1 protocol&quot;</span>)
+                }
             }
         })
     }
@@ -905,5 +909,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
 </body></html>

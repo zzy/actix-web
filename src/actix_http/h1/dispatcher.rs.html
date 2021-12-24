@@ -1434,6 +1434,7 @@
 <span id="1432">1432</span>
 <span id="1433">1433</span>
 <span id="1434">1434</span>
+<span id="1435">1435</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::VecDeque</span>,
     <span class="ident">fmt</span>,
@@ -2082,10 +2083,11 @@
                                     Payload is attached to Request and passed to Service::call
                                     where the state can be collected and consumed.
                                     */</span>
-                                    <span class="kw">let</span> (<span class="ident">ps</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">Payload::create</span>(<span class="bool-val">false</span>);
-                                    <span class="kw">let</span> (<span class="ident">req1</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">replace_payload</span>(<span class="ident"><span class="kw">crate</span>::Payload::H1</span>(<span class="ident">pl</span>));
+                                    <span class="kw">let</span> (<span class="ident">sender</span>, <span class="ident">payload</span>) <span class="op">=</span> <span class="ident">Payload::create</span>(<span class="bool-val">false</span>);
+                                    <span class="kw">let</span> (<span class="ident">req1</span>, <span class="kw">_</span>) <span class="op">=</span>
+                                        <span class="ident">req</span>.<span class="ident">replace_payload</span>(<span class="ident"><span class="kw">crate</span>::Payload::H1</span> { <span class="ident">payload</span> });
                                     <span class="ident">req</span> <span class="op">=</span> <span class="ident">req1</span>;
-                                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ps</span>);
+                                    <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">sender</span>);
                                 }
 
                                 <span class="comment">// Request has no payload.</span>
@@ -2869,5 +2871,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
 </body></html>

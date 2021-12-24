@@ -256,6 +256,7 @@
 <span id="254">254</span>
 <span id="255">255</span>
 <span id="256">256</span>
+<span id="257">257</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP requests.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -268,11 +269,12 @@
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">header::HeaderMap</span>, <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Message</span>, <span class="ident">Payload</span>, <span class="ident">PayloadStream</span>, <span class="ident">RequestHead</span>,
+    <span class="ident">header::HeaderMap</span>, <span class="ident">BoxedPayloadStream</span>, <span class="ident">Extensions</span>, <span class="ident">HttpMessage</span>, <span class="ident">Message</span>, <span class="ident">Payload</span>,
+    <span class="ident">RequestHead</span>,
 };
 
 <span class="doccomment">/// An HTTP request.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">P</span> <span class="op">=</span> <span class="ident">PayloadStream</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">P</span> <span class="op">=</span> <span class="ident">BoxedPayloadStream</span><span class="op">&gt;</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">payload</span>: <span class="ident">Payload</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">head</span>: <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">conn_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Extensions</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -304,7 +306,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">PayloadStream</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">BoxedPayloadStream</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">head</span>: <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Request</span> {
             <span class="ident">head</span>,
@@ -315,10 +317,10 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">PayloadStream</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">BoxedPayloadStream</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create new Request instance</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::new_without_default</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">PayloadStream</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">BoxedPayloadStream</span><span class="op">&gt;</span> {
         <span class="ident">Request</span> {
             <span class="ident">head</span>: <span class="ident">Message::new</span>(),
             <span class="ident">payload</span>: <span class="ident">Payload::None</span>,
@@ -513,5 +515,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
 </body></html>

@@ -276,12 +276,23 @@
 <span id="274">274</span>
 <span id="275">275</span>
 <span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Payload stream</span>
-<span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
-<span class="kw">use</span> <span class="ident">std::collections::VecDeque</span>;
-<span class="kw">use</span> <span class="ident">std::pin::Pin</span>;
-<span class="kw">use</span> <span class="ident">std::rc</span>::{<span class="ident">Rc</span>, <span class="ident">Weak</span>};
-<span class="kw">use</span> <span class="ident">std::task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>, <span class="ident">Waker</span>};
+
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">cell::RefCell</span>,
+    <span class="ident">collections::VecDeque</span>,
+    <span class="ident">pin::Pin</span>,
+    <span class="ident">rc</span>::{<span class="ident">Rc</span>, <span class="ident">Weak</span>},
+    <span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>, <span class="ident">Waker</span>},
+};
 
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core::Stream</span>;
@@ -300,39 +311,32 @@
 
 <span class="doccomment">/// Buffered stream of bytes chunks</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Payload stores chunks in a vector. First chunk can be received with</span>
-<span class="doccomment">/// `.readany()` method. Payload stream is not thread safe. Payload does not</span>
-<span class="doccomment">/// notify current task when new data is available.</span>
+<span class="doccomment">/// Payload stores chunks in a vector. First chunk can be received with `poll_next`. Payload does</span>
+<span class="doccomment">/// not notify current task when new data is available.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Payload stream can be used as `Response` body stream.</span>
+<span class="doccomment">/// Payload can be used as `Response` body stream.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Payload</span> {
     <span class="ident">inner</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Inner</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Payload</span> {
-    <span class="doccomment">/// Create payload stream.</span>
+    <span class="doccomment">/// Creates a payload stream.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This method construct two objects responsible for bytes stream</span>
-    <span class="doccomment">/// generation.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * `PayloadSender` - *Sender* side of the stream</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * `Payload` - *Receiver* side of the stream</span>
+    <span class="doccomment">/// This method construct two objects responsible for bytes stream generation:</span>
+    <span class="doccomment">/// - `PayloadSender` - *Sender* side of the stream</span>
+    <span class="doccomment">/// - `Payload` - *Receiver* side of the stream</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create</span>(<span class="ident">eof</span>: <span class="ident">bool</span>) -&gt; (<span class="ident">PayloadSender</span>, <span class="ident">Payload</span>) {
         <span class="kw">let</span> <span class="ident">shared</span> <span class="op">=</span> <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">Inner::new</span>(<span class="ident">eof</span>)));
 
         (
-            <span class="ident">PayloadSender</span> {
-                <span class="ident">inner</span>: <span class="ident">Rc::downgrade</span>(<span class="kw-2">&amp;</span><span class="ident">shared</span>),
-            },
+            <span class="ident">PayloadSender::new</span>(<span class="ident">Rc::downgrade</span>(<span class="kw-2">&amp;</span><span class="ident">shared</span>)),
             <span class="ident">Payload</span> { <span class="ident">inner</span>: <span class="ident">shared</span> },
         )
     }
 
-    <span class="doccomment">/// Create empty payload</span>
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>() -&gt; <span class="ident">Payload</span> {
+    <span class="doccomment">/// Creates an empty payload.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">empty</span>() -&gt; <span class="ident">Payload</span> {
         <span class="ident">Payload</span> {
             <span class="ident">inner</span>: <span class="ident">Rc::new</span>(<span class="ident">RefCell::new</span>(<span class="ident">Inner::new</span>(<span class="bool-val">true</span>))),
         }
@@ -355,14 +359,6 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unread_data</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">Bytes</span>) {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">borrow_mut</span>().<span class="ident">unread_data</span>(<span class="ident">data</span>);
     }
-
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">readany</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">borrow_mut</span>().<span class="ident">readany</span>(<span class="ident">cx</span>)
-    }
 }
 
 <span class="kw">impl</span> <span class="ident">Stream</span> <span class="kw">for</span> <span class="ident">Payload</span> {
@@ -372,7 +368,7 @@
         <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">borrow_mut</span>().<span class="ident">readany</span>(<span class="ident">cx</span>)
+        <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">borrow_mut</span>()).<span class="ident">poll_next</span>(<span class="ident">cx</span>)
     }
 }
 
@@ -382,6 +378,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PayloadSender</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">inner</span>: <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Inner</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">inner</span> }
+    }
+
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_error</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">err</span>: <span class="ident">PayloadError</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">shared</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">upgrade</span>() {
@@ -505,7 +505,10 @@
         <span class="self">self</span>.<span class="ident">len</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">readany</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_next</span>(
+        <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
+        <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">items</span>.<span class="ident">pop_front</span>() {
             <span class="self">self</span>.<span class="ident">len</span> <span class="op">-</span><span class="op">=</span> <span class="ident">data</span>.<span class="ident">len</span>();
             <span class="self">self</span>.<span class="ident">need_read</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span> <span class="op">&lt;</span> <span class="ident">MAX_BUFFER_SIZE</span>;
@@ -535,8 +538,18 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std::panic</span>::{<span class="ident">RefUnwindSafe</span>, <span class="ident">UnwindSafe</span>};
+
     <span class="kw">use</span> <span class="ident">actix_utils::future::poll_fn</span>;
+    <span class="kw">use</span> <span class="ident">static_assertions</span>::{<span class="ident">assert_impl_all</span>, <span class="ident">assert_not_impl_any</span>};
+
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+    <span class="macro">assert_impl_all!</span>(<span class="ident">Payload</span>: <span class="ident">Unpin</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">Payload</span>: <span class="ident">Send</span>, <span class="ident">Sync</span>, <span class="ident">UnwindSafe</span>, <span class="ident">RefUnwindSafe</span>);
+
+    <span class="macro">assert_impl_all!</span>(<span class="ident">Inner</span>: <span class="ident">Unpin</span>, <span class="ident">Send</span>, <span class="ident">Sync</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">Inner</span>: <span class="ident">UnwindSafe</span>, <span class="ident">RefUnwindSafe</span>);
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_unread_data</span>() {
@@ -548,10 +561,13 @@
 
         <span class="macro">assert_eq!</span>(
             <span class="ident">Bytes::from</span>(<span class="string">&quot;data&quot;</span>),
-            <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">payload</span>.<span class="ident">readany</span>(<span class="ident">cx</span>)).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">unwrap</span>()
+            <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">payload</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>))
+                .<span class="kw">await</span>
+                .<span class="ident">unwrap</span>()
+                .<span class="ident">unwrap</span>()
         );
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
 </body></html>

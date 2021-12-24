@@ -558,12 +558,6 @@
 <span id="556">556</span>
 <span id="557">557</span>
 <span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
     <span class="ident">convert::TryInto</span>,
@@ -995,9 +989,12 @@
     <span class="kw">use</span> <span class="ident">actix_http::body</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{
-        <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>},
-        <span class="ident">StatusCode</span>,
+    <span class="kw">use</span> <span class="kw">crate</span>::{
+        <span class="ident">http</span>::{
+            <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>, <span class="ident">CONTENT_TYPE</span>},
+            <span class="ident">StatusCode</span>,
+        },
+        <span class="ident">test::assert_body_eq</span>,
     };
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1038,32 +1035,23 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_json</span>() {
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">HttpResponse::Ok</span>().<span class="ident">json</span>(<span class="macro">vec!</span>[<span class="string">&quot;v1&quot;</span>, <span class="string">&quot;v2&quot;</span>, <span class="string">&quot;v3&quot;</span>]);
-        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">HttpResponse::Ok</span>().<span class="ident">json</span>(<span class="macro">vec!</span>[<span class="string">&quot;v1&quot;</span>, <span class="string">&quot;v2&quot;</span>, <span class="string">&quot;v3&quot;</span>]);
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">ct</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;application/json&quot;</span>));
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">body::to_bytes</span>(<span class="ident">resp</span>.<span class="ident">into_body</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">as_ref</span>(),
-            <span class="string">br#&quot;[&quot;v1&quot;,&quot;v2&quot;,&quot;v3&quot;]&quot;#</span>
-        );
+        <span class="macro">assert_body_eq!</span>(<span class="ident">res</span>, <span class="string">br#&quot;[&quot;v1&quot;,&quot;v2&quot;,&quot;v3&quot;]&quot;#</span>);
 
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">HttpResponse::Ok</span>().<span class="ident">json</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;v1&quot;</span>, <span class="string">&quot;v2&quot;</span>, <span class="string">&quot;v3&quot;</span>]);
-        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">HttpResponse::Ok</span>().<span class="ident">json</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;v1&quot;</span>, <span class="string">&quot;v2&quot;</span>, <span class="string">&quot;v3&quot;</span>]);
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">ct</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;application/json&quot;</span>));
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">body::to_bytes</span>(<span class="ident">resp</span>.<span class="ident">into_body</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">as_ref</span>(),
-            <span class="string">br#&quot;[&quot;v1&quot;,&quot;v2&quot;,&quot;v3&quot;]&quot;#</span>
-        );
+        <span class="macro">assert_body_eq!</span>(<span class="ident">res</span>, <span class="string">br#&quot;[&quot;v1&quot;,&quot;v2&quot;,&quot;v3&quot;]&quot;#</span>);
 
         <span class="comment">// content type override</span>
-        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">HttpResponse::Ok</span>()
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">HttpResponse::Ok</span>()
             .<span class="ident">insert_header</span>((<span class="ident">CONTENT_TYPE</span>, <span class="string">&quot;text/json&quot;</span>))
             .<span class="ident">json</span>(<span class="kw-2">&amp;</span><span class="macro">vec!</span>[<span class="string">&quot;v1&quot;</span>, <span class="string">&quot;v2&quot;</span>, <span class="string">&quot;v3&quot;</span>]);
-        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">ct</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">CONTENT_TYPE</span>).<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">ct</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;text/json&quot;</span>));
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">body::to_bytes</span>(<span class="ident">resp</span>.<span class="ident">into_body</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">as_ref</span>(),
-            <span class="string">br#&quot;[&quot;v1&quot;,&quot;v2&quot;,&quot;v3&quot;]&quot;#</span>
-        );
+        <span class="macro">assert_body_eq!</span>(<span class="ident">res</span>, <span class="string">br#&quot;[&quot;v1&quot;,&quot;v2&quot;,&quot;v3&quot;]&quot;#</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
@@ -1129,5 +1117,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (e100ec5bc 2021-12-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
 </body></html>
