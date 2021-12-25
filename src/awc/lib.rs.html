@@ -315,6 +315,7 @@
 <span id="313">313</span>
 <span id="314">314</span>
 <span id="315">315</span>
+<span id="316">316</span>
 </pre><pre class="rust"><code><span class="doccomment">//! `awc` is a HTTP and WebSocket client library built on the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Making a GET request</span>
@@ -430,7 +431,7 @@
 <span class="kw">mod</span> <span class="ident">frozen</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">middleware</span>;
 <span class="kw">mod</span> <span class="ident">request</span>;
-<span class="kw">mod</span> <span class="ident">response</span>;
+<span class="kw">mod</span> <span class="ident">responses</span>;
 <span class="kw">mod</span> <span class="ident">sender</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">test</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ws</span>;
@@ -445,7 +446,8 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::connect</span>::{<span class="ident">BoxConnectorService</span>, <span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::frozen</span>::{<span class="ident">FrozenClientRequest</span>, <span class="ident">FrozenSendBuilder</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::request::ClientRequest</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::response</span>::{<span class="ident">ClientResponse</span>, <span class="ident">JsonBody</span>, <span class="ident">MessageBody</span>};
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::responses</span>::{<span class="ident">ClientResponse</span>, <span class="ident">JsonBody</span>, <span class="ident">MessageBody</span>, <span class="ident">ResponseBody</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::sender::SendClientRequest</span>;
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
@@ -631,5 +633,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (475b00aa4 2021-12-24)" ></div>
 </body></html>

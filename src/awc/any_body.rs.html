@@ -264,6 +264,23 @@
 <span id="262">262</span>
 <span id="263">263</span>
 <span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">fmt</span>, <span class="ident">mem</span>,
@@ -343,10 +360,27 @@
 <span class="kw">where</span>
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
+    <span class="doccomment">/// Converts a [`MessageBody`] type into the best possible representation.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Checks size for `None` and tries to convert to `Bytes`. Otherwise, uses the `Body` variant.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_message_body</span>(<span class="ident">body</span>: <span class="ident">B</span>) -&gt; <span class="self">Self</span>
+    <span class="kw">where</span>
+        <span class="ident">B</span>: <span class="ident">MessageBody</span>,
+    {
+        <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">body</span>.<span class="ident">size</span>(), <span class="ident">BodySize::None</span>) {
+            <span class="kw">return</span> <span class="ident"><span class="self">Self</span>::None</span>;
+        }
+
+        <span class="kw">match</span> <span class="ident">body</span>.<span class="ident">try_into_bytes</span>() {
+            <span class="prelude-val">Ok</span>(<span class="ident">body</span>) =&gt; <span class="ident"><span class="self">Self</span>::Bytes</span> { <span class="ident">body</span> },
+            <span class="prelude-val">Err</span>(<span class="ident">body</span>) =&gt; <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">body</span>),
+        }
+    }
+
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_boxed</span>(<span class="self">self</span>) -&gt; <span class="ident">AnyBody</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="ident">AnyBody::None</span>,
-            <span class="ident"><span class="self">Self</span>::Bytes</span> { <span class="ident">body</span>: <span class="ident">bytes</span> } =&gt; <span class="ident">AnyBody::Bytes</span> { <span class="ident">body</span>: <span class="ident">bytes</span> },
+            <span class="ident"><span class="self">Self</span>::Bytes</span> { <span class="ident">body</span> } =&gt; <span class="ident">AnyBody::Bytes</span> { <span class="ident">body</span> },
             <span class="ident"><span class="self">Self</span>::Body</span> { <span class="ident">body</span> } =&gt; <span class="ident">AnyBody::new_boxed</span>(<span class="ident">body</span>),
         }
     }
@@ -529,5 +563,5 @@
     <span class="macro">assert_not_impl_all!</span>(<span class="ident">AnyBody</span><span class="op">&lt;</span><span class="ident">PinType</span><span class="op">&gt;</span>: <span class="ident">Send</span>, <span class="ident">Sync</span>, <span class="ident">Unpin</span>);
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (475b00aa4 2021-12-24)" ></div>
 </body></html>

@@ -246,13 +246,13 @@
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
+    <span class="ident">body::MessageBody</span>,
     <span class="ident">error::HttpError</span>,
     <span class="ident">header</span>::{<span class="ident">HeaderMap</span>, <span class="ident">HeaderName</span>, <span class="ident">TryIntoHeaderValue</span>},
     <span class="ident">Method</span>, <span class="ident">RequestHead</span>, <span class="ident">Uri</span>,
 };
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">any_body::AnyBody</span>,
     <span class="ident">sender</span>::{<span class="ident">RequestSender</span>, <span class="ident">SendClientRequest</span>},
     <span class="ident">BoxError</span>, <span class="ident">ClientConfig</span>,
 };
@@ -287,7 +287,7 @@
     <span class="doccomment">/// Send a body.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B</span>) -&gt; <span class="ident">SendClientRequest</span>
     <span class="kw">where</span>
-        <span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>,
+        <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="ident">RequestSender::Rc</span>(<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>(), <span class="prelude-val">None</span>).<span class="ident">send_body</span>(
             <span class="self">self</span>.<span class="ident">addr</span>,
@@ -400,7 +400,7 @@
     <span class="doccomment">/// Complete request construction and send a body.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B</span>) -&gt; <span class="ident">SendClientRequest</span>
     <span class="kw">where</span>
-        <span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyBody</span><span class="op">&gt;</span>,
+        <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">err</span> {
             <span class="kw">return</span> <span class="ident">e</span>.<span class="ident">into</span>();
@@ -479,5 +479,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (475b00aa4 2021-12-24)" ></div>
 </body></html>

@@ -505,8 +505,6 @@
 <span id="503">503</span>
 <span id="504">504</span>
 <span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Route match guards.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Guards are one of the ways how actix-web router chooses a</span>
@@ -779,13 +777,11 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{web, guard::Host, App, HttpResponse};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     App::new().service(</span>
-<span class="doccomment">///         web::resource(&quot;/index.html&quot;)</span>
-<span class="doccomment">///             .guard(Host(&quot;www.rust-lang.org&quot;))</span>
-<span class="doccomment">///             .to(|| HttpResponse::MethodNotAllowed())</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// App::new().service(</span>
+<span class="doccomment">///     web::resource(&quot;/index.html&quot;)</span>
+<span class="doccomment">///         .guard(Host(&quot;www.rust-lang.org&quot;))</span>
+<span class="doccomment">///         .to(|| HttpResponse::MethodNotAllowed())</span>
+<span class="doccomment">/// );</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Host</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">host</span>: <span class="ident">H</span>) -&gt; <span class="ident">HostGuard</span> {
     <span class="ident">HostGuard</span>(<span class="ident">host</span>.<span class="ident">as_ref</span>().<span class="ident">to_string</span>(), <span class="prelude-val">None</span>)
@@ -1015,5 +1011,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (c09a9529c 2021-12-23)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (475b00aa4 2021-12-24)" ></div>
 </body></html>
