@@ -833,8 +833,6 @@
 <span id="831">831</span>
 <span id="832">832</span>
 <span id="833">833</span>
-<span id="834">834</span>
-<span id="835">835</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::BoxBody</span>, <span class="ident">Extensions</span>};
@@ -968,15 +966,13 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::{web, guard, App, HttpResponse};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// fn main() {</span>
-    <span class="doccomment">///     let app = App::new().service(</span>
-    <span class="doccomment">///         web::resource(&quot;/&quot;).route(</span>
-    <span class="doccomment">///             web::route()</span>
-    <span class="doccomment">///                 .guard(guard::Any(guard::Get()).or(guard::Put()))</span>
-    <span class="doccomment">///                 .guard(guard::Header(&quot;Content-Type&quot;, &quot;text/plain&quot;))</span>
-    <span class="doccomment">///                 .to(|| HttpResponse::Ok()))</span>
-    <span class="doccomment">///     );</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// let app = App::new().service(</span>
+    <span class="doccomment">///     web::resource(&quot;/&quot;).route(</span>
+    <span class="doccomment">///         web::route()</span>
+    <span class="doccomment">///             .guard(guard::Any(guard::Get()).or(guard::Put()))</span>
+    <span class="doccomment">///             .guard(guard::Header(&quot;Content-Type&quot;, &quot;text/plain&quot;))</span>
+    <span class="doccomment">///             .to(|| HttpResponse::Ok()))</span>
+    <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Multiple routes could be added to a resource. Resource object uses</span>

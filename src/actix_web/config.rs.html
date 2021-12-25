@@ -364,6 +364,8 @@
 <span id="362">362</span>
 <span id="363">363</span>
 <span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::net::SocketAddr</span>;
 <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
 
@@ -390,6 +392,7 @@
     <span class="ident">config</span>: <span class="ident">AppConfig</span>,
     <span class="ident">root</span>: <span class="ident">bool</span>,
     <span class="ident">default</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpNewService</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::type_complexity</span>)]</span>
     <span class="ident">services</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(
         <span class="ident">ResourceDef</span>,
         <span class="ident">HttpNewService</span>,
@@ -414,6 +417,7 @@
         <span class="self">self</span>.<span class="ident">root</span>
     }
 
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::type_complexity</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">into_services</span>(
         <span class="self">self</span>,
     ) -&gt; (

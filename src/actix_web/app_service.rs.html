@@ -385,6 +385,7 @@
 <span id="383">383</span>
 <span id="384">384</span>
 <span id="385">385</span>
+<span id="386">386</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Request</span>};
@@ -623,6 +624,7 @@
 }
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AppRoutingFactory</span> {
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::type_complexity</span>)]</span>
     <span class="ident">services</span>: <span class="ident">Rc</span><span class="op">&lt;</span>
         [(
             <span class="ident">ResourceDef</span>,

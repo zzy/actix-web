@@ -186,8 +186,8 @@
 <span class="doccomment">/// The first thing to note is that [`FromRequest`] is implemented for tuples (up to 12 in length).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Secondly, the `Handler` trait is implemented for functions (up to an [arity] of 12) in a way</span>
-<span class="doccomment">/// that aligns their parameter positions with a corresponding tuple of types (becoming the `T` type</span>
-<span class="doccomment">/// parameter in this trait&#39;s implementation).</span>
+<span class="doccomment">/// that aligns their parameter positions with a corresponding tuple of types (becoming the `Args`</span>
+<span class="doccomment">/// type parameter for this trait).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Thanks to Rust&#39;s type system, Actix Web can infer the function parameter types. During the</span>
 <span class="doccomment">/// extraction step, the parameter types are described as a tuple type, [`from_request`] is run on</span>
@@ -233,12 +233,12 @@
 <span class="doccomment">/// [arity]: https://en.wikipedia.org/wiki/Arity</span>
 <span class="doccomment">/// [`from_request`]: FromRequest::from_request</span>
 <span class="doccomment">/// [on_unimpl]: https://github.com/rust-lang/rust/issues/29628</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">R</span><span class="op">&gt;</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">Args</span>, <span class="ident">R</span><span class="op">&gt;</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>
 <span class="kw">where</span>
     <span class="ident">R</span>: <span class="ident">Future</span>,
     <span class="ident">R::Output</span>: <span class="ident">Responder</span>,
 {
-    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">args</span>: <span class="ident">T</span>) -&gt; <span class="ident">R</span>;
+    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">args</span>: <span class="ident">Args</span>) -&gt; <span class="ident">R</span>;
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">handler_service</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">Args</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">handler</span>: <span class="ident">F</span>) -&gt; <span class="ident">BoxedHttpServiceFactory</span>

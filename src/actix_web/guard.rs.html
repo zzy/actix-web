@@ -497,14 +497,6 @@
 <span id="495">495</span>
 <span id="496">496</span>
 <span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Route match guards.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Guards are one of the ways how actix-web router chooses a</span>
@@ -522,14 +514,12 @@
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//! use actix_web::{web, http, dev, guard, App, HttpResponse};</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() {</span>
-<span class="doccomment">//!     App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
-<span class="doccomment">//!         web::route()</span>
-<span class="doccomment">//!              .guard(guard::Post())</span>
-<span class="doccomment">//!              .guard(guard::fn_guard(|head| head.method == http::Method::GET))</span>
-<span class="doccomment">//!              .to(|| HttpResponse::MethodNotAllowed()))</span>
-<span class="doccomment">//!     );</span>
-<span class="doccomment">//! }</span>
+<span class="doccomment">//! App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
+<span class="doccomment">//!     web::route()</span>
+<span class="doccomment">//!          .guard(guard::Post())</span>
+<span class="doccomment">//!          .guard(guard::fn_guard(|head| head.method == http::Method::GET))</span>
+<span class="doccomment">//!          .to(|| HttpResponse::MethodNotAllowed()))</span>
+<span class="doccomment">//! );</span>
 <span class="doccomment">//! ```</span>
 
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
@@ -560,16 +550,14 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{guard, web, App, HttpResponse};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
-<span class="doccomment">///         web::route()</span>
-<span class="doccomment">///             .guard(</span>
-<span class="doccomment">///                 guard::fn_guard(</span>
-<span class="doccomment">///                     |req| req.headers()</span>
-<span class="doccomment">///                              .contains_key(&quot;content-type&quot;)))</span>
-<span class="doccomment">///             .to(|| HttpResponse::MethodNotAllowed()))</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
+<span class="doccomment">///     web::route()</span>
+<span class="doccomment">///         .guard(</span>
+<span class="doccomment">///             guard::fn_guard(</span>
+<span class="doccomment">///                 |req| req.headers()</span>
+<span class="doccomment">///                          .contains_key(&quot;content-type&quot;)))</span>
+<span class="doccomment">///         .to(|| HttpResponse::MethodNotAllowed()))</span>
+<span class="doccomment">/// );</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fn_guard</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="kw">impl</span> <span class="ident">Guard</span>
 <span class="kw">where</span>
@@ -603,13 +591,11 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{web, guard, App, HttpResponse};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
-<span class="doccomment">///         web::route()</span>
-<span class="doccomment">///              .guard(guard::Any(guard::Get()).or(guard::Post()))</span>
-<span class="doccomment">///              .to(|| HttpResponse::MethodNotAllowed()))</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
+<span class="doccomment">///     web::route()</span>
+<span class="doccomment">///          .guard(guard::Any(guard::Get()).or(guard::Post()))</span>
+<span class="doccomment">///          .to(|| HttpResponse::MethodNotAllowed()))</span>
+<span class="doccomment">/// );</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Any</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Guard</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="ident">guard</span>: <span class="ident">F</span>) -&gt; <span class="ident">AnyGuard</span> {
     <span class="ident">AnyGuard</span>(<span class="macro">vec!</span>[<span class="ident">Box::new</span>(<span class="ident">guard</span>)])
@@ -642,14 +628,12 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{guard, web, App, HttpResponse};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
-<span class="doccomment">///         web::route()</span>
-<span class="doccomment">///             .guard(</span>
-<span class="doccomment">///                 guard::All(guard::Get()).and(guard::Header(&quot;content-type&quot;, &quot;text/plain&quot;)))</span>
-<span class="doccomment">///             .to(|| HttpResponse::MethodNotAllowed()))</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// App::new().service(web::resource(&quot;/index.html&quot;).route(</span>
+<span class="doccomment">///     web::route()</span>
+<span class="doccomment">///         .guard(</span>
+<span class="doccomment">///             guard::All(guard::Get()).and(guard::Header(&quot;content-type&quot;, &quot;text/plain&quot;)))</span>
+<span class="doccomment">///         .to(|| HttpResponse::MethodNotAllowed()))</span>
+<span class="doccomment">/// );</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">All</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Guard</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="ident">guard</span>: <span class="ident">F</span>) -&gt; <span class="ident">AllGuard</span> {
     <span class="ident">AllGuard</span>(<span class="macro">vec!</span>[<span class="ident">Box::new</span>(<span class="ident">guard</span>)])
