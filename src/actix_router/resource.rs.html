@@ -1816,10 +1816,6 @@
 <span id="1814">1814</span>
 <span id="1815">1815</span>
 <span id="1816">1816</span>
-<span id="1817">1817</span>
-<span id="1818">1818</span>
-<span id="1819">1819</span>
-<span id="1820">1820</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections::HashMap</span>,
@@ -1851,26 +1847,25 @@
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Pattern Format and Matching Behavior</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// Resource pattern is defined as a string of zero or more _segments_ where each segment is</span>
 <span class="doccomment">/// preceded by a slash `/`.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This means that pattern string __must__ either be empty or begin with a slash (`/`).</span>
-<span class="doccomment">/// This also implies that a trailing slash in pattern defines an empty segment.</span>
-<span class="doccomment">/// For example, the pattern `&quot;/user/&quot;` has two segments: `[&quot;user&quot;, &quot;&quot;]`</span>
+<span class="doccomment">/// This means that pattern string __must__ either be empty or begin with a slash (`/`). This also</span>
+<span class="doccomment">/// implies that a trailing slash in pattern defines an empty segment. For example, the pattern</span>
+<span class="doccomment">/// `&quot;/user/&quot;` has two segments: `[&quot;user&quot;, &quot;&quot;]`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// A key point to underhand is that `ResourceDef` matches segments, not strings.</span>
-<span class="doccomment">/// It matches segments individually.</span>
-<span class="doccomment">/// For example, the pattern `/user/` is not considered a prefix for the path `/user/123/456`,</span>
-<span class="doccomment">/// because the second segment doesn&#39;t match: `[&quot;user&quot;, &quot;&quot;]` vs `[&quot;user&quot;, &quot;123&quot;, &quot;456&quot;]`.</span>
+<span class="doccomment">/// A key point to understand is that `ResourceDef` matches segments, not strings. Segments are</span>
+<span class="doccomment">/// matched individually. For example, the pattern `/user/` is not considered a prefix for the path</span>
+<span class="doccomment">/// `/user/123/456`, because the second segment doesn&#39;t match: `[&quot;user&quot;, &quot;&quot;]`</span>
+<span class="doccomment">/// vs `[&quot;user&quot;, &quot;123&quot;, &quot;456&quot;]`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This definition is consistent with the definition of absolute URL path in</span>
-<span class="doccomment">/// [RFC 3986 (section 3.3)](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3)</span>
+<span class="doccomment">/// [RFC 3986 §3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3)</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Static Resources</span>
-<span class="doccomment">/// A static resource is the most basic type of definition. Pass a pattern to</span>
-<span class="doccomment">/// [new][Self::new]. Conforming paths must match the pattern exactly.</span>
+<span class="doccomment">/// A static resource is the most basic type of definition. Pass a pattern to [new][Self::new].</span>
+<span class="doccomment">/// Conforming paths must match the pattern exactly.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Examples</span>
 <span class="doccomment">/// ```</span>
@@ -1884,7 +1879,6 @@
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/homes&quot;));</span>
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/search&quot;));</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Dynamic Segments</span>
 <span class="doccomment">/// Also known as &quot;path parameters&quot;. Resources can define sections of a pattern that be extracted</span>
@@ -1924,15 +1918,15 @@
 <span class="doccomment">/// assert_eq!(path.get(&quot;id&quot;).unwrap(), &quot;123&quot;);</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// # Prefix Resources</span>
 <span class="doccomment">/// A prefix resource is defined as pattern that can match just the start of a path, up to a</span>
 <span class="doccomment">/// segment boundary.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Prefix patterns with a trailing slash may have an unexpected, though correct, behavior.</span>
-<span class="doccomment">/// They define and therefore require an empty segment in order to match. Examples are given below.</span>
+<span class="doccomment">/// They define and therefore require an empty segment in order to match. It is easier to understand</span>
+<span class="doccomment">/// this behavior after reading the [matching behavior section]. Examples are given below.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Empty pattern matches any path as a prefix.</span>
+<span class="doccomment">/// The empty pattern (`&quot;&quot;`), as a prefix, matches any path.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Prefix resources can contain dynamic segments.</span>
 <span class="doccomment">///</span>
@@ -1951,7 +1945,6 @@
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/user/123/stars&quot;));</span>
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/user/123&quot;));</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Custom Regex Segments</span>
 <span class="doccomment">/// Dynamic segments can be customised to only match a specific regular expression. It can be</span>
@@ -1980,7 +1973,6 @@
 <span class="doccomment">/// assert!(!resource.is_match(&quot;/user/abc&quot;));</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// # Tail Segments</span>
 <span class="doccomment">/// As a shortcut to defining a custom regex for matching _all_ remaining characters (not just those</span>
 <span class="doccomment">/// up until a `/` character), there is a special pattern to match (and capture) the remaining</span>
@@ -2001,7 +1993,6 @@
 <span class="doccomment">/// assert_eq!(path.get(&quot;tail&quot;).unwrap(), &quot;main/LICENSE&quot;);</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// # Multi-Pattern Resources</span>
 <span class="doccomment">/// For resources that can map to multiple distinct paths, it may be suitable to use</span>
 <span class="doccomment">/// multi-pattern resources by passing an array/vec to [`new`][Self::new]. They will be combined</span>
@@ -2020,7 +2011,6 @@
 <span class="doccomment">/// assert!(resource.is_match(&quot;/index&quot;));</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// # Trailing Slashes</span>
 <span class="doccomment">/// It should be noted that this library takes no steps to normalize intra-path or trailing slashes.</span>
 <span class="doccomment">/// As such, all resource definitions implicitly expect a pre-processing step to normalize paths if</span>
@@ -2034,6 +2024,8 @@
 <span class="doccomment">/// assert!(!ResourceDef::new(&quot;/root/&quot;).is_match(&quot;/root&quot;));</span>
 <span class="doccomment">/// assert!(!ResourceDef::prefix(&quot;/root/&quot;).is_match(&quot;/root&quot;));</span>
 <span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [matching behavior section]: #pattern-format-and-matching-behavior</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ResourceDef</span> {
     <span class="ident">id</span>: <span class="ident">u16</span>,
@@ -2101,7 +2093,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPatterns</span><span class="op">&gt;</span>(<span class="ident">paths</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
         <span class="macro">profile_method!</span>(<span class="ident">new</span>);
-        <span class="ident"><span class="self">Self</span>::new2</span>(<span class="ident">paths</span>, <span class="bool-val">false</span>)
+        <span class="ident"><span class="self">Self</span>::construct</span>(<span class="ident">paths</span>, <span class="bool-val">false</span>)
     }
 
     <span class="doccomment">/// Constructs a new resource definition using a pattern that performs prefix matching.</span>
@@ -2114,7 +2106,7 @@
     <span class="doccomment">/// resource definition with a tail segment; use [`new`][Self::new] in this case.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">/// Panics if path regex pattern is malformed.</span>
+    <span class="doccomment">/// Panics if path pattern is malformed.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
@@ -2129,14 +2121,14 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prefix</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPatterns</span><span class="op">&gt;</span>(<span class="ident">paths</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
         <span class="macro">profile_method!</span>(<span class="ident">prefix</span>);
-        <span class="ident">ResourceDef::new2</span>(<span class="ident">paths</span>, <span class="bool-val">true</span>)
+        <span class="ident">ResourceDef::construct</span>(<span class="ident">paths</span>, <span class="bool-val">true</span>)
     }
 
     <span class="doccomment">/// Constructs a new resource definition using a string pattern that performs prefix matching,</span>
-    <span class="doccomment">/// inserting a `/` to beginning of the pattern if absent and pattern is not empty.</span>
+    <span class="doccomment">/// ensuring a leading `/` if pattern is not empty.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">/// Panics if path regex pattern is malformed.</span>
+    <span class="doccomment">/// Panics if path pattern is malformed.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
@@ -2337,8 +2329,8 @@
             .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
 
         <span class="kw">match</span> <span class="ident">patterns</span>.<span class="ident">len</span>() {
-            <span class="number">1</span> =&gt; <span class="ident">ResourceDef::new2</span>(<span class="kw-2">&amp;</span><span class="ident">patterns</span>[<span class="number">0</span>], <span class="ident">other</span>.<span class="ident">is_prefix</span>()),
-            <span class="kw">_</span> =&gt; <span class="ident">ResourceDef::new2</span>(<span class="ident">patterns</span>, <span class="ident">other</span>.<span class="ident">is_prefix</span>()),
+            <span class="number">1</span> =&gt; <span class="ident">ResourceDef::construct</span>(<span class="kw-2">&amp;</span><span class="ident">patterns</span>[<span class="number">0</span>], <span class="ident">other</span>.<span class="ident">is_prefix</span>()),
+            <span class="kw">_</span> =&gt; <span class="ident">ResourceDef::construct</span>(<span class="ident">patterns</span>, <span class="ident">other</span>.<span class="ident">is_prefix</span>()),
         }
     }
 
@@ -2703,8 +2695,8 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">new2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPatterns</span><span class="op">&gt;</span>(<span class="ident">paths</span>: <span class="ident">T</span>, <span class="ident">is_prefix</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="macro">profile_method!</span>(<span class="ident">new2</span>);
+    <span class="kw">fn</span> <span class="ident">construct</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPatterns</span><span class="op">&gt;</span>(<span class="ident">paths</span>: <span class="ident">T</span>, <span class="ident">is_prefix</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
+        <span class="macro">profile_method!</span>(<span class="ident">construct</span>);
 
         <span class="kw">let</span> <span class="ident">patterns</span> <span class="op">=</span> <span class="ident">paths</span>.<span class="ident">patterns</span>();
         <span class="kw">let</span> (<span class="ident">pat_type</span>, <span class="ident">segments</span>) <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">patterns</span> {
@@ -3636,7 +3628,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">should_panic</span>]</span>
-    <span class="kw">fn</span> <span class="ident">prefix_plus_tail_match_is_allowed</span>() {
+    <span class="kw">fn</span> <span class="ident">prefix_plus_tail_match_disallowed</span>() {
         <span class="ident">ResourceDef::prefix</span>(<span class="string">&quot;/user/{id}*&quot;</span>);
     }
 }

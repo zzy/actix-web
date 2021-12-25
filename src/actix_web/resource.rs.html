@@ -835,9 +835,6 @@
 <span id="833">833</span>
 <span id="834">834</span>
 <span id="835">835</span>
-<span id="836">836</span>
-<span id="837">837</span>
-<span id="838">838</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::BoxBody</span>, <span class="ident">Extensions</span>};
@@ -863,28 +860,25 @@
     <span class="ident">BoxError</span>, <span class="ident">Error</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>,
 };
 
-<span class="doccomment">/// *Resource* is an entry in resources table which corresponds to requested URL.</span>
+<span class="doccomment">/// A collection of [`Route`]s that respond to the same path pattern.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Resource in turn has at least one route.</span>
-<span class="doccomment">/// Route consists of an handlers objects and list of guards</span>
-<span class="doccomment">/// (objects that implement `Guard` trait).</span>
-<span class="doccomment">/// Resources and routes uses builder-like pattern for configuration.</span>
-<span class="doccomment">/// During request handling, resource object iterate through all routes</span>
-<span class="doccomment">/// and check guards for specific route, if request matches all</span>
-<span class="doccomment">/// guards, route considered matched and route handler get called.</span>
+<span class="doccomment">/// Resource in turn has at least one route. Route consists of an handlers objects and list of</span>
+<span class="doccomment">/// guards (objects that implement `Guard` trait). Resources and routes uses builder-like pattern</span>
+<span class="doccomment">/// for configuration. During request handling, resource object iterate through all routes and check</span>
+<span class="doccomment">/// guards for specific route, if request matches all guards, route considered matched and route</span>
+<span class="doccomment">/// handler get called.</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::{web, App, HttpResponse};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     let app = App::new().service(</span>
-<span class="doccomment">///         web::resource(&quot;/&quot;)</span>
-<span class="doccomment">///             .route(web::get().to(|| HttpResponse::Ok())));</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// let app = App::new().service(</span>
+<span class="doccomment">///     web::resource(&quot;/&quot;)</span>
+<span class="doccomment">///         .route(web::get().to(|| HttpResponse::Ok())));</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// If no matching route could be found, *405* response code get returned.</span>
-<span class="doccomment">/// Default behavior could be overridden with `default_resource()` method.</span>
+<span class="doccomment">/// If no matching route could be found, *405* response code get returned. Default behavior could be</span>
+<span class="doccomment">/// overridden with `default_resource()` method.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Resource</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> <span class="ident">ResourceEndpoint</span>, <span class="ident">B</span> <span class="op">=</span> <span class="ident">BoxBody</span><span class="op">&gt;</span> {
     <span class="ident">endpoint</span>: <span class="ident">T</span>,
     <span class="ident">rdef</span>: <span class="ident">Patterns</span>,

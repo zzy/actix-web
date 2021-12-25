@@ -403,10 +403,10 @@
     <span class="ident">BoxError</span>, <span class="ident">Error</span>, <span class="ident">FromRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>,
 };
 
-<span class="doccomment">/// Resource route definition</span>
+<span class="doccomment">/// A request handler with [guards](guard).</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Route uses builder-like pattern for configuration.</span>
-<span class="doccomment">/// If handler is not explicitly set, default *404 Not Found* handler is used.</span>
+<span class="doccomment">/// Route uses a builder-like pattern for configuration. If handler is not set, a `404 Not Found`</span>
+<span class="doccomment">/// handler is used.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Route</span> {
     <span class="ident">service</span>: <span class="ident">BoxedHttpServiceFactory</span>,
     <span class="ident">guards</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Guard</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
