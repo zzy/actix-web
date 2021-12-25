@@ -81,8 +81,10 @@
 <span id="79">79</span>
 <span id="80">80</span>
 <span id="81">81</span>
+<span id="82">82</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP client errors</span>
 
+<span class="comment">// TODO: figure out how best to expose http::Error vs actix_http::Error</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{
     <span class="ident">error</span>::{<span class="ident">HttpError</span>, <span class="ident">PayloadError</span>},
     <span class="ident">header::HeaderValue</span>,

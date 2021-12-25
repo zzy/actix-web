@@ -330,6 +330,7 @@
 <span id="328">328</span>
 <span id="329">329</span>
 <span id="330">330</span>
+<span id="331">331</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">future::Future</span>,
     <span class="ident">net</span>,
@@ -356,8 +357,9 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">any_body::AnyBody</span>,
+    <span class="ident">client::ClientConfig</span>,
     <span class="ident">error</span>::{<span class="ident">FreezeRequestError</span>, <span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>},
-    <span class="ident">BoxError</span>, <span class="ident">ClientConfig</span>, <span class="ident">ClientResponse</span>, <span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>,
+    <span class="ident">BoxError</span>, <span class="ident">ClientResponse</span>, <span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>,
 };
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">From</span>)]</span>

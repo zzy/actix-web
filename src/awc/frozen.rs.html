@@ -239,6 +239,7 @@
 <span id="237">237</span>
 <span id="238">238</span>
 <span id="239">239</span>
+<span id="240">240</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">net</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
@@ -253,8 +254,9 @@
 };
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">client::ClientConfig</span>,
     <span class="ident">sender</span>::{<span class="ident">RequestSender</span>, <span class="ident">SendClientRequest</span>},
-    <span class="ident">BoxError</span>, <span class="ident">ClientConfig</span>,
+    <span class="ident">BoxError</span>,
 };
 
 <span class="doccomment">/// `FrozenClientRequest` struct represents cloneable client request.</span>

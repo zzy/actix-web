@@ -534,6 +534,7 @@
 <span id="532">532</span>
 <span id="533">533</span>
 <span id="534">534</span>
+<span id="535">535</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Websockets client</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Type definitions required to use [`awc::Client`](super::Client) as a WebSocket client.</span>
@@ -567,18 +568,19 @@
 <span class="kw">use</span> <span class="ident">actix_codec::Framed</span>;
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">ws</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>};
 <span class="kw">use</span> <span class="ident">actix_rt::time::timeout</span>;
-<span class="kw">use</span> <span class="ident">actix_service::Service</span>;
+<span class="kw">use</span> <span class="ident">actix_service::Service</span> <span class="kw">as</span> <span class="kw">_</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::ws</span>::{<span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">Codec</span>, <span class="ident">Frame</span>, <span class="ident">Message</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">client::ClientConfig</span>,
     <span class="ident">connect</span>::{<span class="ident">BoxedSocket</span>, <span class="ident">ConnectRequest</span>},
     <span class="ident">error</span>::{<span class="ident">HttpError</span>, <span class="ident">InvalidUrl</span>, <span class="ident">SendRequestError</span>, <span class="ident">WsClientError</span>},
     <span class="ident">http</span>::{
         <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderName</span>, <span class="ident">HeaderValue</span>, <span class="ident">TryIntoHeaderValue</span>, <span class="ident">AUTHORIZATION</span>},
         <span class="ident">ConnectionType</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Uri</span>, <span class="ident">Version</span>,
     },
-    <span class="ident">ClientConfig</span>, <span class="ident">ClientResponse</span>,
+    <span class="ident">ClientResponse</span>,
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>

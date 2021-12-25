@@ -655,12 +655,6 @@
 <span id="653">653</span>
 <span id="654">654</span>
 <span id="655">655</span>
-<span id="656">656</span>
-<span id="657">657</span>
-<span id="658">658</span>
-<span id="659">659</span>
-<span id="660">660</span>
-<span id="661">661</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">fmt</span>, <span class="ident">net</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
@@ -675,10 +669,11 @@
 };
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">client::ClientConfig</span>,
     <span class="ident">error</span>::{<span class="ident">FreezeRequestError</span>, <span class="ident">InvalidUrl</span>},
     <span class="ident">frozen::FrozenClientRequest</span>,
     <span class="ident">sender</span>::{<span class="ident">PrepForSendingError</span>, <span class="ident">RequestSender</span>, <span class="ident">SendClientRequest</span>},
-    <span class="ident">BoxError</span>, <span class="ident">ClientConfig</span>,
+    <span class="ident">BoxError</span>,
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>
@@ -912,23 +907,16 @@
     <span class="doccomment">/// Set a cookie</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```no_run</span>
-    <span class="doccomment">/// use awc::{cookie, Client};</span>
+    <span class="doccomment">/// use awc::{cookie::Cookie, Client};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # #[actix_rt::main]</span>
     <span class="doccomment">/// # async fn main() {</span>
-    <span class="doccomment">/// let resp = Client::new().get(&quot;https://www.rust-lang.org&quot;)</span>
-    <span class="doccomment">///     .cookie(</span>
-    <span class="doccomment">///         awc::cookie::Cookie::build(&quot;name&quot;, &quot;value&quot;)</span>
-    <span class="doccomment">///             .domain(&quot;www.rust-lang.org&quot;)</span>
-    <span class="doccomment">///             .path(&quot;/&quot;)</span>
-    <span class="doccomment">///             .secure(true)</span>
-    <span class="doccomment">///             .http_only(true)</span>
-    <span class="doccomment">///             .finish(),</span>
-    <span class="doccomment">///      )</span>
-    <span class="doccomment">///      .send()</span>
-    <span class="doccomment">///      .await;</span>
+    <span class="doccomment">/// let res = Client::new().get(&quot;https://httpbin.org/cookies&quot;)</span>
+    <span class="doccomment">///     .cookie(Cookie::new(&quot;name&quot;, &quot;value&quot;))</span>
+    <span class="doccomment">///     .send()</span>
+    <span class="doccomment">///     .await;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// println!(&quot;Response: {:?}&quot;, resp);</span>
+    <span class="doccomment">/// println!(&quot;Response: {:?}&quot;, res);</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>)]</span>

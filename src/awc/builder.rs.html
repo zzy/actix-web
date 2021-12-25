@@ -339,6 +339,8 @@
 <span id="337">337</span>
 <span id="338">338</span>
 <span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">fmt</span>, <span class="ident">net::IpAddr</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
@@ -350,11 +352,13 @@
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">Service</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">client</span>::{<span class="ident">ConnectInfo</span>, <span class="ident">Connector</span>, <span class="ident">ConnectorService</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>},
+    <span class="ident">client</span>::{
+        <span class="ident">ClientConfig</span>, <span class="ident">ConnectInfo</span>, <span class="ident">Connector</span>, <span class="ident">ConnectorService</span>, <span class="ident">TcpConnectError</span>, <span class="ident">TcpConnection</span>,
+    },
     <span class="ident">connect::DefaultConnector</span>,
     <span class="ident">error::SendRequestError</span>,
     <span class="ident">middleware</span>::{<span class="ident">NestTransform</span>, <span class="ident">Redirect</span>, <span class="ident">Transform</span>},
-    <span class="ident">Client</span>, <span class="ident">ClientConfig</span>, <span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>,
+    <span class="ident">Client</span>, <span class="ident">ConnectRequest</span>, <span class="ident">ConnectResponse</span>,
 };
 
 <span class="doccomment">/// An HTTP Client builder</span>
