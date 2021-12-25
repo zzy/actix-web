@@ -274,12 +274,6 @@
 <span id="272">272</span>
 <span id="273">273</span>
 <span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`ErrorHandlers`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -319,27 +313,21 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// use actix_web::middleware::{ErrorHandlers, ErrorHandlerResponse};</span>
-<span class="doccomment">/// use actix_web::{web, dev, App, HttpRequest, HttpResponse, Result};</span>
-<span class="doccomment">/// use actix_web::http::{StatusCode, header};</span>
+<span class="doccomment">/// use actix_web::http::{header, StatusCode};</span>
+<span class="doccomment">/// use actix_web::middleware::{ErrorHandlerResponse, ErrorHandlers};</span>
+<span class="doccomment">/// use actix_web::{dev, web, App, HttpResponse, Result};</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn render_500&lt;B&gt;(mut res: dev::ServiceResponse&lt;B&gt;) -&gt; Result&lt;ErrorHandlerResponse&lt;B&gt;&gt; {</span>
-<span class="doccomment">///     res.response_mut()</span>
-<span class="doccomment">///        .headers_mut()</span>
-<span class="doccomment">///        .insert(header::CONTENT_TYPE, header::HeaderValue::from_static(&quot;Error&quot;));</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// fn add_error_header&lt;B&gt;(mut res: dev::ServiceResponse&lt;B&gt;) -&gt; Result&lt;ErrorHandlerResponse&lt;B&gt;&gt; {</span>
+<span class="doccomment">///     res.response_mut().headers_mut().insert(</span>
+<span class="doccomment">///         header::CONTENT_TYPE,</span>
+<span class="doccomment">///         header::HeaderValue::from_static(&quot;Error&quot;),</span>
+<span class="doccomment">///     );</span>
 <span class="doccomment">///     Ok(ErrorHandlerResponse::Response(res.map_into_left_body()))</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let app = App::new()</span>
-<span class="doccomment">///     .wrap(</span>
-<span class="doccomment">///         ErrorHandlers::new()</span>
-<span class="doccomment">///             .handler(StatusCode::INTERNAL_SERVER_ERROR, render_500),</span>
-<span class="doccomment">///     )</span>
-<span class="doccomment">///     .service(web::resource(&quot;/test&quot;)</span>
-<span class="doccomment">///         .route(web::get().to(|| HttpResponse::Ok()))</span>
-<span class="doccomment">///         .route(web::head().to(|| HttpResponse::MethodNotAllowed())</span>
-<span class="doccomment">///     ));</span>
+<span class="doccomment">///     .wrap(ErrorHandlers::new().handler(StatusCode::INTERNAL_SERVER_ERROR, add_error_header))</span>
+<span class="doccomment">///     .service(web::resource(&quot;/&quot;).route(web::get().to(HttpResponse::InternalServerError)));</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ErrorHandlers</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="ident">handlers</span>: <span class="ident">Handlers</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
