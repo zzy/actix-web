@@ -326,7 +326,7 @@
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>, <span class="ident">Framed</span>};
 <span class="kw">use</span> <span class="ident">actix_rt</span>::{<span class="ident">net::TcpStream</span>, <span class="ident">System</span>};
-<span class="kw">use</span> <span class="ident">actix_server</span>::{<span class="ident">Server</span>, <span class="ident">ServiceFactory</span>};
+<span class="kw">use</span> <span class="ident">actix_server</span>::{<span class="ident">Server</span>, <span class="ident">ServerServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">awc</span>::{
     <span class="ident">error::PayloadError</span>, <span class="ident">http::header::HeaderMap</span>, <span class="ident">ws</span>, <span class="ident">Client</span>, <span class="ident">ClientRequest</span>, <span class="ident">ClientResponse</span>,
     <span class="ident">Connector</span>,
@@ -365,13 +365,13 @@
 <span class="doccomment">///     assert!(response.status().is_success());</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_server</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">factory</span>: <span class="ident">F</span>) -&gt; <span class="ident">TestServer</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_server</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">ServerServiceFactory</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">factory</span>: <span class="ident">F</span>) -&gt; <span class="ident">TestServer</span> {
     <span class="kw">let</span> <span class="ident">tcp</span> <span class="op">=</span> <span class="ident">net::TcpListener::bind</span>(<span class="string">&quot;127.0.0.1:0&quot;</span>).<span class="ident">unwrap</span>();
     <span class="ident">test_server_with_addr</span>(<span class="ident">tcp</span>, <span class="ident">factory</span>).<span class="kw">await</span>
 }
 
 <span class="doccomment">/// Start [`test server`](test_server()) on an existing address binding.</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_server_with_addr</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_server_with_addr</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">ServerServiceFactory</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">&gt;</span>(
     <span class="ident">tcp</span>: <span class="ident">net::TcpListener</span>,
     <span class="ident">factory</span>: <span class="ident">F</span>,
 ) -&gt; <span class="ident">TestServer</span> {
