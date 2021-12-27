@@ -351,6 +351,7 @@
 <span id="349">349</span>
 <span id="350">350</span>
 <span id="351">351</span>
+<span id="352">352</span>
 </pre><pre class="rust"><code><span class="doccomment">//! WebSocket protocol implementation.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! To setup a WebSocket, first perform the WebSocket handshake then on success convert `Payload` into a</span>
@@ -452,8 +453,9 @@
         <span class="kw">match</span> <span class="ident">err</span> {
             <span class="ident">HandshakeError::GetMethodRequired</span> =&gt; {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response::new</span>(<span class="ident">StatusCode::METHOD_NOT_ALLOWED</span>);
-                <span class="ident">res</span>.<span class="ident">headers_mut</span>()
-                    .<span class="ident">insert</span>(<span class="ident">header::ALLOW</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;GET&quot;</span>));
+                <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::declare_interior_mutable_const</span>)]</span>
+                <span class="kw">const</span> <span class="ident">HV_GET</span>: <span class="ident">HeaderValue</span> <span class="op">=</span> <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;GET&quot;</span>);
+                <span class="ident">res</span>.<span class="ident">headers_mut</span>().<span class="ident">insert</span>(<span class="ident">header::ALLOW</span>, <span class="ident">HV_GET</span>);
                 <span class="ident">res</span>
             }
 
@@ -703,5 +705,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (51e8031e1 2021-12-25)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (f8abed9ed 2021-12-26)" ></div>
 </body></html>

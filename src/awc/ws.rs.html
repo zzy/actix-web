@@ -535,6 +535,9 @@
 <span id="533">533</span>
 <span id="534">534</span>
 <span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Websockets client</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Type definitions required to use [`awc::Client`](super::Client) as a WebSocket client.</span>
@@ -837,13 +840,16 @@
         }
 
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">set_connection_type</span>(<span class="ident">ConnectionType::Upgrade</span>);
+
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::declare_interior_mutable_const</span>)]</span>
+        <span class="kw">const</span> <span class="ident">HV_WEBSOCKET</span>: <span class="ident">HeaderValue</span> <span class="op">=</span> <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;websocket&quot;</span>);
+        <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">header::UPGRADE</span>, <span class="ident">HV_WEBSOCKET</span>);
+
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::declare_interior_mutable_const</span>)]</span>
+        <span class="kw">const</span> <span class="ident">HV_THIRTEEN</span>: <span class="ident">HeaderValue</span> <span class="op">=</span> <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;13&quot;</span>);
         <span class="self">self</span>.<span class="ident">head</span>
             .<span class="ident">headers</span>
-            .<span class="ident">insert</span>(<span class="ident">header::UPGRADE</span>, <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;websocket&quot;</span>));
-        <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(
-            <span class="ident">header::SEC_WEBSOCKET_VERSION</span>,
-            <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;13&quot;</span>),
-        );
+            .<span class="ident">insert</span>(<span class="ident">header::SEC_WEBSOCKET_VERSION</span>, <span class="ident">HV_THIRTEEN</span>);
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">protocols</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">protocols</span>.<span class="ident">take</span>() {
             <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(
@@ -1071,5 +1077,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (51e8031e1 2021-12-25)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (f8abed9ed 2021-12-26)" ></div>
 </body></html>

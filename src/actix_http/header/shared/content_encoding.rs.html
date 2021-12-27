@@ -162,13 +162,13 @@
 <span class="kw">impl</span> <span class="ident">ContentEncoding</span> {
     <span class="doccomment">/// Is the content compressed?</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_compression</span>(<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_compression</span>(<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">matches!</span>(<span class="self">self</span>, <span class="ident">ContentEncoding::Identity</span> <span class="op">|</span> <span class="ident">ContentEncoding::Auto</span>)
     }
 
     <span class="doccomment">/// Convert content encoding to string.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">ContentEncoding::Br</span> =&gt; <span class="string">&quot;br&quot;</span>,
             <span class="ident">ContentEncoding::Gzip</span> =&gt; <span class="string">&quot;gzip&quot;</span>,
@@ -231,5 +231,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (51e8031e1 2021-12-25)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (f8abed9ed 2021-12-26)" ></div>
 </body></html>

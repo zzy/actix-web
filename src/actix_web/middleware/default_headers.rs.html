@@ -261,7 +261,6 @@
 <span id="259">259</span>
 <span id="260">260</span>
 <span id="261">261</span>
-<span id="262">262</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`DefaultHeaders`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -364,10 +363,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Default is `application/octet-stream`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_content_type</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">add</span>((
-            <span class="ident">CONTENT_TYPE</span>,
-            <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;application/octet-stream&quot;</span>),
-        ))
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::declare_interior_mutable_const</span>)]</span>
+        <span class="kw">const</span> <span class="ident">HV_MIME</span>: <span class="ident">HeaderValue</span> <span class="op">=</span> <span class="ident">HeaderValue::from_static</span>(<span class="string">&quot;application/octet-stream&quot;</span>);
+        <span class="self">self</span>.<span class="ident">add</span>((<span class="ident">CONTENT_TYPE</span>, <span class="ident">HV_MIME</span>))
     }
 }
 
@@ -525,5 +523,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (51e8031e1 2021-12-25)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (f8abed9ed 2021-12-26)" ></div>
 </body></html>
