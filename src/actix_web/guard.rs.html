@@ -645,6 +645,26 @@
 <span id="643">643</span>
 <span id="644">644</span>
 <span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Route guards.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Guards are used during routing to help select a matching service or handler using some aspect of</span>
@@ -657,16 +677,22 @@
 <span class="doccomment">//! object and returns a boolean; true if the request _should_ be handled by the guarded service</span>
 <span class="doccomment">//! or handler. This interface is defined by the [`Guard`] trait.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! Commonly-used guards are provided in this module as well as way of creating a guard from a</span>
+<span class="doccomment">//! Commonly-used guards are provided in this module as well as a way of creating a guard from a</span>
 <span class="doccomment">//! closure ([`fn_guard`]). The [`Not`], [`Any`], and [`All`] guards are noteworthy, as they can be</span>
 <span class="doccomment">//! used to compose other guards in a more flexible and semantic way than calling `.guard(...)` on</span>
 <span class="doccomment">//! services multiple times (which might have different combining behavior than you want).</span>
 <span class="doccomment">//!</span>
+<span class="doccomment">//! There are shortcuts for routes with method guards in the [`web`](crate::web) module:</span>
+<span class="doccomment">//! [`web::get()`](crate::web::get), [`web::post()`](crate::web::post), etc. The routes created by</span>
+<span class="doccomment">//! the following calls are equivalent:</span>
+<span class="doccomment">//! - `web::get()` (recommended form)</span>
+<span class="doccomment">//! - `web::route().guard(guard::Get())`</span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! Guards can not modify anything about the request. However, it is possible to store extra</span>
 <span class="doccomment">//! attributes in the request-local data container obtained with [`GuardContext::req_data_mut`].</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! Guards can prevent resource definitions from overlapping (resulting in some inaccessible routes)</span>
-<span class="doccomment">//! where they otherwise would when only considering paths. See the virtual hosting example below.</span>
+<span class="doccomment">//! Guards can prevent resource definitions from overlapping which, when only considering paths,</span>
+<span class="doccomment">//! would result in inaccessible routes. See the [`Host`] guard for an example of virtual hosting.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Examples</span>
 <span class="doccomment">//! In the following code, the `/guarded` resource has one defined route whose handler will only be</span>
@@ -683,31 +709,9 @@
 <span class="doccomment">//! );</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! Guards can be used to set up some form of [virtual hosting] within a single app.</span>
-<span class="doccomment">//! Overlapping scope prefixes are usually discouraged, but when combined with non-overlapping guard</span>
-<span class="doccomment">//! definitions they become safe to use in this way. Without these host guards, only routes under</span>
-<span class="doccomment">//! the first-to-be-defined scope would be accessible. You can test this locally using `127.0.0.1`</span>
-<span class="doccomment">//! and `localhost` as the `Host` guards.</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! use actix_web::{web, http::Method, guard, App, HttpResponse};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! App::new()</span>
-<span class="doccomment">//!     .service(</span>
-<span class="doccomment">//!         web::scope(&quot;&quot;)</span>
-<span class="doccomment">//!             .guard(guard::Host(&quot;www.rust-lang.org&quot;))</span>
-<span class="doccomment">//!             .default_service(web::to(|| HttpResponse::Ok().body(&quot;marketing site&quot;))),</span>
-<span class="doccomment">//!     )</span>
-<span class="doccomment">//!     .service(</span>
-<span class="doccomment">//!         web::scope(&quot;&quot;)</span>
-<span class="doccomment">//!             .guard(guard::Host(&quot;play.rust-lang.org&quot;))</span>
-<span class="doccomment">//!             .default_service(web::to(|| HttpResponse::Ok().body(&quot;playground frontend&quot;))),</span>
-<span class="doccomment">//!     );</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
 <span class="doccomment">//! [`Scope`]: crate::Scope::guard()</span>
 <span class="doccomment">//! [`Resource`]: crate::Resource::guard()</span>
 <span class="doccomment">//! [`Route`]: crate::Route::guard()</span>
-<span class="doccomment">//! [virtual hosting]: https://en.wikipedia.org/wiki/Virtual_hosting</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
@@ -1020,6 +1024,29 @@
 <span class="doccomment">///     .guard(Host(&quot;admin.rust-lang.org&quot;).scheme(&quot;https&quot;))</span>
 <span class="doccomment">///     .default_service(web::to(|| HttpResponse::Ok().body(&quot;admin connection is secure&quot;)));</span>
 <span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The `Host` guard can be used to set up some form of [virtual hosting] within a single app.</span>
+<span class="doccomment">/// Overlapping scope prefixes are usually discouraged, but when combined with non-overlapping guard</span>
+<span class="doccomment">/// definitions they become safe to use in this way. Without these host guards, only routes under</span>
+<span class="doccomment">/// the first-to-be-defined scope would be accessible. You can test this locally using `127.0.0.1`</span>
+<span class="doccomment">/// and `localhost` as the `Host` guards.</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// use actix_web::{web, http::Method, guard, App, HttpResponse};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// App::new()</span>
+<span class="doccomment">///     .service(</span>
+<span class="doccomment">///         web::scope(&quot;&quot;)</span>
+<span class="doccomment">///             .guard(guard::Host(&quot;www.rust-lang.org&quot;))</span>
+<span class="doccomment">///             .default_service(web::to(|| HttpResponse::Ok().body(&quot;marketing site&quot;))),</span>
+<span class="doccomment">///     )</span>
+<span class="doccomment">///     .service(</span>
+<span class="doccomment">///         web::scope(&quot;&quot;)</span>
+<span class="doccomment">///             .guard(guard::Host(&quot;play.rust-lang.org&quot;))</span>
+<span class="doccomment">///             .default_service(web::to(|| HttpResponse::Ok().body(&quot;playground frontend&quot;))),</span>
+<span class="doccomment">///     );</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [virtual hosting]: https://en.wikipedia.org/wiki/Virtual_hosting</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">Host</span>(<span class="ident">host</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="ident">HostGuard</span> {
     <span class="ident">HostGuard</span> {
@@ -1288,6 +1315,19 @@
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">uri</span>(<span class="string">&quot;crates.io&quot;</span>).<span class="ident">to_srv_request</span>();
         <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">guard</span>.<span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">guard_ctx</span>()));
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">mega_nesting</span>() {
+        <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">All</span>(<span class="ident">Not</span>(<span class="ident">Any</span>(<span class="ident">Not</span>(<span class="ident">Trace</span>())))).<span class="ident">check</span>(<span class="ident">ctx</span>));
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_srv_request</span>();
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">guard</span>.<span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">guard_ctx</span>()));
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>()
+            .<span class="ident">method</span>(<span class="ident">Method::TRACE</span>)
+            .<span class="ident">to_srv_request</span>();
+        <span class="macro">assert!</span>(<span class="ident">guard</span>.<span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">guard_ctx</span>()));
     }
 }
 </code></pre></div>
