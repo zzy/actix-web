@@ -382,6 +382,10 @@
 <span id="380">380</span>
 <span id="381">381</span>
 <span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http::Method</span>;
@@ -449,9 +453,12 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RouteService</span> {
+    <span class="comment">// TODO: does this need to take &amp;mut ?</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ServiceRequest</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">for</span> <span class="ident">f</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">guards</span>.<span class="ident">iter</span>() {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">check</span>(<span class="ident">req</span>.<span class="ident">head</span>()) {
+        <span class="kw">let</span> <span class="ident">guard_ctx</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">guard_ctx</span>();
+
+        <span class="kw">for</span> <span class="ident">guard</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">guards</span>.<span class="ident">iter</span>() {
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">guard</span>.<span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="ident">guard_ctx</span>) {
                 <span class="kw">return</span> <span class="bool-val">false</span>;
             }
         }
@@ -474,6 +481,7 @@
 <span class="kw">impl</span> <span class="ident">Route</span> {
     <span class="doccomment">/// Add method guard to the route.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use actix_web::*;</span>
     <span class="doccomment">/// # fn main() {</span>
@@ -494,6 +502,7 @@
 
     <span class="doccomment">/// Add guard to the route.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use actix_web::*;</span>
     <span class="doccomment">/// # fn main() {</span>
@@ -527,16 +536,13 @@
     <span class="doccomment">///     format!(&quot;Welcome {}!&quot;, info.username)</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// fn main() {</span>
-    <span class="doccomment">///     let app = App::new().service(</span>
-    <span class="doccomment">///         web::resource(&quot;/{username}/index.html&quot;) // &lt;- define path parameters</span>
-    <span class="doccomment">///             .route(web::get().to(index))        // &lt;- register handler</span>
-    <span class="doccomment">///     );</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// let app = App::new().service(</span>
+    <span class="doccomment">///     web::resource(&quot;/{username}/index.html&quot;) // &lt;- define path parameters</span>
+    <span class="doccomment">///         .route(web::get().to(index))        // &lt;- register handler</span>
+    <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It is possible to use multiple extractors for one handler function.</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use std::collections::HashMap;</span>
     <span class="doccomment">/// # use serde::Deserialize;</span>
@@ -548,16 +554,18 @@
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// /// extract path info using serde</span>
-    <span class="doccomment">/// async fn index(path: web::Path&lt;Info&gt;, query: web::Query&lt;HashMap&lt;String, String&gt;&gt;, body: web::Json&lt;Info&gt;) -&gt; String {</span>
+    <span class="doccomment">/// async fn index(</span>
+    <span class="doccomment">///     path: web::Path&lt;Info&gt;,</span>
+    <span class="doccomment">///     query: web::Query&lt;HashMap&lt;String, String&gt;&gt;,</span>
+    <span class="doccomment">///     body: web::Json&lt;Info&gt;</span>
+    <span class="doccomment">/// ) -&gt; String {</span>
     <span class="doccomment">///     format!(&quot;Welcome {}!&quot;, path.username)</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// fn main() {</span>
-    <span class="doccomment">///     let app = App::new().service(</span>
-    <span class="doccomment">///         web::resource(&quot;/{username}/index.html&quot;) // &lt;- define path parameters</span>
-    <span class="doccomment">///             .route(web::get().to(index))</span>
-    <span class="doccomment">///     );</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// let app = App::new().service(</span>
+    <span class="doccomment">///     web::resource(&quot;/{username}/index.html&quot;) // &lt;- define path parameters</span>
+    <span class="doccomment">///         .route(web::get().to(index))</span>
+    <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">Args</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">handler</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
@@ -583,7 +591,7 @@
     <span class="doccomment">///     type Error = Infallible;</span>
     <span class="doccomment">///     type Future = LocalBoxFuture&lt;&#39;static, Result&lt;Self::Response, Self::Error&gt;&gt;;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">///     always_ready!();</span>
+    <span class="doccomment">///     dev::always_ready!();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">///     fn call(&amp;self, req: ServiceRequest) -&gt; Self::Future {</span>
     <span class="doccomment">///         let (req, _) = req.into_parts();</span>

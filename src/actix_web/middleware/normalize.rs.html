@@ -716,7 +716,7 @@
                 .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/v1/something&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>))
                 .<span class="ident">service</span>(
                     <span class="ident">web::resource</span>(<span class="string">&quot;/v2/something&quot;</span>)
-                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
+                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">ctx</span>.<span class="ident">head</span>().<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
                         .<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>),
                 ),
         )
@@ -752,7 +752,7 @@
                 .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/v1/something&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>))
                 .<span class="ident">service</span>(
                     <span class="ident">web::resource</span>(<span class="string">&quot;/v2/something&quot;</span>)
-                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
+                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">ctx</span>.<span class="ident">head</span>().<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
                         .<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>),
                 ),
         )
@@ -785,7 +785,7 @@
         <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">init_service</span>(
             <span class="ident">App::new</span>().<span class="ident">wrap</span>(<span class="ident">NormalizePath</span>(<span class="ident">TrailingSlash::Trim</span>)).<span class="ident">service</span>(
                 <span class="ident">web::resource</span>(<span class="string">&quot;/&quot;</span>)
-                    .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
+                    .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">ctx</span>.<span class="ident">head</span>().<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
                     .<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>),
             ),
         )
@@ -809,7 +809,7 @@
                 .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/v1/something/&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>))
                 .<span class="ident">service</span>(
                     <span class="ident">web::resource</span>(<span class="string">&quot;/v2/something/&quot;</span>)
-                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
+                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">ctx</span>.<span class="ident">head</span>().<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
                         .<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>),
                 ),
         )
@@ -844,7 +844,7 @@
                 .<span class="ident">wrap</span>(<span class="ident">NormalizePath</span>(<span class="ident">TrailingSlash::Always</span>))
                 .<span class="ident">service</span>(
                     <span class="ident">web::resource</span>(<span class="string">&quot;/&quot;</span>)
-                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
+                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">ctx</span>.<span class="ident">head</span>().<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
                         .<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>),
                 ),
         )
@@ -869,7 +869,7 @@
                 .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/v1/&quot;</span>).<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>))
                 .<span class="ident">service</span>(
                     <span class="ident">web::resource</span>(<span class="string">&quot;/v2/something&quot;</span>)
-                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
+                        .<span class="ident">guard</span>(<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">ctx</span>.<span class="ident">head</span>().<span class="ident">uri</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;query=test&quot;</span>)))
                         .<span class="ident">to</span>(<span class="ident">HttpResponse::Ok</span>),
                 ),
         )

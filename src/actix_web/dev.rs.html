@@ -104,10 +104,21 @@
 <span id="102">102</span>
 <span id="103">103</span>
 <span id="104">104</span>
+<span id="105">105</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Lower-level types and re-exports.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Most users will not have to interact with the types in this module, but it is useful for those</span>
 <span class="doccomment">//! writing extractors, middleware, libraries, or interacting with the service API directly.</span>
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>, <span class="ident">Response</span>, <span class="ident">ResponseHead</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">ResourcePath</span>, <span class="ident">Url</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_server</span>::{<span class="ident">Server</span>, <span class="ident">ServerHandle</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_service</span>::{
+    <span class="ident">always_ready</span>, <span class="ident">fn_factory</span>, <span class="ident">fn_service</span>, <span class="ident">forward_ready</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>, <span class="ident">Transform</span>,
+};
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::encoding::Decoder</span> <span class="kw">as</span> <span class="ident">Decompress</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config</span>::{<span class="ident">AppConfig</span>, <span class="ident">AppService</span>};
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
@@ -119,16 +130,6 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::form::UrlEncoded</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::json::JsonBody</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::readlines::Readlines</span>;
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">Extensions</span>, <span class="ident">Payload</span>, <span class="ident">RequestHead</span>, <span class="ident">Response</span>, <span class="ident">ResponseHead</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_router</span>::{<span class="ident">Path</span>, <span class="ident">ResourceDef</span>, <span class="ident">ResourcePath</span>, <span class="ident">Url</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_server</span>::{<span class="ident">Server</span>, <span class="ident">ServerHandle</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_service</span>::{
-    <span class="ident">always_ready</span>, <span class="ident">fn_factory</span>, <span class="ident">fn_service</span>, <span class="ident">forward_ready</span>, <span class="ident">Service</span>, <span class="ident">ServiceFactory</span>, <span class="ident">Transform</span>,
-};
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::encoding::Decoder</span> <span class="kw">as</span> <span class="ident">Decompress</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header::ContentEncoding</span>;
 
@@ -152,7 +153,6 @@
 
     <span class="ident">patterns</span>
 }
-<span class="kw">struct</span> <span class="ident">Enc</span>(<span class="ident">ContentEncoding</span>);
 
 <span class="doccomment">/// Helper trait that allows to set specific encoding for response.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BodyEncoding</span> {
@@ -175,6 +175,8 @@
         <span class="self">self</span>
     }
 }
+
+<span class="kw">struct</span> <span class="ident">Enc</span>(<span class="ident">ContentEncoding</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident">actix_http::Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
