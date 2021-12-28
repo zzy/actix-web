@@ -841,6 +841,11 @@
 <span id="839">839</span>
 <span id="840">840</span>
 <span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>, <span class="ident">net</span>,
@@ -1071,23 +1076,28 @@
         <span class="self">self</span>.<span class="ident">app_state</span>().<span class="ident">rmap</span>()
     }
 
-    <span class="doccomment">/// Peer socket address.</span>
+    <span class="doccomment">/// Returns peer socket address.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Peer address is the directly connected peer&#39;s socket address. If a proxy is used in front of</span>
     <span class="doccomment">/// the Actix Web server, then it would be address of this proxy.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// To get client connection information `.connection_info()` should be used.</span>
+    <span class="doccomment">/// For expanded client connection information, use [`connection_info`] instead.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Will only return None when called in unit tests.</span>
+    <span class="doccomment">/// Will only return None when called in unit tests unless [`TestRequest::peer_addr`] is used.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`TestRequest::peer_addr`]: crate::test::TestRequest::peer_addr</span>
+    <span class="doccomment">/// [`connection_info`]: Self::connection_info</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peer_addr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net::SocketAddr</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">head</span>().<span class="ident">peer_addr</span>
     }
 
-    <span class="doccomment">/// Get *ConnectionInfo* for the current request.</span>
+    <span class="doccomment">/// Returns connection info for the current request.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This method panics if request&#39;s extensions container is already</span>
-    <span class="doccomment">/// borrowed.</span>
+    <span class="doccomment">/// The return type, [`ConnectionInfo`], can also be used as an extractor.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Panics</span>
+    <span class="doccomment">/// Panics if request&#39;s extensions container is already borrowed.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connection_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">ConnectionInfo</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">contains</span>::<span class="op">&lt;</span><span class="ident">ConnectionInfo</span><span class="op">&gt;</span>() {
@@ -1095,7 +1105,7 @@
             <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">info</span>);
         }
 
-        <span class="ident">Ref::map</span>(<span class="self">self</span>.<span class="ident">extensions</span>(), <span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>())
+        <span class="ident">Ref::map</span>(<span class="self">self</span>.<span class="ident">extensions</span>(), <span class="op">|</span><span class="ident">data</span><span class="op">|</span> <span class="ident">data</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>())
     }
 
     <span class="doccomment">/// App config</span>
