@@ -184,8 +184,6 @@
 <span id="182">182</span>
 <span id="183">183</span>
 <span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Essentials helper functions and types for application registration.</span>
 
 <span class="kw">use</span> <span class="ident">std::future::Future</span>;
@@ -274,23 +272,21 @@
 
 <span class="macro">macro_rules!</span> <span class="ident">method_route</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>:<span class="ident">ident</span>) =&gt; {
-        <span class="macro">paste::paste!</span> {
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; Creates a new route with `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot;` method guard.&quot;</span>]</span>
-            <span class="doccomment">///</span>
-            <span class="doccomment">/// # Examples</span>
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; In this example, one `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot; /{project_id}` route is set up:&quot;</span>]</span>
-            <span class="doccomment">/// ```</span>
-            <span class="doccomment">/// use actix_web::{web, App, HttpResponse};</span>
-            <span class="doccomment">///</span>
-            <span class="doccomment">/// let app = App::new().service(</span>
-            <span class="doccomment">///     web::resource(&quot;/{project_id}&quot;)</span>
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;         .route(web::&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span> <span class="string">&quot;().to(|| HttpResponse::Ok()))&quot;</span>]</span>
-            <span class="doccomment">///</span>
-            <span class="doccomment">/// );</span>
-            <span class="doccomment">/// ```</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>() -&gt; <span class="ident">Route</span> {
-                <span class="ident">method</span>(<span class="ident">Method</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>)
-            }
+        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(<span class="string">&quot; Creates a new route with `&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>), <span class="string">&quot;` method guard.&quot;</span>)]</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// # Examples</span>
+        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(<span class="string">&quot; In this example, one `&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>), <span class="string">&quot; /{project_id}` route is set up:&quot;</span>)]</span>
+        <span class="doccomment">/// ```</span>
+        <span class="doccomment">/// use actix_web::{web, App, HttpResponse};</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// let app = App::new().service(</span>
+        <span class="doccomment">///     web::resource(&quot;/{project_id}&quot;)</span>
+        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(<span class="string">&quot;         .route(web::&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>), <span class="string">&quot;().to(|| HttpResponse::Ok()))&quot;</span>)]</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// );</span>
+        <span class="doccomment">/// ```</span>
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>() -&gt; <span class="ident">Route</span> {
+            <span class="ident">method</span>(<span class="ident">Method</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>)
         }
     };
 }

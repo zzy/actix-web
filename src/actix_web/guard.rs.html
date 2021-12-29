@@ -663,8 +663,6 @@
 <span id="661">661</span>
 <span id="662">662</span>
 <span id="663">663</span>
-<span id="664">664</span>
-<span id="665">665</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Route guards.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Guards are used during routing to help select a matching service or handler using some aspect of</span>
@@ -937,22 +935,20 @@
 
 <span class="macro">macro_rules!</span> <span class="ident">method_guard</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>:<span class="ident">ident</span>) =&gt; {
-        <span class="macro">paste::paste!</span> {
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; Creates a guard that matches the `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot;` request method.&quot;</span>]</span>
-            <span class="doccomment">///</span>
-            <span class="doccomment">/// # Examples</span>
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; The route in this example will only respond to `&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span> <span class="string">&quot;` requests.&quot;</span>]</span>
-            <span class="doccomment">/// ```</span>
-            <span class="doccomment">/// use actix_web::{guard, web, HttpResponse};</span>
-            <span class="doccomment">///</span>
-            <span class="doccomment">/// web::route()</span>
-      <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;     .guard(guard::&quot;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span> <span class="string">&quot;())&quot;</span>]</span>
-            <span class="doccomment">///     .to(|| HttpResponse::Ok());</span>
-            <span class="doccomment">/// ```</span>
-            <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>() -&gt; <span class="kw">impl</span> <span class="ident">Guard</span> {
-                <span class="ident">MethodGuard</span>(<span class="ident">HttpMethod</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>)
-            }
+        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(<span class="string">&quot;Creates a guard that matches the `&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>), <span class="string">&quot;` request method.&quot;</span>)]</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// # Examples</span>
+        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(<span class="string">&quot;The route in this example will only respond to `&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>), <span class="string">&quot;` requests.&quot;</span>)]</span>
+        <span class="doccomment">/// ```</span>
+        <span class="doccomment">/// use actix_web::{guard, web, HttpResponse};</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// web::route()</span>
+        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(<span class="string">&quot;    .guard(guard::&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>), <span class="string">&quot;())&quot;</span>)]</span>
+        <span class="doccomment">///     .to(|| HttpResponse::Ok());</span>
+        <span class="doccomment">/// ```</span>
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_fn</span>() -&gt; <span class="kw">impl</span> <span class="ident">Guard</span> {
+            <span class="ident">MethodGuard</span>(<span class="ident">HttpMethod</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_const</span>)
         }
     };
 }
