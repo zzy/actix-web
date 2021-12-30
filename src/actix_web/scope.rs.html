@@ -1264,6 +1264,7 @@
 <span id="1262">1262</span>
 <span id="1263">1263</span>
 <span id="1264">1264</span>
+<span id="1265">1265</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
@@ -1420,6 +1421,7 @@
     <span class="doccomment">///         .route(&quot;/&quot;, web::get().to(handler))</span>
     <span class="doccomment">/// );</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;manage&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">U</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">app_data</span>
             .<span class="ident">get_or_insert_with</span>(<span class="ident">Extensions::new</span>)
@@ -2529,5 +2531,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (78fd0f633 2021-12-29)" ></div>
 </body></html>

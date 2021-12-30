@@ -846,6 +846,26 @@
 <span id="844">844</span>
 <span id="845">845</span>
 <span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>, <span class="ident">net</span>,
@@ -1114,14 +1134,34 @@
         <span class="self">self</span>.<span class="ident">app_state</span>().<span class="ident">config</span>()
     }
 
-    <span class="doccomment">/// Get an application data object stored with `App::data` or `App::app_data`</span>
-    <span class="doccomment">/// methods during application configuration.</span>
+    <span class="doccomment">/// Retrieves a piece of application state.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If `App::data` was used to store object, use `Data&lt;T&gt;`:</span>
+    <span class="doccomment">/// Extracts any object stored with [`App::app_data()`](crate::App::app_data) (or the</span>
+    <span class="doccomment">/// counterpart methods on [`Scope`](crate::Scope::app_data) and</span>
+    <span class="doccomment">/// [`Resource`](crate::Resource::app_data)) during application configuration.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```ignore</span>
-    <span class="doccomment">/// let opt_t = req.app_data::&lt;Data&lt;T&gt;&gt;();</span>
+    <span class="doccomment">/// Since the Actix Web router layers application data, the returned object will reference the</span>
+    <span class="doccomment">/// &quot;closest&quot; instance of the type. For example, if an `App` stores a `u32`, a nested `Scope`</span>
+    <span class="doccomment">/// also stores a `u32`, and the delegated request handler falls within that `Scope`, then</span>
+    <span class="doccomment">/// calling `.app_data::&lt;u32&gt;()` on an `HttpRequest` within that handler will return the</span>
+    <span class="doccomment">/// `Scope`&#39;s instance. However, using the same router set up and a request that does not get</span>
+    <span class="doccomment">/// captured by the `Scope`, `.app_data::&lt;u32&gt;()` would return the `App`&#39;s instance.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the state was stored using the [`Data`] wrapper, then it must also be retrieved using</span>
+    <span class="doccomment">/// this same type.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// See also the [`Data`] extractor.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">/// ```no_run</span>
+    <span class="doccomment">/// # use actix_web::{web, test::TestRequest};</span>
+    <span class="doccomment">/// # let req = TestRequest::default().to_http_request();</span>
+    <span class="doccomment">/// # type T = u32;</span>
+    <span class="doccomment">/// let opt_t: Option&lt;&amp;T&gt; = req.app_data::&lt;web::Data&lt;T&gt;&gt;();</span>
     <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Data`]: crate::web::Data</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;state&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_data</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">for</span> <span class="ident">container</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">app_data</span>.<span class="ident">iter</span>().<span class="ident">rev</span>() {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="ident">container</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>() {
@@ -1693,5 +1733,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (78fd0f633 2021-12-29)" ></div>
 </body></html>
