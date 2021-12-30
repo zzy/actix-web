@@ -368,7 +368,6 @@
 <span id="366">366</span>
 <span id="367">367</span>
 <span id="368">368</span>
-<span id="369">369</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">any::type_name</span>, <span class="ident">ops::Deref</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
@@ -524,16 +523,15 @@
             <span class="ident">ok</span>(<span class="ident">st</span>.<span class="ident">clone</span>())
         } <span class="kw">else</span> {
             <span class="macro">log::debug!</span>(
-                <span class="string">&quot;Failed to construct Data extractor type: `{}`. For the Data extractor to work \
+                <span class="string">&quot;Failed to extract `Data&lt;{}&gt;` for `{}` handler. For the Data extractor to work \
                 correctly, wrap the data with `Data::new()` and pass it to `App::app_data()`. \
-                Ensure that types align in both the set and retrieve calls. \
-                Request path: {}&quot;</span>,
+                Ensure that types align in both the set and retrieve calls.&quot;</span>,
                 <span class="ident">type_name</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(),
-                <span class="ident">req</span>.<span class="ident">path</span>()
+                <span class="ident">req</span>.<span class="ident">match_name</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">path</span>())
             );
 
             <span class="ident">err</span>(<span class="ident">ErrorInternalServerError</span>(
-                <span class="string">&quot;Requested application data is not configured. \
+                <span class="string">&quot;Requested application data is not configured correctly. \
                 View/enable debug logs for more details.&quot;</span>,
             ))
         }
