@@ -1154,10 +1154,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```no_run</span>
-    <span class="doccomment">/// # use actix_web::{web, test::TestRequest};</span>
+    <span class="doccomment">/// # use actix_web::{test::TestRequest, web::Data};</span>
     <span class="doccomment">/// # let req = TestRequest::default().to_http_request();</span>
     <span class="doccomment">/// # type T = u32;</span>
-    <span class="doccomment">/// let opt_t: Option&lt;&amp;T&gt; = req.app_data::&lt;web::Data&lt;T&gt;&gt;();</span>
+    <span class="doccomment">/// let opt_t: Option&lt;&amp;Data&lt;T&gt;&gt; = req.app_data::&lt;Data&lt;T&gt;&gt;();</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`Data`]: crate::web::Data</span>
@@ -1733,5 +1733,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (78fd0f633 2021-12-29)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (b60e32c82 2021-12-30)" ></div>
 </body></html>
