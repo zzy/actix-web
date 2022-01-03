@@ -29,7 +29,7 @@ required by the spec to send a <code>Vary: Accept-Encoding</code> header.</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">middleware</span>, <span class="ident">http::header</span>, <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>};
 
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index_handler</span>() -&gt; <span class="ident">actix_web::Result</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">Responder</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>(<span class="ident">actix_files::NamedFile::open</span>(<span class="string">&quot;./assets/index.html.gz&quot;</span>)<span class="question-mark">?</span>
+    <span class="prelude-val">Ok</span>(<span class="ident">actix_files::NamedFile::open_async</span>(<span class="string">&quot;./assets/index.html.gz&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>
         .<span class="ident">customize</span>()
         .<span class="ident">insert_header</span>(<span class="ident">header::ContentEncoding::Gzip</span>))
 }

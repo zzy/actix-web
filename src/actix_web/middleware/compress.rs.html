@@ -376,7 +376,7 @@
 <span class="doccomment">/// use actix_web::{middleware, http::header, web, App, HttpResponse, Responder};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// async fn index_handler() -&gt; actix_web::Result&lt;impl Responder&gt; {</span>
-<span class="doccomment">///     Ok(actix_files::NamedFile::open(&quot;./assets/index.html.gz&quot;)?</span>
+<span class="doccomment">///     Ok(actix_files::NamedFile::open_async(&quot;./assets/index.html.gz&quot;).await?</span>
 <span class="doccomment">///         .customize()</span>
 <span class="doccomment">///         .insert_header(header::ContentEncoding::Gzip))</span>
 <span class="doccomment">/// }</span>
