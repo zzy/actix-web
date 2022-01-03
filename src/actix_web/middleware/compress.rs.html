@@ -279,6 +279,40 @@
 <span id="277">277</span>
 <span id="278">278</span>
 <span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`Compress`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -308,17 +342,51 @@
 
 <span class="doccomment">/// Middleware for compressing response payloads.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Use `BodyEncoding` trait for overriding response compression. To disable compression set</span>
-<span class="doccomment">/// encoding to `ContentEncoding::Identity`.</span>
+<span class="doccomment">/// # Encoding Negotiation</span>
+<span class="doccomment">/// `Compress` will read the `Accept-Encoding` header to negotiate which compression codec to use.</span>
+<span class="doccomment">/// Payloads are not compressed if the header is not sent. The `compress-*` [feature flags] are also</span>
+<span class="doccomment">/// considered in this selection process.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Pre-compressed Payload</span>
+<span class="doccomment">/// If you are serving some data is already using a compressed representation (e.g., a gzip</span>
+<span class="doccomment">/// compressed HTML file from disk) you can signal this to `Compress` by setting an appropriate</span>
+<span class="doccomment">/// `Content-Encoding` header. In addition to preventing double compressing the payload, this header</span>
+<span class="doccomment">/// is required by the spec when using compressed representations and will inform the client that</span>
+<span class="doccomment">/// the content should be uncompressed.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// However, it is not advised to unconditionally serve encoded representations of content because</span>
+<span class="doccomment">/// the client may not support it. The [`AcceptEncoding`] typed header has some utilities to help</span>
+<span class="doccomment">/// perform manual encoding negotiation, if required. When negotiating content encoding, it is also</span>
+<span class="doccomment">/// required by the spec to send a `Vary: Accept-Encoding` header.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A (naïve) example serving an pre-compressed Gzip file is included below.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
+<span class="doccomment">/// To enable automatic payload compression just include `Compress` as a top-level middleware:</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// use actix_web::{web, middleware, App, HttpResponse};</span>
+<span class="doccomment">/// use actix_web::{middleware, web, App, HttpResponse};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// let app = App::new()</span>
 <span class="doccomment">///     .wrap(middleware::Compress::default())</span>
-<span class="doccomment">///     .default_service(web::to(|| HttpResponse::NotFound()));</span>
+<span class="doccomment">///     .default_service(web::to(|| HttpResponse::Ok().body(&quot;hello world&quot;)));</span>
 <span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Pre-compressed Gzip file being served from disk with correct headers added to bypass middleware:</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use actix_web::{middleware, http::header, web, App, HttpResponse, Responder};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// async fn index_handler() -&gt; actix_web::Result&lt;impl Responder&gt; {</span>
+<span class="doccomment">///     Ok(actix_files::NamedFile::open(&quot;./assets/index.html.gz&quot;)?</span>
+<span class="doccomment">///         .customize()</span>
+<span class="doccomment">///         .insert_header(header::ContentEncoding::Gzip))</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let app = App::new()</span>
+<span class="doccomment">///     .wrap(middleware::Compress::default())</span>
+<span class="doccomment">///     .default_service(web::to(index_handler));</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [feature flags]: ../index.html#crate-features</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Compress</span>;

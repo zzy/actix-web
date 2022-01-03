@@ -421,6 +421,7 @@
 <span id="419">419</span>
 <span id="420">420</span>
 <span id="421">421</span>
+<span id="422">422</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Stream encoders.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -496,7 +497,7 @@
 
         <span class="kw">if</span> <span class="ident">should_encode</span> {
             <span class="comment">// wrap body only if encoder is feature-enabled</span>
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">enc</span>) <span class="op">=</span> <span class="ident">ContentEncoder::encoder</span>(<span class="ident">encoding</span>) {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">enc</span>) <span class="op">=</span> <span class="ident">ContentEncoder::select</span>(<span class="ident">encoding</span>) {
                 <span class="ident">update_head</span>(<span class="ident">encoding</span>, <span class="ident">head</span>);
 
                 <span class="kw">return</span> <span class="ident">Encoder</span> {
@@ -591,6 +592,7 @@
         <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">project</span>();
+
         <span class="kw">loop</span> {
             <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">eof</span> {
                 <span class="kw">return</span> <span class="ident">Poll::Ready</span>(<span class="prelude-val">None</span>);
@@ -699,7 +701,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ContentEncoder</span> {
-    <span class="kw">fn</span> <span class="ident">encoder</span>(<span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">select</span>(<span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">encoding</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
             <span class="ident">ContentEncoding::Deflate</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">ContentEncoder::Deflate</span>(<span class="ident">ZlibEncoder::new</span>(
