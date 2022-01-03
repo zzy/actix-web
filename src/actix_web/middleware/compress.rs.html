@@ -308,11 +308,6 @@
 <span id="306">306</span>
 <span id="307">307</span>
 <span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`Compress`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -331,7 +326,6 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">body</span>::{<span class="ident">EitherBody</span>, <span class="ident">MessageBody</span>},
-    <span class="ident">dev::BodyEncoding</span> <span class="kw">as</span> <span class="kw">_</span>,
     <span class="ident">http</span>::{
         <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">AcceptEncoding</span>, <span class="ident">Encoding</span>, <span class="ident">HeaderValue</span>},
         <span class="ident">StatusCode</span>,
@@ -491,14 +485,10 @@
 
         <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">this</span>.<span class="ident">fut</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)) {
             <span class="prelude-val">Ok</span>(<span class="ident">resp</span>) =&gt; {
-                <span class="kw">let</span> <span class="ident">enc</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">enc</span>) <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">response</span>().<span class="ident">preferred_encoding</span>() {
-                    <span class="ident">enc</span>
-                } <span class="kw">else</span> {
-                    <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">encoding</span> {
-                        <span class="ident">Encoding::Known</span>(<span class="ident">enc</span>) =&gt; <span class="kw-2">*</span><span class="ident">enc</span>,
-                        <span class="ident">Encoding::Unknown</span>(<span class="ident">enc</span>) =&gt; {
-                            <span class="macro">unimplemented!</span>(<span class="string">&quot;encoding {} should not be here&quot;</span>, <span class="ident">enc</span>);
-                        }
+                <span class="kw">let</span> <span class="ident">enc</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">encoding</span> {
+                    <span class="ident">Encoding::Known</span>(<span class="ident">enc</span>) =&gt; <span class="kw-2">*</span><span class="ident">enc</span>,
+                    <span class="ident">Encoding::Unknown</span>(<span class="ident">enc</span>) =&gt; {
+                        <span class="macro">unimplemented!</span>(<span class="string">&quot;encoding {} should not be here&quot;</span>, <span class="ident">enc</span>);
                     }
                 };
 

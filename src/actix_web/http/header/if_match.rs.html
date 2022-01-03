@@ -67,6 +67,7 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
+<span id="68">68</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">common_header</span>, <span class="ident">EntityTag</span>, <span class="ident">IF_MATCH</span>};
 
 <span class="macro">common_header!</span> {
@@ -123,14 +124,15 @@
             <span class="ident">test1</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;\&quot;xyzzy\&quot;&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">HeaderField::Items</span>(
-                <span class="macro">vec!</span>[<span class="ident">EntityTag::new</span>(<span class="bool-val">false</span>, <span class="string">&quot;xyzzy&quot;</span>.<span class="ident">to_owned</span>())])));
+                <span class="macro">vec!</span>[<span class="ident">EntityTag::new_strong</span>(<span class="string">&quot;xyzzy&quot;</span>.<span class="ident">to_owned</span>())])));
+
         <span class="macro">crate::http::header::common_header_test!</span>(
             <span class="ident">test2</span>,
             <span class="macro">vec!</span>[<span class="string">b&quot;\&quot;xyzzy\&quot;, \&quot;r2d2xxxx\&quot;, \&quot;c3piozzzz\&quot;&quot;</span>],
             <span class="prelude-val">Some</span>(<span class="ident">HeaderField::Items</span>(
-                <span class="macro">vec!</span>[<span class="ident">EntityTag::new</span>(<span class="bool-val">false</span>, <span class="string">&quot;xyzzy&quot;</span>.<span class="ident">to_owned</span>()),
-                     <span class="ident">EntityTag::new</span>(<span class="bool-val">false</span>, <span class="string">&quot;r2d2xxxx&quot;</span>.<span class="ident">to_owned</span>()),
-                     <span class="ident">EntityTag::new</span>(<span class="bool-val">false</span>, <span class="string">&quot;c3piozzzz&quot;</span>.<span class="ident">to_owned</span>())])));
+                <span class="macro">vec!</span>[<span class="ident">EntityTag::new_strong</span>(<span class="string">&quot;xyzzy&quot;</span>.<span class="ident">to_owned</span>()),
+                     <span class="ident">EntityTag::new_strong</span>(<span class="string">&quot;r2d2xxxx&quot;</span>.<span class="ident">to_owned</span>()),
+                     <span class="ident">EntityTag::new_strong</span>(<span class="string">&quot;c3piozzzz&quot;</span>.<span class="ident">to_owned</span>())])));
         <span class="macro">crate::http::header::common_header_test!</span>(<span class="ident">test3</span>, <span class="macro">vec!</span>[<span class="string">b&quot;*&quot;</span>], <span class="prelude-val">Some</span>(<span class="ident">IfMatch::Any</span>));
     }
 }

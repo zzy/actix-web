@@ -175,8 +175,8 @@
 
         <span class="ident">if_none_match</span> <span class="op">=</span> <span class="ident">Header::parse</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">entities</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">EntityTag</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">let</span> <span class="ident">foobar_etag</span> <span class="op">=</span> <span class="ident">EntityTag::new</span>(<span class="bool-val">false</span>, <span class="string">&quot;foobar&quot;</span>.<span class="ident">to_owned</span>());
-        <span class="kw">let</span> <span class="ident">weak_etag</span> <span class="op">=</span> <span class="ident">EntityTag::new</span>(<span class="bool-val">true</span>, <span class="string">&quot;weak-etag&quot;</span>.<span class="ident">to_owned</span>());
+        <span class="kw">let</span> <span class="ident">foobar_etag</span> <span class="op">=</span> <span class="ident">EntityTag::new_strong</span>(<span class="string">&quot;foobar&quot;</span>.<span class="ident">to_owned</span>());
+        <span class="kw">let</span> <span class="ident">weak_etag</span> <span class="op">=</span> <span class="ident">EntityTag::new_weak</span>(<span class="string">&quot;weak-etag&quot;</span>.<span class="ident">to_owned</span>());
         <span class="ident">entities</span>.<span class="ident">push</span>(<span class="ident">foobar_etag</span>);
         <span class="ident">entities</span>.<span class="ident">push</span>(<span class="ident">weak_etag</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">if_none_match</span>.<span class="ident">ok</span>(), <span class="prelude-val">Some</span>(<span class="ident">IfNoneMatch::Items</span>(<span class="ident">entities</span>)));
