@@ -105,6 +105,54 @@
 <span id="103">103</span>
 <span id="104">104</span>
 <span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Lower-level types and re-exports.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Most users will not have to interact with the types in this module, but it is useful for those</span>
@@ -127,11 +175,9 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::rmap::ResourceMap</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::service</span>::{<span class="ident">HttpServiceFactory</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">WebService</span>};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::form::UrlEncoded</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::json::JsonBody</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::readlines::Readlines</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types</span>::{<span class="ident">JsonBody</span>, <span class="ident">Readlines</span>, <span class="ident">UrlEncoded</span>};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header::ContentEncoding</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">http::header::ContentEncoding</span>, <span class="ident">HttpMessage</span> <span class="kw">as</span> <span class="kw">_</span>};
 
 <span class="kw">use</span> <span class="ident">actix_router::Patterns</span>;
 
@@ -154,62 +200,112 @@
     <span class="ident">patterns</span>
 }
 
-<span class="doccomment">/// Helper trait that allows to set specific encoding for response.</span>
+<span class="doccomment">/// Helper trait for managing response encoding.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Use `pre_encoded_with` to flag response as already encoded. For example, when serving a Gzip</span>
+<span class="doccomment">/// compressed file from disk.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BodyEncoding</span> {
     <span class="doccomment">/// Get content encoding</span>
-    <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">preferred_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span>;
 
-    <span class="doccomment">/// Set content encoding</span>
+    <span class="doccomment">/// Set content encoding to use.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Must be used with [`crate::middleware::Compress`] to take effect.</span>
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span>;
+    <span class="doccomment">/// Must be used with [`Compress`] to take effect.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Compress`]: crate::middleware::Compress</span>
+    <span class="kw">fn</span> <span class="ident">encode_with</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span>;
+
+    <span class="comment">// /// Flags that a file already is encoded so that [`Compress`] does not modify it.</span>
+    <span class="comment">// ///</span>
+    <span class="comment">// /// Effectively a shortcut for `compress_with(&quot;identity&quot;)`</span>
+    <span class="comment">// /// plus `insert_header(ContentEncoding, encoding)`.</span>
+    <span class="comment">// ///</span>
+    <span class="comment">// /// [`Compress`]: crate::middleware::Compress</span>
+    <span class="comment">// fn pre_encoded_with(&amp;mut self, encoding: ContentEncoding) -&gt; &amp;mut Self;</span>
 }
 
-<span class="kw">impl</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident">actix_http::ResponseBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
-    }
+<span class="kw">struct</span> <span class="ident">CompressWith</span>(<span class="ident">ContentEncoding</span>);
 
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
-        <span class="self">self</span>
-    }
-}
-
-<span class="kw">struct</span> <span class="ident">Enc</span>(<span class="ident">ContentEncoding</span>);
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident">actix_http::Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
-        <span class="self">self</span>
-    }
-}
+<span class="comment">// TODO: add or delete this</span>
+<span class="comment">// struct PreCompressed(ContentEncoding);</span>
 
 <span class="kw">impl</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::HttpResponseBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
+    <span class="kw">fn</span> <span class="ident">preferred_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">CompressWith</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
+    <span class="kw">fn</span> <span class="ident">encode_with</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">CompressWith</span>(<span class="ident">encoding</span>));
         <span class="self">self</span>
     }
+
+    <span class="comment">// fn pre_encoded_with(&amp;mut self, encoding: ContentEncoding) -&gt; &amp;mut Self {</span>
+    <span class="comment">//     self.extensions_mut().insert(PreCompressed(encoding));</span>
+    <span class="comment">//     self</span>
+    <span class="comment">// }</span>
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::HttpResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">get_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Enc</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
+    <span class="kw">fn</span> <span class="ident">preferred_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">CompressWith</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">encoding</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">Enc</span>(<span class="ident">encoding</span>));
+    <span class="kw">fn</span> <span class="ident">encode_with</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">CompressWith</span>(<span class="ident">encoding</span>));
+        <span class="self">self</span>
+    }
+
+    <span class="comment">// fn pre_encoded_with(&amp;mut self, encoding: ContentEncoding) -&gt; &amp;mut Self {</span>
+    <span class="comment">//     self.extensions_mut().insert(PreCompressed(encoding));</span>
+    <span class="comment">//     self</span>
+    <span class="comment">// }</span>
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">preferred_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">request</span>()
+            .<span class="ident">extensions</span>()
+            .<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">CompressWith</span><span class="op">&gt;</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">encode_with</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">request</span>()
+            .<span class="ident">extensions_mut</span>()
+            .<span class="ident">insert</span>(<span class="ident">CompressWith</span>(<span class="ident">encoding</span>));
+        <span class="self">self</span>
+    }
+
+    <span class="comment">// fn pre_encoded_with(&amp;mut self, encoding: ContentEncoding) -&gt; &amp;mut Self {</span>
+    <span class="comment">//     self.request()</span>
+    <span class="comment">//         .extensions_mut()</span>
+    <span class="comment">//         .insert(PreCompressed(encoding));</span>
+    <span class="comment">//     self</span>
+    <span class="comment">// }</span>
+}
+
+<span class="comment">// TODO: remove these impls ?</span>
+<span class="kw">impl</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident">actix_http::ResponseBuilder</span> {
+    <span class="kw">fn</span> <span class="ident">preferred_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">CompressWith</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">encode_with</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">CompressWith</span>(<span class="ident">encoding</span>));
+        <span class="self">self</span>
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">BodyEncoding</span> <span class="kw">for</span> <span class="ident">actix_http::Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">preferred_encoding</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ContentEncoding</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">extensions</span>().<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">CompressWith</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">enc</span><span class="op">|</span> <span class="ident">enc</span>.<span class="number">0</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">encode_with</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">extensions_mut</span>().<span class="ident">insert</span>(<span class="ident">CompressWith</span>(<span class="ident">encoding</span>));
         <span class="self">self</span>
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (b60e32c82 2021-12-30)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f3238f89 2022-01-02)" ></div>
 </body></html>

@@ -298,6 +298,14 @@
 <span id="296">296</span>
 <span id="297">297</span>
 <span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>, <span class="ident">convert::TryFrom</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">fmt</span>, <span class="ident">str</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::ParseError</span>;
@@ -331,7 +339,7 @@
 <span class="doccomment">/// let q_item_fallback: QualityItem&lt;String&gt; = &quot;abc;q=0.1&quot;.parse().unwrap();</span>
 <span class="doccomment">/// assert!(q_item &gt; q_item_fallback);</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">QualityItem</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// The wrapped contents of the field.</span>
     <span class="kw">pub</span> <span class="ident">item</span>: <span class="ident">T</span>,
@@ -353,9 +361,14 @@
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">item</span>, <span class="ident">Quality::MAX</span>)
     }
 
-    <span class="doccomment">/// Constructs a new `QualityItem` from an item, using the minimum q-value.</span>
+    <span class="doccomment">/// Constructs a new `QualityItem` from an item, using the minimum, non-zero q-value.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min</span>(<span class="ident">item</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">item</span>, <span class="ident">Quality::MIN</span>)
+    }
+
+    <span class="doccomment">/// Constructs a new `QualityItem` from an item, using zero q-value of zero.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">zero</span>(<span class="ident">item</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">item</span>, <span class="ident">Quality::ZERO</span>)
     }
 }
 
@@ -373,7 +386,10 @@
             <span class="comment">// q-factor value is implied for max value</span>
             <span class="ident">Quality::MAX</span> =&gt; <span class="prelude-val">Ok</span>(()),
 
-            <span class="ident">Quality::MIN</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;; q=0&quot;</span>),
+            <span class="comment">// fast path for zero</span>
+            <span class="ident">Quality::ZERO</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;; q=0&quot;</span>),
+
+            <span class="comment">// quality formatting is already using itoa</span>
             <span class="ident">q</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;; q={}&quot;</span>, <span class="ident">q</span>),
         }
     }
@@ -597,5 +613,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (b60e32c82 2021-12-30)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f3238f89 2022-01-02)" ></div>
 </body></html>

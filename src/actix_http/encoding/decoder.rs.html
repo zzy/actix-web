@@ -346,9 +346,9 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">stream</span>: <span class="ident">S</span>, <span class="ident">encoding</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="ident">Decoder</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">encoding</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-            <span class="ident">ContentEncoding::Br</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">ContentDecoder::Br</span>(<span class="ident">Box::new</span>(<span class="ident">BrotliDecoder::new</span>(
-                <span class="ident">Writer::new</span>(),
-            )))),
+            <span class="ident">ContentEncoding::Brotli</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">ContentDecoder::Brotli</span>(<span class="ident">Box::new</span>(
+                <span class="ident">BrotliDecoder::new</span>(<span class="ident">Writer::new</span>()),
+            ))),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
             <span class="ident">ContentEncoding::Deflate</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">ContentDecoder::Deflate</span>(<span class="ident">Box::new</span>(
                 <span class="ident">ZlibDecoder::new</span>(<span class="ident">Writer::new</span>()),
@@ -464,7 +464,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
     <span class="ident">Gzip</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">GzDecoder</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-    <span class="ident">Br</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">BrotliDecoder</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span>),
+    <span class="ident">Brotli</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">BrotliDecoder</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="comment">// We need explicit &#39;static lifetime here because ZstdDecoder need lifetime</span>
     <span class="comment">// argument, and we use `spawn_blocking` in `Decoder::poll_next` that require `FnOnce() -&gt; R + Send + &#39;static`</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-zstd&quot;</span>)]</span>
@@ -475,7 +475,7 @@
     <span class="kw">fn</span> <span class="ident">feed_eof</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-            <span class="ident">ContentDecoder::Br</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">decoder</span>) =&gt; <span class="kw">match</span> <span class="ident">decoder</span>.<span class="ident">flush</span>() {
+            <span class="ident">ContentDecoder::Brotli</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">decoder</span>) =&gt; <span class="kw">match</span> <span class="ident">decoder</span>.<span class="ident">flush</span>() {
                 <span class="prelude-val">Ok</span>(()) =&gt; {
                     <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">get_mut</span>().<span class="ident">take</span>();
 
@@ -533,7 +533,7 @@
     <span class="kw">fn</span> <span class="ident">feed_data</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">Bytes</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-            <span class="ident">ContentDecoder::Br</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">decoder</span>) =&gt; <span class="kw">match</span> <span class="ident">decoder</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>) {
+            <span class="ident">ContentDecoder::Brotli</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">decoder</span>) =&gt; <span class="kw">match</span> <span class="ident">decoder</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>) {
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; {
                     <span class="ident">decoder</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
                     <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">get_mut</span>().<span class="ident">take</span>();
@@ -595,5 +595,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (b60e32c82 2021-12-30)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f3238f89 2022-01-02)" ></div>
 </body></html>

@@ -19,27 +19,25 @@
 <span id="17">17</span>
 <span id="18">18</span>
 <span id="19">19</span>
-<span id="20">20</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Common extractors and responders.</span>
 
-<span class="comment">// TODO: review visibility</span>
 <span class="kw">mod</span> <span class="ident">either</span>;
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">form</span>;
+<span class="kw">mod</span> <span class="ident">form</span>;
 <span class="kw">mod</span> <span class="ident">header</span>;
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">json</span>;
+<span class="kw">mod</span> <span class="ident">json</span>;
 <span class="kw">mod</span> <span class="ident">path</span>;
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">payload</span>;
+<span class="kw">mod</span> <span class="ident">payload</span>;
 <span class="kw">mod</span> <span class="ident">query</span>;
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">readlines</span>;
+<span class="kw">mod</span> <span class="ident">readlines</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::either</span>::{<span class="ident">Either</span>, <span class="ident">EitherExtractError</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::form</span>::{<span class="ident">Form</span>, <span class="ident">FormConfig</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::either::Either</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::form</span>::{<span class="ident">Form</span>, <span class="ident">FormConfig</span>, <span class="ident">UrlEncoded</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::header::Header</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::json</span>::{<span class="ident">Json</span>, <span class="ident">JsonConfig</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::json</span>::{<span class="ident">Json</span>, <span class="ident">JsonBody</span>, <span class="ident">JsonConfig</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::path</span>::{<span class="ident">Path</span>, <span class="ident">PathConfig</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::payload</span>::{<span class="ident">Payload</span>, <span class="ident">PayloadConfig</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::query</span>::{<span class="ident">Query</span>, <span class="ident">QueryConfig</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::readlines::Readlines</span>;
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (b60e32c82 2021-12-30)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f3238f89 2022-01-02)" ></div>
 </body></html>

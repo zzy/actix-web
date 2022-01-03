@@ -1041,6 +1041,13 @@
 <span id="1039">1039</span>
 <span id="1040">1040</span>
 <span id="1041">1041</span>
+<span id="1042">1042</span>
+<span id="1043">1043</span>
+<span id="1044">1044</span>
+<span id="1045">1045</span>
+<span id="1046">1046</span>
+<span id="1047">1047</span>
+<span id="1048">1048</span>
 </pre><pre class="rust"><code><span class="doccomment">//! A multi-value [`HeaderMap`] and its iterators.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">collections::hash_map</span>, <span class="ident">iter</span>, <span class="ident">ops</span>};
@@ -1648,6 +1655,13 @@
     }
 }
 
+<span class="doccomment">/// Convert `http::HeaderMap` to our `HeaderMap`.</span>
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">http::HeaderMap</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HeaderMap</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">map</span>: <span class="ident">http::HeaderMap</span>) -&gt; <span class="ident">HeaderMap</span> {
+        <span class="ident">HeaderMap::from_drain</span>(<span class="ident">map</span>.<span class="ident">drain</span>())
+    }
+}
+
 <span class="doccomment">/// Iterator over removed, owned values with the same associated name.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Returned from methods that remove or replace items. See [`HeaderMap::insert`]</span>
@@ -2083,5 +2097,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (b60e32c82 2021-12-30)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f3238f89 2022-01-02)" ></div>
 </body></html>
