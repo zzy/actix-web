@@ -350,6 +350,7 @@
 <span id="348">348</span>
 <span id="349">349</span>
 <span id="350">350</span>
+<span id="351">351</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ResourcePath</span>;
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
@@ -692,6 +693,7 @@
         <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%25b%2Bc&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%b+c&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2fb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%2fb&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2Fb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%2Fb&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%0Ab&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a\nb&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
