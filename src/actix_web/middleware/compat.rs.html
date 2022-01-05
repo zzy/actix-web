@@ -222,6 +222,21 @@
 <span id="220">220</span>
 <span id="221">221</span>
 <span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
 </pre><pre class="rust"><code><span class="doccomment">//! For middleware documentation, see [`Compat`].</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -374,11 +389,13 @@
 
     <span class="kw">use</span> <span class="ident">actix_service::IntoService</span>;
 
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dev::ServiceRequest</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::StatusCode</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::middleware</span>::{<span class="self">self</span>, <span class="ident">Condition</span>, <span class="ident">Logger</span>};
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test</span>::{<span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">TestRequest</span>};
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::{
+        <span class="ident">dev::ServiceRequest</span>,
+        <span class="ident">http::StatusCode</span>,
+        <span class="ident">middleware</span>::{<span class="self">self</span>, <span class="ident">Condition</span>, <span class="ident">Logger</span>},
+        <span class="ident">test</span>::{<span class="self">self</span>, <span class="ident">call_service</span>, <span class="ident">init_service</span>, <span class="ident">TestRequest</span>},
+        <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>,
+    };
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cookies&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;__compress&quot;</span>))]</span>
@@ -442,6 +459,19 @@
             .<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">mw</span>, <span class="ident">TestRequest::default</span>().<span class="ident">to_srv_request</span>()).<span class="kw">await</span>;
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compat_noop_is_noop</span>() {
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::ok_service</span>();
+
+        <span class="kw">let</span> <span class="ident">mw</span> <span class="op">=</span> <span class="ident">Compat::noop</span>()
+            .<span class="ident">new_transform</span>(<span class="ident">srv</span>.<span class="ident">into_service</span>())
+            .<span class="kw">await</span>
+            .<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">call_service</span>(<span class="kw-2">&amp;</span><span class="ident">mw</span>, <span class="ident">TestRequest::default</span>().<span class="ident">to_srv_request</span>()).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
     }
 }
 </code></pre></div>
