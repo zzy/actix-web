@@ -425,6 +425,11 @@
 <span id="420">420</span>
 <span id="421">421</span>
 <span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Stream encoders.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -440,9 +445,6 @@
 <span class="kw">use</span> <span class="ident">derive_more::Display</span>;
 <span class="kw">use</span> <span class="ident">futures_core::ready</span>;
 <span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">brotli2::write::BrotliEncoder</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">flate2::write</span>::{<span class="ident">GzEncoder</span>, <span class="ident">ZlibEncoder</span>};
@@ -695,7 +697,7 @@
     <span class="ident">Gzip</span>(<span class="ident">GzEncoder</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span>),
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-    <span class="ident">Brotli</span>(<span class="ident">BrotliEncoder</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span>),
+    <span class="ident">Brotli</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">brotli::CompressorWriter</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span>),
 
     <span class="comment">// Wwe need explicit &#39;static lifetime here because ZstdEncoder needs a lifetime argument and we</span>
     <span class="comment">// use `spawn_blocking` in `Encoder::poll_next` that requires `FnOnce() -&gt; R + Send + &#39;static`.</span>
@@ -719,9 +721,7 @@
             ))),
 
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-            <span class="ident">ContentEncoding::Brotli</span> =&gt; {
-                <span class="prelude-val">Some</span>(<span class="ident">ContentEncoder::Brotli</span>(<span class="ident">BrotliEncoder::new</span>(<span class="ident">Writer::new</span>(), <span class="number">3</span>)))
-            }
+            <span class="ident">ContentEncoding::Brotli</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">ContentEncoder::Brotli</span>(<span class="ident">new_brotli_compressor</span>())),
 
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-zstd&quot;</span>)]</span>
             <span class="ident">ContentEncoding::Zstd</span> =&gt; {
@@ -753,8 +753,8 @@
     <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">io::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-            <span class="ident">ContentEncoder::Brotli</span>(<span class="ident">encoder</span>) =&gt; <span class="kw">match</span> <span class="ident">encoder</span>.<span class="ident">finish</span>() {
-                <span class="prelude-val">Ok</span>(<span class="ident">writer</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">writer</span>.<span class="ident">buf</span>.<span class="ident">freeze</span>()),
+            <span class="ident">ContentEncoder::Brotli</span>(<span class="kw-2">mut</span> <span class="ident">encoder</span>) =&gt; <span class="kw">match</span> <span class="ident">encoder</span>.<span class="ident">flush</span>() {
+                <span class="prelude-val">Ok</span>(()) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">encoder</span>.<span class="ident">into_inner</span>().<span class="ident">buf</span>.<span class="ident">freeze</span>()),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
             },
 
@@ -819,6 +819,16 @@
     }
 }
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
+<span class="kw">fn</span> <span class="ident">new_brotli_compressor</span>() -&gt; <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">brotli::CompressorWriter</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="ident">Box::new</span>(<span class="ident">brotli::CompressorWriter::new</span>(
+        <span class="ident">Writer::new</span>(),
+        <span class="number">8</span> <span class="op">*</span> <span class="number">1024</span>, <span class="comment">// 32 KiB buffer</span>
+        <span class="number">3</span>,        <span class="comment">// BROTLI_PARAM_QUALITY</span>
+        <span class="number">22</span>,       <span class="comment">// BROTLI_PARAM_LGWIN</span>
+    ))
+}
+
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Display</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EncoderError</span> {
@@ -848,5 +858,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (22e491ac7 2022-01-13)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (ad46af247 2022-01-14)" ></div>
 </body></html>

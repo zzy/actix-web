@@ -297,9 +297,6 @@
 <span id="292">292</span>
 <span id="293">293</span>
 <span id="294">294</span>
-<span id="295">295</span>
-<span id="296">296</span>
-<span id="297">297</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Stream decoders.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -312,9 +309,6 @@
 <span class="kw">use</span> <span class="ident">actix_rt::task</span>::{<span class="ident">spawn_blocking</span>, <span class="ident">JoinHandle</span>};
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">ready</span>, <span class="ident">Stream</span>};
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">brotli2::write::BrotliDecoder</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">flate2::write</span>::{<span class="ident">GzDecoder</span>, <span class="ident">ZlibDecoder</span>};
@@ -350,7 +344,7 @@
         <span class="kw">let</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">encoding</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
             <span class="ident">ContentEncoding::Brotli</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">ContentDecoder::Brotli</span>(<span class="ident">Box::new</span>(
-                <span class="ident">BrotliDecoder::new</span>(<span class="ident">Writer::new</span>()),
+                <span class="ident">brotli::DecompressorWriter::new</span>(<span class="ident">Writer::new</span>(), <span class="number">8_096</span>),
             ))),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
             <span class="ident">ContentEncoding::Deflate</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">ContentDecoder::Deflate</span>(<span class="ident">Box::new</span>(
@@ -467,7 +461,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-gzip&quot;</span>)]</span>
     <span class="ident">Gzip</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">GzDecoder</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-brotli&quot;</span>)]</span>
-    <span class="ident">Brotli</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">BrotliDecoder</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span>),
+    <span class="ident">Brotli</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">brotli::DecompressorWriter</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="comment">// We need explicit &#39;static lifetime here because ZstdDecoder need lifetime</span>
     <span class="comment">// argument, and we use `spawn_blocking` in `Decoder::poll_next` that require `FnOnce() -&gt; R + Send + &#39;static`</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compress-zstd&quot;</span>)]</span>
@@ -598,5 +592,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (22e491ac7 2022-01-13)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (ad46af247 2022-01-14)" ></div>
 </body></html>
