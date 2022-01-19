@@ -904,6 +904,7 @@
 <span id="899">899</span>
 <span id="900">900</span>
 <span id="901">901</span>
+<span id="902">902</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>,
     <span class="ident">future::Future</span>,
@@ -1113,7 +1114,7 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Maximum supported HTTP major version.</span>
+    <span class="doccomment">/// Sets maximum supported HTTP major version.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Supported versions are HTTP/1.1 and HTTP/2.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_http_version</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">http::Version</span>) -&gt; <span class="self">Self</span> {
@@ -1128,8 +1129,8 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Indicates the initial window size (in octets) for</span>
-    <span class="doccomment">/// HTTP2 stream-level flow control for received data.</span>
+    <span class="doccomment">/// Sets the initial window size (in octets) for HTTP/2 stream-level flow control for</span>
+    <span class="doccomment">/// received data.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The default value is 65,535 and is good for APIs, but not for big objects.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initial_window_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
@@ -1137,8 +1138,8 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Indicates the initial window size (in octets) for</span>
-    <span class="doccomment">/// HTTP2 connection-level flow control for received data.</span>
+    <span class="doccomment">/// Sets the initial window size (in octets) for HTTP/2 connection-level flow control for</span>
+    <span class="doccomment">/// received data.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The default value is 65,535 and is good for APIs, but not for big objects.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initial_connection_window_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
@@ -1149,6 +1150,7 @@
     <span class="doccomment">/// Set total number of simultaneous connections per type of scheme.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If limit is 0, the connector has no limit.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// The default limit size is 100.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="ident">limit</span>;

@@ -206,6 +206,7 @@
 <span id="201">201</span>
 <span id="202">202</span>
 <span id="203">203</span>
+<span id="204">204</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP client.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
@@ -275,12 +276,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Client</span> {
-    <span class="doccomment">/// Create new client instance with default settings.</span>
+    <span class="doccomment">/// Constructs new client instance with default settings.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Client</span> {
         <span class="ident">Client::default</span>()
     }
 
-    <span class="doccomment">/// Create `Client` builder.</span>
+    <span class="doccomment">/// Constructs new `Client` builder.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// This function is equivalent of `ClientBuilder::new()`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">builder</span>() -&gt; <span class="ident">ClientBuilder</span><span class="op">&lt;</span>
         <span class="kw">impl</span> <span class="ident">Service</span><span class="op">&lt;</span>

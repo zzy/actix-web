@@ -1037,6 +1037,11 @@
 <span id="1032">1032</span>
 <span id="1033">1033</span>
 <span id="1034">1034</span>
+<span id="1035">1035</span>
+<span id="1036">1036</span>
+<span id="1037">1037</span>
+<span id="1038">1038</span>
+<span id="1039">1039</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">io</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">mem::MaybeUninit</span>, <span class="ident">task::Poll</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec::Decoder</span>;
@@ -1419,34 +1424,36 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="doccomment">/// Http payload item</span>
+<span class="doccomment">/// Chunk type yielded while decoding a payload.</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PayloadItem</span> {
     <span class="ident">Chunk</span>(<span class="ident">Bytes</span>),
     <span class="ident">Eof</span>,
 }
 
-<span class="doccomment">/// Decoders to handle different Transfer-Encodings.</span>
+<span class="doccomment">/// Decoder that can handle different payload types.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// If a message body does not include a Transfer-Encoding, it *should*</span>
-<span class="doccomment">/// include a Content-Length header.</span>
+<span class="doccomment">/// If a message body does not use `Transfer-Encoding`, it should include a `Content-Length`.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PayloadDecoder</span> {
     <span class="ident">kind</span>: <span class="ident">Kind</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">PayloadDecoder</span> {
+    <span class="doccomment">/// Constructs a fixed-length payload decoder.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">length</span>(<span class="ident">x</span>: <span class="ident">u64</span>) -&gt; <span class="ident">PayloadDecoder</span> {
         <span class="ident">PayloadDecoder</span> {
             <span class="ident">kind</span>: <span class="ident">Kind::Length</span>(<span class="ident">x</span>),
         }
     }
 
+    <span class="doccomment">/// Constructs a chunked encoding decoder.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chunked</span>() -&gt; <span class="ident">PayloadDecoder</span> {
         <span class="ident">PayloadDecoder</span> {
             <span class="ident">kind</span>: <span class="ident">Kind::Chunked</span>(<span class="ident">ChunkedState::Size</span>, <span class="number">0</span>),
         }
     }
 
+    <span class="doccomment">/// Creates an decoder that yields chunks until the stream returns EOF.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eof</span>() -&gt; <span class="ident">PayloadDecoder</span> {
         <span class="ident">PayloadDecoder</span> { <span class="ident">kind</span>: <span class="ident">Kind::Eof</span> }
     }
@@ -1454,25 +1461,26 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">enum</span> <span class="ident">Kind</span> {
-    <span class="doccomment">/// A Reader used when a Content-Length header is passed with a positive</span>
-    <span class="doccomment">/// integer.</span>
+    <span class="doccomment">/// A reader used when a `Content-Length` header is passed with a positive integer.</span>
     <span class="ident">Length</span>(<span class="ident">u64</span>),
-    <span class="doccomment">/// A Reader used when Transfer-Encoding is `chunked`.</span>
+
+    <span class="doccomment">/// A reader used when `Transfer-Encoding` is `chunked`.</span>
     <span class="ident">Chunked</span>(<span class="ident">ChunkedState</span>, <span class="ident">u64</span>),
-    <span class="doccomment">/// A Reader used for responses that don&#39;t indicate a length or chunked.</span>
+
+    <span class="doccomment">/// A reader used for responses that don&#39;t indicate a length or chunked.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Note: This should only used for `Response`s. It is illegal for a</span>
-    <span class="doccomment">/// `Request` to be made with both `Content-Length` and</span>
-    <span class="doccomment">/// `Transfer-Encoding: chunked` missing, as explained from the spec:</span>
+    <span class="doccomment">/// Note: This should only used for `Response`s. It is illegal for a `Request` to be made</span>
+    <span class="doccomment">/// without either of `Content-Length` and `Transfer-Encoding: chunked` missing, as explained</span>
+    <span class="doccomment">/// in [RFC 7230 §3.3.3]:</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// &gt; If a Transfer-Encoding header field is present in a response and</span>
-    <span class="doccomment">/// &gt; the chunked transfer coding is not the final encoding, the</span>
-    <span class="doccomment">/// &gt; message body length is determined by reading the connection until</span>
-    <span class="doccomment">/// &gt; it is closed by the server.  If a Transfer-Encoding header field</span>
-    <span class="doccomment">/// &gt; is present in a request and the chunked transfer coding is not</span>
-    <span class="doccomment">/// &gt; the final encoding, the message body length cannot be determined</span>
-    <span class="doccomment">/// &gt; reliably; the server MUST respond with the 400 (Bad Request)</span>
-    <span class="doccomment">/// &gt; status code and then close the connection.</span>
+    <span class="doccomment">/// &gt; If a Transfer-Encoding header field is present in a response and the chunked transfer</span>
+    <span class="doccomment">/// &gt; coding is not the final encoding, the message body length is determined by reading the</span>
+    <span class="doccomment">/// &gt; connection until it is closed by the server. If a Transfer-Encoding header field is</span>
+    <span class="doccomment">/// &gt; present in a request and the chunked transfer coding is not the final encoding, the</span>
+    <span class="doccomment">/// &gt; message body length cannot be determined reliably; the server MUST respond with the 400</span>
+    <span class="doccomment">/// &gt; (Bad Request) status code and then close the connection.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [RFC 7230 §3.3.3]: https://datatracker.ietf.org/doc/html/rfc7230#section-3.3.3</span>
     <span class="ident">Eof</span>,
 }
 
@@ -1502,6 +1510,7 @@
                     <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">PayloadItem::Chunk</span>(<span class="ident">buf</span>)))
                 }
             }
+
             <span class="ident">Kind::Chunked</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">state</span>, <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">size</span>) =&gt; {
                 <span class="kw">loop</span> {
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="prelude-val">None</span>;
@@ -1527,6 +1536,7 @@
                     }
                 }
             }
+
             <span class="ident">Kind::Eof</span> =&gt; {
                 <span class="kw">if</span> <span class="ident">src</span>.<span class="ident">is_empty</span>() {
                     <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
