@@ -281,6 +281,7 @@
 <span id="276">276</span>
 <span id="277">277</span>
 <span id="278">278</span>
+<span id="279">279</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">firestorm::profile_method</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">IntoPatterns</span>, <span class="ident">Resource</span>, <span class="ident">ResourceDef</span>};
@@ -539,6 +540,7 @@
         <span class="ident">router</span>.<span class="ident">path</span>(<span class="string">&quot;/name/{val}&quot;</span>, <span class="number">11</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">router</span> <span class="op">=</span> <span class="ident">router</span>.<span class="ident">finish</span>();
 
+        <span class="comment">// test skip beyond path length</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="string">&quot;/name&quot;</span>);
         <span class="ident">path</span>.<span class="ident">skip</span>(<span class="number">6</span>);
         <span class="macro">assert!</span>(<span class="ident">router</span>.<span class="ident">recognize_mut</span>(<span class="kw-2">&amp;mut</span> <span class="ident">path</span>).<span class="ident">is_none</span>());
