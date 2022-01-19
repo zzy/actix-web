@@ -675,13 +675,13 @@
             <span class="kw">if</span> <span class="ident">methods</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">1</span> {
                 <span class="macro">quote!</span> {
                     .<span class="ident">guard</span>(
-                        <span class="ident">actix_web::guard::Any</span>(<span class="ident">actix_web::guard</span>::#<span class="ident">first</span>())
-                            #(.<span class="ident">or</span>(<span class="ident">actix_web::guard</span>::#<span class="ident">others</span>()))<span class="op">*</span>
+                        <span class="ident">::actix_web::guard::Any</span>(<span class="ident">::actix_web::guard</span>::#<span class="ident">first</span>())
+                            #(.<span class="ident">or</span>(<span class="ident">::actix_web::guard</span>::#<span class="ident">others</span>()))<span class="op">*</span>
                     )
                 }
             } <span class="kw">else</span> {
                 <span class="macro">quote!</span> {
-                    .<span class="ident">guard</span>(<span class="ident">actix_web::guard</span>::#<span class="ident">first</span>())
+                    .<span class="ident">guard</span>(<span class="ident">::actix_web::guard</span>::#<span class="ident">first</span>())
                 }
             }
         };
@@ -691,17 +691,17 @@
             <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>, <span class="ident">missing_docs</span>)]</span>
             <span class="kw">pub</span> <span class="kw">struct</span> #<span class="ident">name</span>;
 
-            <span class="kw">impl</span> <span class="ident">actix_web::dev::HttpServiceFactory</span> <span class="kw">for</span> #<span class="ident">name</span> {
+            <span class="kw">impl</span> <span class="ident">::actix_web::dev::HttpServiceFactory</span> <span class="kw">for</span> #<span class="ident">name</span> {
                 <span class="kw">fn</span> <span class="ident">register</span>(<span class="self">self</span>, <span class="ident">__config</span>: <span class="kw-2">&amp;mut</span> <span class="ident">actix_web::dev::AppService</span>) {
                     #<span class="ident">ast</span>
-                    <span class="kw">let</span> <span class="ident">__resource</span> <span class="op">=</span> <span class="ident">actix_web::Resource::new</span>(#<span class="ident">path</span>)
+                    <span class="kw">let</span> <span class="ident">__resource</span> <span class="op">=</span> <span class="ident">::actix_web::Resource::new</span>(#<span class="ident">path</span>)
                         .<span class="ident">name</span>(#<span class="ident">resource_name</span>)
                         #<span class="ident">method_guards</span>
-                        #(.<span class="ident">guard</span>(<span class="ident">actix_web::guard::fn_guard</span>(#<span class="ident">guards</span>)))<span class="op">*</span>
+                        #(.<span class="ident">guard</span>(<span class="ident">::actix_web::guard::fn_guard</span>(#<span class="ident">guards</span>)))<span class="op">*</span>
                         #(.<span class="ident">wrap</span>(#<span class="ident">wrappers</span>))<span class="op">*</span>
                         .#<span class="ident">resource_type</span>(#<span class="ident">name</span>);
 
-                    <span class="ident">actix_web::dev::HttpServiceFactory::register</span>(<span class="ident">__resource</span>, <span class="ident">__config</span>)
+                    <span class="ident">::actix_web::dev::HttpServiceFactory::register</span>(<span class="ident">__resource</span>, <span class="ident">__config</span>)
                 }
             }
         };

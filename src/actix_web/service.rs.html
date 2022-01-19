@@ -816,6 +816,36 @@
 <span id="811">811</span>
 <span id="812">812</span>
 <span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>, <span class="ident">net</span>,
@@ -915,6 +945,11 @@
 
     <span class="doccomment">/// Construct request from parts.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_parts</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="ident">Payload</span>) -&gt; <span class="self">Self</span> {
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">debug_assertions</span>)]</span>
+        <span class="kw">if</span> <span class="ident">Rc::strong_count</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">inner</span>) <span class="op">&gt;</span> <span class="number">1</span> {
+            <span class="macro">log::warn!</span>(<span class="string">&quot;Cloning an `HttpRequest` might cause panics.&quot;</span>);
+        }
+
         <span class="self">Self</span> { <span class="ident">req</span>, <span class="ident">payload</span> }
     }
 
@@ -1481,7 +1516,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test</span>::{<span class="ident">init_service</span>, <span class="ident">TestRequest</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test</span>::{<span class="self">self</span>, <span class="ident">init_service</span>, <span class="ident">TestRequest</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">guard</span>, <span class="ident">http</span>, <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
     <span class="kw">use</span> <span class="ident">actix_service::Service</span>;
     <span class="kw">use</span> <span class="ident">actix_utils::future::ok</span>;
@@ -1627,6 +1662,31 @@
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::with_uri</span>(<span class="string">&quot;/test3/scoped_test2&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">srv</span>.<span class="ident">call</span>(<span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">http::StatusCode::OK</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="attribute">#[<span class="ident">should_panic</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">&quot;called `Option::unwrap()` on a `None` value&quot;</span>)]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">cloning_request_panics</span>() {
+        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">_name</span>: <span class="ident">web::Path</span><span class="op">&lt;</span>(<span class="ident">String</span>,)<span class="op">&gt;</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+            <span class="string">&quot;&quot;</span>
+        }
+
+        <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">test::init_service</span>(
+            <span class="ident">App::new</span>()
+                .<span class="ident">wrap_fn</span>(<span class="op">|</span><span class="ident">req</span>, <span class="ident">svc</span><span class="op">|</span> {
+                    <span class="kw">let</span> (<span class="ident">req</span>, <span class="ident">pl</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">into_parts</span>();
+                    <span class="kw">let</span> <span class="ident">_req2</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">clone</span>();
+                    <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">ServiceRequest::from_parts</span>(<span class="ident">req</span>, <span class="ident">pl</span>);
+                    <span class="ident">svc</span>.<span class="ident">call</span>(<span class="ident">req</span>)
+                })
+                .<span class="ident">service</span>(
+                    <span class="ident">web::resource</span>(<span class="string">&quot;/resource1/{name}/index.html&quot;</span>).<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">index</span>)),
+                ),
+        )
+        .<span class="kw">await</span>;
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">test::TestRequest::default</span>().<span class="ident">to_request</span>();
+        <span class="kw">let</span> <span class="ident">_res</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>, <span class="ident">req</span>).<span class="kw">await</span>;
     }
 }
 </code></pre></div>
