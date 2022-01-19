@@ -2512,7 +2512,7 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">segments</span> <span class="op">=</span> <span class="op">&lt;</span>[<span class="ident">PathItem</span>; <span class="ident">MAX_DYNAMIC_SEGMENTS</span>]<span class="op">&gt;</span><span class="ident">::default</span>();
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">resource</span>.<span class="ident">resource_path</span>();
-        <span class="kw">let</span> <span class="ident">path_str</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">path</span>();
+        <span class="kw">let</span> <span class="ident">path_str</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">unprocessed</span>();
 
         <span class="kw">let</span> (<span class="ident">matched_len</span>, <span class="ident">matched_vars</span>) <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">pat_type</span> {
             <span class="ident">PatternType::Static</span>(<span class="ident">pattern</span>) =&gt; {
@@ -2530,7 +2530,7 @@
                 <span class="kw">let</span> <span class="ident">captures</span> <span class="op">=</span> {
                     <span class="macro">profile_section!</span>(<span class="ident">pattern_dynamic_regex_exec</span>);
 
-                    <span class="kw">match</span> <span class="ident">re</span>.<span class="ident">captures</span>(<span class="ident">path</span>.<span class="ident">path</span>()) {
+                    <span class="kw">match</span> <span class="ident">re</span>.<span class="ident">captures</span>(<span class="ident">path</span>.<span class="ident">unprocessed</span>()) {
                         <span class="prelude-val">Some</span>(<span class="ident">captures</span>) =&gt; <span class="ident">captures</span>,
                         <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="bool-val">false</span>,
                     }
@@ -2558,7 +2558,7 @@
             <span class="ident">PatternType::DynamicSet</span>(<span class="ident">re</span>, <span class="ident">params</span>) =&gt; {
                 <span class="macro">profile_section!</span>(<span class="ident">pattern_dynamic_set</span>);
 
-                <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">path</span>();
+                <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">unprocessed</span>();
                 <span class="kw">let</span> (<span class="ident">pattern</span>, <span class="ident">names</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">re</span>.<span class="ident">matches</span>(<span class="ident">path</span>).<span class="ident">into_iter</span>().<span class="ident">next</span>() {
                     <span class="prelude-val">Some</span>(<span class="ident">idx</span>) =&gt; <span class="kw-2">&amp;</span><span class="ident">params</span>[<span class="ident">idx</span>],
                     <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="bool-val">false</span>,

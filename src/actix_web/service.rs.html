@@ -1016,15 +1016,21 @@
         <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">connection_info</span>()
     }
 
-    <span class="doccomment">/// Get a reference to the Path parameters.</span>
+    <span class="doccomment">/// Returns a reference to the Path parameters.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Params is a container for url parameters.</span>
+    <span class="doccomment">/// Params is a container for URL parameters.</span>
     <span class="doccomment">/// A variable segment is specified in the form `{identifier}`,</span>
     <span class="doccomment">/// where the identifier can be used later in a request handler to</span>
     <span class="doccomment">/// access the matched value for that segment.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_info</span>()
+    }
+
+    <span class="doccomment">/// Returns a mutable reference to the Path parameters.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_info_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_info_mut</span>()
     }
 
     <span class="doccomment">/// Counterpart to [`HttpRequest::match_name`].</span>
@@ -1037,12 +1043,6 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_pattern</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_pattern</span>()
-    }
-
-    <span class="doccomment">/// Get a mutable reference to the Path parameters.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">match_info_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">req</span>.<span class="ident">match_info_mut</span>()
     }
 
     <span class="doccomment">/// Get a reference to a `ResourceMap` of current application.</span>
