@@ -779,7 +779,7 @@
             }
             <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) <span class="kw">if</span> <span class="ident">camel_case</span> =&gt; <span class="ident">dst</span>.<span class="ident">put_slice</span>(<span class="string">b&quot;\r\nContent-Length: 0\r\n&quot;</span>),
             <span class="ident">BodySize::Sized</span>(<span class="number">0</span>) =&gt; <span class="ident">dst</span>.<span class="ident">put_slice</span>(<span class="string">b&quot;\r\ncontent-length: 0\r\n&quot;</span>),
-            <span class="ident">BodySize::Sized</span>(<span class="ident">len</span>) =&gt; <span class="ident">helpers::write_content_length</span>(<span class="ident">len</span>, <span class="ident">dst</span>),
+            <span class="ident">BodySize::Sized</span>(<span class="ident">len</span>) =&gt; <span class="ident">helpers::write_content_length</span>(<span class="ident">len</span>, <span class="ident">dst</span>, <span class="ident">camel_case</span>),
             <span class="ident">BodySize::None</span> =&gt; <span class="ident">dst</span>.<span class="ident">put_slice</span>(<span class="string">b&quot;\r\n&quot;</span>),
         }
 
@@ -887,7 +887,7 @@
 
         <span class="comment">// optimized date header, set_date writes \r\n</span>
         <span class="kw">if</span> <span class="op">!</span><span class="ident">has_date</span> {
-            <span class="ident">config</span>.<span class="ident">set_date</span>(<span class="ident">dst</span>);
+            <span class="ident">config</span>.<span class="ident">set_date</span>(<span class="ident">dst</span>, <span class="ident">camel_case</span>);
         } <span class="kw">else</span> {
             <span class="comment">// msg eof</span>
             <span class="ident">dst</span>.<span class="ident">extend_from_slice</span>(<span class="string">b&quot;\r\n&quot;</span>);
