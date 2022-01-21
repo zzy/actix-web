@@ -826,9 +826,9 @@
 <span class="kw">fn</span> <span class="ident">new_brotli_compressor</span>() -&gt; <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">brotli::CompressorWriter</span><span class="op">&lt;</span><span class="ident">Writer</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="ident">Box::new</span>(<span class="ident">brotli::CompressorWriter::new</span>(
         <span class="ident">Writer::new</span>(),
-        <span class="number">8</span> <span class="op">*</span> <span class="number">1024</span>, <span class="comment">// 32 KiB buffer</span>
-        <span class="number">3</span>,        <span class="comment">// BROTLI_PARAM_QUALITY</span>
-        <span class="number">22</span>,       <span class="comment">// BROTLI_PARAM_LGWIN</span>
+        <span class="number">32</span> <span class="op">*</span> <span class="number">1024</span>, <span class="comment">// 32 KiB buffer</span>
+        <span class="number">3</span>,         <span class="comment">// BROTLI_PARAM_QUALITY</span>
+        <span class="number">22</span>,        <span class="comment">// BROTLI_PARAM_LGWIN</span>
     ))
 }
 
