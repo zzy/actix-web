@@ -369,7 +369,7 @@
                         }
                     }
                     <span class="prelude-val">None</span> <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">show_index</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">this</span>.<span class="ident">show_index</span>(<span class="ident">req</span>, <span class="ident">path</span>)),
-                    <span class="kw">_</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ServiceResponse::from_err</span>(
+                    <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ServiceResponse::from_err</span>(
                         <span class="ident">FilesError::IsDirectory</span>,
                         <span class="ident">req</span>.<span class="ident">into_parts</span>().<span class="number">0</span>,
                     )),
@@ -395,5 +395,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (777bb86bc 2022-01-20)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>

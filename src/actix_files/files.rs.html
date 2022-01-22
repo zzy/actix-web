@@ -435,7 +435,7 @@
 <span class="doccomment">///     .service(Files::new(&quot;/static&quot;, &quot;.&quot;));</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Files</span> {
-    <span class="ident">path</span>: <span class="ident">String</span>,
+    <span class="ident">mount_path</span>: <span class="ident">String</span>,
     <span class="ident">directory</span>: <span class="ident">PathBuf</span>,
     <span class="ident">index</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="ident">show_index</span>: <span class="ident">bool</span>,
@@ -466,7 +466,7 @@
             <span class="ident">default</span>: <span class="self">self</span>.<span class="ident">default</span>.<span class="ident">clone</span>(),
             <span class="ident">renderer</span>: <span class="self">self</span>.<span class="ident">renderer</span>.<span class="ident">clone</span>(),
             <span class="ident">file_flags</span>: <span class="self">self</span>.<span class="ident">file_flags</span>,
-            <span class="ident">path</span>: <span class="self">self</span>.<span class="ident">path</span>.<span class="ident">clone</span>(),
+            <span class="ident">mount_path</span>: <span class="self">self</span>.<span class="ident">mount_path</span>.<span class="ident">clone</span>(),
             <span class="ident">mime_override</span>: <span class="self">self</span>.<span class="ident">mime_override</span>.<span class="ident">clone</span>(),
             <span class="ident">path_filter</span>: <span class="self">self</span>.<span class="ident">path_filter</span>.<span class="ident">clone</span>(),
             <span class="ident">use_guards</span>: <span class="self">self</span>.<span class="ident">use_guards</span>.<span class="ident">clone</span>(),
@@ -505,7 +505,7 @@
         };
 
         <span class="ident">Files</span> {
-            <span class="ident">path</span>: <span class="ident">mount_path</span>.<span class="ident">trim_end_matches</span>(<span class="string">&#39;/&#39;</span>).<span class="ident">to_owned</span>(),
+            <span class="ident">mount_path</span>: <span class="ident">mount_path</span>.<span class="ident">trim_end_matches</span>(<span class="string">&#39;/&#39;</span>).<span class="ident">to_owned</span>(),
             <span class="ident">directory</span>: <span class="ident">dir</span>,
             <span class="ident">index</span>: <span class="prelude-val">None</span>,
             <span class="ident">show_index</span>: <span class="bool-val">false</span>,
@@ -740,9 +740,9 @@
         }
 
         <span class="kw">let</span> <span class="ident">rdef</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">is_root</span>() {
-            <span class="ident">ResourceDef::root_prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">path</span>)
+            <span class="ident">ResourceDef::root_prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mount_path</span>)
         } <span class="kw">else</span> {
-            <span class="ident">ResourceDef::prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">path</span>)
+            <span class="ident">ResourceDef::prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mount_path</span>)
         };
 
         <span class="ident">config</span>.<span class="ident">register_service</span>(<span class="ident">rdef</span>, <span class="ident">guards</span>, <span class="self">self</span>, <span class="prelude-val">None</span>)
@@ -789,5 +789,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (777bb86bc 2022-01-20)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
 </body></html>
