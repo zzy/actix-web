@@ -54,6 +54,9 @@
 <span id="46">46</span>
 <span id="47">47</span>
 <span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">convert::Infallible</span>,
     <span class="ident">pin::Pin</span>,
@@ -66,9 +69,12 @@
 
 <span class="doccomment">/// Body type for responses that forbid payloads.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Distinct from an empty response which would contain a Content-Length header.</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// This is distinct from an &quot;empty&quot; response which _would_ contain a `Content-Length` header.</span>
 <span class="doccomment">/// For an &quot;empty&quot; body, use `()` or `Bytes::new()`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// For example, the HTTP spec forbids a payload to be sent with a `204 No Content` response.</span>
+<span class="doccomment">/// In this case, the payload (or lack thereof) is implicit from the status code, so a</span>
+<span class="doccomment">/// `Content-Length` header is not required.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="prelude-val">None</span>;
@@ -103,5 +109,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (17d29dcdc 2022-01-21)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (bfe156467 2022-01-22)" ></div>
 </body></html>
