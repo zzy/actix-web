@@ -425,6 +425,7 @@
 <span id="417">417</span>
 <span id="418">418</span>
 <span id="419">419</span>
+<span id="420">420</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP response.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -612,7 +613,7 @@
         <span class="self">self</span>.<span class="ident">replace_body</span>(())
     }
 
-    <span class="doccomment">/// Map the current body type to another using a closure. Returns a new response.</span>
+    <span class="doccomment">/// Map the current body type to another using a closure, returning a new response.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Closure receives the response head and the current body type.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
@@ -629,6 +630,7 @@
         }
     }
 
+    <span class="doccomment">/// Map the current body to a type-erased `BoxBody`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_into_boxed_body</span>(<span class="self">self</span>) -&gt; <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">BoxBody</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -637,7 +639,7 @@
         <span class="self">self</span>.<span class="ident">map_body</span>(<span class="op">|</span><span class="kw">_</span>, <span class="ident">body</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">boxed</span>())
     }
 
-    <span class="doccomment">/// Returns body, consuming this response.</span>
+    <span class="doccomment">/// Returns the response body, dropping all other parts.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_body</span>(<span class="self">self</span>) -&gt; <span class="ident">B</span> {
         <span class="self">self</span>.<span class="ident">body</span>

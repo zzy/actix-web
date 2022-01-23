@@ -671,7 +671,6 @@
 <span id="663">663</span>
 <span id="664">664</span>
 <span id="665">665</span>
-<span id="666">666</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp</span>,
     <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span>},
@@ -826,7 +825,6 @@
             <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">as_str</span>().<span class="ident">as_bytes</span>();
             <span class="kw">let</span> <span class="ident">k_len</span> <span class="op">=</span> <span class="ident">k</span>.<span class="ident">len</span>();
 
-            <span class="comment">// TODO: drain?</span>
             <span class="kw">for</span> <span class="ident">val</span> <span class="kw">in</span> <span class="ident">value</span>.<span class="ident">iter</span>() {
                 <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">as_ref</span>();
                 <span class="kw">let</span> <span class="ident">v_len</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">len</span>();

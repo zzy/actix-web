@@ -435,6 +435,11 @@
 <span id="427">427</span>
 <span id="428">428</span>
 <span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::{<span class="ident">Ref</span>, <span class="ident">RefMut</span>},
     <span class="ident">fmt</span>,
@@ -693,7 +698,7 @@
         }
     }
 
-    <span class="doccomment">/// Map the current body type to another using a closure. Returns a new response.</span>
+    <span class="doccomment">/// Map the current body type to another using a closure, returning a new response.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Closure receives the response head and the current body type.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_body</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>
@@ -706,18 +711,23 @@
         }
     }
 
-    <span class="comment">// TODO: docs for the body map methods below</span>
-
+    <span class="doccomment">/// Map the current body type `B` to `EitherBody::Left(B)`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Useful for middleware which can generate their own responses.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_into_left_body</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="self">self</span>) -&gt; <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">EitherBody</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">map_body</span>(<span class="op">|</span><span class="kw">_</span>, <span class="ident">body</span><span class="op">|</span> <span class="ident">EitherBody::left</span>(<span class="ident">body</span>))
     }
 
+    <span class="doccomment">/// Map the current body type `B` to `EitherBody::Right(B)`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Useful for middleware which can generate their own responses.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_into_right_body</span><span class="op">&lt;</span><span class="ident">L</span><span class="op">&gt;</span>(<span class="self">self</span>) -&gt; <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">EitherBody</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">map_body</span>(<span class="op">|</span><span class="kw">_</span>, <span class="ident">body</span><span class="op">|</span> <span class="ident">EitherBody::right</span>(<span class="ident">body</span>))
     }
 
+    <span class="doccomment">/// Map the current body to a type-erased `BoxBody`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_into_boxed_body</span>(<span class="self">self</span>) -&gt; <span class="ident">HttpResponse</span><span class="op">&lt;</span><span class="ident">BoxBody</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -726,7 +736,7 @@
         <span class="self">self</span>.<span class="ident">map_body</span>(<span class="op">|</span><span class="kw">_</span>, <span class="ident">body</span><span class="op">|</span> <span class="ident">body</span>.<span class="ident">boxed</span>())
     }
 
-    <span class="doccomment">/// Extract response body</span>
+    <span class="doccomment">/// Returns the response body, dropping all other parts.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_body</span>(<span class="self">self</span>) -&gt; <span class="ident">B</span> {
         <span class="self">self</span>.<span class="ident">res</span>.<span class="ident">into_body</span>()
     }

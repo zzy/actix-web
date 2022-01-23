@@ -593,6 +593,7 @@
 <span id="585">585</span>
 <span id="586">586</span>
 <span id="587">587</span>
+<span id="588">588</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">convert::TryFrom</span>,
     <span class="ident">future::Future</span>,
@@ -758,7 +759,7 @@
                     <span class="op">|</span> <span class="ident">StatusCode::PERMANENT_REDIRECT</span>
                         <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">max_redirect_times</span> <span class="op">&gt;</span> <span class="number">0</span> =&gt;
                     {
-                        <span class="kw">let</span> <span class="ident">is_redirect</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">head</span>().<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode::TEMPORARY_REDIRECT</span>
+                        <span class="kw">let</span> <span class="ident">reuse_body</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">head</span>().<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode::TEMPORARY_REDIRECT</span>
                             <span class="op">|</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">head</span>().<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode::PERMANENT_REDIRECT</span>;
 
                         <span class="kw">let</span> <span class="ident">prev_uri</span> <span class="op">=</span> <span class="ident">uri</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
@@ -771,7 +772,7 @@
                         <span class="kw">let</span> <span class="ident">connector</span> <span class="op">=</span> <span class="ident">connector</span>.<span class="ident">take</span>();
 
                         <span class="comment">// reset method</span>
-                        <span class="kw">let</span> <span class="ident">method</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">is_redirect</span> {
+                        <span class="kw">let</span> <span class="ident">method</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">reuse_body</span> {
                             <span class="ident">method</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>()
                         } <span class="kw">else</span> {
                             <span class="kw">let</span> <span class="ident">method</span> <span class="op">=</span> <span class="ident">method</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
@@ -782,18 +783,19 @@
                         };
 
                         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">body</span>.<span class="ident">take</span>();
-                        <span class="kw">let</span> <span class="ident">body_new</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">is_redirect</span> {
-                            <span class="comment">// try to reuse body</span>
+                        <span class="kw">let</span> <span class="ident">body_new</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">reuse_body</span> {
+                            <span class="comment">// try to reuse saved body</span>
                             <span class="kw">match</span> <span class="ident">body</span> {
                                 <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">bytes</span>) =&gt; <span class="ident">AnyBody::Bytes</span> {
                                     <span class="ident">body</span>: <span class="ident">bytes</span>.<span class="ident">clone</span>(),
                                 },
-                                <span class="comment">// TODO: should this be AnyBody::Empty or AnyBody::None.</span>
+
+                                <span class="comment">// body was a non-reusable type so send an empty body instead</span>
                                 <span class="kw">_</span> =&gt; <span class="ident">AnyBody::empty</span>(),
                             }
                         } <span class="kw">else</span> {
                             <span class="ident">body</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-                            <span class="comment">// remove body</span>
+                            <span class="comment">// remove body since we&#39;re downgrading to a GET</span>
                             <span class="ident">AnyBody::None</span>
                         };
 

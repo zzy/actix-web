@@ -209,7 +209,6 @@
 <span id="201">201</span>
 <span id="202">202</span>
 <span id="203">203</span>
-<span id="204">204</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP client.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">rc::Rc</span>, <span class="ident">time::Duration</span>};
@@ -306,10 +305,9 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">ClientRequest::new</span>(<span class="ident">method</span>, <span class="ident">url</span>, <span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>());
 
         <span class="kw">for</span> <span class="ident">header</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">default_headers</span>.<span class="ident">iter</span>() {
-            <span class="comment">// header map is empty</span>
-            <span class="comment">// TODO: probably append instead</span>
-            <span class="ident">req</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">insert_header_if_none</span>(<span class="ident">header</span>);
+            <span class="ident">req</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">append_header</span>(<span class="ident">header</span>);
         }
+
         <span class="ident">req</span>
     }
 
