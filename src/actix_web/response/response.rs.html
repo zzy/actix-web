@@ -690,7 +690,7 @@
         (
             <span class="ident">HttpResponse</span> {
                 <span class="ident">res</span>: <span class="ident">head</span>,
-                <span class="ident">error</span>: <span class="prelude-val">None</span>,
+                <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>,
             },
             <span class="ident">body</span>,
         )
@@ -700,7 +700,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">drop_body</span>(<span class="self">self</span>) -&gt; <span class="ident">HttpResponse</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">HttpResponse</span> {
             <span class="ident">res</span>: <span class="self">self</span>.<span class="ident">res</span>.<span class="ident">drop_body</span>(),
-            <span class="ident">error</span>: <span class="prelude-val">None</span>,
+            <span class="ident">error</span>: <span class="self">self</span>.<span class="ident">error</span>,
         }
     }
 
