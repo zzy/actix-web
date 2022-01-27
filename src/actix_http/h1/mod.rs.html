@@ -92,6 +92,8 @@
 <span id="85">85</span>
 <span id="86">86</span>
 <span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP/1 protocol implementation.</span>
 
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
@@ -101,6 +103,8 @@
 <span class="kw">mod</span> <span class="ident">codec</span>;
 <span class="kw">mod</span> <span class="ident">decoder</span>;
 <span class="kw">mod</span> <span class="ident">dispatcher</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">dispatcher_tests</span>;
 <span class="kw">mod</span> <span class="ident">encoder</span>;
 <span class="kw">mod</span> <span class="ident">expect</span>;
 <span class="kw">mod</span> <span class="ident">payload</span>;
@@ -180,5 +184,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (51126be1b 2022-01-24)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (6abb6385b 2022-01-26)" ></div>
 </body></html>
