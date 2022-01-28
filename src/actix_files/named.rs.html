@@ -631,6 +631,7 @@
 <span id="626">626</span>
 <span id="627">627</span>
 <span id="628">628</span>
+<span id="629">629</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fs::Metadata</span>,
     <span class="ident">io</span>,
@@ -842,6 +843,7 @@
         <span class="ident"><span class="self">Self</span>::from_file</span>(<span class="ident">file</span>, <span class="ident">path</span>)
     }
 
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">rustdoc::broken_intra_doc_links</span>)]</span>
     <span class="doccomment">/// Attempts to open a file asynchronously in read-only mode.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When the `experimental-io-uring` crate feature is enabled, this will be async.</span>
@@ -933,7 +935,7 @@
 
     <span class="doccomment">/// Set content encoding for serving this file</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Must be used with [`actix_web::middleware::Compress`] to take effect.</span>
+    <span class="doccomment">/// Must be used with `actix_web::middleware::Compress` to take effect.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_content_encoding</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">enc</span>: <span class="ident">ContentEncoding</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">encoding</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">enc</span>);
@@ -1260,5 +1262,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (6abb6385b 2022-01-26)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
 </body></html>
