@@ -1246,6 +1246,7 @@
 <span id="1239">1239</span>
 <span id="1240">1240</span>
 <span id="1241">1241</span>
+<span id="1242">1242</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">mem</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::MessageBody</span>, <span class="ident">Extensions</span>};
@@ -1512,7 +1513,8 @@
 
     <span class="doccomment">/// Default service to be used if no matching route could be found.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If default resource is not registered, app&#39;s default resource is being used.</span>
+    <span class="doccomment">/// If a default service is not registered, it will fall back to the default service of</span>
+    <span class="doccomment">/// the parent [`App`](crate::App) (see [`App::default_service`](crate::App::default_service).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_service</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">ServiceRequest</span><span class="op">&gt;</span>,

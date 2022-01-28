@@ -803,6 +803,8 @@
 <span id="796">796</span>
 <span id="797">797</span>
 <span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
@@ -1117,9 +1119,11 @@
         }
     }
 
-    <span class="doccomment">/// Default service to be used if no matching route could be found.</span>
-    <span class="doccomment">/// By default *405* response get returned. Resource does not use</span>
-    <span class="doccomment">/// default handler from `App` or `Scope`.</span>
+    <span class="doccomment">/// Default service to be used if no matching route could be found.  </span>
+    <span class="doccomment">/// You can pass a [`Route`] as default_service.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If no default service is specified, a `405 Method Not Allowed` response will be returned to the caller.  </span>
+    <span class="doccomment">/// [`Resource`] does **not** inherit the default handler specified on the parent [`App`](crate::App) or [`Scope`](crate::Scope).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_service</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">ServiceRequest</span><span class="op">&gt;</span>,
