@@ -1511,10 +1511,10 @@
         )
     }
 
-    <span class="doccomment">/// Default service to be used if no matching route could be found.</span>
+    <span class="doccomment">/// Default service to be used if no matching resource could be found.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If a default service is not registered, it will fall back to the default service of</span>
-    <span class="doccomment">/// the parent [`App`](crate::App) (see [`App::default_service`](crate::App::default_service).</span>
+    <span class="doccomment">/// the parent [`App`](crate::App) (see [`App::default_service`](crate::App::default_service)).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_service</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">ServiceRequest</span><span class="op">&gt;</span>,

@@ -717,6 +717,8 @@
 <span id="710">710</span>
 <span id="711">711</span>
 <span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell::RefCell</span>, <span class="ident">fmt</span>, <span class="ident">future::Future</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::MessageBody</span>, <span class="ident">Extensions</span>, <span class="ident">Request</span>};
@@ -957,8 +959,12 @@
 
     <span class="doccomment">/// Default service that is invoked when no matching resource could be found.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// You must use a [`Route`] as default service:</span>
+    <span class="doccomment">/// You can use a [`Route`] as default service.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// If a default service is not registered, an empty `404 Not Found` response will be sent to</span>
+    <span class="doccomment">/// the client instead.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use actix_web::{web, App, HttpResponse};</span>
     <span class="doccomment">///</span>
@@ -967,10 +973,8 @@
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let app = App::new()</span>
-    <span class="doccomment">///     .service(</span>
-    <span class="doccomment">///         web::resource(&quot;/index.html&quot;).route(web::get().to(index)))</span>
-    <span class="doccomment">///     .default_service(</span>
-    <span class="doccomment">///         web::route().to(|| HttpResponse::NotFound()));</span>
+    <span class="doccomment">///     .service(web::resource(&quot;/index.html&quot;).route(web::get().to(index)))</span>
+    <span class="doccomment">///     .default_service(web::to(|| HttpResponse::NotFound()));</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_service</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">svc</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
