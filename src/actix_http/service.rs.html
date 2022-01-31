@@ -643,10 +643,6 @@
 <span id="636">636</span>
 <span id="637">637</span>
 <span id="638">638</span>
-<span id="639">639</span>
-<span id="640">640</span>
-<span id="641">641</span>
-<span id="642">642</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>,
     <span class="ident">future::Future</span>,
@@ -668,9 +664,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">body</span>::{<span class="ident">BoxBody</span>, <span class="ident">MessageBody</span>},
     <span class="ident">builder::HttpServiceBuilder</span>,
-    <span class="ident">config</span>::{<span class="ident">KeepAlive</span>, <span class="ident">ServiceConfig</span>},
     <span class="ident">error::DispatchError</span>,
-    <span class="ident">h1</span>, <span class="ident">h2</span>, <span class="ident">ConnectCallback</span>, <span class="ident">OnConnectData</span>, <span class="ident">Protocol</span>, <span class="ident">Request</span>, <span class="ident">Response</span>,
+    <span class="ident">h1</span>, <span class="ident">h2</span>, <span class="ident">ConnectCallback</span>, <span class="ident">OnConnectData</span>, <span class="ident">Protocol</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">ServiceConfig</span>,
 };
 
 <span class="doccomment">/// A `ServiceFactory` for HTTP/1.1 or HTTP/2 protocol.</span>
@@ -692,9 +687,9 @@
     <span class="op">&lt;</span><span class="ident">S::Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="doccomment">/// Create builder for `HttpService` instance.</span>
+    <span class="doccomment">/// Constructs builder for `HttpService` instance.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>() -&gt; <span class="ident">HttpServiceBuilder</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span><span class="op">&gt;</span> {
-        <span class="ident">HttpServiceBuilder::new</span>()
+        <span class="ident">HttpServiceBuilder::default</span>()
     }
 }
 
@@ -707,12 +702,10 @@
     <span class="op">&lt;</span><span class="ident">S::Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="doccomment">/// Create new `HttpService` instance.</span>
+    <span class="doccomment">/// Constructs new `HttpService` instance from service with default config.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">service</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig::new</span>(<span class="ident">KeepAlive::Timeout</span>(<span class="number">5</span>), <span class="number">5000</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
-
         <span class="ident">HttpService</span> {
-            <span class="ident">cfg</span>,
+            <span class="ident">cfg</span>: <span class="ident">ServiceConfig::default</span>(),
             <span class="ident">srv</span>: <span class="ident">service</span>.<span class="ident">into_factory</span>(),
             <span class="ident">expect</span>: <span class="ident">h1::ExpectHandler</span>,
             <span class="ident">upgrade</span>: <span class="prelude-val">None</span>,
@@ -721,7 +714,7 @@
         }
     }
 
-    <span class="doccomment">/// Create new `HttpService` instance with config.</span>
+    <span class="doccomment">/// Constructs new `HttpService` instance from config and service.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_config</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">service</span>: <span class="ident">F</span>,
@@ -746,11 +739,10 @@
     <span class="op">&lt;</span><span class="ident">S::Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
-    <span class="doccomment">/// Provide service for `EXPECT: 100-Continue` support.</span>
+    <span class="doccomment">/// Sets service for `Expect: 100-Continue` handling.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Service get called with request that contains `EXPECT` header.</span>
-    <span class="doccomment">/// Service must return request in case of success, in that case</span>
-    <span class="doccomment">/// request will be forwarded to main service.</span>
+    <span class="doccomment">/// An expect service is called with requests that contain an `Expect` header. A successful</span>
+    <span class="doccomment">/// response type is also a request which will be forwarded to the main service.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expect</span><span class="op">&lt;</span><span class="ident">X1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">expect</span>: <span class="ident">X1</span>) -&gt; <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X1</span>, <span class="ident">U</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">X1</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
@@ -767,10 +759,10 @@
         }
     }
 
-    <span class="doccomment">/// Provide service for custom `Connection: UPGRADE` support.</span>
+    <span class="doccomment">/// Sets service for custom `Connection: Upgrade` handling.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If service is provided then normal requests handling get halted</span>
-    <span class="doccomment">/// and this service get called with original request and framed object.</span>
+    <span class="doccomment">/// If service is provided then normal requests handling get halted and this service get called</span>
+    <span class="doccomment">/// with original request and framed object.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>) -&gt; <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U1</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">U1</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">h1::Codec</span><span class="op">&gt;</span>), <span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
@@ -1290,5 +1282,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (08df8b81d 2022-01-30)" ></div>
 </body></html>
