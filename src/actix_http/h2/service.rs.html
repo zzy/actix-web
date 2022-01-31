@@ -728,7 +728,7 @@
                 }
 
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
-                    <span class="macro">trace!</span>(<span class="string">&quot;H2 handshake error: {}&quot;</span>, <span class="ident">err</span>);
+                    <span class="macro">log::trace!</span>(<span class="string">&quot;H2 handshake error: {}&quot;</span>, <span class="ident">err</span>);
                     <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))
                 }
             },

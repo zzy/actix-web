@@ -105,7 +105,6 @@
 <span id="98"> 98</span>
 <span id="99"> 99</span>
 <span id="100">100</span>
-<span id="101">101</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP primitives for the Actix ecosystem.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Crate Features</span>
@@ -132,9 +131,6 @@
 <span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://actix.rs/img/logo.png&quot;</span>)]</span>
 <span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://actix.rs/favicon.ico&quot;</span>)]</span>
 
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
-
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">uri</span>, <span class="ident">uri::Uri</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::http</span>::{<span class="ident">Method</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>};
 
@@ -147,6 +143,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">mod</span> <span class="ident">extensions</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">h1</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http2&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">h2</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">header</span>;
 <span class="kw">mod</span> <span class="ident">helpers</span>;
@@ -160,6 +157,7 @@
 <span class="kw">mod</span> <span class="ident">responses</span>;
 <span class="kw">mod</span> <span class="ident">service</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">test</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;ws&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ws</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::builder::HttpServiceBuilder</span>;

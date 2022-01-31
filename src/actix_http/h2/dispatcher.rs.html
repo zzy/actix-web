@@ -482,7 +482,7 @@
                                 <span class="ident">DispatchError::SendResponse</span>(<span class="ident">err</span>) =&gt; {
                                     <span class="macro">trace!</span>(<span class="string">&quot;Error sending HTTP/2 response: {:?}&quot;</span>, <span class="ident">err</span>)
                                 }
-                                <span class="ident">DispatchError::SendData</span>(<span class="ident">err</span>) =&gt; <span class="macro">warn!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">err</span>),
+                                <span class="ident">DispatchError::SendData</span>(<span class="ident">err</span>) =&gt; <span class="macro">log::warn!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">err</span>),
                                 <span class="ident">DispatchError::ResponseBody</span>(<span class="ident">err</span>) =&gt; {
                                     <span class="macro">error!</span>(<span class="string">&quot;Response payload stream error: {:?}&quot;</span>, <span class="ident">err</span>)
                                 }

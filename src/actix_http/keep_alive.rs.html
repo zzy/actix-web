@@ -88,6 +88,7 @@
 <span id="81">81</span>
 <span id="82">82</span>
 <span id="83">83</span>
+<span id="84">84</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::time::Duration</span>;
 
 <span class="doccomment">/// Connection keep-alive config.</span>
@@ -114,6 +115,7 @@
         <span class="op">!</span><span class="macro">matches!</span>(<span class="self">self</span>, <span class="ident"><span class="self">Self</span>::Disabled</span>)
     }
 
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span> <span class="comment">// used with `http2` feature flag</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">duration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">KeepAlive::Timeout</span>(<span class="ident">dur</span>) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">dur</span>),
