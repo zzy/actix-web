@@ -247,6 +247,8 @@
 <span id="240">240</span>
 <span id="241">241</span>
 <span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
@@ -374,11 +376,13 @@
             <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">set</span>(<span class="ident">Flags::HEAD</span>, <span class="ident">head</span>.<span class="ident">method</span> <span class="op">==</span> <span class="ident">Method::HEAD</span>);
             <span class="self">self</span>.<span class="ident">version</span> <span class="op">=</span> <span class="ident">head</span>.<span class="ident">version</span>;
             <span class="self">self</span>.<span class="ident">conn_type</span> <span class="op">=</span> <span class="ident">head</span>.<span class="ident">connection_type</span>();
+
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">conn_type</span> <span class="op">==</span> <span class="ident">ConnectionType::KeepAlive</span>
                 <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags::KEEP_ALIVE_ENABLED</span>)
             {
                 <span class="self">self</span>.<span class="ident">conn_type</span> <span class="op">=</span> <span class="ident">ConnectionType::Close</span>
             }
+
             <span class="kw">match</span> <span class="ident">payload</span> {
                 <span class="ident">PayloadType::None</span> =&gt; <span class="self">self</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">None</span>,
                 <span class="ident">PayloadType::Payload</span>(<span class="ident">pl</span>) =&gt; <span class="self">self</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">pl</span>),
@@ -490,5 +494,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (2681f253b 2022-02-01)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (27f5d830e 2022-02-02)" ></div>
 </body></html>
