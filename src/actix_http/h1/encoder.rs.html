@@ -883,13 +883,13 @@
             <span class="ident">dst</span>.<span class="ident">advance_mut</span>(<span class="ident">pos</span>);
         }
 
-        <span class="comment">// optimized date header, set_date writes \r\n</span>
         <span class="kw">if</span> <span class="op">!</span><span class="ident">has_date</span> {
+            <span class="comment">// optimized date header, write_date_header writes its own \r\n</span>
             <span class="ident">config</span>.<span class="ident">write_date_header</span>(<span class="ident">dst</span>, <span class="ident">camel_case</span>);
-        } <span class="kw">else</span> {
-            <span class="comment">// msg eof</span>
-            <span class="ident">dst</span>.<span class="ident">extend_from_slice</span>(<span class="string">b&quot;\r\n&quot;</span>);
         }
+
+        <span class="comment">// end-of-headers marker</span>
+        <span class="ident">dst</span>.<span class="ident">extend_from_slice</span>(<span class="string">b&quot;\r\n&quot;</span>);
 
         <span class="prelude-val">Ok</span>(())
     }

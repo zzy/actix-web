@@ -330,6 +330,7 @@
 <span id="323">323</span>
 <span id="324">324</span>
 <span id="325">325</span>
+<span id="326">326</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{
@@ -464,6 +465,7 @@
 }
 
 <span class="macro">impl_responder_by_forward_into_base_response!</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>]);
+<span class="macro">impl_responder_by_forward_into_base_response!</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>);
 <span class="macro">impl_responder_by_forward_into_base_response!</span>(<span class="ident">Bytes</span>);
 <span class="macro">impl_responder_by_forward_into_base_response!</span>(<span class="ident">BytesMut</span>);
 
