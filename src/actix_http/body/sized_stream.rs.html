@@ -254,7 +254,7 @@
     <span class="kw">use</span> <span class="ident">actix_rt::pin</span>;
     <span class="kw">use</span> <span class="ident">actix_utils::future::poll_fn</span>;
     <span class="kw">use</span> <span class="ident">futures_util::stream</span>;
-    <span class="kw">use</span> <span class="ident">static_assertions</span>::{<span class="ident">assert_impl_all</span>, <span class="ident">assert_not_impl_all</span>};
+    <span class="kw">use</span> <span class="ident">static_assertions</span>::{<span class="ident">assert_impl_all</span>, <span class="ident">assert_not_impl_any</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::body::to_bytes</span>;
@@ -265,10 +265,10 @@
     <span class="macro">assert_impl_all!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Empty</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Infallible</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
     <span class="macro">assert_impl_all!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Infallible</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
 
-    <span class="macro">assert_not_impl_all!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Empty</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
-    <span class="macro">assert_not_impl_all!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Empty</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
     <span class="comment">// crate::Error is not Clone</span>
-    <span class="macro">assert_not_impl_all!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">SizedStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">skips_empty_chunks</span>() {
