@@ -255,7 +255,7 @@
 
 <span class="doccomment">/// Allows overriding status code and headers for a [`Responder`].</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Created by the [`Responder::customize`] method.</span>
+<span class="doccomment">/// Created by calling the [`customize`](Responder::customize) method on a [`Responder`] type.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CustomizeResponder</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
     <span class="ident">inner</span>: <span class="ident">CustomizeResponderInner</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
