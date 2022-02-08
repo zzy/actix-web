@@ -176,6 +176,10 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::future::Future</span>;
 
 <span class="kw">use</span> <span class="ident">actix_service</span>::{<span class="ident">boxed</span>, <span class="ident">fn_service</span>};
@@ -188,11 +192,15 @@
 <span class="doccomment">/// The interface for request handlers.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # What Is A Request Handler</span>
-<span class="doccomment">/// A request handler has three requirements:</span>
+<span class="doccomment">/// In short, a handler is just an async function that receives request-based arguments, in any</span>
+<span class="doccomment">/// order, and returns something that can be converted to a response.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// In particular, a request handler has three requirements:</span>
 <span class="doccomment">/// 1. It is an async function (or a function/closure that returns an appropriate future);</span>
 <span class="doccomment">/// 1. The function parameters (up to 12) implement [`FromRequest`];</span>
 <span class="doccomment">/// 1. The async function (or future) resolves to a type that can be converted into an</span>
 <span class="doccomment">///   [`HttpResponse`] (i.e., it implements the [`Responder`] trait).</span>
+<span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Compiler Errors</span>
 <span class="doccomment">/// If you get the error `the trait Handler&lt;_&gt; is not implemented`, then your handler does not</span>
