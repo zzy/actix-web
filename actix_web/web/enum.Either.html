@@ -10,7 +10,7 @@
     Left(L),
     Right(R),
 }</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Combines two extractor or responder types into a single type.</p>
-<h2 id="extractor" class="section-header"><a href="#extractor">Extractor</a></h2>
+<h2 id="extractor"><a href="#extractor">Extractor</a></h2>
 <p>Provides a mechanism for trying two extractors, a primary and a fallback. Useful for
 “polymorphic payloads” where, for example, a form might be JSON or URL encoded.</p>
 <p>It is important to note that this extractor, by necessity, buffers the entire request payload
@@ -34,7 +34,7 @@ as part of its implementation. Though, it does respect any <code>PayloadConfig</
 
     <span class="macro">format!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">name</span>)
 }</code></pre></div>
-<h2 id="responder" class="section-header"><a href="#responder">Responder</a></h2>
+<h2 id="responder"><a href="#responder">Responder</a></h2>
 <p>It may be desireable to use a concrete type for a response with multiple branches. As long as
 both types implement <code>Responder</code>, so will the <code>Either</code> type, enabling it to be used as a
 handler’s return type.</p>
@@ -88,5 +88,5 @@ by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.Pa
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

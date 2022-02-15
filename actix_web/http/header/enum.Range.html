@@ -14,7 +14,7 @@ in <a href="https://datatracker.ietf.org/doc/html/rfc7233#section-3.1">RFC 7233 
 <p>The “Range” header field on a GET request modifies the method semantics to request transfer of
 only one or more sub-ranges of the selected representation data, rather than the entire selected
 representation data.</p>
-<h2 id="abnf" class="section-header"><a href="#abnf">ABNF</a></h2><div class="example-wrap"><pre class="language-plain"><code>Range = byte-ranges-specifier / other-ranges-specifier
+<h2 id="abnf"><a href="#abnf">ABNF</a></h2><div class="example-wrap"><pre class="language-plain"><code>Range = byte-ranges-specifier / other-ranges-specifier
 other-ranges-specifier = other-range-unit &quot;=&quot; other-range-set
 other-range-set = 1*VCHAR
 
@@ -26,7 +26,7 @@ byte-range-spec = first-byte-pos &quot;-&quot; [last-byte-pos]
 suffix-byte-range-spec = &quot;-&quot; suffix-length
 suffix-length = 1*DIGIT
 first-byte-pos = 1*DIGIT
-last-byte-pos = 1*DIGIT</code></pre></div><h2 id="example-values" class="section-header"><a href="#example-values">Example Values</a></h2>
+last-byte-pos = 1*DIGIT</code></pre></div><h2 id="example-values"><a href="#example-values">Example Values</a></h2>
 <ul>
 <li><code>bytes=1000-</code></li>
 <li><code>bytes=-50</code></li>
@@ -35,7 +35,7 @@ last-byte-pos = 1*DIGIT</code></pre></div><h2 id="example-values" class="section
 <li><code>custom_unit=0-123</code></li>
 <li><code>custom_unit=xxx-yyy</code></li>
 </ul>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web::http::header</span>::{<span class="ident">Range</span>, <span class="ident">ByteRangeSpec</span>};
 <span class="kw">use</span> <span class="ident">actix_web::HttpResponse</span>;
 
@@ -88,5 +88,5 @@ by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.Pa
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

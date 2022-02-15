@@ -18,7 +18,7 @@ is enough. This is because all of the methods take <code>&amp;self</code> instea
 and the program has exited, and cannot be reconnected. It is advised
 that you either check for and unlink the existing socket if it exists,
 or use a temporary file that is guaranteed to not already exist.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <p>Using named sockets, associated with a filesystem path:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
@@ -69,12 +69,12 @@ task without splitting the socket.</p>
 <p>The function may complete without the socket being ready. This is a
 false-positive and attempting an operation will return with
 <code>io::ErrorKind::WouldBlock</code>.</p>
-<h5 id="cancel-safety" class="section-header"><a href="#cancel-safety">Cancel safety</a></h5>
+<h5 id="cancel-safety"><a href="#cancel-safety">Cancel safety</a></h5>
 <p>This method is cancel safe. Once a readiness event occurs, the method
 will continue to return immediately until the readiness event is
 consumed by an attempt to read or write that fails with <code>WouldBlock</code> or
 <code>Poll::Pending</code>.</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <p>Concurrently receive from and send to the socket on the same task
 without splitting.</p>
 
@@ -128,12 +128,12 @@ usually paired with <code>try_send()</code> or <code>try_send_to()</code>.</p>
 <p>The function may complete without the socket being writable. This is a
 false-positive and attempting a <code>try_send()</code> will return with
 <code>io::ErrorKind::WouldBlock</code>.</p>
-<h5 id="cancel-safety-1" class="section-header"><a href="#cancel-safety-1">Cancel safety</a></h5>
+<h5 id="cancel-safety-1"><a href="#cancel-safety-1">Cancel safety</a></h5>
 <p>This method is cancel safe. Once a readiness event occurs, the method
 will continue to return immediately until the readiness event is
 consumed by an attempt to write that fails with <code>WouldBlock</code> or
 <code>Poll::Pending</code>.</p>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -178,14 +178,14 @@ second, independent waker.)</p>
 <p>This function is intended for cases where creating and pinning a future
 via <a href="struct.UnixDatagram.html#method.writable"><code>writable</code></a> is not feasible. Where possible, using <a href="struct.UnixDatagram.html#method.writable"><code>writable</code></a> is
 preferred, as this supports polling from multiple tasks at once.</p>
-<h5 id="return-value" class="section-header"><a href="#return-value">Return value</a></h5>
+<h5 id="return-value"><a href="#return-value">Return value</a></h5>
 <p>The function returns:</p>
 <ul>
 <li><code>Poll::Pending</code> if the socket is not ready for writing.</li>
 <li><code>Poll::Ready(Ok(()))</code> if the socket is ready for writing.</li>
 <li><code>Poll::Ready(Err(e))</code> if an error is encountered.</li>
 </ul>
-<h5 id="errors" class="section-header"><a href="#errors">Errors</a></h5>
+<h5 id="errors"><a href="#errors">Errors</a></h5>
 <p>This function may encounter any standard I/O error except <code>WouldBlock</code>.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.readable" class="method has-srclink"><a href="#method.readable" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.readable" class="fnname">readable</a>(&amp;'_ self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Waits for the socket to become readable.</p>
 <p>This function is equivalent to <code>ready(Interest::READABLE)</code> and is usually
@@ -193,12 +193,12 @@ paired with <code>try_recv()</code>.</p>
 <p>The function may complete without the socket being readable. This is a
 false-positive and attempting a <code>try_recv()</code> will return with
 <code>io::ErrorKind::WouldBlock</code>.</p>
-<h5 id="cancel-safety-2" class="section-header"><a href="#cancel-safety-2">Cancel safety</a></h5>
+<h5 id="cancel-safety-2"><a href="#cancel-safety-2">Cancel safety</a></h5>
 <p>This method is cancel safe. Once a readiness event occurs, the method
 will continue to return immediately until the readiness event is
 consumed by an attempt to read that fails with <code>WouldBlock</code> or
 <code>Poll::Pending</code>.</p>
-<h5 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h5>
+<h5 id="examples-3"><a href="#examples-3">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -249,17 +249,17 @@ recent call is scheduled to receive a wakeup. (However,
 <p>This function is intended for cases where creating and pinning a future
 via <a href="struct.UnixDatagram.html#method.readable"><code>readable</code></a> is not feasible. Where possible, using <a href="struct.UnixDatagram.html#method.readable"><code>readable</code></a> is
 preferred, as this supports polling from multiple tasks at once.</p>
-<h5 id="return-value-1" class="section-header"><a href="#return-value-1">Return value</a></h5>
+<h5 id="return-value-1"><a href="#return-value-1">Return value</a></h5>
 <p>The function returns:</p>
 <ul>
 <li><code>Poll::Pending</code> if the socket is not ready for reading.</li>
 <li><code>Poll::Ready(Ok(()))</code> if the socket is ready for reading.</li>
 <li><code>Poll::Ready(Err(e))</code> if an error is encountered.</li>
 </ul>
-<h5 id="errors-1" class="section-header"><a href="#errors-1">Errors</a></h5>
+<h5 id="errors-1"><a href="#errors-1">Errors</a></h5>
 <p>This function may encounter any standard I/O error except <code>WouldBlock</code>.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.bind" class="method has-srclink"><a href="#method.bind" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.bind" class="fnname">bind</a>&lt;P&gt;(path: P) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.UnixDatagram.html" title="struct actix_web::rt::net::UnixDatagram">UnixDatagram</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;P: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,&nbsp;</span></h4></section></summary><div class="docblock"><p>Creates a new <code>UnixDatagram</code> bound to the specified path.</p>
-<h5 id="examples-4" class="section-header"><a href="#examples-4">Examples</a></h5>
+<h5 id="examples-4"><a href="#examples-4">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">tempfile::tempdir</span>;
 
@@ -274,7 +274,7 @@ preferred, as this supports polling from multiple tasks at once.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.pair" class="method has-srclink"><a href="#method.pair" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.pair" class="fnname">pair</a>() -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="struct" href="struct.UnixDatagram.html" title="struct actix_web::rt::net::UnixDatagram">UnixDatagram</a>, <a class="struct" href="struct.UnixDatagram.html" title="struct actix_web::rt::net::UnixDatagram">UnixDatagram</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Creates an unnamed pair of connected sockets.</p>
 <p>This function will create a pair of interconnected Unix sockets for
 communicating back and forth between one another.</p>
-<h5 id="examples-5" class="section-header"><a href="#examples-5">Examples</a></h5>
+<h5 id="examples-5"><a href="#examples-5">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 
 <span class="comment">// Create the pair of sockets</span>
@@ -296,12 +296,12 @@ communicating back and forth between one another.</p>
 standard library in the Tokio equivalent. The conversion assumes
 nothing about the underlying datagram; it is left up to the user to set
 it in non-blocking mode.</p>
-<h5 id="panics" class="section-header"><a href="#panics">Panics</a></h5>
+<h5 id="panics"><a href="#panics">Panics</a></h5>
 <p>This function panics if thread-local runtime is not set.</p>
 <p>The runtime is usually set implicitly when this function is called
 from a future driven by a Tokio runtime, otherwise runtime can be set
 explicitly with <a href="crate::runtime::Runtime::enter"><code>Runtime::enter</code></a> function.</p>
-<h5 id="examples-6" class="section-header"><a href="#examples-6">Examples</a></h5>
+<h5 id="examples-6"><a href="#examples-6">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::os::unix::net::UnixDatagram</span> <span class="kw">as</span> <span class="ident">StdUDS</span>;
 <span class="kw">use</span> <span class="ident">tempfile::tempdir</span>;
@@ -320,7 +320,7 @@ explicitly with <a href="crate::runtime::Runtime::enter"><code>Runtime::enter</c
 <p>The returned <a href="https://doc.rust-lang.org/nightly/std/os/unix/net/datagram/struct.UnixDatagram.html"><code>std::os::unix::net::UnixDatagram</code></a> will have nonblocking
 mode set as <code>true</code>.  Use <a href="https://doc.rust-lang.org/nightly/std/os/unix/net/datagram/struct.UnixDatagram.html#method.set_nonblocking"><code>set_nonblocking</code></a> to change the blocking mode
 if needed.</p>
-<h5 id="examples-7" class="section-header"><a href="#examples-7">Examples</a></h5>
+<h5 id="examples-7"><a href="#examples-7">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::error::Error</span>;
 
 <span class="attribute">#[<span class="ident">tokio::main</span>]</span>
@@ -331,7 +331,7 @@ if needed.</p>
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.unbound" class="method has-srclink"><a href="#method.unbound" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.unbound" class="fnname">unbound</a>() -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.UnixDatagram.html" title="struct actix_web::rt::net::UnixDatagram">UnixDatagram</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Creates a new <code>UnixDatagram</code> which is not bound to any address.</p>
-<h5 id="examples-8" class="section-header"><a href="#examples-8">Examples</a></h5>
+<h5 id="examples-8"><a href="#examples-8">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">tempfile::tempdir</span>;
 
@@ -356,7 +356,7 @@ if needed.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.connect" class="method has-srclink"><a href="#method.connect" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.connect" class="fnname">connect</a>&lt;P&gt;(&amp;self, path: P) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;P: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,&nbsp;</span></h4></section></summary><div class="docblock"><p>Connects the socket to the specified address.</p>
 <p>The <code>send</code> method may be used to send data to the specified address.
 <code>recv</code> and <code>recv_from</code> will only receive data from that address.</p>
-<h5 id="examples-9" class="section-header"><a href="#examples-9">Examples</a></h5>
+<h5 id="examples-9"><a href="#examples-9">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">tempfile::tempdir</span>;
 
@@ -382,11 +382,11 @@ if needed.</p>
 <span class="macro">assert_eq!</span>(<span class="ident">dgram</span>, <span class="ident">bytes</span>);
 </code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.send" class="method has-srclink"><a href="#method.send" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.send" class="fnname">send</a>(&amp;'_ self, buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'_ [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Sends data on the socket to the socket’s peer.</p>
-<h5 id="cancel-safety-3" class="section-header"><a href="#cancel-safety-3">Cancel safety</a></h5>
+<h5 id="cancel-safety-3"><a href="#cancel-safety-3">Cancel safety</a></h5>
 <p>This method is cancel safe. If <code>send</code> is used as the event in a
 <a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
 completes first, then it is guaranteed that the message was not sent.</p>
-<h5 id="examples-10" class="section-header"><a href="#examples-10">Examples</a></h5>
+<h5 id="examples-10"><a href="#examples-10">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 
 <span class="comment">// Create the pair of sockets</span>
@@ -404,7 +404,7 @@ completes first, then it is guaranteed that the message was not sent.</p>
 <span class="macro">assert_eq!</span>(<span class="ident">dgram</span>, <span class="ident">bytes</span>);
 </code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.try_send" class="method has-srclink"><a href="#method.try_send" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.try_send" class="fnname">try_send</a>(&amp;self, buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Tries to send a datagram to the peer without waiting.</p>
-<h5 id="examples-11" class="section-header"><a href="#examples-11">Examples</a></h5>
+<h5 id="examples-11"><a href="#examples-11">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -438,7 +438,7 @@ completes first, then it is guaranteed that the message was not sent.</p>
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.try_send_to" class="method has-srclink"><a href="#method.try_send_to" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.try_send_to" class="fnname">try_send_to</a>&lt;P&gt;(&amp;self, buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, target: P) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;P: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,&nbsp;</span></h4></section></summary><div class="docblock"><p>Tries to send a datagram to the peer without waiting.</p>
-<h5 id="examples-12" class="section-header"><a href="#examples-12">Examples</a></h5>
+<h5 id="examples-12"><a href="#examples-12">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -471,12 +471,12 @@ completes first, then it is guaranteed that the message was not sent.</p>
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.recv" class="method has-srclink"><a href="#method.recv" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.recv" class="fnname">recv</a>(&amp;'_ self, buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'_ mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Receives data from the socket.</p>
-<h5 id="cancel-safety-4" class="section-header"><a href="#cancel-safety-4">Cancel safety</a></h5>
+<h5 id="cancel-safety-4"><a href="#cancel-safety-4">Cancel safety</a></h5>
 <p>This method is cancel safe. If <code>recv</code> is used as the event in a
 <a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
 completes first, it is guaranteed that no messages were received on this
 socket.</p>
-<h5 id="examples-13" class="section-header"><a href="#examples-13">Examples</a></h5>
+<h5 id="examples-13"><a href="#examples-13">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 
 <span class="comment">// Create the pair of sockets</span>
@@ -494,7 +494,7 @@ socket.</p>
 <span class="macro">assert_eq!</span>(<span class="ident">dgram</span>, <span class="ident">bytes</span>);
 </code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.try_recv" class="method has-srclink"><a href="#method.try_recv" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.try_recv" class="fnname">try_recv</a>(&amp;self, buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Tries to receive a datagram from the peer without waiting.</p>
-<h5 id="examples-14" class="section-header"><a href="#examples-14">Examples</a></h5>
+<h5 id="examples-14"><a href="#examples-14">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -534,7 +534,7 @@ socket.</p>
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.try_recv_buf_from" class="method has-srclink"><a href="#method.try_recv_buf_from" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.try_recv_buf_from" class="fnname">try_recv_buf_from</a>&lt;B&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>B<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, SocketAddr<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;B: <a class="trait" href="../../web/trait.BufMut.html" title="trait actix_web::web::BufMut">BufMut</a>,&nbsp;</span></h4></section></summary><div class="docblock"><p>Tries to receive data from the socket without waiting.</p>
-<h5 id="examples-15" class="section-header"><a href="#examples-15">Examples</a></h5>
+<h5 id="examples-15"><a href="#examples-15">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -572,7 +572,7 @@ socket.</p>
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.try_recv_buf" class="method has-srclink"><a href="#method.try_recv_buf" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.try_recv_buf" class="fnname">try_recv_buf</a>&lt;B&gt;(&amp;self, buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>B) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;B: <a class="trait" href="../../web/trait.BufMut.html" title="trait actix_web::web::BufMut">BufMut</a>,&nbsp;</span></h4></section></summary><div class="docblock"><p>Tries to read data from the stream into the provided buffer, advancing the
 buffer’s internal cursor, returning how many bytes were read.</p>
-<h5 id="examples-16" class="section-header"><a href="#examples-16">Examples</a></h5>
+<h5 id="examples-16"><a href="#examples-16">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -610,11 +610,11 @@ buffer’s internal cursor, returning how many bytes were read.</p>
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.send_to" class="method has-srclink"><a href="#method.send_to" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.send_to" class="fnname">send_to</a>&lt;P&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;'_ self, <br>&nbsp;&nbsp;&nbsp;&nbsp;buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'_ [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;target: P<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;P: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,&nbsp;</span></h4></section></summary><div class="docblock"><p>Sends data on the socket to the specified address.</p>
-<h5 id="cancel-safety-5" class="section-header"><a href="#cancel-safety-5">Cancel safety</a></h5>
+<h5 id="cancel-safety-5"><a href="#cancel-safety-5">Cancel safety</a></h5>
 <p>This method is cancel safe. If <code>send_to</code> is used as the event in a
 <a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
 completes first, then it is guaranteed that the message was not sent.</p>
-<h5 id="examples-17" class="section-header"><a href="#examples-17">Examples</a></h5>
+<h5 id="examples-17"><a href="#examples-17">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">tempfile::tempdir</span>;
 
@@ -639,12 +639,12 @@ completes first, then it is guaranteed that the message was not sent.</p>
 <span class="macro">assert_eq!</span>(<span class="ident">addr</span>.<span class="ident">as_pathname</span>().<span class="ident">unwrap</span>(), <span class="kw-2">&amp;</span><span class="ident">tx_path</span>);
 </code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.recv_from" class="method has-srclink"><a href="#method.recv_from" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.recv_from" class="fnname">recv_from</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;'_ self, <br>&nbsp;&nbsp;&nbsp;&nbsp;buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'_ mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, SocketAddr<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Receives data from the socket.</p>
-<h5 id="cancel-safety-6" class="section-header"><a href="#cancel-safety-6">Cancel safety</a></h5>
+<h5 id="cancel-safety-6"><a href="#cancel-safety-6">Cancel safety</a></h5>
 <p>This method is cancel safe. If <code>recv_from</code> is used as the event in a
 <a href="crate::select"><code>tokio::select!</code></a> statement and some other branch
 completes first, it is guaranteed that no messages were received on this
 socket.</p>
-<h5 id="examples-18" class="section-header"><a href="#examples-18">Examples</a></h5>
+<h5 id="examples-18"><a href="#examples-18">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">tempfile::tempdir</span>;
 
@@ -672,27 +672,27 @@ socket.</p>
 <p>Note that on multiple calls to a <code>poll_*</code> method in the recv direction, only the
 <code>Waker</code> from the <code>Context</code> passed to the most recent call will be scheduled to
 receive a wakeup.</p>
-<h5 id="return-value-2" class="section-header"><a href="#return-value-2">Return value</a></h5>
+<h5 id="return-value-2"><a href="#return-value-2">Return value</a></h5>
 <p>The function returns:</p>
 <ul>
 <li><code>Poll::Pending</code> if the socket is not ready to read</li>
 <li><code>Poll::Ready(Ok(addr))</code> reads data from <code>addr</code> into <code>ReadBuf</code> if the socket is ready</li>
 <li><code>Poll::Ready(Err(e))</code> if an error is encountered.</li>
 </ul>
-<h5 id="errors-2" class="section-header"><a href="#errors-2">Errors</a></h5>
+<h5 id="errors-2"><a href="#errors-2">Errors</a></h5>
 <p>This function may encounter any standard I/O error except <code>WouldBlock</code>.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.poll_send_to" class="method has-srclink"><a href="#method.poll_send_to" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.poll_send_to" class="fnname">poll_send_to</a>&lt;P&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;cx: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/task/wake/struct.Context.html" title="struct core::task::wake::Context">Context</a>&lt;'_&gt;, <br>&nbsp;&nbsp;&nbsp;&nbsp;buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;target: P<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/task/poll/enum.Poll.html" title="enum core::task::poll::Poll">Poll</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;P: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,&nbsp;</span></h4></section></summary><div class="docblock"><p>Attempts to send data to the specified address.</p>
 <p>Note that on multiple calls to a <code>poll_*</code> method in the send direction, only the
 <code>Waker</code> from the <code>Context</code> passed to the most recent call will be scheduled to
 receive a wakeup.</p>
-<h5 id="return-value-3" class="section-header"><a href="#return-value-3">Return value</a></h5>
+<h5 id="return-value-3"><a href="#return-value-3">Return value</a></h5>
 <p>The function returns:</p>
 <ul>
 <li><code>Poll::Pending</code> if the socket is not ready to write</li>
 <li><code>Poll::Ready(Ok(n))</code> <code>n</code> is the number of bytes sent.</li>
 <li><code>Poll::Ready(Err(e))</code> if an error is encountered.</li>
 </ul>
-<h5 id="errors-3" class="section-header"><a href="#errors-3">Errors</a></h5>
+<h5 id="errors-3"><a href="#errors-3">Errors</a></h5>
 <p>This function may encounter any standard I/O error except <code>WouldBlock</code>.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.poll_send" class="method has-srclink"><a href="#method.poll_send" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.poll_send" class="fnname">poll_send</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;cx: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/task/wake/struct.Context.html" title="struct core::task::wake::Context">Context</a>&lt;'_&gt;, <br>&nbsp;&nbsp;&nbsp;&nbsp;buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/task/poll/enum.Poll.html" title="enum core::task::poll::Poll">Poll</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;&gt;</h4></section></summary><div class="docblock"><p>Attempts to send data on the socket to the remote address to which it
 was previously <code>connect</code>ed.</p>
@@ -701,14 +701,14 @@ This method will fail if the socket is not connected.</p>
 <p>Note that on multiple calls to a <code>poll_*</code> method in the send direction,
 only the <code>Waker</code> from the <code>Context</code> passed to the most recent call will
 be scheduled to receive a wakeup.</p>
-<h5 id="return-value-4" class="section-header"><a href="#return-value-4">Return value</a></h5>
+<h5 id="return-value-4"><a href="#return-value-4">Return value</a></h5>
 <p>The function returns:</p>
 <ul>
 <li><code>Poll::Pending</code> if the socket is not available to write</li>
 <li><code>Poll::Ready(Ok(n))</code> <code>n</code> is the number of bytes sent</li>
 <li><code>Poll::Ready(Err(e))</code> if an error is encountered.</li>
 </ul>
-<h5 id="errors-4" class="section-header"><a href="#errors-4">Errors</a></h5>
+<h5 id="errors-4"><a href="#errors-4">Errors</a></h5>
 <p>This function may encounter any standard I/O error except <code>WouldBlock</code>.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.poll_recv" class="method has-srclink"><a href="#method.poll_recv" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.poll_recv" class="fnname">poll_recv</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;cx: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/task/wake/struct.Context.html" title="struct core::task::wake::Context">Context</a>&lt;'_&gt;, <br>&nbsp;&nbsp;&nbsp;&nbsp;buf: &amp;mut ReadBuf&lt;'_&gt;<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/task/poll/enum.Poll.html" title="enum core::task::poll::Poll">Poll</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;&gt;</h4></section></summary><div class="docblock"><p>Attempts to receive a single datagram message on the socket from the remote
 address to which it is <code>connect</code>ed.</p>
@@ -717,17 +717,17 @@ resolves to an error if the socket is not connected.</p>
 <p>Note that on multiple calls to a <code>poll_*</code> method in the recv direction, only the
 <code>Waker</code> from the <code>Context</code> passed to the most recent call will be scheduled to
 receive a wakeup.</p>
-<h5 id="return-value-5" class="section-header"><a href="#return-value-5">Return value</a></h5>
+<h5 id="return-value-5"><a href="#return-value-5">Return value</a></h5>
 <p>The function returns:</p>
 <ul>
 <li><code>Poll::Pending</code> if the socket is not ready to read</li>
 <li><code>Poll::Ready(Ok(()))</code> reads data <code>ReadBuf</code> if the socket is ready</li>
 <li><code>Poll::Ready(Err(e))</code> if an error is encountered.</li>
 </ul>
-<h5 id="errors-5" class="section-header"><a href="#errors-5">Errors</a></h5>
+<h5 id="errors-5"><a href="#errors-5">Errors</a></h5>
 <p>This function may encounter any standard I/O error except <code>WouldBlock</code>.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.try_recv_from" class="method has-srclink"><a href="#method.try_recv_from" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.try_recv_from" class="fnname">try_recv_from</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, SocketAddr<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Tries to receive data from the socket without waiting.</p>
-<h5 id="examples-19" class="section-header"><a href="#examples-19">Examples</a></h5>
+<h5 id="examples-19"><a href="#examples-19">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 
@@ -784,7 +784,7 @@ defined on the Tokio <code>UnixDatagram</code> type, as this will mess with the
 readiness flag and can cause the socket to behave incorrectly.</p>
 <p>Usually, <a href="struct.UnixDatagram.html#method.readable"><code>readable()</code></a>, <a href="struct.UnixDatagram.html#method.writable"><code>writable()</code></a> or <a href="struct.UnixDatagram.html#method.ready"><code>ready()</code></a> is used with this function.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.local_addr" class="method has-srclink"><a href="#method.local_addr" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.local_addr" class="fnname">local_addr</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;SocketAddr, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the local address that this socket is bound to.</p>
-<h5 id="examples-20" class="section-header"><a href="#examples-20">Examples</a></h5>
+<h5 id="examples-20"><a href="#examples-20">Examples</a></h5>
 <p>For a socket bound to a local path</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
@@ -811,7 +811,7 @@ readiness flag and can cause the socket to behave incorrectly.</p>
 </code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.peer_addr" class="method has-srclink"><a href="#method.peer_addr" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.peer_addr" class="fnname">peer_addr</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;SocketAddr, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the address of this socket’s peer.</p>
 <p>The <code>connect</code> method will connect the socket to a peer.</p>
-<h5 id="examples-21" class="section-header"><a href="#examples-21">Examples</a></h5>
+<h5 id="examples-21"><a href="#examples-21">Examples</a></h5>
 <p>For a peer with a local path</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
@@ -840,7 +840,7 @@ readiness flag and can cause the socket to behave incorrectly.</p>
 <span class="macro">assert!</span>(<span class="ident">sock1</span>.<span class="ident">peer_addr</span>()<span class="question-mark">?</span>.<span class="ident">is_unnamed</span>());
 </code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.take_error" class="method has-srclink"><a href="#method.take_error" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.take_error" class="fnname">take_error</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the value of the <code>SO_ERROR</code> option.</p>
-<h5 id="examples-22" class="section-header"><a href="#examples-22">Examples</a></h5>
+<h5 id="examples-22"><a href="#examples-22">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 
 <span class="comment">// Create an unbound socket</span>
@@ -854,7 +854,7 @@ readiness flag and can cause the socket to behave incorrectly.</p>
 <p>This function will cause all pending and future I/O calls on the
 specified portions to immediately return with an appropriate value
 (see the documentation of <code>Shutdown</code>).</p>
-<h5 id="examples-23" class="section-header"><a href="#examples-23">Examples</a></h5>
+<h5 id="examples-23"><a href="#examples-23">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::UnixDatagram</span>;
 <span class="kw">use</span> <span class="ident">std::net::Shutdown</span>;
 
@@ -897,5 +897,5 @@ specified portions to immediately return with an appropriate value
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

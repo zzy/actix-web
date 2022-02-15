@@ -11,7 +11,7 @@
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl-1" class="impl has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_web/app.rs.html#53-442">source</a></span><a href="#impl-1" class="anchor"></a><h3 class="code-header in-band">impl&lt;T&gt; <a class="struct" href="struct.App.html" title="struct actix_web::App">App</a>&lt;T&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="dev/trait.ServiceFactory.html" title="trait actix_web::dev::ServiceFactory">ServiceFactory</a>&lt;<a class="struct" href="dev/struct.ServiceRequest.html" title="struct actix_web::dev::ServiceRequest">ServiceRequest</a>, Config = <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, Error = <a class="struct" href="error/struct.Error.html" title="struct actix_web::error::Error">Error</a>, InitError = <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt;,&nbsp;</span></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.app_data" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_web/app.rs.html#115-118">source</a></span><a href="#method.app_data" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.app_data" class="fnname">app_data</a>&lt;U:&nbsp;'static&gt;(self, ext: U) -&gt; Self</h4></section></summary><div class="docblock"><p>Set application (root level) data.</p>
 <p>Application data stored with <code>App::app_data()</code> method is available through the
 <a href="web/struct.HttpRequest.html#method.app_data"><code>HttpRequest::app_data</code></a> method at runtime.</p>
-<h5 id="datat" class="section-header"><a href="#datat"><code>Data&lt;T&gt;</code></a></h5>
+<h5 id="datat"><a href="#datat"><code>Data&lt;T&gt;</code></a></h5>
 <p>Any <a href="web/struct.Data.html" title="Data&lt;T&gt;"><code>Data&lt;T&gt;</code></a> type added here can utilize it’s extractor implementation in handlers.
 Types not wrapped in <code>Data&lt;T&gt;</code> cannot use this extractor. See <a href="web/struct.Data.html">its docs</a> for more
 about its usage and patterns.</p>
@@ -40,7 +40,7 @@ about its usage and patterns.</p>
         .<span class="ident">app_data</span>(<span class="ident">web::Data::new</span>(<span class="ident">MyData</span> { <span class="ident">count</span>: <span class="ident">Default::default</span>() }))
         .<span class="ident">route</span>(<span class="ident">web::get</span>().<span class="ident">to</span>(<span class="ident">handler</span>))
 );</code></pre></div>
-<h5 id="shared-mutable-state" class="section-header"><a href="#shared-mutable-state">Shared Mutable State</a></h5>
+<h5 id="shared-mutable-state"><a href="#shared-mutable-state">Shared Mutable State</a></h5>
 <p><a href="struct.HttpServer.html#method.new"><code>HttpServer::new</code></a> accepts an application factory rather than an
 application instance; the factory closure is called on each worker thread independently.
 Therefore, if you want to share a data object between different workers, a shareable object
@@ -109,7 +109,7 @@ multiple resources with one route would be registered for same resource path.</p
 <p>You can use a <a href="struct.Route.html" title="Route"><code>Route</code></a> as default service.</p>
 <p>If a default service is not registered, an empty <code>404 Not Found</code> response will be sent to
 the client instead.</p>
-<h5 id="examples" class="section-header"><a href="#examples">Examples</a></h5>
+<h5 id="examples"><a href="#examples">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
@@ -145,7 +145,7 @@ modifying request/response as necessary, across all requests managed by the <cod
 <p>Use middleware when you need to read or modify <em>every</em> request or response in some way.</p>
 <p>Middleware can be applied similarly to individual <code>Scope</code>s and <code>Resource</code>s.
 See <a href="struct.Scope.html#method.wrap"><code>Scope::wrap</code></a> and <a href="struct.Resource.html#method.wrap" title="Resource::wrap"><code>Resource::wrap</code></a>.</p>
-<h5 id="middleware-order" class="section-header"><a href="#middleware-order">Middleware Order</a></h5>
+<h5 id="middleware-order"><a href="#middleware-order">Middleware Order</a></h5>
 <p>Notice that the keyword for registering middleware is <code>wrap</code>. As you register middleware
 using <code>wrap</code> in the App builder, imagine wrapping layers around an inner App. The first
 middleware layer exposed to a Request is the outermost layer (i.e., the <em>last</em> registered in
@@ -154,7 +154,7 @@ the <em>last</em> to start executing during request processing.</p>
 <p>Ordering is less obvious when wrapped services also have middleware applied. In this case,
 middlewares are run in reverse order for <code>App</code> <em>and then</em> in reverse order for the
 wrapped service.</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">middleware</span>, <span class="ident">web</span>, <span class="ident">App</span>};
 
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
@@ -171,7 +171,7 @@ requests handled by the <code>App</code>.</p>
 <p>Use middleware when you need to read or modify <em>every</em> request or response in some way.</p>
 <p>Middleware can also be applied to individual <code>Scope</code>s and <code>Resource</code>s.</p>
 <p>See <a href="struct.App.html#method.wrap" title="App::wrap"><code>App::wrap</code></a> for details on how middlewares compose with each other.</p>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">dev::Service</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">middleware</span>, <span class="ident">web</span>, <span class="ident">App</span>};
 <span class="kw">use</span> <span class="ident">actix_web::http::header</span>::{<span class="ident">CONTENT_TYPE</span>, <span class="ident">HeaderValue</span>};
 
@@ -208,5 +208,5 @@ requests handled by the <code>App</code>.</p>
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

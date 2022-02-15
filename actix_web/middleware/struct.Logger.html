@@ -9,12 +9,12 @@
     <h1 class="fqn"><span class="in-band">Struct <a href="../index.html">actix_web</a>::<wbr><a href="index.html">middleware</a>::<wbr><a class="struct" href="#">Logger</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/actix_web/middleware/logger.rs.html#84">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><div class="docblock item-decl"><pre class="rust struct"><code>pub struct Logger(_);</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Middleware for logging request and response summaries to the terminal.</p>
 <p>This middleware uses the <code>log</code> crate to output information. Enable <code>log</code>’s output for the
 “actix_web” scope using <a href="https://docs.rs/env_logger"><code>env_logger</code></a> or similar crate.</p>
-<h2 id="default-format" class="section-header"><a href="#default-format">Default Format</a></h2>
+<h2 id="default-format"><a href="#default-format">Default Format</a></h2>
 <p>The <a href="struct.Logger.html#method.default"><code>default</code></a> Logger uses the following format:</p>
 <div class="example-wrap"><pre class="language-plain"><code>%a &quot;%r&quot; %s %b &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; %T
 
 Example Output:
-127.0.0.1:54278 &quot;GET /test HTTP/1.1&quot; 404 20 &quot;-&quot; &quot;HTTPie/2.2.0&quot; 0.001074</code></pre></div><h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+127.0.0.1:54278 &quot;GET /test HTTP/1.1&quot; 404 20 &quot;-&quot; &quot;HTTPie/2.2.0&quot; 0.001074</code></pre></div><h2 id="examples"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">middleware::Logger</span>, <span class="ident">App</span>};
 
 <span class="comment">// access logs are printed with the INFO level so ensure it is enabled by default</span>
@@ -23,7 +23,7 @@ Example Output:
 <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>()
     <span class="comment">// .wrap(Logger::default())</span>
     .<span class="ident">wrap</span>(<span class="ident">Logger::new</span>(<span class="string">&quot;%a %{User-Agent}i&quot;</span>));</code></pre></div>
-<h2 id="format" class="section-header"><a href="#format">Format</a></h2><div><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
+<h2 id="format"><a href="#format">Format</a></h2><div><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>%%</code></td><td>The percent sign</td></tr>
 <tr><td><code>%a</code></td><td>Peer IP address (or IP address of reverse proxy if used)</td></tr>
 <tr><td><code>%t</code></td><td>Time when the request started processing (in RFC 3339 format)</td></tr>
@@ -39,7 +39,7 @@ Example Output:
 <tr><td><code>%{FOO}e</code></td><td><code>env_var[&quot;FOO&quot;]</code></td></tr>
 <tr><td><code>%{FOO}xi</code></td><td><a href="struct.Logger.html#method.custom_request_replace">Custom request replacement</a> labelled “FOO”</td></tr>
 </tbody></table>
-</div><h2 id="security" class="section-header"><a href="#security">Security</a></h2>
+</div><h2 id="security"><a href="#security">Security</a></h2>
 <p><strong>*</strong> “Real IP” remote address is calculated using
 <a href="../dev/struct.ConnectionInfo.html#method.realip_remote_addr"><code>ConnectionInfo::realip_remote_addr()</code></a></p>
 <p>If you use this value, ensure that all requests come from trusted hosts. Otherwise, it is
@@ -50,7 +50,7 @@ trivial for the remote client to falsify their source IP address.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.log_target" class="method has-srclink"><span class="rightside"><a class="srclink" href="../../src/actix_web/middleware/logger.rs.html#136-140">source</a></span><a href="#method.log_target" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.log_target" class="fnname">log_target</a>(self, target: impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/alloc/borrow/enum.Cow.html" title="enum alloc::borrow::Cow">Cow</a>&lt;'static, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;&gt;) -&gt; Self</h4></section></summary><div class="docblock"><p>Sets the logging target to <code>target</code>.</p>
 <p>By default, the log target is <code>module_path!()</code> of the log call location. In our case, that
 would be <code>actix_web::middleware::logger</code>.</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <p>Using <code>.log_target(&quot;http_log&quot;)</code> would have this effect on request logs:</p>
 <div class="example-wrap"><pre class="language-diff"><code>- [2015-10-21T07:28:00Z INFO  actix_web::middleware::logger] 127.0.0.1 &quot;GET / HTTP/1.1&quot; 200 88 &quot;-&quot; &quot;dmc/1.0&quot; 0.001985
 + [2015-10-21T07:28:00Z INFO  http_log] 127.0.0.1 &quot;GET / HTTP/1.1&quot; 200 88 &quot;-&quot; &quot;dmc/1.0&quot; 0.001985
@@ -58,7 +58,7 @@ would be <code>actix_web::middleware::logger</code>.</p>
 log line. The label passed as the first argument should match a replacement substring in
 the logger format like <code>%{label}xi</code>.</p>
 <p>It is convention to print “-” to indicate no output instead of an empty string.</p>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="ident">Logger::new</span>(<span class="string">&quot;example %{JWT_ID}xi&quot;</span>)
     .<span class="ident">custom_request_replace</span>(<span class="string">&quot;JWT_ID&quot;</span>, <span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">parse_jwt_id</span>(<span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="string">&quot;Authorization&quot;</span>)));</code></pre></div>
 </div></details></div></details><h2 id="trait-implementations" class="small-section-header">Trait Implementations<a href="#trait-implementations" class="anchor"></a></h2><div id="trait-implementations-list"><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl-Debug" class="impl has-srclink"><span class="rightside"><a class="srclink" href="../../src/actix_web/middleware/logger.rs.html#83">source</a></span><a href="#impl-Debug" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="struct.Logger.html" title="struct actix_web::middleware::Logger">Logger</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.fmt" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="../../src/actix_web/middleware/logger.rs.html#83">source</a></span><a href="#method.fmt" class="anchor"></a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt" class="fnname">fmt</a>(&amp;self, f: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>&lt;'_&gt;) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></h4></section></summary><div class='docblock'><p>Formats the value using the given formatter. <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt">Read more</a></p>
@@ -87,5 +87,5 @@ the logger format like <code>%{label}xi</code>.</p>
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

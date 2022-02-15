@@ -9,11 +9,11 @@
     <h1 class="fqn"><span class="in-band">Function <a href="../index.html">actix_web</a>::<wbr><a href="index.html">web</a>::<wbr><a class="fn" href="#">scope</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/actix_web/web.rs.html#77-79">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><div class="docblock item-decl"><pre class="rust fn"><code>pub fn scope(path: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="struct" href="../struct.Scope.html" title="struct actix_web::Scope">Scope</a></code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Creates scope for common path prefix.</p>
 <p>Scopes collect multiple paths under a common path prefix. The scope’s path can contain dynamic
 path segments.</p>
-<h2 id="avoid-trailing-slashes" class="section-header"><a href="#avoid-trailing-slashes">Avoid Trailing Slashes</a></h2>
+<h2 id="avoid-trailing-slashes"><a href="#avoid-trailing-slashes">Avoid Trailing Slashes</a></h2>
 <p>Avoid using trailing slashes in the scope prefix (e.g., <code>web::scope(&quot;/scope/&quot;)</code>). It will almost
 certainly not have the expected behavior. See the <a href="../dev/struct.ResourceDef.html#prefix-resources">documentation on resource definitions</a>
 to understand why this is the case and how to correctly construct scope/prefix definitions.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <p>In this example, three routes are set up (and will handle any method):</p>
 <ul>
 <li><code>/{project_id}/path1</code></li>
@@ -29,5 +29,5 @@ to understand why this is the case and how to correctly construct scope/prefix d
         .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/path2&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::Ok</span>()))
         .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/path3&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse::MethodNotAllowed</span>()))
 );</code></pre></div>
-</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

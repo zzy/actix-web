@@ -32,7 +32,7 @@ having millions of signal channels open.</p>
 <p>If you’ve got any questions about this feel free to open an issue on the
 repo! New approaches to alleviate some of these limitations are always
 appreciated!</p>
-<h2 id="caveats" class="section-header"><a href="#caveats">Caveats</a></h2>
+<h2 id="caveats"><a href="#caveats">Caveats</a></h2>
 <p>The first time that a <code>Signal</code> instance is registered for a particular
 signal kind, an OS signal-handler is installed which replaces the default
 platform behavior when that signal is received, <strong>for the duration of the
@@ -45,7 +45,7 @@ instance is dropped, subsequent SIGINT deliveries will end up captured by
 Tokio, and the default platform behavior will NOT be reset</strong>.</p>
 <p>Thus, applications should take care to ensure the expected signal behavior
 occurs as expected after listening for specific signals.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <p>Wait for SIGHUP</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::signal::unix</span>::{<span class="ident">signal</span>, <span class="ident">SignalKind</span>};
@@ -63,7 +63,7 @@ occurs as expected after listening for specific signals.</p>
 }</code></pre></div>
 </div></details><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor"></a></h2><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl" class="impl has-srclink"><a href="#impl" class="anchor"></a><h3 class="code-header in-band">impl <a class="struct" href="struct.Signal.html" title="struct actix_web::rt::signal::unix::Signal">Signal</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.recv" class="method has-srclink"><a href="#method.recv" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.recv" class="fnname">recv</a>(&amp;'_ mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt;</h4></section></summary><div class="docblock"><p>Receives the next signal notification event.</p>
 <p><code>None</code> is returned if no more events can be received by this stream.</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <p>Wait for SIGHUP</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::signal::unix</span>::{<span class="ident">signal</span>, <span class="ident">SignalKind</span>};
@@ -89,7 +89,7 @@ closed.</li>
 <li><code>Poll::Ready(None)</code> if the channel has been closed and all signals
 sent before it was closed have been received.</li>
 </ul>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
 <p>Polling from a manually implemented future</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::pin::Pin</span>;
@@ -128,5 +128,5 @@ sent before it was closed have been received.</li>
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

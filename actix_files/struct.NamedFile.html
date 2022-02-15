@@ -24,7 +24,7 @@
 </div></details><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor"></a></h2><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl" class="impl has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_files/named.rs.html#91-530">source</a></span><a href="#impl" class="anchor"></a><h3 class="code-header in-band">impl <a class="struct" href="struct.NamedFile.html" title="struct actix_files::NamedFile">NamedFile</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.from_file" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_files/named.rs.html#112-197">source</a></span><a href="#method.from_file" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.from_file" class="fnname">from_file</a>&lt;P:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;&gt;(file: File, path: P) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/std/io/error/type.Result.html" title="type std::io::error::Result">Result</a>&lt;<a class="struct" href="struct.NamedFile.html" title="struct actix_files::NamedFile">NamedFile</a>&gt;</h4></section></summary><div class="docblock"><p>Creates an instance from a previously opened file.</p>
 <p>The given <code>path</code> need not exist and is only used to determine the <code>ContentType</code> and
 <code>ContentDisposition</code> headers.</p>
-<h5 id="examples" class="section-header"><a href="#examples">Examples</a></h5>
+<h5 id="examples"><a href="#examples">Examples</a></h5>
 <div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">use</span> <span class="ident">actix_files::NamedFile</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 <span class="kw">use</span> <span class="ident">std::env</span>;
@@ -39,12 +39,12 @@
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.open_async" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_files/named.rs.html#225-239">source</a></span><a href="#method.open_async" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.open_async" class="fnname">open_async</a>&lt;P:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;&gt;(path: P) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/std/io/error/type.Result.html" title="type std::io::error::Result">Result</a>&lt;<a class="struct" href="struct.NamedFile.html" title="struct actix_files::NamedFile">NamedFile</a>&gt;</h4></section></summary><div class="docblock"><p>Attempts to open a file asynchronously in read-only mode.</p>
 <p>When the <code>experimental-io-uring</code> crate feature is enabled, this will be async.
 Otherwise, it will be just like [<code>open</code>][Self::open].</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_files::NamedFile</span>;
 <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;foo.txt&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.file" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_files/named.rs.html#243-245">source</a></span><a href="#method.file" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.file" class="fnname">file</a>(&amp;self) -&gt; &amp;File</h4></section></summary><div class="docblock"><p>Returns reference to the underlying <code>File</code> object.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.path" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_files/named.rs.html#261-263">source</a></span><a href="#method.path" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.path" class="fnname">path</a>(&amp;self) -&gt; &amp;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a></h4></section></summary><div class="docblock"><p>Retrieve the path of this file.</p>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_files::NamedFile</span>;
 
 <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;test.txt&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -73,7 +73,7 @@ browsers/clients how to decode it. For example, if serving a compressed HTML fil
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.into_response" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_files/named.rs.html#377-529">source</a></span><a href="#method.into_response" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.into_response" class="fnname">into_response</a>(self, req: &amp;<a class="struct" href="../actix_web/request/struct.HttpRequest.html" title="struct actix_web::request::HttpRequest">HttpRequest</a>) -&gt; <a class="struct" href="../actix_web/response/response/struct.HttpResponse.html" title="struct actix_web::response::response::HttpResponse">HttpResponse</a>&lt;<a class="struct" href="../actix_http/body/boxed/struct.BoxBody.html" title="struct actix_http::body::boxed::BoxBody">BoxBody</a>&gt;</h4></section></summary><div class="docblock"><p>Creates an <code>HttpResponse</code> with file as a streaming body.</p>
 </div></details></div></details><h2 id="deref-methods-File" class="small-section-header"><span>Methods from <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html" title="trait core::ops::deref::Deref">Deref</a>&lt;Target = File&gt;</span><a href="#deref-methods-File" class="anchor"></a></h2><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.read_at" class="method has-srclink"><a href="#method.read_at" class="anchor"></a><h4 class="code-header">pub async fn <a href="#method.read_at" class="fnname">read_at</a>&lt;T&gt;(&amp;'_ self, buf: T, pos: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;, T<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a> <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: IoBufMut,&nbsp;</span></h4></section></summary><div class="docblock"><p>Read some bytes at the specified offset from the file into the specified
 buffer, returning how many bytes were read.</p>
-<h5 id="return" class="section-header"><a href="#return">Return</a></h5>
+<h5 id="return"><a href="#return">Return</a></h5>
 <p>The method returns the operation result and the same buffer value passed
 as an argument.</p>
 <p>If the method returns [<code>Ok(n)</code>], then the read was successful. A nonzero
@@ -85,10 +85,10 @@ data from the file. If <code>n</code> is <code>0</code>, then one of the followi
 </ol>
 <p>It is not an error if the returned value <code>n</code> is smaller than the buffer
 size, even when the file contains enough data to fill the buffer.</p>
-<h5 id="errors" class="section-header"><a href="#errors">Errors</a></h5>
+<h5 id="errors"><a href="#errors">Errors</a></h5>
 <p>If this function encounters any form of I/O or other error, an error
 variant will be returned. The buffer is returned on error.</p>
-<h5 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h5>
+<h5 id="examples-3"><a href="#examples-3">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio_uring::fs::File</span>;
 
 <span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std::error::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -112,18 +112,18 @@ many bytes were written.</p>
 <p>This function will attempt to write the entire contents of <code>buf</code>, but
 the entire write may not succeed, or the write may also generate an
 error. The bytes will be written starting at the specified offset.</p>
-<h5 id="return-1" class="section-header"><a href="#return-1">Return</a></h5>
+<h5 id="return-1"><a href="#return-1">Return</a></h5>
 <p>The method returns the operation result and the same buffer value passed
 in as an argument. A return value of <code>0</code> typically means that the
 underlying file is no longer able to accept bytes and will likely not be
 able to in the future as well, or that the buffer provided is empty.</p>
-<h5 id="errors-1" class="section-header"><a href="#errors-1">Errors</a></h5>
+<h5 id="errors-1"><a href="#errors-1">Errors</a></h5>
 <p>Each call to <code>write</code> may generate an I/O error indicating that the
 operation could not be completed. If an error is returned then no bytes
 in the buffer were written to this writer.</p>
 <p>It is <strong>not</strong> considered an error if the entire buffer could not be
 written to this writer.</p>
-<h5 id="examples-4" class="section-header"><a href="#examples-4">Examples</a></h5>
+<h5 id="examples-4"><a href="#examples-4">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio_uring::fs::File</span>;
 
 <span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std::error::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -147,7 +147,7 @@ filesystem before completing.</p>
 <p>This can be used to handle errors that would otherwise only be caught
 when the <code>File</code> is closed.  Dropping a file will ignore errors in
 synchronizing this in-memory data.</p>
-<h5 id="examples-5" class="section-header"><a href="#examples-5">Examples</a></h5>
+<h5 id="examples-5"><a href="#examples-5">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio_uring::fs::File</span>;
 
 <span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std::error::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -171,7 +171,7 @@ need the metadata on disk. The goal of this method is to reduce disk
 operations.</p>
 <p>Note that some platforms may simply implement this in terms of
 <a href="File::sync_all"><code>sync_all</code></a>.</p>
-<h5 id="examples-6" class="section-header"><a href="#examples-6">Examples</a></h5>
+<h5 id="examples-6"><a href="#examples-6">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio_uring::fs::File</span>;
 
 <span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">std::error::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -224,5 +224,5 @@ of the resulting type. <a href="#method.map">Read more</a></p>
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

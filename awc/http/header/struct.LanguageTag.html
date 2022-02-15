@@ -100,7 +100,7 @@ Full validation could be done with the <code>validate</code> method.</p>
 
 <span class="kw">let</span> <span class="ident">language_tag</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;en-us&quot;</span>).<span class="ident">unwrap</span>();
 <span class="macro">assert_eq!</span>(<span class="ident">language_tag</span>.<span class="ident">into_string</span>(), <span class="string">&quot;en-US&quot;</span>)</code></pre></div>
-<h5 id="errors" class="section-header"><a href="#errors">Errors</a></h5>
+<h5 id="errors"><a href="#errors">Errors</a></h5>
 <p>If the language tag is not “well-formed” a <code>ParseError</code> variant will be returned.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.validate" class="method has-srclink"><a href="#method.validate" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.validate" class="fnname">validate</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, ValidationError&gt;</h4></section></summary><div class="docblock"><p>Check if the language tag is “valid” according to
 <a href="https://tools.ietf.org/html/rfc5646#section-2.2.9">RFC 5646</a>.</p>
@@ -115,7 +115,7 @@ in the IANA Language Subtag Registry.</li>
 in the IANA Language Subtag Registry.</li>
 <li>There should be no duplicate variant and singleton (extension) subtags.</li>
 </ul>
-<h5 id="errors-1" class="section-header"><a href="#errors-1">Errors</a></h5>
+<h5 id="errors-1"><a href="#errors-1">Errors</a></h5>
 <p>If the language tag is not “valid” a <code>ValidationError</code> variant will be returned.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.is_valid" class="method has-srclink"><a href="#method.is_valid" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_valid" class="fnname">is_valid</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Check if the language tag is valid according to
 <a href="https://tools.ietf.org/html/rfc5646#section-2.2.9">RFC 5646</a>.</p>
@@ -130,7 +130,7 @@ in the IANA Language Subtag Registry.</li>
 <li>Suppress-Script is applied to remove default script for a language (e.g. “en-Latn” is canonicalized as “en”).</li>
 <li>Variants are deduplicated</li>
 </ul>
-<h5 id="errors-2" class="section-header"><a href="#errors-2">Errors</a></h5>
+<h5 id="errors-2"><a href="#errors-2">Errors</a></h5>
 <p>If there is not a unique way to canonicalize the language tag
 a <code>ValidationError</code> variant will be returned.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.matches" class="method has-srclink"><a href="#method.matches" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.matches" class="fnname">matches</a>(&amp;self, other: &amp;<a class="struct" href="struct.LanguageTag.html" title="struct awc::http::header::LanguageTag">LanguageTag</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Matches language tags. The first language acts as a language range, the second one is used
@@ -140,9 +140,9 @@ case-insensitive.</p>
 <p>For example the range <code>en-GB</code> matches only <code>en-GB</code> and <code>en-Arab-GB</code> but not <code>en</code>.
 The range <code>en</code> matches all language tags starting with <code>en</code> including <code>en</code>, <code>en-GB</code>,
 <code>en-Arab</code> and <code>en-Arab-GB</code>.</p>
-<h5 id="panics" class="section-header"><a href="#panics">Panics</a></h5>
+<h5 id="panics"><a href="#panics">Panics</a></h5>
 <p>If the language range has extensions or private use tags.</p>
-<h5 id="examples" class="section-header"><a href="#examples">Examples</a></h5>
+<h5 id="examples"><a href="#examples">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">language_tags::LanguageTag</span>;
 
 <span class="kw">let</span> <span class="ident">range_italian</span> <span class="op">=</span> <span class="ident">LanguageTag::parse</span>(<span class="string">&quot;it&quot;</span>).<span class="ident">unwrap</span>();
@@ -189,5 +189,5 @@ by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.Pa
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

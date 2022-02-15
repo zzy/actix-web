@@ -10,11 +10,11 @@
 <p>The <code>Scope</code>’s path can contain <a href="dev/struct.ResourceDef.html#dynamic-segments">dynamic segments</a>. The dynamic segments can be extracted from
 requests using the <a href="web/struct.Path.html"><code>Path</code></a> extractor or
 with <a href="web/struct.HttpRequest.html#method.match_info"><code>HttpRequest::match_info()</code></a>.</p>
-<h2 id="avoid-trailing-slashes" class="section-header"><a href="#avoid-trailing-slashes">Avoid Trailing Slashes</a></h2>
+<h2 id="avoid-trailing-slashes"><a href="#avoid-trailing-slashes">Avoid Trailing Slashes</a></h2>
 <p>Avoid using trailing slashes in the scope prefix (e.g., <code>web::scope(&quot;/scope/&quot;)</code>). It will almost
 certainly not have the expected behavior. See the <a href="dev/struct.ResourceDef.html#prefix-resources">documentation on resource definitions</a>
 to understand why this is the case and how to correctly construct scope/prefix definitions.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>};
 
 <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>().<span class="ident">service</span>(
@@ -49,7 +49,7 @@ to understand why this is the case and how to correctly construct scope/prefix d
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.app_data" class="method has-srclink"><span class="rightside"><a class="srclink" href="../src/actix_web/scope.rs.html#146-152">source</a></span><a href="#method.app_data" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.app_data" class="fnname">app_data</a>&lt;U:&nbsp;'static&gt;(self, data: U) -&gt; Self</h4></section></summary><div class="docblock"><p>Add scope data.</p>
 <p>Data of different types from parent contexts will still be accessible. Any <code>Data&lt;T&gt;</code> types
 set here can be extracted in handlers using the <code>Data&lt;T&gt;</code> extractor.</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::cell::Cell</span>;
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">Responder</span>};
 
@@ -166,5 +166,5 @@ requests handled by the <code>Scope</code>.</p>
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

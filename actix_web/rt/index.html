@@ -10,7 +10,7 @@
 <p>Actix Web runs on <a href="https://docs.rs/tokio">Tokio</a>, providing full<sup id="fnref1"><a href="#fn1">1</a></sup> compatibility with its huge ecosystem of
 crates. Each of the server’s workers uses a single-threaded runtime. Read more about the
 architecture in <a href="https://docs.rs/actix-rt"><code>actix-rt</code></a>’s docs.</p>
-<h2 id="running-actix-web-without-macros" class="section-header"><a href="#running-actix-web-without-macros">Running Actix Web Without Macros</a></h2>
+<h2 id="running-actix-web-without-macros"><a href="#running-actix-web-without-macros">Running Actix Web Without Macros</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">middleware</span>, <span class="ident">rt</span>, <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpServer</span>};
 
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
@@ -27,7 +27,7 @@ architecture in <a href="https://docs.rs/actix-rt"><code>actix-rt</code></a>’s
         .<span class="ident">run</span>()
     )
 }</code></pre></div>
-<h2 id="running-actix-web-using-tokiomain" class="section-header"><a href="#running-actix-web-using-tokiomain">Running Actix Web Using <code>#[tokio::main]</code></a></h2>
+<h2 id="running-actix-web-using-tokiomain"><a href="#running-actix-web-using-tokiomain">Running Actix Web Using <code>#[tokio::main]</code></a></h2>
 <p>If you need to run something alongside Actix Web that uses Tokio’s work stealing functionality,
 you can run Actix Web under <code>#[tokio::main]</code>. The <a href="../dev/struct.Server.html"><code>Server</code></a> object returned
 from <a href="../struct.HttpServer.html#method.run"><code>HttpServer::run</code></a> can also be <a href="https://docs.rs/tokio/1/tokio/fn.spawn.html"><code>spawn</code></a>ed, if preferred.</p>
@@ -65,5 +65,5 @@ the vast majority of Tokio-based crates do not use it.&nbsp;<a href="#fnref1">�
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.SystemRunner.html" title="actix_web::rt::SystemRunner struct">SystemRunner</a></div><div class="item-right docblock-short"><p>Runner that keeps a <a href="struct.System.html" title="System">System</a>’s event loop alive until stop message is received.</p>
 </div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.spawn.html" title="actix_web::rt::spawn fn">spawn</a></div><div class="item-right docblock-short"><p>Spawns a future on the current thread as a new task.</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

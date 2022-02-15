@@ -15,13 +15,13 @@
 </div></details><details class="rustdoc-toggle" open><summary><section id="associatedconstant.WRITE_CLOSED" class="associatedconstant has-srclink"><a href="#associatedconstant.WRITE_CLOSED" class="anchor"></a><h4 class="code-header">pub const <a href="#associatedconstant.WRITE_CLOSED" class="constant">WRITE_CLOSED</a>: <a class="struct" href="struct.Ready.html" title="struct actix_web::rt::net::Ready">Ready</a></h4></section></summary><div class="docblock"><p>Returns a <code>Ready</code> representing write closed readiness.</p>
 </div></details><details class="rustdoc-toggle" open><summary><section id="associatedconstant.ALL" class="associatedconstant has-srclink"><a href="#associatedconstant.ALL" class="anchor"></a><h4 class="code-header">pub const <a href="#associatedconstant.ALL" class="constant">ALL</a>: <a class="struct" href="struct.Ready.html" title="struct actix_web::rt::net::Ready">Ready</a></h4></section></summary><div class="docblock"><p>Returns a <code>Ready</code> representing readiness for all operations.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.is_empty" class="method has-srclink"><a href="#method.is_empty" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_empty" class="fnname">is_empty</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Returns true if <code>Ready</code> is the empty set.</p>
-<h5 id="examples" class="section-header"><a href="#examples">Examples</a></h5>
+<h5 id="examples"><a href="#examples">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::io::Ready</span>;
 
 <span class="macro">assert!</span>(<span class="ident">Ready::EMPTY</span>.<span class="ident">is_empty</span>());
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Ready::READABLE</span>.<span class="ident">is_empty</span>());</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.is_readable" class="method has-srclink"><a href="#method.is_readable" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_readable" class="fnname">is_readable</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Returns <code>true</code> if the value includes <code>readable</code>.</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::io::Ready</span>;
 
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Ready::EMPTY</span>.<span class="ident">is_readable</span>());
@@ -29,7 +29,7 @@
 <span class="macro">assert!</span>(<span class="ident">Ready::READ_CLOSED</span>.<span class="ident">is_readable</span>());
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Ready::WRITABLE</span>.<span class="ident">is_readable</span>());</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.is_writable" class="method has-srclink"><a href="#method.is_writable" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_writable" class="fnname">is_writable</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Returns <code>true</code> if the value includes writable <code>readiness</code>.</p>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::io::Ready</span>;
 
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Ready::EMPTY</span>.<span class="ident">is_writable</span>());
@@ -37,14 +37,14 @@
 <span class="macro">assert!</span>(<span class="ident">Ready::WRITABLE</span>.<span class="ident">is_writable</span>());
 <span class="macro">assert!</span>(<span class="ident">Ready::WRITE_CLOSED</span>.<span class="ident">is_writable</span>());</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.is_read_closed" class="method has-srclink"><a href="#method.is_read_closed" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_read_closed" class="fnname">is_read_closed</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Returns <code>true</code> if the value includes read-closed <code>readiness</code>.</p>
-<h5 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h5>
+<h5 id="examples-3"><a href="#examples-3">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::io::Ready</span>;
 
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Ready::EMPTY</span>.<span class="ident">is_read_closed</span>());
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Ready::READABLE</span>.<span class="ident">is_read_closed</span>());
 <span class="macro">assert!</span>(<span class="ident">Ready::READ_CLOSED</span>.<span class="ident">is_read_closed</span>());</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.is_write_closed" class="method has-srclink"><a href="#method.is_write_closed" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.is_write_closed" class="fnname">is_write_closed</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Returns <code>true</code> if the value includes write-closed <code>readiness</code>.</p>
-<h5 id="examples-4" class="section-header"><a href="#examples-4">Examples</a></h5>
+<h5 id="examples-4"><a href="#examples-4">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::io::Ready</span>;
 
 <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Ready::EMPTY</span>.<span class="ident">is_write_closed</span>());
@@ -91,5 +91,5 @@ operator. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.h
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>

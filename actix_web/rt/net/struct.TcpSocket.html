@@ -61,10 +61,10 @@ accessing the <code>RawFd</code>/<code>RawSocket</code> using <a href="https://d
 setting the option with a crate like <a href="https://docs.rs/socket2/"><code>socket2</code></a>.</p>
 </div></details><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor"></a></h2><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl" class="impl has-srclink"><a href="#impl" class="anchor"></a><h3 class="code-header in-band">impl <a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.new_v4" class="method has-srclink"><a href="#method.new_v4" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.new_v4" class="fnname">new_v4</a>() -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Creates a new socket configured for IPv4.</p>
 <p>Calls <code>socket(2)</code> with <code>AF_INET</code> and <code>SOCK_STREAM</code>.</p>
-<h5 id="returns" class="section-header"><a href="#returns">Returns</a></h5>
+<h5 id="returns"><a href="#returns">Returns</a></h5>
 <p>On success, the newly created <code>TcpSocket</code> is returned. If an error is
 encountered, it is returned instead.</p>
-<h5 id="examples" class="section-header"><a href="#examples">Examples</a></h5>
+<h5 id="examples"><a href="#examples">Examples</a></h5>
 <p>Create a new IPv4 socket and start listening.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
@@ -82,10 +82,10 @@ encountered, it is returned instead.</p>
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.new_v6" class="method has-srclink"><a href="#method.new_v6" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.new_v6" class="fnname">new_v6</a>() -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Creates a new socket configured for IPv6.</p>
 <p>Calls <code>socket(2)</code> with <code>AF_INET6</code> and <code>SOCK_STREAM</code>.</p>
-<h5 id="returns-1" class="section-header"><a href="#returns-1">Returns</a></h5>
+<h5 id="returns-1"><a href="#returns-1">Returns</a></h5>
 <p>On success, the newly created <code>TcpSocket</code> is returned. If an error is
 encountered, it is returned instead.</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
 <p>Create a new IPv6 socket and start listening.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
@@ -104,7 +104,7 @@ encountered, it is returned instead.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.set_reuseaddr" class="method has-srclink"><a href="#method.set_reuseaddr" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.set_reuseaddr" class="fnname">set_reuseaddr</a>(&amp;self, reuseaddr: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Allows the socket to bind to an in-use address.</p>
 <p>Behavior is platform specific. Refer to the target platform’s
 documentation for more details.</p>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
 
 <span class="kw">use</span> <span class="ident">std::io</span>;
@@ -122,7 +122,7 @@ documentation for more details.</p>
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.reuseaddr" class="method has-srclink"><a href="#method.reuseaddr" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.reuseaddr" class="fnname">reuseaddr</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Retrieves the value set for <code>SO_REUSEADDR</code> on this socket.</p>
-<h5 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h5>
+<h5 id="examples-3"><a href="#examples-3">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
 
 <span class="kw">use</span> <span class="ident">std::io</span>;
@@ -143,7 +143,7 @@ documentation for more details.</p>
 (excluding Solaris &amp; Illumos).</p>
 <p>Behavior is platform specific. Refer to the target platform’s
 documentation for more details.</p>
-<h5 id="examples-4" class="section-header"><a href="#examples-4">Examples</a></h5>
+<h5 id="examples-4"><a href="#examples-4">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
 
 <span class="kw">use</span> <span class="ident">std::io</span>;
@@ -163,7 +163,7 @@ documentation for more details.</p>
 (excluding Solaris &amp; Illumos).</p>
 <p>Behavior is platform specific. Refer to the target platform’s
 documentation for more details.</p>
-<h5 id="examples-5" class="section-header"><a href="#examples-5">Examples</a></h5>
+<h5 id="examples-5"><a href="#examples-5">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
 
 <span class="kw">use</span> <span class="ident">std::io</span>;
@@ -239,7 +239,7 @@ option.</p>
 <p>For more information about this option, see <a href="struct.TcpSocket.html#method.set_linger"><code>set_linger</code></a>.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.local_addr" class="method has-srclink"><a href="#method.local_addr" class="anchor"></a><h4 class="code-header">pub fn <a href="#method.local_addr" class="fnname">local_addr</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/std/net/addr/enum.SocketAddr.html" title="enum std::net::addr::SocketAddr">SocketAddr</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Gets the local address of this socket.</p>
 <p>Will fail on windows if called before <code>bind</code>.</p>
-<h5 id="examples-6" class="section-header"><a href="#examples-6">Examples</a></h5>
+<h5 id="examples-6"><a href="#examples-6">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
 
 <span class="kw">use</span> <span class="ident">std::io</span>;
@@ -258,7 +258,7 @@ option.</p>
 <p>This calls the <code>bind(2)</code> operating-system function. Behavior is
 platform specific. Refer to the target platform’s documentation for more
 details.</p>
-<h5 id="examples-7" class="section-header"><a href="#examples-7">Examples</a></h5>
+<h5 id="examples-7"><a href="#examples-7">Examples</a></h5>
 <p>Bind a socket before listening.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
@@ -283,7 +283,7 @@ encountered error is returned.</p>
 <p>This calls the <code>connect(2)</code> operating-system function. Behavior is
 platform specific. Refer to the target platform’s documentation for more
 details.</p>
-<h5 id="examples-8" class="section-header"><a href="#examples-8">Examples</a></h5>
+<h5 id="examples-8"><a href="#examples-8">Examples</a></h5>
 <p>Connecting to a peer.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
@@ -307,7 +307,7 @@ operating-system will start rejecting connections.</p>
 <p>This calls the <code>listen(2)</code> operating-system function, marking the socket
 as a passive socket. Behavior is platform specific. Refer to the target
 platform’s documentation for more details.</p>
-<h5 id="examples-9" class="section-header"><a href="#examples-9">Examples</a></h5>
+<h5 id="examples-9"><a href="#examples-9">Examples</a></h5>
 <p>Create a <code>TcpListener</code>.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
@@ -329,7 +329,7 @@ platform’s documentation for more details.</p>
 socket must not have been connected prior to calling this function. This
 function is typically used together with crates such as <a href="https://docs.rs/socket2/"><code>socket2</code></a> to
 configure socket options that are not available on <code>TcpSocket</code>.</p>
-<h5 id="examples-10" class="section-header"><a href="#examples-10">Examples</a></h5>
+<h5 id="examples-10"><a href="#examples-10">Examples</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::net::TcpSocket</span>;
 <span class="kw">use</span> <span class="ident">socket2</span>::{<span class="ident">Domain</span>, <span class="ident">Socket</span>, <span class="ident">Type</span>};
 
@@ -345,7 +345,7 @@ configure socket options that are not available on <code>TcpSocket</code>.</p>
 </div></details></div></details><h2 id="trait-implementations" class="small-section-header">Trait Implementations<a href="#trait-implementations" class="anchor"></a></h2><div id="trait-implementations-list"><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl-AsRawFd" class="impl has-srclink"><a href="#impl-AsRawFd" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.AsRawFd.html" title="trait std::os::fd::raw::AsRawFd">AsRawFd</a> for <a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.as_raw_fd" class="method trait-impl has-srclink"><a href="#method.as_raw_fd" class="anchor"></a><h4 class="code-header">pub fn <a href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.AsRawFd.html#tymethod.as_raw_fd" class="fnname">as_raw_fd</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class='docblock'><p>Extracts the raw file descriptor. <a href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.AsRawFd.html#tymethod.as_raw_fd">Read more</a></p>
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl-Debug" class="impl has-srclink"><a href="#impl-Debug" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.fmt" class="method trait-impl has-srclink"><a href="#method.fmt" class="anchor"></a><h4 class="code-header">pub fn <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt" class="fnname">fmt</a>(&amp;self, fmt: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>&lt;'_&gt;) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Error.html" title="struct core::fmt::Error">Error</a>&gt;</h4></section></summary><div class='docblock'><p>Formats the value using the given formatter. <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt">Read more</a></p>
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl-FromRawFd" class="impl has-srclink"><a href="#impl-FromRawFd" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.FromRawFd.html" title="trait std::os::fd::raw::FromRawFd">FromRawFd</a> for <a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.from_raw_fd" class="method trait-impl has-srclink"><a href="#method.from_raw_fd" class="anchor"></a><h4 class="code-header">pub unsafe fn <a href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.FromRawFd.html#tymethod.from_raw_fd" class="fnname">from_raw_fd</a>(fd: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a></h4></section></summary><div class="docblock"><p>Converts a <code>RawFd</code> to a <code>TcpSocket</code>.</p>
-<h5 id="notes" class="section-header"><a href="#notes">Notes</a></h5>
+<h5 id="notes"><a href="#notes">Notes</a></h5>
 <p>The caller is responsible for ensuring that the socket is in
 non-blocking mode.</p>
 </div></details></div></details><details class="rustdoc-toggle implementors-toggle" open><summary><section id="impl-IntoRawFd" class="impl has-srclink"><a href="#impl-IntoRawFd" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.IntoRawFd.html" title="trait std::os::fd::raw::IntoRawFd">IntoRawFd</a> for <a class="struct" href="struct.TcpSocket.html" title="struct actix_web::rt::net::TcpSocket">TcpSocket</a></h3></section></summary><div class="impl-items"><details class="rustdoc-toggle method-toggle" open><summary><section id="method.into_raw_fd" class="method trait-impl has-srclink"><a href="#method.into_raw_fd" class="anchor"></a><h4 class="code-header">pub fn <a href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.IntoRawFd.html#tymethod.into_raw_fd" class="fnname">into_raw_fd</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class='docblock'><p>Consumes this object, returning the raw underlying file descriptor. <a href="https://doc.rust-lang.org/nightly/std/os/fd/raw/trait.IntoRawFd.html#tymethod.into_raw_fd">Read more</a></p>
@@ -367,5 +367,5 @@ non-blocking mode.</p>
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_subscriber">Read more</a></p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><section id="method.with_current_subscriber" class="method trait-impl has-srclink"><span class="rightside"><a class="srclink" href="https://docs.rs/tracing/0.1.30/src/tracing/instrument.rs.html#221">source</a></span><a href="#method.with_current_subscriber" class="anchor"></a><h4 class="code-header">fn <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber" class="fnname">with_current_subscriber</a>(self) -&gt; <a class="struct" href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="struct tracing::instrument::WithDispatch">WithDispatch</a>&lt;Self&gt;</h4></section></summary><div class='docblock'><p>Attaches the current <a href="https://docs.rs/tracing/0.1.30/tracing/dispatcher/index.html#setting-the-default-subscriber">default</a> <a href="https://docs.rs/tracing-core/0.1.22/tracing_core/subscriber/trait.Subscriber.html"><code>Subscriber</code></a> to this type, returning a
 <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/struct.WithDispatch.html" title="WithDispatch"><code>WithDispatch</code></a> wrapper. <a href="https://docs.rs/tracing/0.1.30/tracing/instrument/trait.WithSubscriber.html#method.with_current_subscriber">Read more</a></p>
-</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e7aca8959 2022-02-09)" ></div>
+</div></details></div></details></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (c5c610aad 2022-02-14)" ></div>
 </body></html>
