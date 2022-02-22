@@ -1321,6 +1321,12 @@
 <span id="1314">1314</span>
 <span id="1315">1315</span>
 <span id="1316">1316</span>
+<span id="1317">1317</span>
+<span id="1318">1318</span>
+<span id="1319">1319</span>
+<span id="1320">1320</span>
+<span id="1321">1321</span>
+<span id="1322">1322</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::VecDeque</span>,
     <span class="ident">fmt</span>,
@@ -2254,10 +2260,16 @@
                 <span class="string">&quot;dispatcher should not be in keep-alive phase if state is not none: {:?}&quot;</span>,
                 <span class="ident">this</span>.<span class="ident">state</span>,
             );
-            <span class="macro">debug_assert!</span>(
-                <span class="ident">this</span>.<span class="ident">write_buf</span>.<span class="ident">is_empty</span>(),
-                <span class="string">&quot;dispatcher should not be in keep-alive phase if write_buf is not empty&quot;</span>,
-            );
+
+            <span class="comment">// Assert removed by @robjtede on account of issue #2655. There are cases where an I/O</span>
+            <span class="comment">// flush can be pending after entering the keep-alive state causing the subsequent flush</span>
+            <span class="comment">// wake up to panic here. This appears to be a Linux-only problem. Leaving original code</span>
+            <span class="comment">// below for posterity because a simple and reliable test could not be found to trigger</span>
+            <span class="comment">// the behavior.</span>
+            <span class="comment">// debug_assert!(</span>
+            <span class="comment">//     this.write_buf.is_empty(),</span>
+            <span class="comment">//     &quot;dispatcher should not be in keep-alive phase if write_buf is not empty&quot;,</span>
+            <span class="comment">// );</span>
 
             <span class="comment">// keep-alive timer has timed out</span>
             <span class="kw">if</span> <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>).<span class="ident">is_ready</span>() {
@@ -2638,5 +2650,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (b17226fcc 2022-02-18)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (45e2c2881 2022-02-20)" ></div>
 </body></html>
