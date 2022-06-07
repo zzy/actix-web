@@ -1,109 +1,111 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `awc/src/middleware/redirect.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>redirect.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../awc/index.html"><div class="logo-container"><img src="https://actix.rs/img/logo.png" alt="logo"></div>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://actix.rs/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../awc/index.html"><div class="logo-container"><img src="https://actix.rs/img/logo.png" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../../awc/index.html"><div class="logo-container">
                     <img src="https://actix.rs/img/logo.png" alt="logo"></div>
         </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../awc/index.html">
-                        <img src="https://actix.rs/img/logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+                        <img src="https://actix.rs/img/logo.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -593,6 +595,61 @@
 <span id="586">586</span>
 <span id="587">587</span>
 <span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">convert::TryFrom</span>,
     <span class="ident">future::Future</span>,
@@ -756,7 +813,8 @@
                     <span class="op">|</span> <span class="ident">StatusCode::SEE_OTHER</span>
                     <span class="op">|</span> <span class="ident">StatusCode::TEMPORARY_REDIRECT</span>
                     <span class="op">|</span> <span class="ident">StatusCode::PERMANENT_REDIRECT</span>
-                        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">max_redirect_times</span> <span class="op">&gt;</span> <span class="number">0</span> =&gt;
+                        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">max_redirect_times</span> <span class="op">&gt;</span> <span class="number">0</span>
+                            <span class="op">&amp;&amp;</span> <span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">contains_key</span>(<span class="ident">header::LOCATION</span>) =&gt;
                     {
                         <span class="kw">let</span> <span class="ident">reuse_body</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">head</span>().<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode::TEMPORARY_REDIRECT</span>
                             <span class="op">|</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">head</span>().<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode::PERMANENT_REDIRECT</span>;
@@ -840,26 +898,32 @@
 }
 
 <span class="kw">fn</span> <span class="ident">build_next_uri</span>(<span class="ident">res</span>: <span class="kw-2">&amp;</span><span class="ident">ClientResponse</span>, <span class="ident">prev_uri</span>: <span class="kw-2">&amp;</span><span class="ident">Uri</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Uri</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">uri</span> <span class="op">=</span> <span class="ident">res</span>
-        .<span class="ident">headers</span>()
-        .<span class="ident">get</span>(<span class="ident">header::LOCATION</span>)
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">value</span><span class="op">|</span> {
-            <span class="comment">// try to parse the location to a full uri</span>
-            <span class="kw">let</span> <span class="ident">uri</span> <span class="op">=</span> <span class="ident">Uri::try_from</span>(<span class="ident">value</span>.<span class="ident">as_bytes</span>())
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">SendRequestError::Url</span>(<span class="ident">InvalidUrl::HttpError</span>(<span class="ident">e</span>.<span class="ident">into</span>())))<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">uri</span>.<span class="ident">scheme</span>().<span class="ident">is_none</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">uri</span>.<span class="ident">authority</span>().<span class="ident">is_none</span>() {
-                <span class="kw">let</span> <span class="ident">uri</span> <span class="op">=</span> <span class="ident">Uri::builder</span>()
-                    .<span class="ident">scheme</span>(<span class="ident">prev_uri</span>.<span class="ident">scheme</span>().<span class="ident">cloned</span>().<span class="ident">unwrap</span>())
-                    .<span class="ident">authority</span>(<span class="ident">prev_uri</span>.<span class="ident">authority</span>().<span class="ident">cloned</span>().<span class="ident">unwrap</span>())
-                    .<span class="ident">path_and_query</span>(<span class="ident">value</span>.<span class="ident">as_bytes</span>())
-                    .<span class="ident">build</span>()<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">SendRequestError</span><span class="op">&gt;</span>(<span class="ident">uri</span>)
-            } <span class="kw">else</span> {
-                <span class="prelude-val">Ok</span>(<span class="ident">uri</span>)
-            }
-        })
-        <span class="comment">// TODO: this error type is wrong.</span>
-        .<span class="ident">ok_or</span>(<span class="ident">SendRequestError::Url</span>(<span class="ident">InvalidUrl::MissingScheme</span>))<span class="question-mark">?</span><span class="question-mark">?</span>;
+    <span class="comment">// responses without this header are not processed</span>
+    <span class="kw">let</span> <span class="ident">location</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header::LOCATION</span>).<span class="ident">unwrap</span>();
+
+    <span class="comment">// try to parse the location and resolve to a full URI but fall back to default if it fails</span>
+    <span class="kw">let</span> <span class="ident">uri</span> <span class="op">=</span> <span class="ident">Uri::try_from</span>(<span class="ident">location</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Uri::default</span>());
+
+    <span class="kw">let</span> <span class="ident">uri</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">uri</span>.<span class="ident">scheme</span>().<span class="ident">is_none</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">uri</span>.<span class="ident">authority</span>().<span class="ident">is_none</span>() {
+        <span class="kw">let</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">Uri::builder</span>()
+            .<span class="ident">scheme</span>(<span class="ident">prev_uri</span>.<span class="ident">scheme</span>().<span class="ident">cloned</span>().<span class="ident">unwrap</span>())
+            .<span class="ident">authority</span>(<span class="ident">prev_uri</span>.<span class="ident">authority</span>().<span class="ident">cloned</span>().<span class="ident">unwrap</span>());
+
+        <span class="comment">// when scheme or authority is missing treat the location value as path and query</span>
+        <span class="comment">// recover error where location does not have leading slash</span>
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">location</span>.<span class="ident">as_bytes</span>().<span class="ident">starts_with</span>(<span class="string">b&quot;/&quot;</span>) {
+            <span class="ident">location</span>.<span class="ident">as_bytes</span>().<span class="ident">to_owned</span>()
+        } <span class="kw">else</span> {
+            [<span class="string">b&quot;/&quot;</span>, <span class="ident">location</span>.<span class="ident">as_bytes</span>()].<span class="ident">concat</span>()
+        };
+
+        <span class="ident">builder</span>
+            .<span class="ident">path_and_query</span>(<span class="ident">path</span>)
+            .<span class="ident">build</span>()
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">SendRequestError::Url</span>(<span class="ident">InvalidUrl::HttpError</span>(<span class="ident">err</span>)))<span class="question-mark">?</span>
+    } <span class="kw">else</span> {
+        <span class="ident">uri</span>
+    };
 
     <span class="prelude-val">Ok</span>(<span class="ident">uri</span>)
 }
@@ -882,10 +946,13 @@
     <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">Error</span>, <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">http::header::HeaderValue</span>, <span class="ident">ClientBuilder</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::{
+        <span class="ident">http</span>::{<span class="ident">header::HeaderValue</span>, <span class="ident">StatusCode</span>},
+        <span class="ident">ClientBuilder</span>,
+    };
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_basic_redirect</span>() {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basic_redirect</span>() {
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>()
             .<span class="ident">disable_redirects</span>()
             .<span class="ident">wrap</span>(<span class="ident">Redirect::new</span>().<span class="ident">max_redirect_times</span>(<span class="number">10</span>))
@@ -911,6 +978,44 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">redirect_relative_without_leading_slash</span>() {
+        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>().<span class="ident">finish</span>();
+
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">actix_test::start</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="ident">App::new</span>()
+                .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">route</span>(<span class="ident">web::to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
+                    <span class="ident">HttpResponse::Found</span>()
+                        .<span class="ident">insert_header</span>((<span class="string">&quot;location&quot;</span>, <span class="string">&quot;abc/&quot;</span>))
+                        .<span class="ident">finish</span>()
+                })))
+                .<span class="ident">service</span>(
+                    <span class="ident">web::resource</span>(<span class="string">&quot;/abc/&quot;</span>)
+                        .<span class="ident">route</span>(<span class="ident">web::to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="ident">HttpResponse::Accepted</span>().<span class="ident">finish</span>() })),
+                )
+        });
+
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">get</span>(<span class="ident">srv</span>.<span class="ident">url</span>(<span class="string">&quot;/&quot;</span>)).<span class="ident">send</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::ACCEPTED</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">redirect_without_location</span>() {
+        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>()
+            .<span class="ident">disable_redirects</span>()
+            .<span class="ident">wrap</span>(<span class="ident">Redirect::new</span>().<span class="ident">max_redirect_times</span>(<span class="number">10</span>))
+            .<span class="ident">finish</span>();
+
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">actix_test::start</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">route</span>(<span class="ident">web::to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
+                <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(<span class="ident">HttpResponse::Found</span>().<span class="ident">finish</span>())
+            })))
+        });
+
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">get</span>(<span class="ident">srv</span>.<span class="ident">url</span>(<span class="string">&quot;/&quot;</span>)).<span class="ident">send</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::FOUND</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_redirect_limit</span>() {
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">ClientBuilder::new</span>()
             .<span class="ident">disable_redirects</span>()
@@ -923,14 +1028,14 @@
                 .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">route</span>(<span class="ident">web::to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
                     <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(
                         <span class="ident">HttpResponse::Found</span>()
-                            .<span class="ident">append_header</span>((<span class="string">&quot;location&quot;</span>, <span class="string">&quot;/test&quot;</span>))
+                            .<span class="ident">insert_header</span>((<span class="string">&quot;location&quot;</span>, <span class="string">&quot;/test&quot;</span>))
                             .<span class="ident">finish</span>(),
                     )
                 })))
                 .<span class="ident">service</span>(<span class="ident">web::resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">route</span>(<span class="ident">web::to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
                     <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span>(
                         <span class="ident">HttpResponse::Found</span>()
-                            .<span class="ident">append_header</span>((<span class="string">&quot;location&quot;</span>, <span class="string">&quot;/test2&quot;</span>))
+                            .<span class="ident">insert_header</span>((<span class="string">&quot;location&quot;</span>, <span class="string">&quot;/test2&quot;</span>))
                             .<span class="ident">finish</span>(),
                     )
                 })))
@@ -940,8 +1045,15 @@
         });
 
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">get</span>(<span class="ident">srv</span>.<span class="ident">url</span>(<span class="string">&quot;/&quot;</span>)).<span class="ident">send</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>();
-
-        <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">as_u16</span>(), <span class="number">302</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">res</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::FOUND</span>);
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">res</span>.<span class="ident">headers</span>()
+                .<span class="ident">get</span>(<span class="ident">header::LOCATION</span>)
+                .<span class="ident">unwrap</span>()
+                .<span class="ident">to_str</span>()
+                .<span class="ident">unwrap</span>(),
+            <span class="string">&quot;/test2&quot;</span>
+        );
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
@@ -1182,5 +1294,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (45e2c2881 2022-02-20)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (50b00252a 2022-06-06)" ></div>
 </body></html>
