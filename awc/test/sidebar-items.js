@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TestResponse","Test `ClientResponse` builder"]]});
+window.SIDEBAR_ITEMS = {"struct":[["TestResponse","Test `ClientResponse` builder"]]};
